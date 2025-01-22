@@ -7,12 +7,12 @@ import (
 
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		template, err := template.ParseFiles("template.html", "home.html")
+		template, err := template.ParseFiles("main.html", "main-home.html")
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		template.ExecuteTemplate(w, "template.html", nil)
+		template.ExecuteTemplate(w, "main.html", nil)
 	})
 	// http.HandleFunc("hcf", func(w http.ResponseWriter, r *http.Request) {
 	// 	http.ServeFile(w, r, "hcf.html")
