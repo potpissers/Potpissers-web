@@ -14,12 +14,22 @@ func main() {
 		}
 		template.ExecuteTemplate(w, "main.html", nil)
 	})
-	// http.HandleFunc("hcf", func(w http.ResponseWriter, r *http.Request) {
-	// 	http.ServeFile(w, r, "hcf.html")
-	// })
-	// http.HandleFunc("mz", func(w http.ResponseWriter, r *http.Request) {
-	// 	http.ServeFile(w, r, "mz.html")
-	// })
+	http.HandleFunc("/hcf", func(w http.ResponseWriter, r *http.Request) {
+		template, err := template.ParseFiles("main.html", "main-hcf.html")
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		template.ExecuteTemplate(w, "main.html", nil)
+	})
+	http.HandleFunc("/mz", func(w http.ResponseWriter, r *http.Request) {
+		template, err := template.ParseFiles("main.html", "main-mz.html")
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		template.ExecuteTemplate(w, "main.html", nil)
+	})
 
 	http.Handle("/style.css", http.StripPrefix("/", http.FileServer(http.Dir("."))))
 	http.Handle("/potpisser.jpg", http.StripPrefix("/", http.FileServer(http.Dir("."))))
