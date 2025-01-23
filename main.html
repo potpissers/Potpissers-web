@@ -36,7 +36,8 @@
       style="backdrop-filter: blur(10px); background-color: rgba(0, 0, 0, .5); font-family: sans-serif; display: grid; grid-template-columns: 20vw 1fr auto 1fr 20vw; grid-template-rows: 50vh auto auto">
 
 <div class="foo bar" style="text-align: center">
-    <h4></h4> <!--  TODO   deaths-->
+    <h4>deaths</h4>
+    {{block "deaths" .}}{{end}}
 </div>
 
 <div>
@@ -84,7 +85,8 @@
 </div>
 
 <div class="foo bar" style="text-align: center">
-    <h4 style="text-align: center"></h4> <!--   TODO  events -->
+    <h4 style="text-align: center">events</h4>
+    {{block "events" .}}{{end}}
 </div>
 
 {{block "content" .}}{{end}}

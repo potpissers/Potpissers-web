@@ -1,11 +1,31 @@
 package main
 
 import (
+	"context"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"html/template"
+	"log"
 	"net/http"
+	"os"
+	"strconv"
 )
 
 func main() {
+	port, err := strconv.Atoi(os.Getenv("POSTGRES_PORT"))
+	if (err != nil) {
+		log.Fatal("getenv string to int conversion")
+	}
+	config := pgxpool.Config{}
+	config.ConnConfig.Host = os.Getenv("POSTGRES_HOST")
+	config.ConnConfig.User = os.Getenv("POSTGRES_USERNAME")
+	config.ConnConfig.Password = os.Getenv("POSTGRES_PASSWORD")
+	config.ConnConfig.Port = uint16(port)
+	connect, err := pgxpool.NewWithConfig(context.Background(), &config)
+	if err != nil {
+		return
+	}
+	err = connect.Ping(context.Background())
+
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		template, err := template.ParseFiles("main.html", "main-home.html")
 		if err != nil {
