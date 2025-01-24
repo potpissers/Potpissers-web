@@ -44,5 +44,5 @@ func main() {
 	http.Handle("/style.css", http.StripPrefix("/", http.FileServer(http.Dir("."))))
 	http.Handle("/potpisser.jpg", http.StripPrefix("/", http.FileServer(http.Dir("."))))
 
-	http.ListenAndServe(":443", nil)
+	http.ListenAndServeTLS(":443", "/etc/letsencrypt/live/potpissers.com/fullchain.pem",  "/etc/letsencrypt/live/potpissers.com/privkey.pem", nil)
 }
