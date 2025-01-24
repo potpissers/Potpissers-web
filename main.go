@@ -16,6 +16,8 @@ func main() {
 	}
 	err = connect.Ping(context.Background())
 
+	connect
+
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		template, err := template.ParseFiles("main.html", "main-home.html")
 		if err != nil {
