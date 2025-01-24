@@ -44,5 +44,5 @@ func main() {
 	http.Handle("/style.css", http.StripPrefix("/", http.FileServer(http.Dir("."))))
 	http.Handle("/potpisser.jpg", http.StripPrefix("/", http.FileServer(http.Dir("."))))
 
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":443", nil)
 }
