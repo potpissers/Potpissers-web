@@ -7,22 +7,12 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strconv"
 )
 
 func main() {
-	port, err := strconv.Atoi(os.Getenv("POSTGRES_PORT"))
-	if (err != nil) {
-		log.Fatal("INVALID ENVIRONMENT VARIABLE")
-	}
-	config := pgxpool.Config{}
-	config.ConnConfig.Host = os.Getenv("POSTGRES_HOST")
-	config.ConnConfig.User = os.Getenv("POSTGRES_USERNAME")
-	config.ConnConfig.Password = os.Getenv("POSTGRES_PASSWORD")
-	config.ConnConfig.Port = uint16(port)
-	connect, err := pgxpool.NewWithConfig(context.Background(), &config)
+	connect, err := pgxpool.New(context.Background(), os.Getenv("POSTGRES_CONNECTION_STRING"))
 	if err != nil {
-		return
+		log.Fatal("hey")
 	}
 	err = connect.Ping(context.Background())
 
