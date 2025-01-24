@@ -13,7 +13,7 @@ import (
 func main() {
 	port, err := strconv.Atoi(os.Getenv("POSTGRES_PORT"))
 	if (err != nil) {
-		log.Fatal("getenv string to int conversion")
+		log.Fatal("INVALID ENVIRONMENT VARIABLE")
 	}
 	config := pgxpool.Config{}
 	config.ConnConfig.Host = os.Getenv("POSTGRES_HOST")
