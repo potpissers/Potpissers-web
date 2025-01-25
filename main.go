@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"context"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"html/template"
@@ -20,9 +19,6 @@ func init() {
 }
 
 func main() {
-	var preparedHcfContentHtml string
-	var preparedMinezContentHtml string
-
 	cubecoreTips := fetchTips("cubecore")
 	mzTips := fetchTips("minez")
 
@@ -30,35 +26,24 @@ func main() {
 	hcf := getMainTemplate("main-hcf.html")
 	mz := getMainTemplate("main-mz.html")
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		handleMainTemplate(home, w)
+		err := home.Execute(w, nil)
+		if err != nil {
+			log.Fatal("home template execute")
+		}
 	})
 	http.HandleFunc("/hcf", func(w http.ResponseWriter, r *http.Request) {
-		handleMainTemplate(hcf, w)
+		executeMainTipsTemplate(hcf, w, cubecoreTips)
 	})
 	http.HandleFunc("/mz", func(w http.ResponseWriter, r *http.Request) {
-		handleMainTemplate(mz, w)
+		executeMainTipsTemplate(mz, w, mzTips)
 	})
 	http.Handle("/style.css", http.StripPrefix("/", http.FileServer(http.Dir("."))))
 	http.Handle("/potpisser.jpg", http.StripPrefix("/", http.FileServer(http.Dir("."))))
 
-	http.ListenAndServeTLS(":443", "/etc/letsencrypt/live/potpissers.com/fullchain.pem",  "/etc/letsencrypt/live/potpissers.com/privkey.pem", nil)
-}
-func getMainTemplate(fileName string, tipsName string) string {
-	hey, err := template.ParseFiles("main.html", fileName)
-	if err != nil {
-		log.Fatal("template error")
+	err := http.ListenAndServeTLS(":443", "/etc/letsencrypt/live/potpissers.com/fullchain.pem",  "/etc/letsencrypt/live/potpissers.com/privkey.pem", nil)
+	if (err != nil) {
+		log.Fatal("http err")
 	}
-	var buffer bytes.Buffer
-
-	err = hey.ExecuteTemplate(&buffer, "main.html", struct {
-		Tips []string
-	}{
-		Tips: fetchTips(tipsName),
-	})
-	if err != nil {
-		log.Fatal("template error1")
-	}
-	return buffer.String()
 }
 func fetchTips(tipsName string) []string {
 	rows, err := postgresConnection.Query(context.Background(), "SELECT tip_message FROM server_tips WHERE server_id = (SELECT id FROM servers WHERE name = '" + tipsName + "')")
@@ -76,4 +61,21 @@ func fetchTips(tipsName string) []string {
 	}
 	rows.Close()
 	return cubecoreTips
+}
+func getMainTemplate(fileName string) *template.Template {
+	hey, err := template.ParseFiles("main.html", fileName)
+	if err != nil {
+		log.Fatal("template error")
+	}
+	return hey
+}
+func executeMainTipsTemplate(template2 *template.Template, w http.ResponseWriter, tips []string) {
+	err := template2.Execute(w, struct {
+		Tips []string
+	}{
+		Tips: tips,
+	})
+	if (err != nil) {
+		log.Fatal("execute main tips template")
+	}
 }
