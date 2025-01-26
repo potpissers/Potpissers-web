@@ -1,0 +1,21 @@
+html {
+    background-color: #A0AFBF
+}
+
+.foo {
+    gap: .5rem;
+    padding-left: .5rem;
+    padding-right: .5rem;
+    border: .1rem solid black;
+    box-shadow: .1rem .1rem .1rem black;
+}
+
+.bar {
+    color: #A0ADB8;
+    background-color: #33383D;
+}
+
+.baz {
+    color: #DEDEE3;
+    background-color: #4F565E
+}
