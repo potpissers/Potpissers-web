@@ -19,3 +19,10 @@ html {
     color: #DEDEE3;
     background-color: #4F565E
 }
+
+ul li:nth-child(odd) {
+    background-color: white;
+}
+ul {
+    list-style-type: none;
+}
