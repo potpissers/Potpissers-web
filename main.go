@@ -19,17 +19,15 @@ func init() {
 }
 
 func main() {
-	cubecoreTips := fetchTips("cubecore")
-	mzTips := fetchTips("minez")
+	potpissersTips := fetchTips("null")
+	cubecoreTips := append(potpissersTips, fetchTips("cubecore")...)
+	mzTips := append(potpissersTips, fetchTips("minez")...)
 
 	home := getMainTemplate("main-home.html")
 	hcf := getMainTemplate("main-hcf.html")
 	mz := getMainTemplate("main-mz.html")
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		err := home.Execute(w, nil)
-		if err != nil {
-			log.Fatal(err)
-		}
+		executeMainTipsTemplate(home, w, potpissersTips)
 	})
 	http.HandleFunc("/hcf", func(w http.ResponseWriter, r *http.Request) {
 		executeMainTipsTemplate(hcf, w, cubecoreTips)
@@ -42,7 +40,7 @@ func main() {
 	http.Handle("/potpisser.jpg", http.StripPrefix("/", http.FileServer(http.Dir("."))))
 
 	err := http.ListenAndServeTLS(":443", "/etc/letsencrypt/live/potpissers.com/fullchain.pem",  "/etc/letsencrypt/live/potpissers.com/privkey.pem", nil)
-	if (err != nil) {
+	if err != nil {
 		log.Fatal(err)
 	}
 }
@@ -54,7 +52,7 @@ func fetchTips(tipsName string) []string {
 	var cubecoreTips []string
 	for rows.Next() {
 		var tipMessage string
-		err = rows.Scan(&tipMessage);
+		err = rows.Scan(&tipMessage)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -76,7 +74,7 @@ func executeMainTipsTemplate(template2 *template.Template, w http.ResponseWriter
 	}{
 		Tips: tips,
 	})
-	if (err != nil) {
+	if err != nil {
 		log.Fatal(err)
 	}
 }
