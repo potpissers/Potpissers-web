@@ -14,7 +14,7 @@ func init() {
 	var err error
 	postgresConnection, err = pgxpool.New(context.Background(), os.Getenv("POSTGRES_CONNECTION_STRING"))
 	if err != nil {
-		log.Fatal("hey")
+		log.Fatal(err)
 	}
 }
 
@@ -28,7 +28,7 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		err := home.Execute(w, nil)
 		if err != nil {
-			log.Fatal("home template execute")
+			log.Fatal(err)
 		}
 	})
 	http.HandleFunc("/hcf", func(w http.ResponseWriter, r *http.Request) {
@@ -42,20 +42,20 @@ func main() {
 
 	err := http.ListenAndServeTLS(":443", "/etc/letsencrypt/live/potpissers.com/fullchain.pem",  "/etc/letsencrypt/live/potpissers.com/privkey.pem", nil)
 	if (err != nil) {
-		log.Fatal("http err")
+		log.Fatal(err)
 	}
 }
 func fetchTips(tipsName string) []string {
 	rows, err := postgresConnection.Query(context.Background(), "SELECT tip_message FROM server_tips WHERE server_id = (SELECT id FROM servers WHERE name = '" + tipsName + "')")
 	if err != nil {
-		log.Fatal("cubecoreTips1")
+		log.Fatal(err)
 	}
 	var cubecoreTips []string
 	for rows.Next() {
 		var tipMessage string
 		err = rows.Scan(&tipMessage);
 		if err != nil {
-			log.Fatal("cubecoreTips2")
+			log.Fatal(err)
 		}
 		cubecoreTips = append(cubecoreTips, tipMessage)
 	}
@@ -65,7 +65,7 @@ func fetchTips(tipsName string) []string {
 func getMainTemplate(fileName string) *template.Template {
 	hey, err := template.ParseFiles("main.html", fileName)
 	if err != nil {
-		log.Fatal("template error")
+		log.Fatal(err)
 	}
 	return hey
 }
@@ -76,6 +76,6 @@ func executeMainTipsTemplate(template2 *template.Template, w http.ResponseWriter
 		Tips: tips,
 	})
 	if (err != nil) {
-		log.Fatal("execute main tips template")
+		log.Fatal(err)
 	}
 }
