@@ -23,6 +23,8 @@ func main() {
 	cubecoreTips := append(potpissersTips, fetchTips("cubecore")...)
 	mzTips := append(potpissersTips, fetchTips("minez")...)
 
+//	TODO deaths
+
 	home := getMainTemplate("main-home.html")
 	hcf := getMainTemplate("main-hcf.html")
 	mz := getMainTemplate("main-mz.html")
