@@ -17,7 +17,6 @@ ul li:nth-child(odd) {
 
 ul {
     list-style-type: none;
-    text-align: center;
 }
 
 .foo {
