@@ -2,6 +2,24 @@ html {
     background-color: #A0AFBF
 }
 
+body {
+    backdrop-filter: blur(10px);
+    background-color: rgba(0, 0, 0, .5);
+    font-family: sans-serif;
+    display: grid;
+    grid-template-columns: 20vw 1fr auto 1fr 20vw;
+    grid-template-rows: 50vh auto auto
+}
+
+ul li:nth-child(odd) {
+    background-color: white;
+}
+
+ul {
+    list-style-type: none;
+    text-align: center;
+}
+
 .foo {
     gap: .5rem;
     padding-left: .5rem;
@@ -18,11 +36,4 @@ html {
 .baz {
     color: #DEDEE3;
     background-color: #4F565E
-}
-
-ul li:nth-child(odd) {
-    background-color: white;
-}
-ul {
-    list-style-type: none;
 }
