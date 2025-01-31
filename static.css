@@ -11,6 +11,14 @@ body {
     grid-template-rows: 50vh auto auto
 }
 
+ul li:nth-child(odd) {
+    background-color: white;
+}
+
+ul {
+    list-style-type: none;
+}
+
 .foo {
     gap: .5rem;
     padding-left: .5rem;
@@ -27,14 +35,6 @@ body {
 .baz {
     color: #DEDEE3;
     background-color: #4F565E
-}
-
-ul li:nth-child(odd) {
-    background-color: white;
-}
-
-ul {
-    list-style-type: none;
 }
 
 .content-inline-grid {
