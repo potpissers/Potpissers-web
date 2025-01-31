@@ -13,11 +13,17 @@
     {{block "deaths" .}}{{end}}
 </div>
 
-<div>
-<!--    <select class="foo" style="background-color: #F0F0F0">-->
-<!--        <option disabled selected hidden>archive</option>-->
-<!--    </select>TODO -->
-<!--    TODO LIVE CONSOLE -->
+<div style="display: flex; flex-direction: column;">
+    <div>
+        {{block "server info" .}}{{end}}
+    </div>
+    <div style="margin-top: auto">
+        {{block "console" .}}{{end}}
+        <!--    <select class="foo" style="background-color: #F0F0F0">-->
+        <!--        <option disabled selected hidden>archive</option>-->
+        <!--    </select>TODO -->
+        <!--    TODO LIVE CONSOLE -->
+    </div>
 </div>
 
 <div class="foo"
@@ -55,6 +61,7 @@
 
 <div class="foo bar" style="text-align: center;">
     <h4></h4> <!--  TODO   videos-->
+    {{block "videos" .}}{{end}}
 </div>
 
 <div class="foo bar" style="text-align: center">
@@ -66,6 +73,7 @@
 
 <div class="foo bar" style="text-align: center">
     <h4></h4> <!--  TODO   purchases-->
+    {{block "transactions" .}}{{end}}
 </div>
 
 <footer style="grid-column: 1/6; text-align: center">
