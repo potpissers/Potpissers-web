@@ -63,6 +63,23 @@ func fetchTips(tipsName string) []string {
 	rows.Close()
 	return cubecoreTips
 }
+func fetchDeaths(tipsName string) []string {
+	rows, err := postgresConnection.Query(context.Background(), "SELECT tip_message FROM server_tips WHERE server_id = (SELECT id FROM servers WHERE name = '" + tipsName + "')")
+	if err != nil {
+		log.Fatal(err)
+	}
+	var cubecoreTips []string
+	for rows.Next() {
+		var tipMessage string
+		err = rows.Scan(&tipMessage)
+		if err != nil {
+			log.Fatal(err)
+		}
+		cubecoreTips = append(cubecoreTips, tipMessage)
+	}
+	rows.Close()
+	return cubecoreTips
+}
 func getMainTemplate(fileName string) *template.Template {
 	hey, err := template.ParseFiles("main.html", fileName)
 	if err != nil {
