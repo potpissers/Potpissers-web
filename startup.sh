@@ -1,8 +1,8 @@
 #!/bin/bash
 
 while true; do
-    git fetch origin
-    git reset --hard origin/main
+    git fetch upstream
+    git reset --hard upstream/main
     ./Potpissers-web
     echo Server restarting...
     echo Press CTRL + C to stop.
