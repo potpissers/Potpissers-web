@@ -9,10 +9,10 @@ import (
 	"os"
 )
 
-var postgresConnection *pgxpool.Pool
+var PostgresPoolFinal *pgxpool.Pool
 func init() {
 	var err error
-	postgresConnection, err = pgxpool.New(context.Background(), os.Getenv("POSTGRES_CONNECTION_STRING"))
+	PostgresPoolFinal, err = pgxpool.New(context.Background(), os.Getenv("POSTGRES_CONNECTION_STRING"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -22,21 +22,46 @@ func main() {
 	potpissersTips := fetchTips("null")
 	cubecoreTips := append(potpissersTips, fetchTips("cubecore")...)
 	mzTips := append(potpissersTips, fetchTips("minez")...)
+	cubecoreClassTips := fetchTips("cubecore_classes")
 
 //	TODO deaths
 
 	home := getMainTemplate("main-home.html")
-	hcf := getMainTemplate("main-hcf.html")
-	mz := getMainTemplate("main-mz.html")
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		executeMainTipsTemplate(home, w, potpissersTips)
+		err := home.Execute(w, struct {
+			Tips []string
+		}{
+			Tips: potpissersTips,
+		})
+		if err != nil {
+			log.Fatal(err)
+		}
 	})
-	http.HandleFunc("/hcf", func(w http.ResponseWriter, r *http.Request) {
-		executeMainTipsTemplate(hcf, w, cubecoreTips)
-	})
+	mz := getMainTemplate("main-mz.html")
 	http.HandleFunc("/mz", func(w http.ResponseWriter, r *http.Request) {
-		executeMainTipsTemplate(mz, w, mzTips)
+		err := mz.Execute(w, struct {
+			Tips []string
+		}{
+			Tips: mzTips,
+		})
+		if err != nil {
+			log.Fatal(err)
+		}
 	})
+	hcf := getMainTemplate("main-hcf.html")
+	http.HandleFunc("/hcf", func(w http.ResponseWriter, r *http.Request) {
+		err := hcf.Execute(w, struct {
+			Tips []string
+			ClassInfo []string
+		}{
+			Tips: cubecoreTips,
+			ClassInfo: cubecoreClassTips,
+		})
+		if err != nil {
+			log.Fatal(err)
+		}
+	})
+
 	http.Handle("/static.css", http.StripPrefix("/", http.FileServer(http.Dir("."))))
 	http.Handle("/static.js", http.StripPrefix("/", http.FileServer(http.Dir("."))))
 	http.Handle("/potpisser.jpg", http.StripPrefix("/", http.FileServer(http.Dir("."))))
@@ -47,7 +72,7 @@ func main() {
 	}
 }
 func fetchTips(tipsName string) []string {
-	rows, err := postgresConnection.Query(context.Background(), "SELECT tip_message FROM server_tips WHERE server_id = (SELECT id FROM servers WHERE name = '" + tipsName + "')")
+	rows, err := PostgresPoolFinal.Query(context.Background(), "SELECT tip_message FROM server_tips WHERE server_id = (SELECT id FROM servers WHERE name = '" + tipsName + "')")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -64,7 +89,7 @@ func fetchTips(tipsName string) []string {
 	return cubecoreTips
 }
 func fetchDeaths(tipsName string) []string {
-	rows, err := postgresConnection.Query(context.Background(), "SELECT tip_message FROM server_tips WHERE server_id = (SELECT id FROM servers WHERE name = '" + tipsName + "')")
+	rows, err := PostgresPoolFinal.Query(context.Background(), "SELECT tip_message FROM server_tips WHERE server_id = (SELECT id FROM servers WHERE name = '" + tipsName + "')")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -86,14 +111,4 @@ func getMainTemplate(fileName string) *template.Template {
 		log.Fatal(err)
 	}
 	return hey
-}
-func executeMainTipsTemplate(template2 *template.Template, w http.ResponseWriter, tips []string) {
-	err := template2.Execute(w, struct {
-		Tips []string
-	}{
-		Tips: tips,
-	})
-	if err != nil {
-		log.Fatal(err)
-	}
 }
