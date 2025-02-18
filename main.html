@@ -13,8 +13,10 @@
     {{block "deaths" .}}{{end}}
 </div>
 
-<div style="display: flex; flex-direction: column; background-color: #F0F0F0">
-    <h4 style="margin-left: 0; font-weight: normal">online: 000/000</h4>
+<div style="display: flex; flex-direction: column;">
+    <h4 class="foo" style="margin-left: 0; font-weight: normal; background-color: #F0F0F0">
+        online: 000/000
+    </h4>
     {{block "server info" .}}{{end}}
     <div style="margin-top: auto">
         {{block "console" .}}{{end}}
