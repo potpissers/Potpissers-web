@@ -29,16 +29,13 @@
      style="align-items: center; align-self: start; justify-self: center; position: sticky; top: 0; display: inline-flex; background-color: #CEE3F8;">
     <img style="cursor: pointer; height: 3em; width: 3em; margin: 0" src="potpisser.jpg" alt="image of calvin pissing"
          onclick="sendHome()">
-<!--    <h5 class="foo" style="cursor: pointer; width: 7.5rem; text-align: right; font-weight: normal" onclick=sendHome()>-->
-<!--        {{block "potpissers" .}}{{end}}-->
-<!--    </h5>-->
     <select class="foo"
             style="width: 10rem"
             onchange="window.location.href=this.value">
         <option disabled selected hidden>{{block "potpissers" .}}{{end}}</option>
         {{block "gamemodes" .}}{{end}}
     </select>
-    <input class="foo" style="width: 6rem" type="search" placeholder="players">
+    <input class="foo" style="width: 5rem" type="search" placeholder="players">
 </div>
 
 <div style="flex-direction: column; justify-self: end; display: flex">
