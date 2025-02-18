@@ -36,8 +36,7 @@
             style="width: 7rem"
             onchange="window.location.href=this.value">
         <option disabled selected hidden>{{block "potpissers" .}}{{end}}</option>
-        <option value="hcf">hcf</option>
-        <option value="mz">mz</option>
+        {{block "gamemodes" .}}{{end}}
     </select>
     <input class="foo" style="width: 6rem" type="search" placeholder="players">
 </div>
