@@ -7,19 +7,34 @@
 <option disabled value="hcf">hcf.potpissers.com</option>
 {{end}}
 
+{{define "server info"}}
+<li style="">deathban: ip -> 30m</li>
+<li style="">border: 2500</li>
+<li style="">sharpness: 1</li>
+<li style="">protection: 2</li>
+<li style="">power: 3</li>
+<li style="">regen: 1</li>
+<li style="">strength: 2</li>
+<li style="">weakness: off</li>
+<li style="">extended debuffs: off</li>
+<li style="">dtr freeze: 0s</li>
+<li style="">dtr regen: 480s</li>
+<li style="">dtr max: 5.5</li>
+{{end}}
+
 {{define "content"}}
 <div class="foo content-inline-grid">
     <div class="foo baz" style="grid-row: span 3">
-        <h4></h4> <!--     TODO    factions  -->
+        <button>factions</button>
     </div>
     <div class="foo baz">
-<!--        <h3>TODO announcements</h3>-->
+        <button>announcements</button>
     </div>
     <div class="foo baz" style="grid-row: span 3">
-        <h4></h4> <!-- TODO       fights -->
+        <button>fights</button>
     </div>
     <div class="foo baz">
-<!--        <h3>TODO changelog</h3>-->
+        <button>changelog</button>
     </div>
     <div class="foo-less baz">
         <h3 style="text-align: center;">hcf info</h3>
@@ -39,19 +54,4 @@
 <!--        <h3>TODO MAP + loot tables-->
     </div>
 </div>
-{{end}}
-
-{{define "server info"}}
-<li style="">deathban: ip -> 30m</li>
-<li style="">border: 2500</li>
-<li style="">sharpness: 1</li>
-<li style="">protection: 2</li>
-<li style="">power: 3</li>
-<li style="">regen: 1</li>
-<li style="">strength: 2</li>
-<li style="">weakness: off</li>
-<li style="">extended debuffs: off</li>
-<li style="">dtr freeze: 0s</li>
-<li style="">dtr regen: 480s</li>
-<li style="">dtr max: 5.5</li>
 {{end}}

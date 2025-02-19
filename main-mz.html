@@ -7,19 +7,23 @@
 <option value="hcf">hcf.potpissers.com</option>
 {{end}}
 
+{{define "server info"}}
+<li>deathban: alts -> 30m</li>
+{{end}}
+
 {{define "content"}}
 <div class="foo content-inline-grid">
     <div class="foo baz" style="grid-row: span 3">
-        <h4></h4> <!--     TODO    bandits + heroes (?) -->
+        <button>bandits</button> <!--     TODO heroes (?) -->
     </div>
     <div class="foo baz" style="">
-<!--        <h3>TODO announcements</h3>-->
+        <button>announcements</button>
     </div>
     <div class="foo baz" style="grid-row: span 3">
-        <h4></h4> <!-- TODO       fights-->
+        <button>fights</button>
     </div>
     <div class="foo baz" style="">
-<!--        <h3>TODO changelog</h3>-->
+        <button>changelog</button>
     </div>
     <div class="foo baz">
         <h3 style="text-align: center">mz info</h3>
@@ -35,8 +39,4 @@
         </h3>
     </div>
 </div>
-{{end}}
-
-{{define "server info"}}
-<li>deathban: alts -> 30m</li>
 {{end}}
