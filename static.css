@@ -40,6 +40,11 @@ li {
     box-shadow: .1rem .1rem .1rem black;
 }
 
+.foo-less {
+    border: .1rem solid black;
+    box-shadow: .1rem .1rem .1rem black;
+}
+
 .bar {
     color: #A0ADB8;
     background-color: #33383D;
