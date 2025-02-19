@@ -15,21 +15,15 @@ ul li:nth-child(odd) {
     background-color: white;
 }
 
-/*ul {*/
-/*    list-style-type: none;*/
-/*}*/
-
 ul {
     margin: 0;
     padding: 0;
-    list-style: none; /* Remove bullets */
-    text-align: center; /* Center the text inside list items */
+    list-style: none;
 }
 
-li {
-    display: inline-block; /* Make list items inline so they don't stack vertically */
-    margin: 5px; /* Optional: adds space between items */
-}
+/*li {*/
+/*    display: inline-block; !* Make list items inline so they don't stack vertically *!*/
+/*}*/
 
 .foo {
     gap: .5rem;
