@@ -12,7 +12,8 @@ body {
 }
 
 ul li:nth-child(odd) {
-    background-color: white;
+    color: #A0ADB8;
+    background-color: #33383D;
 }
 
 ul {
