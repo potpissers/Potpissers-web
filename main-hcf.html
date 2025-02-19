@@ -37,8 +37,10 @@
         <button>changelog</button>
     </div>
     <div class="foo-less baz">
-        <button style="text-align: center;">hcf info</button>
-        <ul>
+        <button style="text-align: center;" onclick="doUnhide('tips')">
+            hcf info
+        </button>
+        <ul id="tips" hidden>
             {{range .Tips}}
             <li>{{.}}</li>
             {{end}}
