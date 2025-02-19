@@ -20,8 +20,8 @@ func init() {
 
 func main() {
 	potpissersTips := fetchTips("null")
-	cubecoreTips := append(potpissersTips, fetchTips("cubecore")...)
-	mzTips := append(potpissersTips, fetchTips("minez")...)
+	cubecoreTips := append(fetchTips("cubecore"), potpissersTips...)
+	mzTips := append(fetchTips("minez"), potpissersTips...)
 	cubecoreClassTips := fetchTips("cubecore_classes")
 
 //	TODO deaths
