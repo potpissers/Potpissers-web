@@ -38,26 +38,25 @@
             onchange="window.location.href=this.value">
         {{block "gamemodes" .}}{{end}}
     </select>
+    <input class="foo" style="width: 6.5rem" type="search" placeholder="players">
 </div>
 
-<div style="display: grid; grid-template-columns: auto auto; grid-template-rows: auto auto">
-    <input class="foo" style="width: 6.5rem; grid-row: span 2; align-self: start; justify-self: start" type="search" placeholder="players">
-
-    <div style="display: inline-flex; justify-content: end">
+<div style="flex-direction: column; justify-self: end; display: flex">
+    <div class="foo" style="display: inline-flex; background-color: #F0F0F0">
         <a href="https://discord.gg/Cqnvktf7EF">
-            <h4 class="foo" style="font-weight: normal; margin: 0; background-color: #F0F0F0">discord</h4>
+            <h4 style="font-weight: normal; margin: 0">discord</h4>
         </a>
         <a href="https://reddit.com/r/potpissers">
-            <h4 class="foo" style="font-weight: normal; margin: 0; background-color: #F0F0F0">reddit</h4>
+            <h4 style="font-weight: normal; margin: 0">reddit</h4>
         </a>
     </div>
 
-    <div style="display: inline-flex; justify-content: end; align-items: end">
-        <button class="foo" style="margin: 0; background-color: #F0F0F0">
+    <div class="foo" style="display: inline-flex; margin-left: auto; margin-top: auto">
+        <button style="margin: 0">
             donate
         </button>
         <a href="http://localhost:8080">
-            <p class="foo" style="font-weight: normal; margin: 0; background-color: #F0F0F0">
+            <p style="font-weight: normal; margin: 0; background-color: #F0F0F0">
                 vote
             </p>
         </a>
