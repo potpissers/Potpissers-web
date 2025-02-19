@@ -11,6 +11,10 @@ body {
     grid-template-rows: 50vh auto auto
 }
 
+body::-webkit-scrollbar {
+    display: none;
+}
+
 ul li:nth-child(odd) {
     /*this is baz*/
     color: #A0ADB8;
