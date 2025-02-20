@@ -79,10 +79,15 @@
     {{block "events" .}}{{end}}
 </div>
 
-<div class="foo" style="background: #33383D; grid-column: 2/5;">
-    <div class="foo baz" style="text-align: center">
-        <button>announcements</button>
-        <button>changelog</button>
+<div class="foo" style="background: #33383D; grid-column: 2/5">
+    <div style="display: flex">
+        <div class="foo baz" style="text-align: center; flex: 2">
+            <button>announcements</button>
+            <button>changelog</button>
+        </div>
+        <div style="flex: 1">
+
+        </div>
     </div>
     {{block "content" .}}{{end}}
 </div>
