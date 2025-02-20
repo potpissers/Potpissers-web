@@ -84,34 +84,8 @@
         <button>announcements</button>
         <button>changelog</button>
     </div>
-    <div class="foo baz" style="grid-row: span 3">
-        <button>factions</button>
-    </div>
-    <div class="foo baz" style="grid-row: span 3">
-        <button>fights</button>
-    <div class="foo-less baz" style="text-align: center">
-        <button style=";" onclick="doUnhide('tips')">
-            hcf info
-        </button>
-        <ul id="tips" hidden>
-            {{range .Tips}}
-            <li>{{.}}</li>
-            {{end}}
-        </ul>
-        <button>
-            class info
-        </button>
-        <ul id="classes" hidden>
-            {{range .ClassInfo}}
-            <li>{{.}}</li>
-            {{end}}
-        </ul>
-    </div>
-    <div class="foo baz" style="grid-column: span 3">
-        <!--        <h3>TODO MAP + loot tables-->
-    </div>
+    {{block "content" .}}{{end}}
 </div>
-{{block "content" .}}{{end}}
 
 <div class="foo bar" style="text-align: center">
     <button>donations</button>
