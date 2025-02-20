@@ -40,11 +40,18 @@
 </div>
 
 <div style="display: flex; flex-direction: column; justify-content: space-between">
-    <a style="" href="https://discord.gg/Cqnvktf7EF">
-        <h5 class="foo" style="font-weight: normal; background-color: #F0F0F0; margin: 0; text-align: right">
-            discord
-        </h5>
-    </a>
+    <div>
+        <a style="" href="https://discord.gg/Cqnvktf7EF">
+            <h5 class="foo" style="font-weight: normal; background-color: #F0F0F0; margin: 0; text-align: right">
+                discord
+            </h5>
+        </a>
+        <a href="https://reddit.com/r/potpissers" style="flex: 1;">
+            <h5 class="foo" style="font-weight: normal; margin: 0; background-color: #F0F0F0">
+                /r/potpissers
+            </h5>
+        </a>
+    </div>
 
     <div style="">
         {{block "console" .}}{{end}}
@@ -54,15 +61,9 @@
 
 <div class="foo bar">
     <div style="display: flex;">
-        <a href="https://reddit.com/r/potpissers" style="flex: 1;">
-            <h5 class="foo" style="font-weight: normal; margin: 0; background-color: #F0F0F0">
-                /r/potpissers
-            </h5>
-        </a>
-        <button style="flex: 1; text-align: center">
+        <button style="text-align: center">
             videos
         </button>
-        <div style="flex: 1"></div>
     </div>
     {{block "videos" .}}{{end}}
 </div>
