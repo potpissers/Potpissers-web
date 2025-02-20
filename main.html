@@ -60,11 +60,11 @@
 
 <div class="foo bar" style="display: flex">
     <a href="https://reddit.com/r/potpissers">
-        <h4 style="font-weight: normal; margin: 0">
+        <h4 style="font-weight: normal; margin: 0; flex-shrink: 0">
             reddit
         </h4>
     </a>
-    <div style="justify-content: center">
+    <div style="justify-content: center; flex-grow: 1">
         <button>videos</button>
         {{block "videos" .}}{{end}}
     </div>
