@@ -58,16 +58,17 @@
     </div>
 </div>
 
-<div class="foo bar" style="display: flex; justify-content: space-between">
-    <a href="https://reddit.com/r/potpissers">
-        <h4 style="font-weight: normal; margin: 0">
-            reddit
-        </h4>
-    </a>
-    <div style="flex-grow: 1; display: inline-flex; justify-content: center;">
-        <button>videos</button>
-        {{block "videos" .}}{{end}}
+<div class="foo bar">
+    <div style="display: flex;">
+        <a href="https://reddit.com/r/potpissers" style="flex: 1;">
+            <h4 style="font-weight: normal; margin: 0">
+                reddit
+            </h4>
+        </a>
+        <button style="flex: 1; text-align: center">videos</button>
+        <div style="flex: 1"></div>
     </div>
+    {{block "videos" .}}{{end}}
 </div>
 
 <div class="foo bar" style="text-align: center">
