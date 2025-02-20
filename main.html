@@ -58,17 +58,29 @@
     </div>
 </div>
 
-<div class="foo bar" style="display: flex; justify-content: space-between; width: 100%;">
+<div class="foo bar" style="display: flex; justify-content: space-between; width: 100%">
     <a href="https://reddit.com/r/potpissers">
-        <h4 style="font-weight: normal; margin: 0; flex-shrink: 0">
+        <h4 style="font-weight: normal; margin: 0">
             reddit
         </h4>
     </a>
-    <div style="justify-content: center; flex-grow: 1">
+    <div style="flex-grow: 1; display: flex; justify-content: center;">
         <button>videos</button>
         {{block "videos" .}}{{end}}
     </div>
 </div>
+
+<!--<div class="foo bar" style="display: flex">-->
+<!--    <a href="https://reddit.com/r/potpissers">-->
+<!--        <h4 style="font-weight: normal; margin: 0">-->
+<!--            reddit-->
+<!--        </h4>-->
+<!--    </a>-->
+<!--    <div style="">-->
+<!--        <button>videos</button>-->
+<!--        {{block "videos" .}}{{end}}-->
+<!--    </div>-->
+<!--</div>-->
 
 <div class="foo bar" style="text-align: center">
     <button>events</button>
