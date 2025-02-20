@@ -26,12 +26,14 @@
 {{end}}
 
 {{define "content"}}
-<div class="foo baz" style="grid-row: span 3">
-    <button>factions</button>
-</div>
-<div class="foo baz" style="grid-row: span 3">
-    <button>fights</button>
+<button>factions</button>
+<div class="foo baz" style="">
+    <div>
+        <button>fights</button>
+    </div>
+
     <div class="foo-less baz" style="text-align: center">
+
         <button style=";" onclick="doUnhide('tips')">
             hcf info
         </button>
@@ -40,6 +42,7 @@
             <li>{{.}}</li>
             {{end}}
         </ul>
+
         <button>
             class info
         </button>
@@ -48,7 +51,9 @@
             <li>{{.}}</li>
             {{end}}
         </ul>
+
     </div>
+
     <div class="foo baz" style="grid-column: span 3">
         <!--        <h3>TODO MAP + loot tables-->
     </div>
