@@ -26,9 +26,9 @@
 {{end}}
 
 {{define "content"}}
-<div class="foo baz" style="display: grid; grid-template-columns: 1fr 20%">
+<div class="foo baz" style="display: flex;">
 
-    <div class="foo-less baz" style="text-align: center">
+    <div class="foo-less baz" style="text-align: center; flex: 2">
 
         <div>
             <button style=";" onclick="doUnhide('tips')">
@@ -56,7 +56,7 @@
 
     </div>
 
-    <div style="text-align: center">
+    <div style="text-align: center; flex: 1">
         <button>factions</button>
     </div>
 </div>
