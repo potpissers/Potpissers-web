@@ -1,7 +1,6 @@
 html {
     background-color: #A0AFBF
 }
-
 body {
     backdrop-filter: blur(10px);
     background-color: rgba(0, 0, 0, .5);
@@ -10,23 +9,19 @@ body {
     grid-template-columns: 20% 1fr auto 1fr 20%;
     grid-template-rows: 45vh 45vh auto
 }
-
 body::-webkit-scrollbar {
     display: none;
 }
-
 ul li:nth-child(odd) {
     /*this is baz*/
     color: #A0ADB8;
     background-color: #33383D;
 }
-
 ul {
     margin: 0;
     padding: 0;
     list-style: none;
 }
-
 li {
     gap: .5rem;
     padding-left: .5rem;
@@ -34,6 +29,10 @@ li {
     border: .1rem solid black;
     box-shadow: .1rem .1rem .1rem black;
     margin-bottom: .5rem;
+}
+footer {
+    grid-column: 1/6;
+    text-align: center;
 }
 
 .foo {
@@ -44,22 +43,11 @@ li {
     box-shadow: .1rem .1rem .1rem black;
 }
 
-.foo-less {
-    border: .1rem solid black;
-    box-shadow: .1rem .1rem .1rem black;
-}
-
 .bar {
     color: #A0ADB8;
     background-color: #33383D;
 }
-
 .baz {
     color: #DEDEE3;
     background-color: #4F565E
-}
-
-footer {
-    grid-column: 1/6;
-    text-align: center;
 }
