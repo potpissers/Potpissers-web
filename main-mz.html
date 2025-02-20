@@ -15,19 +15,8 @@
 {{end}}
 
 {{define "content"}}
-<div class="foo content-inline-grid">
-    <div class="foo baz" style="grid-row: span 3">
-        <button>bandits</button> <!--     TODO heroes (?) -->
-    </div>
-    <div class="foo baz" style="text-align: center">
-    </div>
-    <div class="foo baz" style="grid-row: span 3">
-        <button>fights</button>
-    </div>
-    <div class="foo baz" style="text-align: center">
-        <button>changelog</button>
-    </div>
-    <div class="foo baz" style="text-align: center">
+<div class="foo" style="display: flex">
+    <div class="foo baz" style="text-align: center; flex: 3">
         <button style="">mz info</button>
         <ul id="tips" hidden>
             {{range .Tips}}
@@ -35,10 +24,13 @@
             {{end}}
         </ul>
     </div>
-    <div class="foo baz" style="grid-column: span 3">
-        <h3>
-            <!--        TODO -> map + loot tables-->
-        </h3>
+    <div class="foo baz" style="flex: 1">
+        <button>bandits</button> <!--     TODO heroes (?) -->
     </div>
+<!--    <div class="foo baz" style="">-->
+<!--        <h3>-->
+<!--            &lt;!&ndash;        TODO -> map + loot tables&ndash;&gt;-->
+<!--        </h3>-->
+<!--    </div>-->
 </div>
 {{end}}
