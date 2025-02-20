@@ -8,7 +8,7 @@ body {
     font-family: sans-serif;
     display: grid;
     grid-template-columns: 20% 1fr auto 1fr 20%;
-    grid-template-rows: 50vh auto auto
+    grid-template-rows: 50vw 50vw
 }
 
 body::-webkit-scrollbar {
