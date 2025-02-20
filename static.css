@@ -69,4 +69,5 @@ li {
 footer {
     grid-column: 1/6;
     text-align: center;
+    padding: 0
 }
