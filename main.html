@@ -14,13 +14,16 @@
     {{block "fights" .}}{{end}}
 </div>
 
-<div style="display: flex; flex-direction: column;">
-    <button style="">online: 000/000</button>
-    <ul style="font-size: 87.5%; overflow-y: scroll; height: 50%">
-        <li style="">attack speed: 12</li>
-        {{block "server info" .}}{{end}}
-    </ul>
+<div style="display: flex; flex-direction: column; justify-content: space-between">
+    <div>
+        <button style="">online: 000/000</button>
+        <ul style="font-size: 87.5%; overflow-y: scroll; height: 50%">
+            <li style="">attack speed: 12</li>
+            {{block "server info" .}}{{end}}
+        </ul>
+    </div>
     <div style="margin-top: auto">
+        foo
         {{block "console" .}}{{end}}
         <!--    TODO LIVE CONSOLE -->
     </div>
