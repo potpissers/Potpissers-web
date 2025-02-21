@@ -20,7 +20,8 @@
             <button style="margin-bottom: auto">
                 leaderboards
             </button>
-            <input class="foo" style="margin-top: auto; width: 6.25rem; text-align: right" type="search" placeholder="players">
+            <input class="foo" style="margin-top: auto; width: 6.25rem; text-align: right" type="search"
+                   placeholder="players">
         </div>
         <div class="foo"
              style="align-items: center; justify-self: center; display: inline-flex; background-color: #CEE3F8; padding-left: 0">
@@ -51,7 +52,10 @@
 
     <div style="display: flex; height: 100%;">
         <div style="display: flex; flex-direction: column; justify-content: space-between">
-            <button style="margin-left: auto;">000/000 online</button>
+            <div>
+<!--                TODO TAB LIST-->
+            </div>
+
             <div style="">
                 <ul style="">
                     {{block "console" .}}{{end}}
@@ -59,6 +63,10 @@
                 </ul>
                 <input style="margin-top: auto">
             </div>
+        </div>
+
+        <div>
+            <button style="margin-left: auto;">000/000 online</button>
         </div>
 
         <div style="display: flex; flex-direction: column; justify-content: space-between;">
