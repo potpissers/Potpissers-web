@@ -49,16 +49,17 @@
     </div>
 
     <div style="display: flex; height: 100%;">
-        <div style="display: flex; flex-direction: column; justify-content: flex-end">
-            <ul style="">
-                {{block "console" .}}{{end}}
-                <!--    TODO LIVE CONSOLE -->
-            </ul>
-            <input style="margin-top: auto">
-        </div>
-
-        <div style="">
-            <button style="">online - 000/000</button>
+        <div style="display: flex; justify-content: space-between">
+            <div style="">
+                <button style="">online - 000/000</button>
+            </div>
+            <div style="">
+                <ul style="">
+                    {{block "console" .}}{{end}}
+                    <!--    TODO LIVE CONSOLE -->
+                </ul>
+                <input style="margin-top: auto">
+            </div>
         </div>
 
         <div style="display: flex; flex-direction: column; justify-content: space-between;">
