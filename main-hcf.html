@@ -9,19 +9,9 @@
 
 {{define "server info"}}
 <li style="display: flex; justify-content: space-between">
-    deathban: 30m - ip
+    deathban (ip): 30m
 </li>
 <li style="">border: 2500</li>
-<li style="">sharpness: 1</li>
-<li style="">protection: 2</li>
-<li style="">power: 3</li>
-<li style="">regen: 1</li>
-<li style="">strength: 2</li>
-<li style="">weakness: off</li>
-<li style="">extended debuffs: off</li>
-<li style="">dtr freeze: 0s</li>
-<li style="">dtr regen: 480s</li>
-<li style="">dtr max: 5.5</li>
 {{end}}
 
 {{define "content"}}
@@ -31,19 +21,34 @@
             <button style=";" onclick="doUnhide('tips')">
                 hcf info
             </button>
+            <button onclick="doUnhide('classes')">
+                class info
+            </button>
+            <button onclick="doUnhide('kit')">
+                map foo info
+            </button>
+
             <ul id="tips" hidden>
                 {{range .Tips}}
                 <li>{{.}}</li>
                 {{end}}
             </ul>
-
-            <button>
-                class info
-            </button>
             <ul id="classes" hidden>
                 {{range .ClassInfo}}
                 <li>{{.}}</li>
                 {{end}}
+            </ul>
+            <ul id="kit" hidden>
+                <li style="">sharpness: 1</li>
+                <li style="">protection: 2</li>
+                <li style="">power: 3</li>
+                <li style="">regen: 1</li>
+                <li style="">strength: 2</li>
+                <li style="">weakness: off</li>
+                <li style="">extended debuffs: off</li>
+                <li style="">dtr freeze: 0s</li>
+                <li style="">dtr regen: 480s</li>
+                <li style="">dtr max: 5.5</li>
             </ul>
         </div>
 <!--        <div class="foo baz">-->
