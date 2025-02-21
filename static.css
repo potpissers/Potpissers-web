@@ -8,7 +8,7 @@ body {
     display: grid;
     grid-template-columns: 20% 1fr 20%;
     grid-template-rows: 45vh 45vh auto;
-    scrollbar-gutter: stable;
+    scrollbar-gutter: stable both-edges;
 }
 /*body::-webkit-scrollbar {*/
 /*    display: none;*/
