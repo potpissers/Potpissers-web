@@ -33,6 +33,20 @@ li {
     display: inline-flex;
     justify-content: space-between
 }
+input {
+    gap: .5rem;
+    padding-left: .5rem;
+    padding-right: .5rem;
+    border: .1rem solid black;
+    box-shadow: .1rem .1rem .1rem black;
+}
+button {
+    gap: .5rem;
+    padding-left: .5rem;
+    padding-right: .5rem;
+    border: .1rem solid black;
+    box-shadow: .1rem .1rem .1rem black;
+}
 footer {
     grid-column: 2;
     text-align: center;
