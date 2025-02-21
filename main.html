@@ -50,16 +50,13 @@
     <div style="display: flex; height: 100%;">
         <div style="display: flex; flex-direction: column; justify-content: space-between; flex: 1">
             <div>
-<!--                TODO TAB LIST-->
+                <!-- TODO TAB LIST-->
             </div>
-
-            <div style="flex: 1">
-                <ul style="overflow-y: scroll">
-                    {{block "console" .}}{{end}}
-                    <!--    TODO LIVE CONSOLE -->
-                </ul>
-                <input style="margin-top: auto; width: 100%">
-            </div>
+            <ul style="overflow-y: scroll">
+                {{block "console" .}}{{end}}
+                <!-- TODO LIVE CONSOLE -->
+            </ul>
+            <input style="margin-top: auto; width: 100%">
         </div>
 
         <div style="flex: 1">
