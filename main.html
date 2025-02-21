@@ -51,6 +51,13 @@
     </div>
 
     <div style="display: flex">
+        <div style="display: flex; flex-direction: column; justify-content: space-between">
+            <div style="">
+                {{block "console" .}}{{end}}
+                <!--    TODO LIVE CONSOLE -->
+                <input>
+            </div>
+        </div>
         <div style="display: flex; flex-direction: column; justify-content: space-between;">
             <div style="width: 12.5rem; overflow-y: scroll">
                 <ul>
@@ -65,14 +72,6 @@
 
         <div style="">
             <button style="">online - 000/000</button>
-        </div>
-
-        <div style="display: flex; flex-direction: column; justify-content: space-between">
-            <div style="">
-                console
-                {{block "console" .}}{{end}}
-                <!--    TODO LIVE CONSOLE -->
-            </div>
         </div>
     </div>
 </div>
