@@ -30,6 +30,8 @@ li {
     border: .1rem solid black;
     box-shadow: .1rem .1rem .1rem black;
     margin-bottom: .5rem;
+    display: inline-flex;
+    justify-content: space-between
 }
 footer {
     grid-column: 2;
