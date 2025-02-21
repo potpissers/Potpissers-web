@@ -15,12 +15,11 @@
 </div>
 
 <div>
-    <div style="display: grid; grid-template-columns: 1fr auto 1fr">
+    <div style="display: grid; grid-template-columns: 1fr auto 1fr; grid-template-rows: auto auto">
         <div style="display: flex; justify-content: space-between; margin-bottom: auto">
             <button>
                 leaderboards
             </button>
-            <input class="foo" style="width: 6.5rem" type="search" placeholder="players">
         </div>
         <div>
             <div class="foo"
@@ -35,9 +34,10 @@
             </div>
         </div>
         <div style="display: flex; justify-content: space-between;">
-            <ul style="font-size: 75%;">
-                {{block "server info" .}}{{end}}
-            </ul>
+<!--            <ul style="font-size: 75%;">-->
+<!--                {{block "server info" .}}{{end}}-->
+<!--            </ul>-->
+            <input class="foo" style="width: 6.5rem" type="search" placeholder="players">
             <div style="display: flex">
                 <a style="" href="https://discord.gg/Cqnvktf7EF">
                     <h5 class="foo" style="font-weight: normal; background-color: #F0F0F0; margin: 0;">
@@ -51,6 +51,8 @@
                 </a>
             </div>
         </div>
+
+
     </div>
 
     <div style="display: flex">
