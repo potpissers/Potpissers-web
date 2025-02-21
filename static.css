@@ -23,12 +23,20 @@ ul {
     padding: 0;
     list-style: none;
 }
+.foo {
+    gap: .5rem;
+    padding-left: .5rem;
+    padding-right: .5rem;
+    border: .1rem solid black;
+    box-shadow: .1rem .1rem .1rem black;
+}
 li {
     gap: .5rem;
     padding-left: .5rem;
     padding-right: .5rem;
     border: .1rem solid black;
     box-shadow: .1rem .1rem .1rem black;
+
     margin-bottom: .5rem;
     display: inline-flex;
     justify-content: space-between
@@ -50,14 +58,6 @@ button {
 footer {
     grid-column: 2;
     text-align: center;
-}
-
-.foo {
-    gap: .5rem;
-    padding-left: .5rem;
-    padding-right: .5rem;
-    border: .1rem solid black;
-    box-shadow: .1rem .1rem .1rem black;
 }
 
 .bar {
