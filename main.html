@@ -8,11 +8,11 @@
 <body class="foo">
 
 <div class="foo bar" style="text-align: center">
-    <button>deaths</button>
-    {{block "deaths" .}}{{end}}
     <button>fights</button>
-    {{block "fights" .}}{{end}}
+    <button>deaths</button>
     <button>duels</button>
+    {{block "deaths" .}}{{end}}
+    {{block "fights" .}}{{end}}
     {{block "duels" .}}{{end}}
 </div>
 
