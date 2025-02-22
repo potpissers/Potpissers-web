@@ -59,6 +59,14 @@ button {
     box-shadow: .1rem .1rem .1rem black;
     border-radius: .1rem
 }
+select {
+    gap: .5rem;
+    padding-left: .5rem;
+    padding-right: .5rem;
+    outline: .1rem solid black;
+    box-shadow: .1rem .1rem .1rem black;
+    border-radius: .1rem
+}
 footer {
     grid-column: 2;
     text-align: center;
