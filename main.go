@@ -87,7 +87,7 @@ func main() {
 		DeathY int `json:"deathY"`
 		DeathZ int `json:"deathZ"`
 		DeathMessage string `json:"deathMessage"`
-		KillerUuid string `json:"killerUuid"`
+		KillerUuid *string `json:"killerUuid"`
 		// TODO killer weapon
 		// TODO killer inventory
 	}
@@ -113,9 +113,9 @@ func main() {
 		StartTimestamp time.Time `json:"startTimestamp"`
 		LootFactor    int `json:"lootFactor"`
 		IsMovementRestricted bool `json:"isMovementRestricted"`
-		CappingUserUUID string `json:"cappingUserUUID"`
+		CappingUserUUID *string `json:"cappingUserUUID"`
 		EndTimestamp time.Time `json:"endTimestamp"`
-		CappingPartyUUID string `json:"cappingPartyUUID"`
+		CappingPartyUUID *string `json:"cappingPartyUUID"`
 		World string `json:"world"`
 		X int `json:"x"`
 		Y int `json:"y"`
