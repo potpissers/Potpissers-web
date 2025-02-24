@@ -224,8 +224,10 @@ func main() {
 	home, mz, hcf := getMainTemplate("main-home.html"), getMainTemplate("main-mz.html"), getMainTemplate("main-hcf.html")
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		err := home.Execute(w, struct {
+			NewPlayers []NewPlayer
 			Tips []string
 		}{
+			NewPlayers: newPlayers,
 			Tips: potpissersTips,
 			})
 		if err != nil {
@@ -234,8 +236,10 @@ func main() {
 	})
 	http.HandleFunc("/mz", func(w http.ResponseWriter, r *http.Request) {
 		err := mz.Execute(w, struct {
+			NewPlayers []NewPlayer
 			Tips []string
 		}{
+			NewPlayers: newPlayers,
 			Tips: mzTips,
 			})
 		if err != nil {
@@ -244,9 +248,11 @@ func main() {
 	})
 	http.HandleFunc("/hcf", func(w http.ResponseWriter, r *http.Request) {
 		err := hcf.Execute(w, struct {
+			NewPlayers []NewPlayer
 			Tips []string
 			ClassInfo []string
 		}{
+			NewPlayers: newPlayers,
 			Tips: cubecoreTips,
 			ClassInfo: cubecoreClassTips,
 			})
