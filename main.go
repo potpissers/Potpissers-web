@@ -112,6 +112,7 @@ func main() {
 	type Event struct {
 		StartTimestamp time.Time `json:"startTimestamp"`
 		LootFactor    int `json:"lootFactor"`
+		MaxTimer int `json:"maxTimer"`
 		IsMovementRestricted bool `json:"isMovementRestricted"`
 		CappingUserUUID *string `json:"cappingUserUUID"`
 		EndTimestamp time.Time `json:"endTimestamp"`
@@ -128,7 +129,7 @@ func main() {
 	{
 		handleRowsBlocking(Return100Events, func(rows pgx.Rows) {
 			var event Event
-			_, err := pgx.ForEachRow(rows, []any{&event.StartTimestamp, &event.LootFactor, &event.IsMovementRestricted, &event.CappingUserUUID, &event.EndTimestamp, &event.CappingPartyUUID, &event.World, &event.X, &event.Y, &event.Z, &event.ServerName, &event.ArenaName, &event.Creator}, func() error {
+			_, err := pgx.ForEachRow(rows, []any{&event.StartTimestamp, &event.LootFactor, &event.MaxTimer, &event.IsMovementRestricted, &event.CappingUserUUID, &event.EndTimestamp, &event.CappingPartyUUID, &event.World, &event.X, &event.Y, &event.Z, &event.ServerName, &event.ArenaName, &event.Creator}, func() error {
 				events = append(events, event)
 				return nil
 			})
