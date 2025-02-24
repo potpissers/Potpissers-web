@@ -265,7 +265,7 @@ func main() {
 
 const Return100Deaths = `SELECT name,
        victim_user_fight_id,
-       Timestamp,
+       timestamp,
        victim_uuid,
        bukkit_victim_inventory,
        death_world,
@@ -278,11 +278,11 @@ const Return100Deaths = `SELECT name,
        bukkit_killer_inventory
 FROM user_deaths
          JOIN servers ON user_deaths.server_id = servers.id
-ORDER BY Timestamp
+ORDER BY timestamp
 LIMIT 100`
-const Return100NewPlayers = `SELECT user_uuid, Referrer, Timestamp, ROW_NUMBER() OVER (ORDER BY Timestamp) AS row_number
+const Return100NewPlayers = `SELECT user_uuid, referrer, timestamp, ROW_NUMBER() OVER (ORDER BY timestamp) AS row_number
 FROM user_referrals
-ORDER BY Timestamp
+ORDER BY timestamp
 LIMIT 100`
 const Return100Events = `SELECT start_timestamp,
        loot_factor,
