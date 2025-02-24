@@ -78,7 +78,7 @@ func main() {
 
 	type Death struct {
 		ServerName string `json:"serverName"`
-		VictimUserFightId int `json:"victimUserFightId"`
+		VictimUserFightId *int `json:"victimUserFightId"`
 		Timestamp time.Time `json:"timestamp"`
 		VictimUuid string `json:"victimUuid"`
 		// TODO victim inventory
