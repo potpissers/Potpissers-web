@@ -63,9 +63,22 @@
         {{block "server info" .}}{{end}}
 
         <div style="display: flex; flex-direction: column; justify-content: space-between; flex: 1">
-            <ul style="flex: 1">
-                <!-- TODO show joined number + new players list -->
-            </ul>
+            <table style="flex: 1">
+                <tr>
+                    <th>#</th>
+                    <th>player</th>
+                    <th>referrer</th>
+                    <th>timestamp</th>
+                </tr>
+                {{range .NewPlayers}}
+                <tr>
+                    <td>{{.RowNumber}}</td>
+                    <td>{{.PlayerUuid}}</td>
+                    <td>{{.Referrer}}</td>
+                    <td>{{.Timestamp}}</td>
+                </tr>
+                {{end}}
+            </table>
             <button style="margin-left: auto; text-align: right">new players</button>
         </div>
     </div>
