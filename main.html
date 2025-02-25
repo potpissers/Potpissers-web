@@ -64,13 +64,13 @@
 
         <div style="display: flex; flex-direction: column; justify-content: space-between; flex: 1">
             <div style="flex: 1">
-                <p>
+                <small>
                     1/21/21:4:20: [1] Camwen. referrer: cawmen
-                </p>
+                </small>
                 {{range .NewPlayers}}
-                <p>
+                <small>
                     {{.Timestamp}}: [{{.RowNumber}}] {{.PlayerUuid}}. referrer: {{.Referrer}}
-                </p>
+                </small>
                 {{end}}
             </div>
             <button style="margin-left: auto; text-align: right">new players</button>
