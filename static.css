@@ -33,7 +33,7 @@ li {
     border-radius: .25rem;
 
     margin-bottom: .5rem;
-    /*display: inline-flex;*/
+    display: inline-flex;
     justify-content: space-between
 }
 .foo {
