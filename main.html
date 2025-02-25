@@ -18,9 +18,7 @@
         <li style="">({{.ServerName}}) {{.DeathMessage}}</li>
         {{end}}
     </ul>
-    <script>
-        document.getElementById('deaths').scrollTop = 0;
-    </script>
+    <script>doUnhide("deaths")</script>
     {{block "fights" .}}{{end}}
     {{block "duels" .}}{{end}}
 </div>
