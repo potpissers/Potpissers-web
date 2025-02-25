@@ -13,13 +13,14 @@
         <button>deaths</button>
         <button>duels</button>
     </div>
-    <div style="overflow-y: scroll; overflow-x: hidden; flex: 1; display: flex; flex-direction: column-reverse">
+    <ul id="deaths" style="overflow-y: scroll; overflow-x: hidden; font-size: 75%; flex: 1">
         {{range .Deaths}}
-        <small style="">({{.ServerName}}) {{.DeathMessage}}</small>
+        <li style="">({{.ServerName}}) {{.DeathMessage}}</li>
         {{end}}
-    </div>
-<!--    <ul style="overflow-y: scroll; overflow-x: hidden; font-size: 75%; flex: 1">-->
-<!--    </ul>-->
+    </ul>
+    <script>
+        document.getElementById('deaths').scrollTop = 0;
+    </script>
     {{block "fights" .}}{{end}}
     {{block "duels" .}}{{end}}
 </div>
