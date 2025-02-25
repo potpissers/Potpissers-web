@@ -93,7 +93,7 @@ func main() {
 	}
 	var deaths []Death
 	{
-		handleRowsBlocking(Return20Deaths, func(rows pgx.Rows) {
+		handleRowsBlocking(Return15Deaths, func(rows pgx.Rows) {
 			var death Death
 			_, err := pgx.ForEachRow(rows, []any{&death.ServerName, &death.VictimUserFightId, &death.Timestamp, &death.VictimUuid, nil, &death.DeathWorldName, &death.DeathX, &death.DeathY, &death.DeathZ, &death.DeathMessage, &death.KillerUuid, nil, nil}, func() error {
 				deaths = append(deaths, death)
@@ -293,7 +293,7 @@ func main() {
 	}
 }
 
-const Return20Deaths = `SELECT name,
+const Return15Deaths = `SELECT name,
        victim_user_fight_id,
        timestamp,
        victim_uuid,
@@ -309,7 +309,7 @@ const Return20Deaths = `SELECT name,
 FROM user_deaths
          JOIN servers ON user_deaths.server_id = servers.id
 ORDER BY timestamp DESC
-LIMIT 20`
+LIMIT 15`
 const Return100NewPlayers = `SELECT user_uuid, referrer, timestamp, ROW_NUMBER() OVER (ORDER BY timestamp) AS row_number
 FROM user_referrals
 ORDER BY timestamp
