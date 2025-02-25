@@ -9,16 +9,18 @@
 
 {{define "server info"}}
 <div style="flex: 1; display: flex; flex-direction: column">
-    <button style="width: fit-content">server: 000</button>
+    <div style="display: flex; justify-content: space-between">
+        <button style="width: fit-content">server: 000</button>
+        <select style="margin-top: auto; margin-left: auto">
+            <option disabled selected>map 1</option>
+        </select>
+    </div>
     <ul style="font-size: 75%;">
         <li>{{ .AttackSpeed }} attack speed</li>
         <li>{{ .DeathBanMinutes }}m deathban</li>
         <li>{{ .LootFactor }}x event loot</li>
         <li>{{ .BorderSize }} border</li>
     </ul>
-    <select style="margin-top: auto; margin-left: auto">
-        <option disabled selected>map 1</option>
-    </select>
 </div>
 {{end}}
 
