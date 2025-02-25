@@ -254,7 +254,6 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		print(serverDatas["mz"].AttackSpeedName)
 	})
 	http.HandleFunc("/hcf", func(w http.ResponseWriter, r *http.Request) {
 		serverData := serverDatas["hcf"]
@@ -278,6 +277,8 @@ func main() {
 
 			DeathBanMinutes: serverData.DeathBanMinutes,
 //			LootFactor: serverDatas["hcf"]., // TODO -> defaultLootFactor
+			BorderSize: serverData.WorldBorderRadius,
+
 			ClassInfo: cubecoreClassTips,
 			})
 		if err != nil {
