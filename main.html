@@ -13,9 +13,9 @@
         <button>deaths</button>
         <button>duels</button>
     </div>
-    <ul style="font-size: 75%; flex: 1; display: flex; flex-direction: column-reverse">
+    <ul style="overflow-x: hidden; font-size: 75%; flex: 1; display: flex; flex-direction: column-reverse">
         {{range .Deaths}}
-        <li style="">({{.ServerName}}) {{.DeathMessage}}</li>
+        <li style="white-space: nowrap">({{.ServerName}}) {{.DeathMessage}}</li>
         {{end}}
     </ul>
     {{block "fights" .}}{{end}}
