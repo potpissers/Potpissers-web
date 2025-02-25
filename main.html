@@ -13,7 +13,7 @@
     <button>duels</button>
     {{range .Deaths}}
     <ul>
-        <li>({{.ServerName}}) {{.DeathMessage}}</li>
+        <li>({{.ServerName}}) {{.Timestamp}}: {{.DeathMessage}}</li>
     </ul>
     {{end}}
     {{block "fights" .}}{{end}}
