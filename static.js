@@ -3,5 +3,5 @@ function doUnhide(id) {
     tips.hidden=!tips.hidden
 }
 function doScrollTop(id) {
-    document.getElementById(id).scrollTop = 999
+    document.getElementById(id).scrollTop = 0
 }
