@@ -1,8 +1,7 @@
 function doUnhide(id) {
-    const tips = document.getElementById(id);
-    tips.hidden=!tips.hidden;
+    const tips = document.getElementById(id)
+    tips.hidden=!tips.hidden
 }
-// function doScrollBottom(id) {
-//     const element = document.getElementById(id);
-//     element.scrollTop = element.scrollHeight;
-// }
+function doScrollTop(id) {
+    document.getElementById(id).scrollTop = 0
+}
