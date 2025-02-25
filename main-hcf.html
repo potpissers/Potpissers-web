@@ -23,11 +23,21 @@
     </ul>
     <span style="margin-top: auto; margin-left: auto">
         <select>
-        <option disabled selected>events</option>
+            <option disabled selected>events</option>
         </select>
         <select>
-        <option disabled selected>kit</option>
-    </select>
+            <option disabled selected hidden>kit</option>
+            <option>sharpness 1</option>
+            <option>protection 2</option>
+            <option>power 3</option>
+            <option>regen 1</option>
+            <option>strength 2</option>
+            <option>weakness off</option>
+            <option>extended debuffs off</option>
+            <option>dtr freeze 0s</option>
+            <option>dtr regen 480s</option>
+            <option>dtr max 5.5</option>
+        </select>
     </span>
 </div>
 {{end}}
@@ -55,18 +65,6 @@
                 {{range .ClassInfo}}
                 <li>{{.}}</li>
                 {{end}}
-            </ul>
-            <ul id="kit" style="">
-                <li style="">sharpness 1</li>
-                <li style="">protection 2</li>
-                <li style="">power 3</li>
-                <li style="">regen 1</li>
-                <li style="">strength 2</li>
-                <li style="">weakness off</li>
-                <li style="">extended debuffs off</li>
-                <li style="">dtr freeze 0s</li>
-                <li style="">dtr regen 480s</li>
-                <li style="">dtr max 5.5</li>
             </ul>
         </div>
 <!--        <div class="foo baz">-->
