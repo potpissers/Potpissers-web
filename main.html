@@ -8,9 +8,11 @@
 <body class="foo">
 
 <div class="foo bar" style="text-align: center; display: flex; flex-direction: column">
-    <button>fights</button>
-    <button>deaths</button>
-    <button>duels</button>
+    <div>
+        <button>fights</button>
+        <button>deaths</button>
+        <button>duels</button>
+    </div>
     <ul class=ns style="overflow-x: scroll; font-size: 75%; flex: 1">
         {{range .Deaths}}
         <li style="white-space: nowrap">({{.ServerName}}) {{.DeathMessage}}</li>
