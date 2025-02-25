@@ -226,9 +226,11 @@ func main() {
 		err := home.Execute(w, struct {
 			NewPlayers []NewPlayer
 			Tips []string
+			Deaths []Death
 		}{
 			NewPlayers: newPlayers,
 			Tips: potpissersTips,
+			Deaths: deaths,
 			})
 		if err != nil {
 			log.Fatal(err)
@@ -238,10 +240,14 @@ func main() {
 		err := mz.Execute(w, struct {
 			NewPlayers []NewPlayer
 			Tips []string
+			Deaths []Death
+
 			AttackSpeed string
 		}{
 			NewPlayers: newPlayers,
 			Tips: mzTips,
+			Deaths: deaths,
+
 			AttackSpeed: serverDatas["mz"].AttackSpeedName,
 			})
 		if err != nil {
@@ -253,6 +259,8 @@ func main() {
 		err := hcf.Execute(w, struct {
 			NewPlayers []NewPlayer
 			Tips []string
+			Deaths []Death
+
 			AttackSpeed string
 
 			DeathBanMinutes int
@@ -262,6 +270,8 @@ func main() {
 		}{
 			NewPlayers: newPlayers,
 			Tips: cubecoreTips,
+			Deaths: deaths,
+
 			AttackSpeed: serverData.AttackSpeedName,
 
 			DeathBanMinutes: serverData.DeathBanMinutes,
