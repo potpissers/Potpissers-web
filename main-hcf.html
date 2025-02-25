@@ -11,7 +11,7 @@
 <div style="flex: 1; display: flex; flex-direction: column">
     <div style="display: flex; justify-content: space-between">
         <button style="width: fit-content">server: 000</button>
-        <select style="margin-top: auto; margin-left: auto">
+        <select>
             <option disabled selected>map 1</option>
         </select>
     </div>
@@ -21,6 +21,9 @@
         <li>{{ .LootFactor }}x event loot</li>
         <li>{{ .BorderSize }} border</li>
     </ul>
+    <select style="margin-top: auto; margin-left: auto">
+        <option disabled selected>koths</option>
+    </select>
 </div>
 {{end}}
 
