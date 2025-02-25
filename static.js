@@ -4,5 +4,5 @@ function doUnhide(id) {
 }
 function doScrollTop(id) {
     const element = document.getElementById(id)
-    element.scrollTop = element.scrollHeight
+    element.scrollTop = 0
 }
