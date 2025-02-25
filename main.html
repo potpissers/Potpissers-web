@@ -63,28 +63,13 @@
         {{block "server info" .}}{{end}}
 
         <div style="display: flex; flex-direction: column; justify-content: space-between; flex: 1">
-            <table style="flex: 1">
-                <tr>
-                    <th>#</th>
-                    <th>player</th>
-                    <th>referrer</th>
-                    <th>timestamp</th>
-                </tr>
-                <tr>
-                    <td>foo</td>
-                    <td>foo</td>
-                    <td>foo</td>
-                    <td>foo</td>
-                </tr>
+            <div style="flex: 1">
                 {{range .NewPlayers}}
-                <tr>
-                    <td>{{.RowNumber}}</td>
-                    <td>{{.PlayerUuid}}</td>
-                    <td>{{.Referrer}}</td>
-                    <td>{{.Timestamp}}</td>
-                </tr>
+                <p>
+                    {{.Timestamp}}: [{{.RowNumber}}] {{.PlayerUuid}}. referrer: {{.Referrer}}
+                </p>
                 {{end}}
-            </table>
+            </div>
             <button style="margin-left: auto; text-align: right">new players</button>
         </div>
     </div>
