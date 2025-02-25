@@ -33,8 +33,11 @@ li {
     border-radius: .25rem;
 
     margin-bottom: .5rem;
-    display: inline-flex;
-    justify-content: space-between
+    width: fit-content
+}
+.li1 {
+    justify-content: space-between;
+    display: inline-flex
 }
 .foo {
     gap: .5rem;
