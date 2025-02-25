@@ -13,12 +13,11 @@
         <button>deaths</button>
         <button>duels</button>
     </div>
-    <ul id="deaths" style="overflow-y: scroll; overflow-x: hidden; font-size: 75%; flex: 1">
+    <ul onclick="doScrollBottom('deaths')" id="deaths" style="overflow-y: scroll; overflow-x: hidden; font-size: 75%; flex: 1">
         {{range .Deaths}}
         <li style="">({{.ServerName}}) {{.DeathMessage}}</li>
         {{end}}
     </ul>
-    <script defer>doScrollBottom("deaths")</script>
     {{block "fights" .}}{{end}}
     {{block "duels" .}}{{end}}
 </div>
