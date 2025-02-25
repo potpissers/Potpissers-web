@@ -22,6 +22,7 @@ ul {
     margin: 0;
     padding: 0;
     list-style: none;
+    display: flex;
 }
 .foo {
     gap: .5rem;
