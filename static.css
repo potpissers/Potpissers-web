@@ -85,3 +85,6 @@ footer {
     color: #DEDEE3;
     background-color: #4F565E
 }
+.ns::-webkit-scrollbar {
+    display: none
+}
