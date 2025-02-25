@@ -11,7 +11,11 @@
     <button>fights</button>
     <button>deaths</button>
     <button>duels</button>
-    {{block "deaths" .}}{{end}}
+    {{range .Deaths}}
+    <ul>
+        <li>({{.ServerName}}) {{.DeathMessage}}</li>
+    </ul>
+    {{end}}
     {{block "fights" .}}{{end}}
     {{block "duels" .}}{{end}}
 </div>
@@ -65,13 +69,12 @@
         <div style="display: flex; flex-direction: column; justify-content: space-between; flex: 1">
             <div style="flex: 1; display: flex; flex-direction: column-reverse; text-align: right">
                 <ul style="font-size: 75%">
-                    <li>1/21/21:4:20: Camwen (cawmen) [1]</li>
                     {{range .NewPlayers}}
                     <li>
-                        {{.Timestamp}}: [{{.RowNumber}}] {{.PlayerUuid}}. referrer: {{.Referrer}}
+                        {{.Timestamp}}: {{.PlayerUuid}} ({{.Referrer}}) [{{.RowNumber}}]
                     </li>
+                    {{end}}
                 </ul>
-                {{end}}
             </div>
             <button style="margin-left: auto; text-align: right">new players</button>
         </div>
