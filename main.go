@@ -254,6 +254,7 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+		print(serverDatas["mz"].AttackSpeedName)
 	})
 	http.HandleFunc("/hcf", func(w http.ResponseWriter, r *http.Request) {
 		serverData := serverDatas["hcf"]
