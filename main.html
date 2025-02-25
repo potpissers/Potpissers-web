@@ -11,7 +11,7 @@
     <button>fights</button>
     <button>deaths</button>
     <button>duels</button>
-    <ul class=ns style="overflow-x: scroll; font-size: 75%">
+    <ul class=ns style="overflow-x: scroll; font-size: 75%; overflow-y: scroll">
         {{range .Deaths}}
         <li style="white-space: nowrap">({{.ServerName}}) {{.DeathMessage}}</li>
         {{end}}
