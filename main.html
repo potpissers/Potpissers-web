@@ -14,7 +14,7 @@
         <button>duels</button>
     </div>
     <ul style="overflow-y: scroll; overflow-x: hidden; font-size: 75%; flex: 1">
-        {{range .Deaths | reverse}}
+        {{range .Deaths}}
         <li style="">({{.ServerName}}) {{.DeathMessage}}</li>
         {{end}}
     </ul>
