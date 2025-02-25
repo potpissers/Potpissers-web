@@ -13,7 +13,7 @@
         <button>deaths</button>
         <button>duels</button>
     </div>
-    <div style="overflow-y: scroll; overflow-x: hidden; flex: 1">
+    <div style="overflow-y: scroll; overflow-x: hidden; flex: 1; display: flex; flex-direction: column-reverse">
         {{range .Deaths}}
         <small style="">({{.ServerName}}) {{.DeathMessage}}</small>
         {{end}}
