@@ -8,21 +8,25 @@
 {{end}}
 
 {{define "server info"}}
-<div style="flex: 1; display: flex; flex-direction: column">
-    <div style="display: flex; justify-content: space-between;">
-        <ul style="font-size: 87.5%;">
-            <li class=li1>{{ .AttackSpeed }} attack speed</li>
-            <li class=li1>{{ .DeathBanMinutes }}m deathban</li>
-        </ul>
-        <ul style="font-size: 87.5%; text-align: right">
-            <li class=li1>{{ .LootFactor }}x event loot</li>
-            <li class=li1>{{ .BorderSize }} border</li>
-        </ul>
-    </div>
-    <select style="margin-top: auto; margin-left: auto">
-        <option disabled selected>map 1</option>
-    </select>
-</div>
+<button>{{ .AttackSpeed }} attack speed</button>
+<button>{{ .DeathBanMinutes }}m deathban</button>
+<button>{{ .LootFactor }}x event loot</button>
+<button>{{ .BorderSize }} border</button>
+<!--<div style="flex: 1; display: flex; flex-direction: column">-->
+<!--    <div style="display: flex; justify-content: space-between;">-->
+<!--        <ul style="font-size: 87.5%;">-->
+<!--            <li class=li1></li>-->
+<!--            <li class=li1></li>-->
+<!--        </ul>-->
+<!--        <ul style="font-size: 87.5%; text-align: right">-->
+<!--            <li class=li1></li>-->
+<!--            <li class=li1></li>-->
+<!--        </ul>-->
+<!--    </div>-->
+<!--</div>-->
+<select style="margin-top: auto; margin-left: auto">
+    <option disabled selected>map 1</option>
+</select>
 {{end}}
 
 {{define "content"}}
