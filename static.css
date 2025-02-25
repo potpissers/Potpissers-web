@@ -35,10 +35,6 @@ li {
     margin-bottom: .5rem;
     width: fit-content
 }
-.li1 {
-    justify-content: space-between;
-    display: inline-flex
-}
 .foo {
     gap: .5rem;
     padding-left: .5rem;
