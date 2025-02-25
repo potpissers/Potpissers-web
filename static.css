@@ -23,14 +23,6 @@ ul {
     padding: 0;
     list-style: none;
 }
-.foo {
-    gap: .5rem;
-    padding-left: .5rem;
-    padding-right: .5rem;
-    border: .1rem solid black;
-    box-shadow: .1rem .1rem .1rem black;
-    border-radius: .5rem
-}
 li {
     gap: .5rem;
     padding-left: .5rem;
@@ -43,6 +35,14 @@ li {
     margin-bottom: .5rem;
     display: inline-flex;
     justify-content: space-between
+}
+.foo {
+    gap: .5rem;
+    padding-left: .5rem;
+    padding-right: .5rem;
+    border: .1rem solid black;
+    box-shadow: .1rem .1rem .1rem black;
+    border-radius: .5rem
 }
 input {
     gap: .5rem;
