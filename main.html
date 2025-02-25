@@ -13,7 +13,7 @@
     <button>duels</button>
     {{range .Deaths}}
     <ul class=ns style="overflow-x: scroll; white-space: nowrap; font-size: 75%">
-        <li>({{.ServerName}}) {{.Timestamp}}: {{.DeathMessage}}</li>
+        <li>({{.ServerName}}) {{.DeathMessage}}</li>
     </ul>
     {{end}}
     {{block "fights" .}}{{end}}
