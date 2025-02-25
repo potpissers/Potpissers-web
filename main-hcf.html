@@ -8,18 +8,12 @@
 {{end}}
 
 {{define "server info"}}
-<div style="flex: 1; display: flex; flex-direction: column">
-    <div style="display: flex; justify-content: space-between;">
-        <ul style="font-size: 87.5%;">
-            <li class=li1>attack speed: {{ .AttackSpeed }}</li>
-            <li class=li1>deathban: {{ .DeathBanMinutes }}m</li>
-        </ul>
-        <ul style="font-size: 87.5%; text-align: right">
-            <li class=li1>event loot: {{ .LootFactor }}x</li>
-            <li class=li1>border: {{ .BorderSize }}</li>
-        </ul>
-    </div>
-</div>
+<ul style="font-size: 87.5%;">
+    <li class=li1>attack speed: {{ .AttackSpeed }}</li>
+    <li class=li1>deathban: {{ .DeathBanMinutes }}m</li>
+    <li class=li1>event loot: {{ .LootFactor }}x</li>
+    <li class=li1>border: {{ .BorderSize }}</li>
+</ul>
 <select style="margin-top: auto; margin-left: auto">
     <option disabled selected>map 1</option>
 </select>
