@@ -307,7 +307,7 @@ const Return100Deaths = `SELECT name,
        bukkit_killer_inventory
 FROM user_deaths
          JOIN servers ON user_deaths.server_id = servers.id
-ORDER BY timestamp
+ORDER BY timestamp DESC
 LIMIT 100`
 const Return100NewPlayers = `SELECT user_uuid, referrer, timestamp, ROW_NUMBER() OVER (ORDER BY timestamp) AS row_number
 FROM user_referrals
@@ -367,7 +367,7 @@ func handlePutJson[T any](r *http.Request, decodeJson func(*T, *http.Request) er
 				log.Fatal(err)
 			}
 			mutex.Lock()
-			*collection = append(*collection, newT)
+			*collection = append([]T{newT}, *collection...) // TODO -> this is necessary because html/css and go's templating can't handle reversing it for some reason. go's templater could maybe do it but it seems like more processing than this takes
 			mutex.Unlock()
 		}
 	}
