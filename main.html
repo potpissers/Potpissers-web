@@ -13,11 +13,16 @@
         <button>deaths</button>
         <button>duels</button>
     </div>
-    <ul id="deaths" style="overflow-y: scroll; overflow-x: hidden; font-size: 75%; flex: 1; display: flex; flex-direction: column-reverse">
+    <div>
         {{range .Deaths}}
-        <li style="">({{.ServerName}}) {{.DeathMessage}}</li>
+        <small style="">({{.ServerName}}) {{.DeathMessage}}</small>
         {{end}}
-    </ul>
+    </div>
+<!--    <ul id="deaths" style="overflow-y: scroll; overflow-x: hidden; font-size: 75%; flex: 1; display: flex; flex-direction: column-reverse">-->
+<!--        {{range .Deaths}}-->
+<!--        <li style="">({{.ServerName}}) {{.DeathMessage}}</li>-->
+<!--        {{end}}-->
+<!--    </ul>-->
     {{block "fights" .}}{{end}}
     {{block "duels" .}}{{end}}
 </div>
