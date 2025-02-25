@@ -13,16 +13,11 @@
         <button>deaths</button>
         <button>duels</button>
     </div>
-    <ul id="deaths" onclick="doScrollTop('deaths')" style="overflow-y: scroll; overflow-x: hidden; font-size: 75%; flex: 1; display: flex; flex-direction: column">
+    <ul id="deaths" style="overflow-y: scroll; overflow-x: hidden; font-size: 75%; flex: 1; display: flex; flex-direction: column">
         {{range .Deaths}}
         <li style="">({{.ServerName}}) {{.DeathMessage}}</li>
         {{end}}
     </ul>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            doScrollTop('deaths');
-        });
-    </script>
     {{block "fights" .}}{{end}}
     {{block "duels" .}}{{end}}
 </div>
