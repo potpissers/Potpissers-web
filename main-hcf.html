@@ -18,6 +18,7 @@
     <ul style="font-size: 75%;">
         <li>{{ .AttackSpeed }} attack speed</li>
         <li>{{ .DeathBanMinutes }}m deathban</li>
+        <li>{{ .OffPeakLivesNeeded }}x revive cost</li>
         <li>{{ .LootFactor }}x event loot</li>
         <li>{{ .BorderSize }} border</li>
     </ul>
@@ -27,16 +28,16 @@
         </select>
         <select>
             <option disabled selected hidden>kit</option>
-            <option disabled>sharpness 1</option>
-            <option disabled>protection 2</option>
-            <option disabled>power 3</option>
-            <option disabled>regen 1</option>
-            <option disabled>strength 2</option>
-            <option disabled>weakness off</option>
-            <option disabled>extended debuffs off</option>
-            <option disabled>dtr freeze 0s</option>
-            <option disabled>dtr regen 480s</option>
-            <option disabled>dtr max 5.5</option>
+            <option disabled>sharpness {{ .SharpnessLimit }}</option>
+            <option disabled>protection {{ .ProtectionLimit }}</option>
+            <option disabled>power {{ .PowerLimit }}</option>
+            <option disabled>regen {{ .RegenLimit }}</option>
+            <option disabled>strength {{ .StrengthLimit }}</option>
+            <option disabled>weakness {{ .IsWeaknessEnabled }}</option>
+            <option disabled>extended debuffs {{ .IsBardPassiveDebuffingEnabled }}</option>
+            <option disabled>dtr freeze {{ .DtrFreezeTimer }}s</option>
+            <option disabled>dtr regen {{ .DtrMaxTime }}s</option>
+            <option disabled>dtr max {{ .DtrMax }}</option>
         </select>
     </span>
 </div>
