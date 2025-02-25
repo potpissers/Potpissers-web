@@ -249,17 +249,23 @@ func main() {
 		}
 	})
 	http.HandleFunc("/hcf", func(w http.ResponseWriter, r *http.Request) {
+		serverData := serverDatas["hcf"]
 		err := hcf.Execute(w, struct {
 			NewPlayers []NewPlayer
 			Tips []string
 			AttackSpeed string
 
+			DeathBanMinutes int
+			LootFactor int
+			BorderSize int
 			ClassInfo []string
 		}{
 			NewPlayers: newPlayers,
 			Tips: cubecoreTips,
-			AttackSpeed: serverDatas["hcf"].AttackSpeedName,
+			AttackSpeed: serverData.AttackSpeedName,
 
+			DeathBanMinutes: serverData.DeathBanMinutes,
+//			LootFactor: serverDatas["hcf"]., // TODO -> defaultLootFactor
 			ClassInfo: cubecoreClassTips,
 			})
 		if err != nil {
