@@ -3,5 +3,6 @@ function doUnhide(id) {
     tips.hidden=!tips.hidden;
 }
 function doScrollTop(id) {
-    document.getElementById('deaths').scrollTop = 0;
+    const element = document.getElementById(id);
+    element.scrollTop = element.scrollHeight;
 }
