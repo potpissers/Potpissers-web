@@ -16,10 +16,6 @@
             <option disabled selected>map 1</option>
         </select>
     </div>
-<!--    <div style="">-->
-<!--        <button>/events</button>-->
-<!--        <button>/mapkit</button>-->
-<!--    </div>-->
     <ul style="overflow: auto">
         <li>sharpness {{ .SharpnessLimit }}</li>
         <li>protection {{ .ProtectionLimit }}</li>
@@ -36,6 +32,10 @@
         <li>{{ .LootFactor }}x event loot</li>
         <li>{{ .BorderSize }} border</li>
     </ul>
+    <div style="">
+        <button>/events</button>
+        <button>/mapkit</button>
+    </div>
 </div>
 {{end}}
 
