@@ -9,32 +9,34 @@
 {{end}}
 
 {{define "server info"}}
-<div style="display: flex; flex-direction: column">
-    <div style="display: flex; justify-content: space-between">
-        <button style="">server: 000</button>
-        <select>
-            <option disabled selected>map 1</option>
-        </select>
-    </div>
-    <ul style="">
-        <li>sharpness {{ .SharpnessLimit }}</li>
-        <li>protection {{ .ProtectionLimit }}</li>
-        <li>power {{ .PowerLimit }}</li>
-        <li>regen {{ .RegenLimit }}</li>
-        <li>strength {{ .StrengthLimit }}</li>
-        <li>weakness {{ .IsWeaknessEnabled }}</li>
-        <li>extended debuffs {{ .IsBardPassiveDebuffingEnabled }}</li>
-        <li>dtr max {{ .DtrMax }}</li>
+<div style="flex: 1">
+    <div style="display: flex; flex-direction: column">
+        <div style="display: flex; justify-content: space-between">
+            <button style="">server: 000</button>
+            <select>
+                <option disabled selected>map 1</option>
+            </select>
+        </div>
+        <ul style="">
+            <li>sharpness {{ .SharpnessLimit }}</li>
+            <li>protection {{ .ProtectionLimit }}</li>
+            <li>power {{ .PowerLimit }}</li>
+            <li>regen {{ .RegenLimit }}</li>
+            <li>strength {{ .StrengthLimit }}</li>
+            <li>weakness {{ .IsWeaknessEnabled }}</li>
+            <li>extended debuffs {{ .IsBardPassiveDebuffingEnabled }}</li>
+            <li>dtr max {{ .DtrMax }}</li>
 
-        <li>{{ .AttackSpeed }} attack speed</li>
-        <li>{{ .DeathBanMinutes }}m deathban</li>
-        <li>{{ .OffPeakLivesNeeded }}x revive cost</li>
-        <li>{{ .LootFactor }}x event loot</li>
-        <li>{{ .BorderSize }} border</li>
-    </ul>
-    <div style="margin-top: auto; margin-left: auto; display: inline-flex">
-        <button>/events</button>
-        <button>/mapkit</button>
+            <li>{{ .AttackSpeed }} attack speed</li>
+            <li>{{ .DeathBanMinutes }}m deathban</li>
+            <li>{{ .OffPeakLivesNeeded }}x revive cost</li>
+            <li>{{ .LootFactor }}x event loot</li>
+            <li>{{ .BorderSize }} border</li>
+        </ul>
+        <div style="margin-top: auto; margin-left: auto; display: inline-flex">
+            <button>/events</button>
+            <button>/mapkit</button>
+        </div>
     </div>
 </div>
 {{end}}
