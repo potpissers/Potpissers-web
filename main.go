@@ -226,11 +226,11 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		err := home.Execute(w, struct {
 			NewPlayers []NewPlayer
-			Tips []string
+			PotpissersTips []string
 			Deaths []Death
 		}{
 			NewPlayers: newPlayers,
-			Tips: potpissersTips,
+			PotpissersTips: potpissersTips,
 			Deaths: deaths,
 			})
 		if err != nil {
@@ -240,16 +240,20 @@ func main() {
 	http.HandleFunc("/mz", func(w http.ResponseWriter, r *http.Request) {
 		err := mz.Execute(w, struct {
 			NewPlayers []NewPlayer
-			Tips []string
+			PotpissersTips []string
 			Deaths []Death
 
 			AttackSpeed string
+
+			MzTips []string
 		}{
 			NewPlayers: newPlayers,
-			Tips: mzTips,
+			PotpissersTips: potpissersTips,
 			Deaths: deaths,
 
 			AttackSpeed: serverDatas["mz"].AttackSpeedName,
+
+			MzTips: mzTips,
 			})
 		if err != nil {
 			log.Fatal(err)
@@ -259,7 +263,7 @@ func main() {
 		serverData := serverDatas["hcf"]
 		err := hcf.Execute(w, struct {
 			NewPlayers []NewPlayer
-			Tips []string
+			PotpissersTips []string
 			Deaths []Death
 
 			AttackSpeed string
@@ -278,10 +282,11 @@ func main() {
 			IsBardPassiveDebuffingEnabled bool
 			DtrMax float32
 
-			ClassInfo []string
+			CubecoreTips []string
+			ClassTips []string
 		}{
 			NewPlayers: newPlayers,
-			Tips: cubecoreTips,
+			PotpissersTips: potpissersTips,
 			Deaths: deaths,
 
 			AttackSpeed: serverData.AttackSpeedName,
@@ -300,7 +305,8 @@ func main() {
 			IsBardPassiveDebuffingEnabled: serverData.IsBardPassiveDebuffingEnabled,
 			DtrMax: serverData.DtrMax,
 
-			ClassInfo: cubecoreClassTips,
+			CubecoreTips: cubecoreTips,
+			ClassTips: cubecoreClassTips,
 			})
 		if err != nil {
 			log.Fatal(err)
