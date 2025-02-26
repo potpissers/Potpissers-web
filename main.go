@@ -265,8 +265,21 @@ func main() {
 			AttackSpeed string
 
 			DeathBanMinutes int
+			OffPeakLivesNeeded float32
 			LootFactor int
 			BorderSize int
+
+			SharpnessLimit int
+			ProtectionLimit int
+			PowerLimit int
+			RegenLimit int
+			StrengthLimit int
+			IsWeaknessEnabled bool
+			IsBardPassiveDebuffingEnabled bool
+			DtrFreezeTimer int
+			DtrMaxTime int
+			DtrMax float32
+
 			ClassInfo []string
 		}{
 			NewPlayers: newPlayers,
@@ -276,8 +289,20 @@ func main() {
 			AttackSpeed: serverData.AttackSpeedName,
 
 			DeathBanMinutes: serverData.DeathBanMinutes,
+			OffPeakLivesNeeded: float32(serverData.OffPeakLivesNeededAsCents) / 100.0,
 //			LootFactor: serverDatas["hcf"]., // TODO -> defaultLootFactor
 			BorderSize: serverData.WorldBorderRadius,
+
+			SharpnessLimit: serverData.SharpnessLimit,
+			ProtectionLimit: serverData.ProtectionLimit,
+			PowerLimit: serverData.PowerLimit,
+			RegenLimit: serverData.RegenLimit,
+			StrengthLimit: serverData.StrengthLimit,
+			IsWeaknessEnabled: serverData.IsWeaknessEnabled,
+			IsBardPassiveDebuffingEnabled: serverData.IsBardPassiveDebuffingEnabled,
+			DtrFreezeTimer: serverData.DtrFreezeTimer,
+			DtrMaxTime: serverData.DtrMaxTime,
+			DtrMax: serverData.DtrMax,
 
 			ClassInfo: cubecoreClassTips,
 			})
