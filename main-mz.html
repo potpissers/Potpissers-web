@@ -17,23 +17,35 @@
 {{end}}
 
 {{define "content"}}
-<div class="" style="display: flex">
-    <div class="foo baz" style="text-align: center; flex: 3">
-        <button style="">mz info</button>
-        <ul id="tips" style="visibility: hidden">
-            {{range .Tips}}
-            <li>{{.}}</li>
-            {{end}}
-        </ul>
+<div class="foo baz" style="flex: 3; display: flex; flex-direction: column">
+    <div style="display: flex">
+        <button style="width: fit-content">
+            potpissers tips
+        </button>
+        <button style="">
+            mz tips
+        </button>
+        <button style="margin-left: auto"></button>
     </div>
-    <div class="foo baz" style="flex: 1; text-align: center">
-        <button>bandits</button>
-        <button>heroes</button>
-    </div>
-<!--    <div class="foo baz" style="">-->
-<!--        <h3>-->
-<!--            &lt;!&ndash;        TODO -> map + loot tables&ndash;&gt;-->
-<!--        </h3>-->
-<!--    </div>-->
+    <ul id="tips" style="overflow-y: scroll; flex: 1">
+        {{range .Tips}}
+        <li>{{.}}</li>
+        {{end}}
+    </ul>
+    <ul id="mztips" style="overflow-y: scroll; flex: 0">
+        {{range .Tips}}
+        <li>{{.}}</li>
+        {{end}}
+    </ul>
+    <!--    <div class="foo baz" style="">-->
+    <!--        <h3>-->
+    <!--            &lt;!&ndash;        TODO -> map + loot tables&ndash;&gt;-->
+    <!--        </h3>-->
+    <!--    </div>-->
+</div>
+
+<div class="foo baz" style="flex: 1; text-align: center">
+    <button>bandits</button>
+    <button>heroes</button>
 </div>
 {{end}}
