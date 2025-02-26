@@ -45,39 +45,48 @@
 {{end}}
 
 {{define "content"}}
-<div class="" style="display: flex;">
-    <div class="foo baz" style="text-align: center; flex: 3">
-        <div>
-            <button onclick="doUnhide('tips')">
-                hcf info
-            </button>
-            <input type="radio"> hey
-            <button onclick="doUnhide('classes')">
-                class info
-            </button>
-            <input type="radio">
-
-            <ul id="tips" style="">
-                {{range .Tips}}
-                <li>{{.}}</li>
-                {{end}}
-            </ul>
-            <ul id="classes" style="">
-                {{range .ClassInfo}}
-                <li>{{.}}</li>
-                {{end}}
-            </ul>
-        </div>
-<!--        <div class="foo baz">-->
-<!--            &lt;!&ndash;        <h3>TODO MAP + loot tables&ndash;&gt;-->
-<!--        </div>-->
+<div class="foo baz" style="flex: 3; display: flex; flex-direction: column">
+    <div style="display: flex">
+        <button style="width: fit-content">
+            potpissers tips
+        </button>
+        <button style="">
+            hcf tips
+        </button>
+        <button>
+            class tips
+        </button>
+        <button style="margin-left: auto"></button>
     </div>
-    <div class="foo baz" style="text-align: center; flex: 1;">
-        <button style="align-self: center">factions</button>
-        <ul>
+    <ul id="tips" style="overflow-y: scroll; flex: 0">
+        {{range .Tips}}
+        <li>{{.}}</li>
+        {{end}}
+    </ul>
+    <ul id="hcftips" style="overflow-y: scroll; flex: 1">
+        {{range .Tips}}
+        <li>{{.}}</li>
+        {{end}}
+    </ul>
+    <ul id="classtips" style="overflow-y: scroll; flex: 0">
+        {{range .Tips}}
+        <li>{{.}}</li>
+        {{end}}
+    </ul>
+    <!--    <div class="foo baz" style="">-->
+    <!--        <h3>-->
+    <!--            &lt;!&ndash;        TODO -> map + loot tables&ndash;&gt;-->
+    <!--        </h3>-->
+    <!--    </div>-->
+</div>
 
-        </ul>
-        <input class=fi style="width: 6.25rem">
-    </div>
+<div class="foo baz" style="text-align: center; flex: 1;">
+    <button style="align-self: center">
+        factions
+    </button>
+    <ul>
+
+    </ul>
+    <input class=fi style="width: 6.25rem">
 </div>
 {{end}}
