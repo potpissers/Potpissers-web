@@ -276,8 +276,6 @@ func main() {
 			StrengthLimit int
 			IsWeaknessEnabled bool
 			IsBardPassiveDebuffingEnabled bool
-			DtrFreezeTimer int
-			DtrMaxTime int
 			DtrMax float32
 
 			ClassInfo []string
@@ -300,8 +298,6 @@ func main() {
 			StrengthLimit: serverData.StrengthLimit,
 			IsWeaknessEnabled: serverData.IsWeaknessEnabled,
 			IsBardPassiveDebuffingEnabled: serverData.IsBardPassiveDebuffingEnabled,
-			DtrFreezeTimer: serverData.DtrFreezeTimer,
-			DtrMaxTime: serverData.DtrMaxTime,
 			DtrMax: serverData.DtrMax,
 
 			ClassInfo: cubecoreClassTips,
