@@ -84,3 +84,7 @@ footer {
     color: #DEDEE3;
     background-color: #4F565E
 }
+.ifc {
+    display: inline-flex;
+    flex-direction: column
+}
