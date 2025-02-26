@@ -9,14 +9,14 @@
 {{end}}
 
 {{define "server info"}}
-<div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between; height: 100%">
+<div style="flex: 1; display: flex; flex-direction: column">
     <div style="display: flex; justify-content: space-between">
         <button style="">server: 000</button>
         <select>
             <option disabled selected>map 1</option>
         </select>
     </div>
-    <ul style="">
+    <ul style="height: 100%">
         <li>sharpness {{ .SharpnessLimit }}</li>
         <li>protection {{ .ProtectionLimit }}</li>
         <li>power {{ .PowerLimit }}</li>
