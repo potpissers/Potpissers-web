@@ -9,14 +9,14 @@
 {{end}}
 
 {{define "server info"}}
-<div style="flex: 1; display: flex; flex-direction: column; height: 100%">
+<div style="flex: 1; display: flex; flex-direction: column">
     <div style="display: flex; justify-content: space-between">
         <button style="width: fit-content">server: 000</button>
         <select>
             <option disabled selected>map 1</option>
         </select>
     </div>
-    <ul style="overflow-y: scroll">
+    <ul style="overflow-y: scroll; height: 100%">
         <li>{{ .AttackSpeed }} attack speed</li>
         <li>{{ .DeathBanMinutes }}m deathban</li>
         <li>{{ .OffPeakLivesNeeded }}x revive cost</li>
