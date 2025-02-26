@@ -23,7 +23,7 @@
         <li>{{ .LootFactor }}x event loot</li>
         <li>{{ .BorderSize }} border</li>
     </ul>
-    <span style="margin-top: auto; margin-left: auto">
+    <div style="margin-top: auto; margin-left: auto; display: inline-flex">
         <select>
             <option disabled selected hidden>/events</option>
 
@@ -40,7 +40,7 @@
             <option disabled>extended debuffs {{ .IsBardPassiveDebuffingEnabled }}</option>
             <option disabled>dtr max {{ .DtrMax }}</option>
         </select>
-    </span>
+    </div>
 </div>
 {{end}}
 
