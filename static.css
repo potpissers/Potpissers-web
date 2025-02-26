@@ -13,11 +13,6 @@ body {
 body::-webkit-scrollbar {
     display: none;
 }
-ul li:nth-child(odd) {
-    /*this is baz*/
-    color: #A0ADB8;
-    background-color: #33383D;
-}
 ul {
     margin: 0;
     padding: 0;
