@@ -106,18 +106,23 @@
 
 <div class="foo" style="background: #33383D; display: flex; flex-direction: column">
     <div style="display: flex; height: 50%">
-        <div class="foo baz" style="text-align: center; flex: 3; display: flex">
-            <span class=ifc>
+        <div class="foo baz" style="flex: 3">
+            <div style="display: flex; text-align: center">
+                <span class=ifc>
                 <button>announcements</button>
                 <input name="announcements" type="radio">
                 </span>
 
-            <span class=ifc>
+                <span class=ifc>
                 <button>changelog</button>
                 <input name="announcements" type="radio">
                 </span>
 
-            <button style="margin-left: auto"></button>
+                <button style="margin-left: auto"></button>
+            </div>
+            <ul style="overflow-y: scroll; flex: 1">
+
+            </ul>
         </div>
         <div class="foo baz" style="flex: 1; text-align: center">
             <button>donate</button>
