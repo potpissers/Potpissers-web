@@ -22,7 +22,7 @@
             <input name="deaths-ticker" type="radio">
         </span>
     </div>
-    <ul style="overflow: scroll">
+    <ul style="overflow-y: scroll; overflow-x: hidden">
         {{range .Deaths}}
         <li style="">({{.ServerName}}) {{.DeathMessage}}</li>
         {{end}}
