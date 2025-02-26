@@ -9,12 +9,18 @@
 
 <div class="foo bar" style="display: flex; flex-direction: column">
     <div style="text-align: center">
-        <button>fights</button>
+        <span>
+            <button>fights</button>
+            <input name="deaths-ticker" type="radio">
+        </span>
+        <span>
+            <button>deaths</button>
+            <input name="deaths-ticker" type="radio">
+        </span>
+        <span>
+            <button>duels</button>
         <input name="deaths-ticker" type="radio">
-        <button>deaths</button>
-        <input name="deaths-ticker" type="radio">
-        <button>duels</button>
-        <input name="deaths-ticker" type="radio">
+        </span>
     </div>
     <ul style="overflow-y: scroll; overflow-x: hidden">
         {{range .Deaths}}
