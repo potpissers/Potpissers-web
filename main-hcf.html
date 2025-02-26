@@ -51,16 +51,15 @@
             <button onclick="doUnhide('tips')">
                 hcf info
             </button>
-            <label class="switch">
-                <input type="checkbox">
-                <span class="slider"></span>
-            </label>
+            <input type="radio">
             <button onclick="doUnhide('classes')">
                 class info
             </button>
+            <input type="radio">
             <button onclick="doUnhide('kit')">
                 map foo info
             </button>
+            <input type="radio">
 
             <ul id="tips" style="">
                 {{range .Tips}}
