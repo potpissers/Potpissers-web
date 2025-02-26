@@ -2,6 +2,7 @@
 
 {{define "gamemodes"}}
 <option disabled selected hidden>hcf.potpissers.com</option>
+
 <option value="/">home</option>
 <option value="mz">mz.potpissers.com</option>
 <option disabled>hcf.potpissers.com</option>
@@ -24,10 +25,12 @@
     </ul>
     <span style="margin-top: auto; margin-left: auto">
         <select>
-            <option disabled selected>events</option>
+            <option disabled selected hidden>events</option>
+
         </select>
         <select>
             <option disabled selected hidden>kit</option>
+
             <option disabled>sharpness {{ .SharpnessLimit }}</option>
             <option disabled>protection {{ .ProtectionLimit }}</option>
             <option disabled>power {{ .PowerLimit }}</option>
@@ -45,9 +48,13 @@
 <div class="" style="display: flex;">
     <div class="foo baz" style="text-align: center; flex: 3">
         <div>
-            <button style=";" onclick="doUnhide('tips')">
+            <button onclick="doUnhide('tips')">
                 hcf info
             </button>
+            <label class="switch">
+                <input type="checkbox">
+                <span class="slider"></span>
+            </label>
             <button onclick="doUnhide('classes')">
                 class info
             </button>
