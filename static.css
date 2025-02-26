@@ -44,6 +44,7 @@ li {
     border-radius: .5rem
 }
 .fi {
+    font-size: 112.5%;
     gap: .5rem;
     padding-left: .5rem;
     padding-right: .5rem;
