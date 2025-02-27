@@ -7,15 +7,15 @@
 <option value="hcf">hcf.potpissers.com</option>
 {{end}}
 
-{{define "attackspeed" }}
+{{define "attackspeed"}}
 <button style="width: fit-content; font-size: 75%">attack speed: {{ .AttackSpeed }}</button>
 {{end}}
 
-{{define "server tips buttons .}}
+{{define "server tips buttons"}}
 <button>mz tips</button>
 {{end}}
 
-{{define "server tips data" .}}
+{{define "server tips data"}}
 <ul id="mztips" style="overflow-y: scroll; flex: 0">
     {{range .MzTips}}
     <li>{{.}}</li>
