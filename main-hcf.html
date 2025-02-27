@@ -19,12 +19,20 @@
 {{end}}
 
 {{define "server info"}}
-<div style="display: flex">
-    <button style="font-size: 75%">deathban: {{ .DeathBanMinutes }}m</button>
-    <button style="font-size: 75%">revive cost: {{ .OffPeakLivesNeeded }}x</button>
-    <button style="font-size: 75%">event loot: {{ .LootFactor }}x</button>
-    <button style="font-size: 75%">border: {{ .BorderSize }}</button>
-</div>
+<table>
+    <tr>
+        <td>deathban</td>
+        <td>revive cost</td>
+        <td>event loot</td>
+        <td>border</td>
+    </tr>
+    <tr>
+        <td>{{ .DeathBanMinutes }}m</td>
+        <td>{{ .OffPeakLivesNeeded }}x</td>
+        <td>{{ .LootFactor }}x</td>
+        <td>{{ .BorderSize }}</td>
+    </tr>
+</table>
 <!--<div class="" style="flex: 1; display: flex; flex-direction: column">-->
 <!--&lt;!&ndash;        <li>sharpness {{ .SharpnessLimit }}</li>&ndash;&gt;-->
 <!--&lt;!&ndash;        <li>protection {{ .ProtectionLimit }}</li>&ndash;&gt;-->
