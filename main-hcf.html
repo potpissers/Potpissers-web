@@ -63,48 +63,36 @@
 <button style="font-size: 75%; height: fit-content; margin-top: auto">/events</button>
 {{end}}
 
-{{define "content"}}
-<div class="foo baz" style="flex: 3; display: flex; flex-direction: column">
-    <div style="display: flex">
-        <button style="width: fit-content">
-            potpissers tips
-        </button>
-        <button style="">
-            hcf tips
-        </button>
-        <button>
-            class tips
-        </button>
-        <button style="margin-left: auto"></button>
-    </div>
-    <ul id="hcftips" style="overflow-y: scroll; flex: 1">
-        {{range .CubecoreTips}}
-        <li>{{.}}</li>
-        {{end}}
-    </ul>
-    <ul id="tips" style="overflow-y: scroll; flex: 0">
-        {{range .PotpissersTips}}
-        <li>{{.}}</li>
-        {{end}}
-    </ul>
-    <ul id="classtips" style="overflow-y: scroll; flex: 0">
-        {{range .ClassTips}}
-        <li>{{.}}</li>
-        {{end}}
-    </ul>
-    <!--    <div class="foo baz" style="">-->
-    <!--        <h3>-->
-    <!--            &lt;!&ndash;        TODO -> map + loot tables&ndash;&gt;-->
-    <!--        </h3>-->
-    <!--    </div>-->
-</div>
-
-<div class="foo baz" style="text-align: center; flex: 1;">
-    <button style="align-self: center">
-        factions
-    </button>
-    <ul>
-
-    </ul>
-</div>
+{{define "server tips buttons"}}
+<button>hcf tips</button>
+<button>class tips</button>
 {{end}}
+
+{{define "server tips data"}}
+<ul id="hcftips" style="overflow-y: scroll; flex: 1">
+    {{range .CubecoreTips}}
+    <li>{{.}}</li>
+    {{end}}
+</ul>
+<ul id="classtips" style="overflow-y: scroll; flex: 0">
+    {{range .ClassTips}}
+    <li>{{.}}</li>
+    {{end}}
+</ul>
+{{end}}
+
+{{define "server ticker buttons"}}
+<button>factions</button>
+{{end}}
+
+{{define "server ticker data"}}
+<!--TODO-->
+{{end}}
+
+<!--{{define "content"}}-->
+<!--&lt;!&ndash;    <div class="foo baz" style="">&ndash;&gt;-->
+<!--&lt;!&ndash;        <h3>&ndash;&gt;-->
+<!--&lt;!&ndash;            &lt;!&ndash;        TODO -> map + loot tables&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        </h3>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+<!--{{end}}-->
