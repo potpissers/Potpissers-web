@@ -16,22 +16,22 @@
             <option disabled selected>map 1</option>
         </select>
     </div>
-    <div style="overflow-y: scroll; flex: 1">
-        <p>sharpness {{ .SharpnessLimit }}</p>
-        <p>protection {{ .ProtectionLimit }}</p>
-        <p>power {{ .PowerLimit }}</p>
-        <p>regen {{ .RegenLimit }}</p>
-        <p>strength {{ .StrengthLimit }}</p>
-        <p>weakness {{ .IsWeaknessEnabled }}</p>
-        <p>extended debuffs {{ .IsBardPassiveDebuffingEnabled }}</p>
-        <p>dtr max {{ .DtrMax }}</p>
+    <ul style="overflow-y: scroll; flex: 1; display: flex; flex-direction: column">
+        <li>sharpness {{ .SharpnessLimit }}</li>
+        <li>protection {{ .ProtectionLimit }}</li>
+        <li>power {{ .PowerLimit }}</li>
+        <li>regen {{ .RegenLimit }}</li>
+        <li>strength {{ .StrengthLimit }}</li>
+        <li>weakness {{ .IsWeaknessEnabled }}</li>
+        <li>extended debuffs {{ .IsBardPassiveDebuffingEnabled }}</li>
+        <li>dtr max {{ .DtrMax }}</li>
 
-        <p>{{ .AttackSpeed }} attack speed</p>
-        <p>{{ .DeathBanMinutes }}m deathban</p>
-        <p>{{ .OffPeakLivesNeeded }}x revive cost</p>
-        <p>{{ .LootFactor }}x event loot</p>
-        <p>{{ .BorderSize }} border</p>
-    </div>
+        <li>{{ .AttackSpeed }} attack speed</li>
+        <li>{{ .DeathBanMinutes }}m deathban</li>
+        <li>{{ .OffPeakLivesNeeded }}x revive cost</li>
+        <li>{{ .LootFactor }}x event loot</li>
+        <li>{{ .BorderSize }} border</li>
+    </ul>
     <div style="margin-left: auto; margin-top: auto">
         <button>/events</button>
         <button>/mapkit</button>
