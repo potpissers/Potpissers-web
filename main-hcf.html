@@ -16,7 +16,7 @@
             <option disabled selected>map 1</option>
         </select>
     </div>
-    <ul style="font-size: 75%; text-align: center">
+    <ul style="font-size: 75%">
 <!--        <li>sharpness {{ .SharpnessLimit }}</li>-->
 <!--        <li>protection {{ .ProtectionLimit }}</li>-->
 <!--        <li>power {{ .PowerLimit }}</li>-->
@@ -26,11 +26,11 @@
 <!--        <li>extended debuffs {{ .IsBardPassiveDebuffingEnabled }}</li>-->
 <!--        <li>dtr max {{ .DtrMax }}</li>-->
 
-        <li>{{ .AttackSpeed }} attack speed</li>
-        <li>{{ .DeathBanMinutes }}m deathban</li>
-        <li>{{ .OffPeakLivesNeeded }}x revive cost</li>
-        <li>{{ .LootFactor }}x event loot</li>
-        <li>{{ .BorderSize }} border</li>
+        <li style="text-align: center">{{ .AttackSpeed }} attack speed</li>
+        <li style="text-align: center">{{ .DeathBanMinutes }}m deathban</li>
+        <li style="text-align: center">{{ .OffPeakLivesNeeded }}x revive cost</li>
+        <li style="text-align: center">{{ .LootFactor }}x event loot</li>
+        <li style="text-align: center">{{ .BorderSize }} border</li>
     </ul>
     <div style="margin-left: auto; margin-top: auto">
         <button>/events</button>
