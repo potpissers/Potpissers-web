@@ -8,16 +8,25 @@
 <option disabled>hcf.potpissers.com</option>
 {{end}}
 
+{{define "attackspeed"}}
+<button style="font-size: 75%">attack speed: {{ .AttackSpeed }}</button>
+{{end}}
+
+{{define "map"}}
+<select>
+    <option disabled selected>map 1</option>
+</select>
+{{end}}
+
 {{define "server info"}}
 <div class="" style="flex: 1; display: flex; flex-direction: column">
-    <div style="display: flex; justify-content: space-between">
-        <button style="">server: 000</button>
-        <select>
-            <option disabled selected>map 1</option>
-        </select>
-    </div>
+<!--    <div style="display: flex; justify-content: space-between">-->
+<!--        <button style="">server: 000</button>-->
+<!--        <select>-->
+<!--            <option disabled selected>map 1</option>-->
+<!--        </select>-->
+<!--    </div>-->
     <div style="display: flex; flex-direction: column; align-items: start">
-        <button style="font-size: 75%">attack speed: {{ .AttackSpeed }}</button>
         <button style="font-size: 75%">deathban: {{ .DeathBanMinutes }}m</button>
         <button style="font-size: 75%">revive cost: {{ .OffPeakLivesNeeded }}x</button>
         <button style="font-size: 75%">event loot: {{ .LootFactor }}x</button>
