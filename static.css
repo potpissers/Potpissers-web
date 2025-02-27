@@ -73,6 +73,10 @@ table {
     box-shadow: .1rem .1rem .1rem black;
     border-radius: .5rem
 }
+td {
+    vertical-align: top;
+    font-size: 75%
+}
 img {
     /*TODO */
 }
