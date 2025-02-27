@@ -9,35 +9,64 @@
 {{end}}
 
 {{define "server info"}}
-<div class="" style="flex: 1; display: flex; flex-direction: column">
+<div style="flex: 1; display: flex; flex-direction: column; min-height: 0;">
     <div style="display: flex; justify-content: space-between">
-        <button style="">server: 000</button>
+        <button>server: 000</button>
         <select>
             <option disabled selected>map 1</option>
         </select>
     </div>
-<!--    <div style="flex: 1"></div>-->
-    <ul style="overflow: auto; flex: 1">
-<!--        <li>sharpness {{ .SharpnessLimit }}</li>-->
-<!--        <li>protection {{ .ProtectionLimit }}</li>-->
-<!--        <li>power {{ .PowerLimit }}</li>-->
-<!--        <li>regen {{ .RegenLimit }}</li>-->
-<!--        <li>strength {{ .StrengthLimit }}</li>-->
-<!--        <li>weakness {{ .IsWeaknessEnabled }}</li>-->
-<!--        <li>extended debuffs {{ .IsBardPassiveDebuffingEnabled }}</li>-->
-<!--        <li>dtr max {{ .DtrMax }}</li>-->
 
-<!--        <li>{{ .AttackSpeed }} attack speed</li>-->
-<!--        <li>{{ .DeathBanMinutes }}m deathban</li>-->
-<!--        <li>{{ .OffPeakLivesNeeded }}x revive cost</li>-->
-<!--        <li>{{ .LootFactor }}x event loot</li>-->
-<!--        <li>{{ .BorderSize }} border</li>-->
+    <ul style="overflow: auto; flex: 1; min-height: 0;">
+        <li>sharpness {{ .SharpnessLimit }}</li>
+        <li>protection {{ .ProtectionLimit }}</li>
+        <li>power {{ .PowerLimit }}</li>
+        <li>regen {{ .RegenLimit }}</li>
+        <li>strength {{ .StrengthLimit }}</li>
+        <li>weakness {{ .IsWeaknessEnabled }}</li>
+        <li>extended debuffs {{ .IsBardPassiveDebuffingEnabled }}</li>
+        <li>dtr max {{ .DtrMax }}</li>
+        <li>{{ .AttackSpeed }} attack speed</li>
+        <li>{{ .DeathBanMinutes }}m deathban</li>
+        <li>{{ .OffPeakLivesNeeded }}x revive cost</li>
+        <li>{{ .LootFactor }}x event loot</li>
+        <li>{{ .BorderSize }} border</li>
     </ul>
+
     <div style="margin-left: auto">
         <button>/events</button>
         <button>/mapkit</button>
     </div>
 </div>
+<!--<div class="" style="flex: 1; display: flex; flex-direction: column">-->
+<!--    <div style="display: flex; justify-content: space-between">-->
+<!--        <button style="">server: 000</button>-->
+<!--        <select>-->
+<!--            <option disabled selected>map 1</option>-->
+<!--        </select>-->
+<!--    </div>-->
+<!--&lt;!&ndash;    <div style="flex: 1"></div>&ndash;&gt;-->
+<!--    <ul style="overflow: auto; flex: 1">-->
+<!--&lt;!&ndash;        <li>sharpness {{ .SharpnessLimit }}</li>&ndash;&gt;-->
+<!--&lt;!&ndash;        <li>protection {{ .ProtectionLimit }}</li>&ndash;&gt;-->
+<!--&lt;!&ndash;        <li>power {{ .PowerLimit }}</li>&ndash;&gt;-->
+<!--&lt;!&ndash;        <li>regen {{ .RegenLimit }}</li>&ndash;&gt;-->
+<!--&lt;!&ndash;        <li>strength {{ .StrengthLimit }}</li>&ndash;&gt;-->
+<!--&lt;!&ndash;        <li>weakness {{ .IsWeaknessEnabled }}</li>&ndash;&gt;-->
+<!--&lt;!&ndash;        <li>extended debuffs {{ .IsBardPassiveDebuffingEnabled }}</li>&ndash;&gt;-->
+<!--&lt;!&ndash;        <li>dtr max {{ .DtrMax }}</li>&ndash;&gt;-->
+
+<!--&lt;!&ndash;        <li>{{ .AttackSpeed }} attack speed</li>&ndash;&gt;-->
+<!--&lt;!&ndash;        <li>{{ .DeathBanMinutes }}m deathban</li>&ndash;&gt;-->
+<!--&lt;!&ndash;        <li>{{ .OffPeakLivesNeeded }}x revive cost</li>&ndash;&gt;-->
+<!--&lt;!&ndash;        <li>{{ .LootFactor }}x event loot</li>&ndash;&gt;-->
+<!--&lt;!&ndash;        <li>{{ .BorderSize }} border</li>&ndash;&gt;-->
+<!--    </ul>-->
+<!--    <div style="margin-left: auto">-->
+<!--        <button>/events</button>-->
+<!--        <button>/mapkit</button>-->
+<!--    </div>-->
+<!--</div>-->
 {{end}}
 
 {{define "content"}}
