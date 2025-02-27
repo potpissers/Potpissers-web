@@ -65,6 +65,14 @@ select {
 
     border-radius: .25rem
 }
+table {
+    gap: .5rem;
+    padding-left: .5rem;
+    padding-right: .5rem;
+    border: .1rem solid black;
+    box-shadow: .1rem .1rem .1rem black;
+    border-radius: .5rem
+}
 img {
     /*TODO */
 }
