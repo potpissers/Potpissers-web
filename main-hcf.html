@@ -9,8 +9,8 @@
 {{end}}
 
 {{define "server info"}}
-<div class="" style="flex: 1; display: flex; flex-direction: column">
-    <div style="display: flex; justify-content: space-between; flex: 0">
+<div class="" style="flex: 1; display: grid; grid-template-rows: auto 1fr auto">
+    <div style="display: flex; justify-content: space-between">
         <button style="">server: 000</button>
         <select>
             <option disabled selected>map 1</option>
@@ -32,10 +32,10 @@
         <li>{{ .LootFactor }}x event loot</li>
         <li>{{ .BorderSize }} border</li>
     </ul>
-<!--    <div style="margin-left: auto; margin-top: auto">-->
-<!--        <button>/events</button>-->
-<!--        <button>/mapkit</button>-->
-<!--    </div>-->
+    <div style="margin-left: auto; margin-top: auto">
+        <button>/events</button>
+        <button>/mapkit</button>
+    </div>
 </div>
 {{end}}
 
