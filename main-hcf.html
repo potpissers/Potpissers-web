@@ -19,34 +19,52 @@
 {{end}}
 
 {{define "server info"}}
-<table>
-    <tr>
-        <td>deathban</td>
-        <td>revive cost</td>
-        <td>event loot</td>
-        <td>border</td>
-    </tr>
-    <tr>
-        <td>{{ .DeathBanMinutes }}m</td>
-        <td>{{ .OffPeakLivesNeeded }}x</td>
-        <td>{{ .LootFactor }}x</td>
-        <td>{{ .BorderSize }}</td>
-    </tr>
-</table>
-<!--<div class="" style="flex: 1; display: flex; flex-direction: column">-->
-<!--&lt;!&ndash;        <li>sharpness {{ .SharpnessLimit }}</li>&ndash;&gt;-->
-<!--&lt;!&ndash;        <li>protection {{ .ProtectionLimit }}</li>&ndash;&gt;-->
-<!--&lt;!&ndash;        <li>power {{ .PowerLimit }}</li>&ndash;&gt;-->
-<!--&lt;!&ndash;        <li>regen {{ .RegenLimit }}</li>&ndash;&gt;-->
-<!--&lt;!&ndash;        <li>strength {{ .StrengthLimit }}</li>&ndash;&gt;-->
-<!--&lt;!&ndash;        <li>weakness {{ .IsWeaknessEnabled }}</li>&ndash;&gt;-->
-<!--&lt;!&ndash;        <li>extended debuffs {{ .IsBardPassiveDebuffingEnabled }}</li>&ndash;&gt;-->
-<!--&lt;!&ndash;        <li>dtr max {{ .DtrMax }}</li>&ndash;&gt;-->
-<!--    <div style="margin-left: auto; margin-top: auto">-->
-<!--        <button style="font-size: 75%">/events</button>-->
-<!--        <button style="font-size: 75%">/mapkit</button>-->
-<!--    </div>-->
-<!--</div>-->
+<div style="display: flex; justify-content: space-between">
+    <table>
+        <tr>
+            <td>deathban</td>
+            <td>revive cost</td>
+            <td>event loot</td>
+            <td>border</td>
+        </tr>
+        <tr>
+            <td>{{ .DeathBanMinutes }}m</td>
+            <td>{{ .OffPeakLivesNeeded }}x</td>
+            <td>{{ .LootFactor }}x</td>
+            <td>{{ .BorderSize }}</td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>sharpness</td>
+            <td>protection</td>
+            <td>power</td>
+            <td>regen</td>
+            <td>strength</td>
+            <td>weakness</td>
+            <td>event loot</td>
+            <td>border</td>
+            <td>deathban</td>
+            <td>extended debuffs</td>
+            <td>dtr max</td>
+            <td>border</td>
+        </tr>
+        <tr>
+            <td>{{ .SharpnessLimit }}</td>
+            <td>{{ .ProtectionLimit }}</td>
+            <td>{{ .PowerLimit }}</td>
+            <td>{{ .RegenLimit }}</td>
+            <td>{{ .StrengthLimit }}</td>
+            <td>{{ .IsWeaknessEnabled }}</td>
+            <td>{{ .IsBardPassiveDebuffingEnabled }}</td>
+            <td>{{ .DtrMax }}</td>
+        </tr>
+    </table>
+</div>
+{{end}}
+
+{{define "events button"}}
+<button style="font-size: 75%">/events</button>
 {{end}}
 
 {{define "content"}}
