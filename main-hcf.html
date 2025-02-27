@@ -9,57 +9,34 @@
 {{end}}
 
 {{define "server info"}}
-<div class="foo bar" style="display: flex; flex-direction: column">
-    <div style="text-align: center">
-        <span class=ifc>
-            <button>fights</button>
-            <input name="deaths-ticker" type="radio">
-        </span>
-        <span class=ifc>
-            <button>deaths</button>
-            <input name="deaths-ticker" type="radio">
-        </span>
-        <span class=ifc>
-            <button>duels</button>
-            <input name="deaths-ticker" type="radio">
-        </span>
+<div class="" style="flex: 1; display: flex; flex-direction: column">
+    <div style="display: flex; justify-content: space-between">
+        <button style="">server: 000</button>
+        <select>
+            <option disabled selected>map 1</option>
+        </select>
     </div>
-    <ul style="overflow-y: scroll; overflow-x: hidden">
-        {{range .Deaths}}
-        <li style="">({{.ServerName}}) {{.DeathMessage}}</li>
-        {{end}}
-    </ul>
-    {{block "fights" .}}{{end}}
-    {{block "duels" .}}{{end}}
-</div>
-<!--<div class="" style="flex: 1; display: flex; flex-direction: column">-->
-<!--    <div style="display: flex; justify-content: space-between">-->
-<!--        <button style="">server: 000</button>-->
-<!--        <select>-->
-<!--            <option disabled selected>map 1</option>-->
-<!--        </select>-->
-<!--    </div>-->
-<!--    <ul style="overflow-y: auto">-->
-<!--        <li>sharpness {{ .SharpnessLimit }}</li>-->
-<!--        <li>protection {{ .ProtectionLimit }}</li>-->
-<!--        <li>power {{ .PowerLimit }}</li>-->
-<!--        <li>regen {{ .RegenLimit }}</li>-->
-<!--        <li>strength {{ .StrengthLimit }}</li>-->
-<!--        <li>weakness {{ .IsWeaknessEnabled }}</li>-->
-<!--        <li>extended debuffs {{ .IsBardPassiveDebuffingEnabled }}</li>-->
-<!--        <li>dtr max {{ .DtrMax }}</li>-->
+    <ul style="overflow-y: auto">
+        <li>sharpness {{ .SharpnessLimit }}</li>
+        <li>protection {{ .ProtectionLimit }}</li>
+        <li>power {{ .PowerLimit }}</li>
+        <li>regen {{ .RegenLimit }}</li>
+        <li>strength {{ .StrengthLimit }}</li>
+        <li>weakness {{ .IsWeaknessEnabled }}</li>
+        <li>extended debuffs {{ .IsBardPassiveDebuffingEnabled }}</li>
+        <li>dtr max {{ .DtrMax }}</li>
 
-<!--        <li>{{ .AttackSpeed }} attack speed</li>-->
-<!--        <li>{{ .DeathBanMinutes }}m deathban</li>-->
-<!--        <li>{{ .OffPeakLivesNeeded }}x revive cost</li>-->
-<!--        <li>{{ .LootFactor }}x event loot</li>-->
-<!--        <li>{{ .BorderSize }} border</li>-->
-<!--    </ul>-->
-<!--    <div style="margin-left: auto">-->
-<!--        <button>/events</button>-->
-<!--        <button>/mapkit</button>-->
-<!--    </div>-->
-<!--</div>-->
+        <li>{{ .AttackSpeed }} attack speed</li>
+        <li>{{ .DeathBanMinutes }}m deathban</li>
+        <li>{{ .OffPeakLivesNeeded }}x revive cost</li>
+        <li>{{ .LootFactor }}x event loot</li>
+        <li>{{ .BorderSize }} border</li>
+    </ul>
+    <div style="margin-left: auto">
+        <button>/events</button>
+        <button>/mapkit</button>
+    </div>
+</div>
 {{end}}
 
 {{define "content"}}
