@@ -11,36 +11,33 @@
 <button style="width: fit-content; font-size: 75%">attack speed: {{ .AttackSpeed }}</button>
 {{end}}
 
-{{define "content"}}
-<div class="foo baz" style="flex: 3; display: flex; flex-direction: column">
-    <div style="display: flex">
-        <button style="width: fit-content">
-            potpissers tips
-        </button>
-        <button style="">
-            mz tips
-        </button>
-        <button style="margin-left: auto"></button>
-    </div>
-    <ul id="tips" style="overflow-y: scroll; flex: 1">
-        {{range .PotpissersTips}}
-        <li>{{.}}</li>
-        {{end}}
-    </ul>
-    <ul id="mztips" style="overflow-y: scroll; flex: 0">
-        {{range .MzTips}}
-        <li>{{.}}</li>
-        {{end}}
-    </ul>
-    <!--    <div class="foo baz" style="">-->
-    <!--        <h3>-->
-    <!--            &lt;!&ndash;        TODO -> map + loot tables&ndash;&gt;-->
-    <!--        </h3>-->
-    <!--    </div>-->
-</div>
-
-<div class="foo baz" style="flex: 1; text-align: center">
-    <button>bandits</button>
-    <button>heroes</button>
-</div>
+{{define "server tips buttons .}}
+<button>mz tips</button>
 {{end}}
+
+{{define "server tips data" .}}
+<ul id="mztips" style="overflow-y: scroll; flex: 0">
+    {{range .MzTips}}
+    <li>{{.}}</li>
+    {{end}}
+</ul>
+{{end}}
+
+{{define "server ticker name"}}
+<button>bandits</button>
+<button>heroes</button>
+{{end}}
+
+{{define "server ticker data"}}
+<!--TODO-->
+{{end}}
+
+<!--{{define "content"}}-->
+<!--<div class="foo baz" style="flex: 3; display: flex; flex-direction: column">-->
+<!--    &lt;!&ndash;    <div class="foo baz" style="">&ndash;&gt;-->
+<!--    &lt;!&ndash;        <h3>&ndash;&gt;-->
+<!--    &lt;!&ndash;            &lt;!&ndash;        TODO -> map + loot tables&ndash;&gt;&ndash;&gt;-->
+<!--    &lt;!&ndash;        </h3>&ndash;&gt;-->
+<!--    &lt;!&ndash;    </div>&ndash;&gt;-->
+<!--</div>-->
+<!--{{end}}-->
