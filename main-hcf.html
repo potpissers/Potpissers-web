@@ -19,18 +19,18 @@
 {{end}}
 
 {{define "server info"}}
-<table style="vertical-align: top">
+<table>
     <tr>
-        <td>deathban</td>
-        <td>revive cost</td>
-        <td>event loot</td>
-        <td>border</td>
+        <td style="vertical-align: top">deathban</td>
+        <td style="vertical-align: top">revive cost</td>
+        <td style="vertical-align: top">event loot</td>
+        <td style="vertical-align: top">border</td>
     </tr>
     <tr>
-        <td>{{ .DeathBanMinutes }}m</td>
-        <td>{{ .OffPeakLivesNeeded }}x</td>
-        <td>{{ .LootFactor }}x</td>
-        <td>{{ .BorderSize }}</td>
+        <td style="vertical-align: top">{{ .DeathBanMinutes }}m</td>
+        <td style="vertical-align: top">{{ .OffPeakLivesNeeded }}x</td>
+        <td style="vertical-align: top">{{ .LootFactor }}x</td>
+        <td style="vertical-align: top">{{ .BorderSize }}</td>
     </tr>
 </table>
 <!--<div class="" style="flex: 1; display: flex; flex-direction: column">-->
