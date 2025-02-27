@@ -7,7 +7,7 @@
 </head>
 <body class="foo">
 
-<div class="foo bar" style="">
+<div class="foo bar" style="display: flex; flex-direction: column">
     <div style="text-align: center">
         <span class=ifc>
             <button>fights</button>
@@ -22,7 +22,7 @@
             <input name="deaths-ticker" type="radio">
         </span>
     </div>
-    <ul style="overflow-x: hidden; overflow-y: scroll; height: 1fr">
+    <ul style="overflow-x: hidden; overflow-y: scroll">
         {{range .Deaths}}
         <li style="">({{.ServerName}}) {{.DeathMessage}}</li>
         {{end}}
