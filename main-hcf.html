@@ -33,30 +33,16 @@
         <td>{{ .BorderSize }}</td>
     </tr>
 </table>
-<!--<div style="margin-top: auto">-->
-<!--    <table style="">-->
-<!--        <tr>-->
-<!--            <td>sharpness</td>-->
-<!--            <td>protection</td>-->
-<!--            <td>power</td>-->
-<!--            <td>regen</td>-->
-<!--            <td>strength</td>-->
-<!--            <td>weakness</td>-->
-<!--            <td>extended debuffs</td>-->
-<!--            <td>dtr max</td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--            <td>{{ .SharpnessLimit }}</td>-->
-<!--            <td>{{ .ProtectionLimit }}</td>-->
-<!--            <td>{{ .PowerLimit }}</td>-->
-<!--            <td>{{ .RegenLimit }}</td>-->
-<!--            <td>{{ .StrengthLimit }}</td>-->
-<!--            <td>{{ .IsWeaknessEnabled }}</td>-->
-<!--            <td>{{ .IsBardPassiveDebuffingEnabled }}</td>-->
-<!--            <td>{{ .DtrMax }}</td>-->
-<!--        </tr>-->
-<!--    </table>-->
-<!--</div>-->
+<ul style="display: flex">
+    <li>sharpness {{ .SharpnessLimit }}</li>
+    <li>protection {{ .ProtectionLimit }}</li>
+    <li>power {{ .PowerLimit }}</li>
+    <li>regen {{ .RegenLimit }}</li>
+    <li>strength {{ .StrengthLimit }}</li>
+    <li>weakness {{ .IsWeaknessEnabled }}</li>
+    <li>extended debuffs {{ .IsBardPassiveDebuffingEnabled }}</li>
+    <li>dtr max {{ .DtrMax }}</li>
+</ul>
 {{end}}
 
 {{define "events button"}}
@@ -67,7 +53,6 @@
 <button>hcf tips</button>
 <button>class tips</button>
 {{end}}
-
 {{define "server tips data"}}
 <ul id="tips" style="overflow-y: auto; flex: 1" hidden>
     {{range .PotpissersTips}}
