@@ -158,7 +158,9 @@
     </div>
     <div class="foo baz" style="text-align: center; overflow-y: auto">
         {{block "server ticker buttons" .}}{{end}}
-        {{block "server ticker data" .}}{{end}}
+        <div style="display: flex; flex-direction: column">
+            {{block "server ticker data" .}}{{end}}
+        </div>
     </div>
 </div>
 
