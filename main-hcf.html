@@ -80,7 +80,9 @@
 {{end}}
 
 {{define "server ticker data"}}
-<ul>
+<!--<div style="display: flex; flex-direction: column">-->
+<!--</div>-->
+<ul style="display: flex; flex-direction: column">
     {{range .Factions}}
     <li>{{.Name}}</li>
     {{end}}
