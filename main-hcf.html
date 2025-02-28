@@ -33,17 +33,29 @@
         <td>{{ .BorderSize }}</td>
     </tr>
 </table>
-<div style="overflow-y: auto; height: 30%">
-    <ul>
-        <li>sharpness: {{ .SharpnessLimit }}</li>
-        <li>protection: {{ .ProtectionLimit }}</li>
-        <li>power: {{ .PowerLimit }}</li>
-        <li>regen: {{ .RegenLimit }}</li>
-        <li>strength: {{ .StrengthLimit }}</li>
-        <li>weakness: {{ .IsWeaknessEnabled }}</li>
-        <li>extended debuffs: {{ .IsBardPassiveDebuffingEnabled }}</li>
-        <li>dtr max: {{ .DtrMax }}</li>
-    </ul>
+<div style="overflow-x: auto; margin-top: auto">
+    <table style="width: 1rem">
+        <tr>
+            <td>sharpness</td>
+            <td>protection</td>
+            <td>power</td>
+            <td>regen</td>
+            <td>strength</td>
+            <td>weakness</td>
+            <td>extended debuffs</td>
+            <td>dtr max</td>
+        </tr>
+        <tr>
+            <td>{{ .SharpnessLimit }}</td>
+            <td>{{ .ProtectionLimit }}</td>
+            <td>{{ .PowerLimit }}</td>
+            <td>{{ .RegenLimit }}</td>
+            <td>{{ .StrengthLimit }}</td>
+            <td>{{ .IsWeaknessEnabled }}</td>
+            <td>{{ .IsBardPassiveDebuffingEnabled }}</td>
+            <td>{{ .DtrMax }}</td>
+        </tr>
+    </table>
 </div>
 {{end}}
 
