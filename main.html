@@ -156,8 +156,10 @@
         </div>
         {{block "server tips data" .}}{{end}}
     </div>
-    <div class="foo baz" style="text-align: center; overflow-y: auto">
-        {{block "server ticker buttons" .}}{{end}}
+    <div class="foo baz" style="text-align: center; overflow-y: auto; display: flex; flex-direction: column">
+        <div>
+            {{block "server ticker buttons" .}}{{end}}
+        </div>
         {{block "server ticker data" .}}{{end}}
     </div>
 </div>
