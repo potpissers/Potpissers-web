@@ -372,6 +372,7 @@ func main() {
 
 			CubecoreTips []string
 			ClassTips []string
+			Factions []Faction
 		}{
 			NetworkPlayers: currentPlayers,
 			ServerPlayers: serverData.CurrentPlayers,
@@ -399,6 +400,7 @@ func main() {
 
 			CubecoreTips: cubecoreTips,
 			ClassTips: cubecoreClassTips,
+			Factions: serverData.Factions,
 			})
 		if err != nil {
 			log.Fatal(err)
