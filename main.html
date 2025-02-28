@@ -118,8 +118,8 @@
     {{block "events" .}}{{end}}
 </div>
 
-<div id="content" class="foo" style="background: #33383D; display: grid; grid-template-columns: 3fr 1fr; grid-template-rows: auto auto">
-    <div class="foo baz" style="overflow-y: auto; height: 1fr">
+<div id="content" class="foo" style="background: #33383D; display: grid; grid-template-columns: 3fr 1fr; grid-template-rows: 1fr 1fr">
+    <div class="foo baz" style="overflow-y: auto">
         <div style="display: flex; text-align: center">
             <button>announcements</button>
             <button>changelog</button>
@@ -137,7 +137,7 @@
         </div>
     </div>
 
-    <div class="foo baz" style="display: flex; flex-direction: column; overflow-y: auto; height: 1fr">
+    <div class="foo baz" style="display: flex; flex-direction: column; overflow-y: auto">
         <div style="display: flex; text-align: left">
             {{block "server tips buttons" .}}{{end}}
 
