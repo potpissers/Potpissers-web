@@ -26,8 +26,8 @@ func main() {
 	}
 	defer postgresPool.Close()
 
-	handleRowsBlocking := func(query string, bar func(rows pgx.Rows)) {
-		rows, err := postgresPool.Query(context.Background(), query)
+	getRowsBlocking := func(query string, bar func(rows pgx.Rows), params ...any) {
+		rows, err := postgresPool.Query(context.Background(), query, params)
 		defer rows.Close()
 		if err != nil {
 			log.Fatal(err)
@@ -37,7 +37,7 @@ func main() {
 
 	fetchTips := func(tipsName string) []string {
 		var tips []string
-		handleRowsBlocking("SELECT tip_message FROM server_tips WHERE server_id = (SELECT id FROM servers WHERE name = '" + tipsName + "')", func(rows pgx.Rows) {
+		getRowsBlocking("SELECT tip_message FROM server_tips WHERE server_id = (SELECT id FROM servers WHERE name = '" + tipsName + "')", func(rows pgx.Rows) {
 			var tipMessage string
 			_, err := pgx.ForEachRow(rows, []any{&tipMessage}, func() error {
 				tips = append(tips, tipMessage)
@@ -47,7 +47,7 @@ func main() {
 				log.Fatal(err)
 			}
 		})
-		return tips // TODO -> pass reference and then deference? fuck idk
+		return tips
 	}
 
 	 potpissersTips, cubecoreTips, mzTips, cubecoreClassTips := fetchTips("null"), fetchTips("cubecore"), fetchTips("minez"), fetchTips("cubecore_classes")
@@ -60,7 +60,7 @@ func main() {
 	}
 	var newPlayers []NewPlayer
 	{
-		handleRowsBlocking(Return100NewPlayers, func(rows pgx.Rows) {
+		getRowsBlocking(Return12NewPlayers, func(rows pgx.Rows) {
 			var death NewPlayer
 			_, err := pgx.ForEachRow(rows, []any{&death.PlayerUuid, &death.Referrer, &death.Timestamp, &death.RowNumber}, func() error {
 				newPlayers = append(newPlayers, death)
@@ -93,7 +93,7 @@ func main() {
 	}
 	var deaths []Death
 	{
-		handleRowsBlocking(Return16Deaths, func(rows pgx.Rows) {
+		getRowsBlocking(Return12Deaths, func(rows pgx.Rows) {
 			var death Death
 			_, err := pgx.ForEachRow(rows, []any{&death.ServerName, &death.VictimUserFightId, &death.Timestamp, &death.VictimUuid, nil, &death.DeathWorldName, &death.DeathX, &death.DeathY, &death.DeathZ, &death.DeathMessage, &death.KillerUuid, nil, nil}, func() error {
 				deaths = append(deaths, death)
@@ -117,6 +117,7 @@ func main() {
 		CappingUserUUID *string `json:"cappingUserUUID"`
 		EndTimestamp time.Time `json:"endTimestamp"`
 		CappingPartyUUID *string `json:"cappingPartyUUID"`
+		CapMessage *string `json:"capMessage"`
 		World string `json:"world"`
 		X int `json:"x"`
 		Y int `json:"y"`
@@ -127,9 +128,9 @@ func main() {
 	}
 	var events []Event
 	{
-		handleRowsBlocking(Return100Events, func(rows pgx.Rows) {
+		getRowsBlocking(Return14Events, func(rows pgx.Rows) {
 			var event Event
-			_, err := pgx.ForEachRow(rows, []any{&event.StartTimestamp, &event.LootFactor, &event.MaxTimer, &event.IsMovementRestricted, &event.CappingUserUUID, &event.EndTimestamp, &event.CappingPartyUUID, &event.World, &event.X, &event.Y, &event.Z, &event.ServerName, &event.ArenaName, &event.Creator}, func() error {
+			_, err := pgx.ForEachRow(rows, []any{&event.StartTimestamp, &event.LootFactor, &event.MaxTimer, &event.IsMovementRestricted, &event.CappingUserUUID, &event.EndTimestamp, &event.CappingPartyUUID, &event.CapMessage, &event.World, &event.X, &event.Y, &event.Z, &event.ServerName, &event.ArenaName, &event.Creator}, func() error {
 				events = append(events, event)
 				return nil
 			})
@@ -145,11 +146,11 @@ func main() {
 	http.HandleFunc("/api/events/", func(w http.ResponseWriter, r *http.Request) {
 	})
 
-//	type Transaction struct {
+//	type Transaction struct { // TODO -> square api transactions
 //	}
 //	var transactions []Transaction
 //	{
-//		handleRowsBlocking(Return100Events, func(rows pgx.Rows) {
+//		getRowsBlocking(, func(rows pgx.Rows) {
 //			var event Transaction
 //			err := rows.Scan()
 //			if err != nil {
@@ -159,6 +160,21 @@ func main() {
 //		})
 //	}
 
+	type Faction struct {
+		Name string
+		PartyUuid string
+	}
+	type Bandit struct {
+		UserUuid string
+		DeathId int
+		Timestamp time.Time
+		ExpirationTimestamp time.Time
+		DeathMessage string
+		DeathWorld string
+		DeathX int
+		DeathY int
+		DeathZ int
+	}
 	type ServerData struct {
 		DeathBanMinutes int
 		WorldBorderRadius int
@@ -180,9 +196,16 @@ func main() {
 		AttackSpeedName string
 
 		CurrentPlayers []string
+		Deaths []Death
+		Events []Event
+//		Transaction []Transaction TODO
+		Messages []string
+
+		Factions []Faction
+		Bandits []Bandit
 	}
 	serverDatas := make(map[string]*ServerData)
-	handleRowsBlocking(ReturnAllServerData, func(rows pgx.Rows) {
+	getRowsBlocking(ReturnAllServerData, func(rows pgx.Rows) {
 		var serverData ServerData
 		_, err := pgx.ForEachRow(rows, []any{&serverData.DeathBanMinutes, &serverData.WorldBorderRadius, &serverData.SharpnessLimit, &serverData.PowerLimit, &serverData.ProtectionLimit, &serverData.RegenLimit, &serverData.StrengthLimit, &serverData.IsWeaknessEnabled, &serverData.IsBardPassiveDebuffingEnabled, &serverData.DtrFreezeTimer, &serverData.DtrMax, &serverData.DtrMaxTime, &serverData.DtrOffPeakFreezeTime, &serverData.OffPeakLivesNeededAsCents, &serverData.BardRadius, &serverData.RogueRadius, &serverData.ServerName, &serverData.AttackSpeedName}, func() error {
 			serverDatas[serverData.ServerName] = &serverData
@@ -192,28 +215,68 @@ func main() {
 			log.Fatal(err)
 		}
 	})
-	handleRowsBlocking(ReturnAllOnlinePlayers, func(rows pgx.Rows) {
+	http.HandleFunc("/api/servers/", func(w http.ResponseWriter, r *http.Request) {
+		// TODO
+	})
+	getRowsBlocking(ReturnAllOnlinePlayers, func(rows pgx.Rows) {
 		var playerName string
 		var serverName string
 		_, err := pgx.ForEachRow(rows, []any{&playerName, &serverName}, func() error {
 			serverDatas[serverName].CurrentPlayers = append(serverDatas[serverName].CurrentPlayers, playerName)
 			return nil
 		})
-		// TODO sort
+		// TODO sort names
 		if err != nil {
 			log.Fatal(err)
 		}
 	})
-	http.HandleFunc("/api/servers/", func(w http.ResponseWriter, r *http.Request) {
-		// TODO
-	})
+	for serverName, serverData := range serverDatas {
+		getRowsBlocking(Return12ServerDeaths, func(rows pgx.Rows) {
+			var death Death
+			_, err := pgx.ForEachRow(rows, []any{&death.ServerName, &death.VictimUserFightId, &death.Timestamp, &death.VictimUuid, nil, &death.DeathWorldName, &death.DeathX, &death.DeathY, &death.DeathZ, &death.DeathMessage, &death.KillerUuid, nil, nil}, func() error {
+				serverData.Deaths = append(serverData.Deaths, death)
+				return nil
+			})
+			if err != nil {
+				log.Fatal(err)
+			}
+		})
+		getRowsBlocking(Return14ServerEvents, func(rows pgx.Rows) {
+			var event Event
+			_, err := pgx.ForEachRow(rows, []any{&event.StartTimestamp, &event.LootFactor, &event.MaxTimer, &event.IsMovementRestricted, &event.CappingUserUUID, &event.EndTimestamp, &event.CappingPartyUUID, &event.CapMessage, &event.World, &event.X, &event.Y, &event.Z, &event.ServerName, &event.ArenaName, &event.Creator}, func() error {
+				serverData.Events = append(serverData.Events, event)
+				return nil
+			})
+			if err != nil {
+				log.Fatal(err)
+			}
+		})
+		getRowsBlocking(Return7ServerFactions, func(rows pgx.Rows) {
+			var faction Faction
+			_, err := pgx.ForEachRow(rows, []any{&faction.Name, &faction.PartyUuid}, func() error {
+				serverData.Factions = append(serverData.Factions, faction)
+				return nil
+			})
+			if err != nil {
+				log.Fatal(err)
+			}
+		}, serverName)
+		getRowsBlocking(Return7ServerBandits, func(rows pgx.Rows) {
+			var bandit Bandit
+			_, err := pgx.ForEachRow(rows, []any{&bandit.UserUuid, &bandit.DeathId, &bandit.Timestamp, &bandit.ExpirationTimestamp, &bandit.DeathMessage, &bandit.DeathWorld, &bandit.DeathX, &bandit.DeathY, &bandit.DeathZ}, func() error {
+				serverData.Bandits = append(serverData.Bandits, bandit)
+				return nil
+			})
+			if err != nil {
+				log.Fatal(err)
+			}
+		})
+	}
 
-//	var chatCache []string // TODO
-	http.HandleFunc("/server-chat", func(w http.ResponseWriter, r *http.Request) {
-		// TODO
+	var messages []string
+	http.HandleFunc("/api/chat", func(w http.ResponseWriter, r *http.Request) {
+		// TODO messages + ServerData.Messages
 	})
-
-	// TODO handle factions (for each map etc)
 
 	getMainTemplate := func(fileName string) *template.Template {
 		mainTemplate, err := template.ParseFiles("main.html", fileName)
@@ -228,32 +291,39 @@ func main() {
 			NewPlayers []NewPlayer
 			PotpissersTips []string
 			Deaths []Death
+			Messages []string
 		}{
 			NewPlayers: newPlayers,
 			PotpissersTips: potpissersTips,
 			Deaths: deaths,
+			Messages: messages,
 			})
 		if err != nil {
 			log.Fatal(err)
 		}
 	})
 	http.HandleFunc("/mz", func(w http.ResponseWriter, r *http.Request) {
+		mzData := serverDatas["mz"]
 		err := mz.Execute(w, struct {
 			NewPlayers []NewPlayer
 			PotpissersTips []string
 			Deaths []Death
+			Messages []string
 
 			AttackSpeed string
 
 			MzTips []string
+			Bandits []Bandit
 		}{
 			NewPlayers: newPlayers,
 			PotpissersTips: potpissersTips,
-			Deaths: deaths,
+			Deaths: mzData.Deaths,
+			Messages: mzData.Messages,
 
-			AttackSpeed: serverDatas["mz"].AttackSpeedName,
+			AttackSpeed: mzData.AttackSpeedName,
 
 			MzTips: mzTips,
+			Bandits: mzData.Bandits,
 			})
 		if err != nil {
 			log.Fatal(err)
@@ -265,6 +335,7 @@ func main() {
 			NewPlayers []NewPlayer
 			PotpissersTips []string
 			Deaths []Death
+			Messages []string
 
 			AttackSpeed string
 
@@ -288,6 +359,7 @@ func main() {
 			NewPlayers: newPlayers,
 			PotpissersTips: potpissersTips,
 			Deaths: deaths,
+			Messages: messages,
 
 			AttackSpeed: serverData.AttackSpeedName,
 
@@ -322,7 +394,7 @@ func main() {
 	}
 }
 
-const Return16Deaths = `SELECT name,
+const Return12Deaths = `SELECT name,
        victim_user_fight_id,
        timestamp,
        victim_uuid,
@@ -338,12 +410,30 @@ const Return16Deaths = `SELECT name,
 FROM user_deaths
          JOIN servers ON user_deaths.server_id = servers.id
 ORDER BY timestamp DESC
-LIMIT 16`
-const Return100NewPlayers = `SELECT user_uuid, referrer, timestamp, ROW_NUMBER() OVER (ORDER BY timestamp) AS row_number
+LIMIT 12`
+const Return12ServerDeaths = `SELECT name,
+       victim_user_fight_id,
+       timestamp,
+       victim_uuid,
+       bukkit_victim_inventory,
+       death_world,
+       death_x,
+       death_y,
+       death_z,
+       death_message,
+       killer_uuid,
+       bukkit_kill_weapon,
+       bukkit_killer_inventory
+FROM user_deaths
+         JOIN servers ON user_deaths.server_id = servers.id
+WHERE server_id = (SELECT id FROM servers WHERE name = ?)
+ORDER BY timestamp DESC
+LIMIT 12`
+const Return12NewPlayers = `SELECT user_uuid, referrer, timestamp, ROW_NUMBER() OVER (ORDER BY timestamp) AS row_number
 FROM user_referrals
 ORDER BY timestamp
-LIMIT 100`
-const Return100Events = `SELECT start_timestamp,
+LIMIT 12`
+const Return14Events = `SELECT start_timestamp,
        loot_factor,
        max_timer,
        is_movement_restricted,
@@ -362,7 +452,28 @@ FROM koths
          JOIN servers ON servers.id = server_koths.server_id
          JOIN arena_data ON arena_data.id = server_koths.arena_id
 ORDER BY end_timestamp IS NULL, end_timestamp
-LIMIT 100`
+LIMIT 14`
+const Return14ServerEvents = `SELECT start_timestamp,
+       loot_factor,
+       max_timer,
+       is_movement_restricted,
+       CASE WHEN end_timestamp IS NOT NULL THEN capping_user_uuid END AS capping_user_uuid,
+       end_timestamp,
+       capping_party_uuid,
+       world,
+       x,
+       y,
+       z,
+       servers.name                                                   AS server_name,
+       arena_data.name                                                AS arena_name,
+       creator
+FROM koths
+         JOIN server_koths ON server_koths_id = server_koths.id
+         JOIN servers ON servers.id = server_koths.server_id
+         JOIN arena_data ON arena_data.id = server_koths.arena_id
+WHERE server_id = (SELECT id FROM servers WHERE name = ?)
+ORDER BY end_timestamp IS NULL, end_timestamp
+LIMIT 14`
 const ReturnAllServerData = `SELECT death_ban_minutes,
        world_border_radius,
        sharpness_limit,
@@ -387,6 +498,25 @@ FROM server_data
 const ReturnAllOnlinePlayers = `SELECT user_name, name
 FROM online_players
          JOIN servers ON server_id = servers.id`
+const Return7ServerFactions = `SELECT name, party_uuid
+FROM factions
+WHERE server_id = (SELECT id FROM servers WHERE name = ?)
+LIMIT 7`
+const Return7ServerBandits = `SELECT user_uuid,
+       death_id,
+       timestamp,
+       expiration_timestamp,
+       death_message,
+       death_world,
+       death_x,
+       death_y,
+       death_z
+FROM bandits
+         JOIN user_deaths on bandits.death_id = user_deaths.id
+WHERE bandits.server_id = (SELECT id FROM servers WHERE name = ?)
+  AND expiration_timestamp > NOW()
+ORDER BY timestamp DESC
+LIMIT 7`
 
 func handlePutJson[T any](r *http.Request, decodeJson func(*T, *http.Request) error, mutex *sync.RWMutex, collection *[]T) {
 	if r.Method == "PATCH" {
