@@ -27,7 +27,7 @@ func main() {
 	defer postgresPool.Close()
 
 	getRowsBlocking := func(query string, bar func(rows pgx.Rows), params ...any) {
-		rows, err := postgresPool.Query(context.Background(), query, params)
+		rows, err := postgresPool.Query(context.Background(), query, params...)
 		defer rows.Close()
 		if err != nil {
 			log.Fatal(err)
