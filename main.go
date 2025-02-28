@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"html/template"
@@ -30,7 +31,7 @@ func main() {
 		rows, err := postgresPool.Query(context.Background(), query, params...)
 		defer rows.Close()
 		if err != nil {
-			print(err)
+			fmt.Println(err)
 			log.Fatal(err)
 		}
 		bar(rows)
