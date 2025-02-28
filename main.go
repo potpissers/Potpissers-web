@@ -35,23 +35,22 @@ func main() {
 		bar(rows)
 	}
 
-//	fetchTips := func(tipsName string) []string {
-//		var tips []string
-//		getRowsBlocking(ReturnServerTips, func(rows pgx.Rows) {
-//			var tipMessage string
-//			_, err := pgx.ForEachRow(rows, []any{&tipMessage}, func() error {
-//				tips = append(tips, tipMessage)
-//				return nil
-//			})
-//			if err != nil {
-//				log.Fatal(err)
-//			}
-//		}, tipsName)
-//		return tips
-//	}
+	fetchTips := func(tipsName string) []string {
+		var tips []string
+		getRowsBlocking(ReturnServerTips, func(rows pgx.Rows) {
+			var tipMessage string
+			_, err := pgx.ForEachRow(rows, []any{&tipMessage}, func() error {
+				tips = append(tips, tipMessage)
+				return nil
+			})
+			if err != nil {
+				log.Fatal(err)
+			}
+		}, tipsName)
+		return tips
+	}
 
-//	potpissersTips, cubecoreTips, mzTips, cubecoreClassTips := fetchTips("null"), fetchTips("cubecore"), fetchTips("minez"), fetchTips("cubecore_classes")
-potpissersTips, cubecoreTips, mzTips, cubecoreClassTips := []string{"hey"}, []string{"hey"}, []string{"hey"}, []string{"hey"}
+	potpissersTips, cubecoreTips, mzTips, cubecoreClassTips := fetchTips("null"), fetchTips("cubecore"), fetchTips("minez"), fetchTips("cubecore_classes")
 
 	type NewPlayer struct {
 		PlayerUuid string `json:"playerUuid"`
@@ -398,7 +397,7 @@ potpissersTips, cubecoreTips, mzTips, cubecoreClassTips := []string{"hey"}, []st
 const ReturnServerTips = `SELECT tip_message
 FROM server_tips
          JOIN servers ON server_tips.server_id = servers.id
-WHERE name = ?`
+WHERE name = $1`
 const Return12Deaths = `SELECT name,
        victim_user_fight_id,
        timestamp,
@@ -431,7 +430,7 @@ const Return12ServerDeaths = `SELECT name,
        bukkit_killer_inventory
 FROM user_deaths
          JOIN servers ON user_deaths.server_id = servers.id
-WHERE server_id = (SELECT id FROM servers WHERE name = ?)
+WHERE server_id = (SELECT id FROM servers WHERE name = $1)
 ORDER BY timestamp DESC
 LIMIT 12`
 const Return12NewPlayers = `SELECT user_uuid, referrer, timestamp, ROW_NUMBER() OVER (ORDER BY timestamp) AS row_number
@@ -476,7 +475,7 @@ FROM koths
          JOIN server_koths ON server_koths_id = server_koths.id
          JOIN servers ON servers.id = server_koths.server_id
          JOIN arena_data ON arena_data.id = server_koths.arena_id
-WHERE server_id = (SELECT id FROM servers WHERE name = ?)
+WHERE server_id = (SELECT id FROM servers WHERE name = $1)
 ORDER BY end_timestamp IS NULL, end_timestamp
 LIMIT 14`
 const ReturnAllServerData = `SELECT death_ban_minutes,
@@ -505,7 +504,7 @@ FROM online_players
          JOIN servers ON server_id = servers.id`
 const Return7ServerFactions = `SELECT name, party_uuid
 FROM factions
-WHERE server_id = (SELECT id FROM servers WHERE name = ?)
+WHERE server_id = (SELECT id FROM servers WHERE name = $1)
 LIMIT 7`
 const Return7ServerBandits = `SELECT user_uuid,
        death_id,
@@ -518,7 +517,7 @@ const Return7ServerBandits = `SELECT user_uuid,
        death_z
 FROM bandits
          JOIN user_deaths on bandits.death_id = user_deaths.id
-WHERE bandits.server_id = (SELECT id FROM servers WHERE name = ?)
+WHERE bandits.server_id = (SELECT id FROM servers WHERE name = $1)
   AND expiration_timestamp > NOW()
 ORDER BY timestamp DESC
 LIMIT 7`
