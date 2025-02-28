@@ -35,22 +35,22 @@ func main() {
 		bar(rows)
 	}
 
-//	fetchTips := func(tipsName string) []string {
-//		var tips []string
-//		getRowsBlocking(ReturnServerTips, func(rows pgx.Rows) {
-//			var tipMessage string
-//			_, err := pgx.ForEachRow(rows, []any{&tipMessage}, func() error {
-//				tips = append(tips, tipMessage)
-//				return nil
-//			})
-//			if err != nil {
-//				log.Fatal(err)
-//			}
-//		}, tipsName)
-//		return tips
-//	}
+	fetchTips := func(tipsName string) []string {
+		var tips []string
+		getRowsBlocking(ReturnServerTips, func(rows pgx.Rows) {
+			var tipMessage string
+			_, err := pgx.ForEachRow(rows, []any{&tipMessage}, func() error {
+				tips = append(tips, tipMessage)
+				return nil
+			})
+			if err != nil {
+				log.Fatal(err)
+			}
+		}, tipsName)
+		return tips
+	}
 
-//	potpissersTips, cubecoreTips, mzTips, cubecoreClassTips := fetchTips("null"), fetchTips("cubecore"), fetchTips("minez"), fetchTips("cubecore_classes")
+	potpissersTips, cubecoreTips, mzTips, cubecoreClassTips := fetchTips("null"), fetchTips("cubecore"), fetchTips("minez"), fetchTips("cubecore_classes")
 
 	type NewPlayer struct {
 		PlayerUuid string `json:"playerUuid"`
@@ -294,7 +294,7 @@ func main() {
 			Messages []string
 		}{
 			NewPlayers: newPlayers,
-//			PotpissersTips: potpissersTips,
+			PotpissersTips: potpissersTips,
 			Deaths: deaths,
 			Messages: messages,
 			})
@@ -316,13 +316,13 @@ func main() {
 			Bandits []Bandit
 		}{
 			NewPlayers: newPlayers,
-//			PotpissersTips: potpissersTips,
+			PotpissersTips: potpissersTips,
 			Deaths: mzData.Deaths,
 			Messages: mzData.Messages,
 
 			AttackSpeed: mzData.AttackSpeedName,
 
-//			MzTips: mzTips,
+			MzTips: mzTips,
 			Bandits: mzData.Bandits,
 			})
 		if err != nil {
@@ -357,7 +357,7 @@ func main() {
 			ClassTips []string
 		}{
 			NewPlayers: newPlayers,
-//			PotpissersTips: potpissersTips,
+			PotpissersTips: potpissersTips,
 			Deaths: deaths,
 			Messages: messages,
 
@@ -377,8 +377,8 @@ func main() {
 			IsBardPassiveDebuffingEnabled: serverData.IsBardPassiveDebuffingEnabled,
 			DtrMax: serverData.DtrMax,
 
-//			CubecoreTips: cubecoreTips,
-//			ClassTips: cubecoreClassTips,
+			CubecoreTips: cubecoreTips,
+			ClassTips: cubecoreClassTips,
 			})
 		if err != nil {
 			log.Fatal(err)
