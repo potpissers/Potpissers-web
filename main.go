@@ -240,7 +240,7 @@ func main() {
 			if err != nil {
 				log.Fatal(err)
 			}
-		})
+		}, serverName)
 		getRowsBlocking(Return14ServerEvents, func(rows pgx.Rows) {
 			var event Event
 			_, err := pgx.ForEachRow(rows, []any{&event.StartTimestamp, &event.LootFactor, &event.MaxTimer, &event.IsMovementRestricted, &event.CappingUserUUID, &event.EndTimestamp, &event.CappingPartyUUID, &event.CapMessage, &event.World, &event.X, &event.Y, &event.Z, &event.ServerName, &event.ArenaName, &event.Creator}, func() error {
@@ -250,7 +250,7 @@ func main() {
 			if err != nil {
 				log.Fatal(err)
 			}
-		})
+		}, serverName)
 		getRowsBlocking(Return7ServerFactions, func(rows pgx.Rows) {
 			var faction Faction
 			_, err := pgx.ForEachRow(rows, []any{&faction.Name, &faction.PartyUuid}, func() error {
@@ -270,7 +270,7 @@ func main() {
 			if err != nil {
 				log.Fatal(err)
 			}
-		})
+		}, serverName)
 	}
 
 	var messages []string
