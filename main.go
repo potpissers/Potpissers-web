@@ -30,6 +30,7 @@ func main() {
 		rows, err := postgresPool.Query(context.Background(), query, params...)
 		defer rows.Close()
 		if err != nil {
+			print(err)
 			log.Fatal(err)
 		}
 		bar(rows)
