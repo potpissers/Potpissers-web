@@ -218,10 +218,12 @@ func main() {
 	http.HandleFunc("/api/servers/", func(w http.ResponseWriter, r *http.Request) {
 		// TODO
 	})
+	var currentPlayers []string
 	getRowsBlocking(ReturnAllOnlinePlayers, func(rows pgx.Rows) {
 		var playerName string
 		var serverName string
 		_, err := pgx.ForEachRow(rows, []any{&playerName, &serverName}, func() error {
+			currentPlayers = append(currentPlayers, playerName)
 			serverDatas[serverName].CurrentPlayers = append(serverDatas[serverName].CurrentPlayers, playerName)
 			return nil
 		})
@@ -288,11 +290,15 @@ func main() {
 	home, mz, hcf := getMainTemplate("main-home.html"), getMainTemplate("main-mz.html"), getMainTemplate("main-hcf.html")
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		err := home.Execute(w, struct {
+			NetworkPlayers []string
+			ServerPlayers []string
 			NewPlayers []NewPlayer
 			PotpissersTips []string
 			Deaths []Death
 			Messages []string
 		}{
+			NetworkPlayers: currentPlayers,
+			ServerPlayers: serverDatas["hub"].CurrentPlayers,
 			NewPlayers: newPlayers,
 			PotpissersTips: potpissersTips,
 			Deaths: deaths,
@@ -305,6 +311,8 @@ func main() {
 	http.HandleFunc("/mz", func(w http.ResponseWriter, r *http.Request) {
 		mzData := serverDatas["mz"]
 		err := mz.Execute(w, struct {
+			NetworkPlayers []string
+			ServerPlayers []string
 			NewPlayers []NewPlayer
 			PotpissersTips []string
 			Deaths []Death
@@ -315,6 +323,8 @@ func main() {
 			MzTips []string
 			Bandits []Bandit
 		}{
+			NetworkPlayers: currentPlayers,
+			ServerPlayers: mzData.CurrentPlayers,
 			NewPlayers: newPlayers,
 			PotpissersTips: potpissersTips,
 			Deaths: mzData.Deaths,
@@ -332,6 +342,8 @@ func main() {
 	http.HandleFunc("/hcf", func(w http.ResponseWriter, r *http.Request) {
 		serverData := serverDatas["hcf"]
 		err := hcf.Execute(w, struct {
+			NetworkPlayers []string
+			ServerPlayers []string
 			NewPlayers []NewPlayer
 			PotpissersTips []string
 			Deaths []Death
@@ -356,6 +368,8 @@ func main() {
 			CubecoreTips []string
 			ClassTips []string
 		}{
+			NetworkPlayers: currentPlayers,
+			ServerPlayers: serverData.CurrentPlayers,
 			NewPlayers: newPlayers,
 			PotpissersTips: potpissersTips,
 			Deaths: deaths,
