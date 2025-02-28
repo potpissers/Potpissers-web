@@ -35,22 +35,23 @@ func main() {
 		bar(rows)
 	}
 
-	fetchTips := func(tipsName string) []string {
-		var tips []string
-		getRowsBlocking(ReturnServerTips, func(rows pgx.Rows) {
-			var tipMessage string
-			_, err := pgx.ForEachRow(rows, []any{&tipMessage}, func() error {
-				tips = append(tips, tipMessage)
-				return nil
-			})
-			if err != nil {
-				log.Fatal(err)
-			}
-		}, tipsName)
-		return tips
-	}
+//	fetchTips := func(tipsName string) []string {
+//		var tips []string
+//		getRowsBlocking(ReturnServerTips, func(rows pgx.Rows) {
+//			var tipMessage string
+//			_, err := pgx.ForEachRow(rows, []any{&tipMessage}, func() error {
+//				tips = append(tips, tipMessage)
+//				return nil
+//			})
+//			if err != nil {
+//				log.Fatal(err)
+//			}
+//		}, tipsName)
+//		return tips
+//	}
 
-	potpissersTips, cubecoreTips, mzTips, cubecoreClassTips := fetchTips("null"), fetchTips("cubecore"), fetchTips("minez"), fetchTips("cubecore_classes")
+//	potpissersTips, cubecoreTips, mzTips, cubecoreClassTips := fetchTips("null"), fetchTips("cubecore"), fetchTips("minez"), fetchTips("cubecore_classes")
+potpissersTips, cubecoreTips, mzTips, cubecoreClassTips := []string{"hey"}, []string{"hey"}, []string{"hey"}, []string{"hey"}
 
 	type NewPlayer struct {
 		PlayerUuid string `json:"playerUuid"`
