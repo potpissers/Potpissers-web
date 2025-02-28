@@ -31,8 +31,14 @@
 {{end}}
 
 {{define "server ticker buttons"}}
-<button>bandits</button>
-<button>heroes</button>
+<span class=ifc>
+    <button>bandits</button>
+    <input name="mz-ticker" type="radio">
+</span>
+<span class=ifc>
+    <button>heroes</button>
+    <input name="mz-ticker" type="radio">
+</span>
 {{end}}
 
 {{define "server ticker data"}}
