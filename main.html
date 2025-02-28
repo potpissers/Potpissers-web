@@ -23,9 +23,9 @@
         </span>
     </div>
     <ul style="overflow-x: hidden; overflow-y: scroll">
-<!--        {{range .Deaths}}-->
-<!--        <li style="">({{.ServerName}}) {{.DeathMessage}}</li>-->
-<!--        {{end}}-->
+        {{range .Deaths}}
+        <li style="">({{.ServerName}}) {{.DeathMessage}}</li>
+        {{end}}
     </ul>
     {{block "fights" .}}{{end}}
     {{block "duels" .}}{{end}}
