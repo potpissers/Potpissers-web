@@ -8,4 +8,5 @@ function handleTipsButtonClick(otherButtonsIds, clickedId) {
 
 function handleContentMaximizeButtonClick(isAnnouncements) {
     document.getElementById("content").style.gridTemplateRows = isAnnouncements ? "auto 1fr" : "1fr auto"
+    document.body.style.gridTemplateRows = "44vh auto auto"
 }
