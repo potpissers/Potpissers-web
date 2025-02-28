@@ -296,6 +296,7 @@ func main() {
 			PotpissersTips []string
 			Deaths []Death
 			Messages []string
+			Events []Event
 		}{
 			NetworkPlayers: currentPlayers,
 			ServerPlayers: serverDatas["hub"].CurrentPlayers,
@@ -303,6 +304,7 @@ func main() {
 			PotpissersTips: potpissersTips,
 			Deaths: deaths,
 			Messages: messages,
+			Events: events,
 			})
 		if err != nil {
 			log.Fatal(err)
@@ -317,6 +319,7 @@ func main() {
 			PotpissersTips []string
 			Deaths []Death
 			Messages []string
+			Events []Event
 
 			AttackSpeed string
 
@@ -329,6 +332,7 @@ func main() {
 			PotpissersTips: potpissersTips,
 			Deaths: mzData.Deaths,
 			Messages: mzData.Messages,
+			Events: mzData.Events,
 
 			AttackSpeed: mzData.AttackSpeedName,
 
@@ -348,6 +352,7 @@ func main() {
 			PotpissersTips []string
 			Deaths []Death
 			Messages []string
+			Events []Event
 
 			AttackSpeed string
 
@@ -374,6 +379,7 @@ func main() {
 			PotpissersTips: potpissersTips,
 			Deaths: deaths,
 			Messages: messages,
+			Events: serverData.Events,
 
 			AttackSpeed: serverData.AttackSpeedName,
 
