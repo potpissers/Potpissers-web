@@ -37,7 +37,7 @@ func main() {
 
 	fetchTips := func(tipsName string) []string {
 		var tips []string
-		getRowsBlocking("SELECT tip_message FROM server_tips WHERE server_id = (SELECT id FROM servers WHERE name = '" + tipsName + "')", func(rows pgx.Rows) {
+		getRowsBlocking(ReturnServerTips, func(rows pgx.Rows) {
 			var tipMessage string
 			_, err := pgx.ForEachRow(rows, []any{&tipMessage}, func() error {
 				tips = append(tips, tipMessage)
@@ -46,7 +46,7 @@ func main() {
 			if err != nil {
 				log.Fatal(err)
 			}
-		})
+		}, tipsName)
 		return tips
 	}
 
@@ -394,6 +394,9 @@ func main() {
 	}
 }
 
+const ReturnServerTips = `SELECT tip_message
+FROM server_tips
+WHERE server_id = (SELECT id FROM servers WHERE name = ?)`
 const Return12Deaths = `SELECT name,
        victim_user_fight_id,
        timestamp,
