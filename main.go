@@ -396,7 +396,8 @@ func main() {
 
 const ReturnServerTips = `SELECT tip_message
 FROM server_tips
-WHERE server_id = (SELECT id FROM servers WHERE name = ?)`
+         JOIN servers ON server_tips.server_id = servers.id
+WHERE name = ?`
 const Return12Deaths = `SELECT name,
        victim_user_fight_id,
        timestamp,
