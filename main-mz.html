@@ -12,10 +12,8 @@
 {{end}}
 
 {{define "server tips buttons"}}
-<div>
-    <button onclick="handleTipsButtonClick(['mztips'], 'tips')">potpissers tips</button>
-    <button onclick="handleTipsButtonClick(['tips'], 'mztips')">mz tips</button>
-</div>
+<button onclick="handleTipsButtonClick(['mztips'], 'tips')">potpissers tips</button>
+<button onclick="handleTipsButtonClick(['tips'], 'mztips')">mz tips</button>
 {{end}}
 
 {{define "server tips data"}}
@@ -33,14 +31,16 @@
 {{end}}
 
 {{define "server ticker buttons"}}
-<span class=ifc>
+<div>
+    <span class=ifc>
     <button>bandits</button>
     <input name="mz-ticker" type="radio">
 </span>
-<span class=ifc>
+    <span class=ifc>
     <button>heroes</button>
     <input name="mz-ticker" type="radio">
 </span>
+</div>
 {{end}}
 
 {{define "server ticker data"}}
