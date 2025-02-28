@@ -7,6 +7,25 @@ function handleTipsButtonClick(otherButtonsIds, clickedId) {
 }
 
 function handleContentMaximizeButtonClick(isAnnouncements) {
-    document.getElementById("content").style.gridTemplateRows = isAnnouncements ? "auto 1fr" : "1fr auto"
-    document.body.style.gridTemplateRows = "44vh auto auto"
+    let contentElement = document.getElementById("content")
+    if (isAnnouncements) {
+        if (contentElement.style.gridTemplateRows === "auto 1fr") {
+            contentElement.style.gridTemplateRows = "1fr 1fr"
+            document.body.style.gridTemplateRows = "44vh 44vh auto"
+        }
+        else {
+            contentElement.style.gridTemplateRows = "auto 1fr"
+            document.body.style.gridTemplateRows = "44vh auto auto"
+        }
+    }
+    else {
+        if (contentElement.style.gridTemplateRows === "1fr auto") {
+            contentElement.style.gridTemplateRows = "1fr 1fr"
+            document.body.style.gridTemplateRows = "44vh 44vh auto"
+        }
+        else {
+            contentElement.style.gridTemplateRows = "1fr auto"
+            document.body.style.gridTemplateRows = "44vh auto auto"
+        }
+    }
 }
