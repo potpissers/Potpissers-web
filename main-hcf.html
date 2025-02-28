@@ -19,45 +19,42 @@
 {{end}}
 
 {{define "server info"}}
-<div style="display: flex; flex-direction: column; justify-content: space-between; overflow-x: auto">
-    <table>
-        <tr>
-            <td>deathban</td>
-            <td>revive cost</td>
-            <td>event loot</td>
-            <td>border</td>
-        </tr>
-        <tr>
-            <td>{{ .DeathBanMinutes }}m</td>
-            <td>{{ .OffPeakLivesNeeded }}x</td>
-            <td>{{ .LootFactor }}x</td>
-            <td>{{ .BorderSize }}</td>
-        </tr>
-    </table>
-
-    <table>
-        <tr>
-            <td>sharpness</td>
-            <td>protection</td>
-            <td>power</td>
-            <td>regen</td>
-            <td>strength</td>
-            <td>weakness</td>
-            <td>extended debuffs</td>
-            <td>dtr max</td>
-        </tr>
-        <tr>
-            <td>{{ .SharpnessLimit }}</td>
-            <td>{{ .ProtectionLimit }}</td>
-            <td>{{ .PowerLimit }}</td>
-            <td>{{ .RegenLimit }}</td>
-            <td>{{ .StrengthLimit }}</td>
-            <td>{{ .IsWeaknessEnabled }}</td>
-            <td>{{ .IsBardPassiveDebuffingEnabled }}</td>
-            <td>{{ .DtrMax }}</td>
-        </tr>
-    </table>
-</div>
+<table>
+    <tr>
+        <td>deathban</td>
+        <td>revive cost</td>
+        <td>event loot</td>
+        <td>border</td>
+    </tr>
+    <tr>
+        <td>{{ .DeathBanMinutes }}m</td>
+        <td>{{ .OffPeakLivesNeeded }}x</td>
+        <td>{{ .LootFactor }}x</td>
+        <td>{{ .BorderSize }}</td>
+    </tr>
+</table>
+<table style="margin-top: auto">
+    <tr>
+        <td>sharpness</td>
+        <td>protection</td>
+        <td>power</td>
+        <td>regen</td>
+        <td>strength</td>
+        <td>weakness</td>
+        <td>extended debuffs</td>
+        <td>dtr max</td>
+    </tr>
+    <tr>
+        <td>{{ .SharpnessLimit }}</td>
+        <td>{{ .ProtectionLimit }}</td>
+        <td>{{ .PowerLimit }}</td>
+        <td>{{ .RegenLimit }}</td>
+        <td>{{ .StrengthLimit }}</td>
+        <td>{{ .IsWeaknessEnabled }}</td>
+        <td>{{ .IsBardPassiveDebuffingEnabled }}</td>
+        <td>{{ .DtrMax }}</td>
+    </tr>
+</table>
 {{end}}
 
 {{define "events button"}}
