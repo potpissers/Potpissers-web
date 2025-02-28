@@ -67,12 +67,19 @@
 
     <div style="display: flex; height: 100%;">
         <div style="display: flex; flex-direction: column; flex: 1">
-            <div style="overflow-y: scroll; flex: 0;">
-                <!-- TODO TAB LIST-->
-            </div>
+            <ul style="overflow-y: scroll; flex: 0;">
+                {{range .OnlinePlayers}}
+                <li>
+                    {{.Name}}
+                </li>
+                {{end}}
+            </ul>
             <ul style="overflow-y: scroll; flex: 1; direction: rtl">
-                {{block "console" .}}{{end}}
-                <!-- TODO LIVE CONSOLE -->
+                {{range .Messages}}
+                <li>
+                    {{.Message}}
+                </li>
+                {{end}}
             </ul>
             <input class=fi>
         </div>
@@ -115,7 +122,11 @@
 
 <div class="foo bar" style="text-align: center">
     <button>events</button>
-    {{block "events" .}}{{end}}
+    <ul>
+        {{range .Events}}
+        <li>{{.CapMessage}}</li>
+        {{end}}
+    </ul>
 </div>
 
 <div id="content" class="foo" style="background: #33383D; display: grid; grid-template-columns: 3fr 1fr; grid-template-rows: 1fr 1fr">
@@ -147,8 +158,8 @@
     </div>
     <div class="foo baz" style="text-align: center">
         {{block "server ticker buttons" .}}{{end}}
+        {{block "server ticker data" .}}{{end}}
         <div style="display: flex; flex-direction: column">
-            {{block "server ticker data" .}}{{end}}
         </div>
     </div>
 </div>

@@ -80,7 +80,11 @@
 {{end}}
 
 {{define "server ticker data"}}
-<!--TODO-->
+<ul>
+    {{range .Factions}}
+    <li>{{.Name}}</li>
+    {{end}}
+</ul>
 {{end}}
 
 <!--{{define "content"}}-->

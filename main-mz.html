@@ -42,7 +42,11 @@
 {{end}}
 
 {{define "server ticker data"}}
-<!--TODO-->
+<ul>
+    {{range .Bandits}}
+    <li>{{.DeathMessage}}</li>
+    {{end}}
+</ul>
 {{end}}
 
 <!--{{define "content"}}-->
