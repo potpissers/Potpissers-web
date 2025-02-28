@@ -52,8 +52,9 @@
 {{end}}
 
 {{define "server tips buttons"}}
-<button>hcf tips</button>
-<button>class tips</button>
+<button onclick="handleTipsButtonClick(['classtips', 'hcftips'], 'tips')">potpissers tips</button>
+<button onclick="handleTipsButtonClick(['tips', 'classtips'], 'hcftips')">hcf tips</button>
+<button onclick="handleTipsButtonClick(['tips', 'hcftips'], 'classtips')">class tips</button>
 {{end}}
 {{define "server tips data"}}
 <ul id="tips" style="overflow-y: auto; flex: 1" hidden>
