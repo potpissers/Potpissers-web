@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"html/template"
@@ -31,7 +30,6 @@ func main() {
 		rows, err := postgresPool.Query(context.Background(), query, params...)
 		defer rows.Close()
 		if err != nil {
-			fmt.Println(err)
 			log.Fatal(err)
 		}
 		bar(rows)
@@ -232,48 +230,48 @@ func main() {
 			log.Fatal(err)
 		}
 	})
-	for serverName, serverData := range serverDatas {
-		getRowsBlocking(Return12ServerDeaths, func(rows pgx.Rows) {
-			var death Death
-			_, err := pgx.ForEachRow(rows, []any{&death.ServerName, &death.VictimUserFightId, &death.Timestamp, &death.VictimUuid, nil, &death.DeathWorldName, &death.DeathX, &death.DeathY, &death.DeathZ, &death.DeathMessage, &death.KillerUuid, nil, nil}, func() error {
-				serverData.Deaths = append(serverData.Deaths, death)
-				return nil
-			})
-			if err != nil {
-				log.Fatal(err)
-			}
-		}, serverName)
-		getRowsBlocking(Return14ServerEvents, func(rows pgx.Rows) {
-			var event Event
-			_, err := pgx.ForEachRow(rows, []any{&event.StartTimestamp, &event.LootFactor, &event.MaxTimer, &event.IsMovementRestricted, &event.CappingUserUUID, &event.EndTimestamp, &event.CappingPartyUUID, &event.CapMessage, &event.World, &event.X, &event.Y, &event.Z, &event.ServerName, &event.ArenaName, &event.Creator}, func() error {
-				serverData.Events = append(serverData.Events, event)
-				return nil
-			})
-			if err != nil {
-				log.Fatal(err)
-			}
-		}, serverName)
-		getRowsBlocking(Return7ServerFactions, func(rows pgx.Rows) {
-			var faction Faction
-			_, err := pgx.ForEachRow(rows, []any{&faction.Name, &faction.PartyUuid}, func() error {
-				serverData.Factions = append(serverData.Factions, faction)
-				return nil
-			})
-			if err != nil {
-				log.Fatal(err)
-			}
-		}, serverName)
-		getRowsBlocking(Return7ServerBandits, func(rows pgx.Rows) {
-			var bandit Bandit
-			_, err := pgx.ForEachRow(rows, []any{&bandit.UserUuid, &bandit.DeathId, &bandit.Timestamp, &bandit.ExpirationTimestamp, &bandit.DeathMessage, &bandit.DeathWorld, &bandit.DeathX, &bandit.DeathY, &bandit.DeathZ}, func() error {
-				serverData.Bandits = append(serverData.Bandits, bandit)
-				return nil
-			})
-			if err != nil {
-				log.Fatal(err)
-			}
-		}, serverName)
-	}
+//	for serverName, serverData := range serverDatas {
+//		getRowsBlocking(Return12ServerDeaths, func(rows pgx.Rows) {
+//			var death Death
+//			_, err := pgx.ForEachRow(rows, []any{&death.ServerName, &death.VictimUserFightId, &death.Timestamp, &death.VictimUuid, nil, &death.DeathWorldName, &death.DeathX, &death.DeathY, &death.DeathZ, &death.DeathMessage, &death.KillerUuid, nil, nil}, func() error {
+//				serverData.Deaths = append(serverData.Deaths, death)
+//				return nil
+//			})
+//			if err != nil {
+//				log.Fatal(err)
+//			}
+//		}, serverName)
+//		getRowsBlocking(Return14ServerEvents, func(rows pgx.Rows) {
+//			var event Event
+//			_, err := pgx.ForEachRow(rows, []any{&event.StartTimestamp, &event.LootFactor, &event.MaxTimer, &event.IsMovementRestricted, &event.CappingUserUUID, &event.EndTimestamp, &event.CappingPartyUUID, &event.CapMessage, &event.World, &event.X, &event.Y, &event.Z, &event.ServerName, &event.ArenaName, &event.Creator}, func() error {
+//				serverData.Events = append(serverData.Events, event)
+//				return nil
+//			})
+//			if err != nil {
+//				log.Fatal(err)
+//			}
+//		}, serverName)
+//		getRowsBlocking(Return7ServerFactions, func(rows pgx.Rows) {
+//			var faction Faction
+//			_, err := pgx.ForEachRow(rows, []any{&faction.Name, &faction.PartyUuid}, func() error {
+//				serverData.Factions = append(serverData.Factions, faction)
+//				return nil
+//			})
+//			if err != nil {
+//				log.Fatal(err)
+//			}
+//		}, serverName)
+//		getRowsBlocking(Return7ServerBandits, func(rows pgx.Rows) {
+//			var bandit Bandit
+//			_, err := pgx.ForEachRow(rows, []any{&bandit.UserUuid, &bandit.DeathId, &bandit.Timestamp, &bandit.ExpirationTimestamp, &bandit.DeathMessage, &bandit.DeathWorld, &bandit.DeathX, &bandit.DeathY, &bandit.DeathZ}, func() error {
+//				serverData.Bandits = append(serverData.Bandits, bandit)
+//				return nil
+//			})
+//			if err != nil {
+//				log.Fatal(err)
+//			}
+//		}, serverName)
+//	}
 
 	var messages []string
 	http.HandleFunc("/api/chat", func(w http.ResponseWriter, r *http.Request) {
