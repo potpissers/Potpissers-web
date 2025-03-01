@@ -314,6 +314,7 @@ func main() {
 			if strings.Contains(url, "youtube.com") || strings.Contains(url, "youtu.be") {
 				// TODO flair
 				videos = append(videos, child.RedditPost) // TODO -> max length + newest etc
+				print("foo")
 			}
 		}
 	}
