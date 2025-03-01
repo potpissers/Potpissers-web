@@ -315,8 +315,8 @@ func main() {
 				// TODO flair
 				videos = append(videos, child.RedditPost) // TODO -> max length + newest etc
 			}
-			print("foo")
 		}
+		print("foo")
 	}
 	http.HandleFunc("/api/videos", func(w http.ResponseWriter, r *http.Request) {
 		// TODO
