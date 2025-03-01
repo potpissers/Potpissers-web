@@ -294,6 +294,7 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+		print(resp.Body)
 		defer func(Body io.ReadCloser) {
 			err := Body.Close()
 			if err != nil {
@@ -316,7 +317,6 @@ func main() {
 				videos = append(videos, child.RedditPost) // TODO -> max length + newest etc
 			}
 		}
-		print("foo")
 	}
 	http.HandleFunc("/api/videos", func(w http.ResponseWriter, r *http.Request) {
 		// TODO
