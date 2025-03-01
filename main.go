@@ -6,6 +6,7 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"html/template"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -146,20 +147,6 @@ func main() {
 	http.HandleFunc("/api/events/", func(w http.ResponseWriter, r *http.Request) {
 	})
 
-//	type Transaction struct { // TODO -> square api transactions
-//	}
-//	var transactions []Transaction
-//	{
-//		getRowsBlocking(, func(rows pgx.Rows) {
-//			var event Transaction
-//			err := rows.Scan()
-//			if err != nil {
-//				log.Fatal(err)
-//			}
-//			transactions = append(transactions, event)
-//		})
-//	}
-
 	type Faction struct {
 		Name string
 		PartyUuid string
@@ -200,6 +187,7 @@ func main() {
 		Events []Event
 //		Transaction []Transaction TODO
 		Messages []string
+		Videos []string
 
 		Factions []Faction
 		Bandits []Bandit
@@ -274,6 +262,79 @@ func main() {
 			}
 		}, serverName)
 	}
+
+	type RedditPost struct {
+		//					Subreddit     string `json:"subreddit"`
+		Title         string `json:"title"`
+		//					SelfText      string `json:"selftext"`
+		Author        string `json:"author"`
+		URL           string `json:"url"`
+		FlairText     string `json:"link_flair_text"`
+		CreatedUTC    int64  `json:"created_utc"`
+		//					ID            string `json:"id"`
+		//					Name          string `json:"name"`
+		NumComments   int    `json:"num_comments"`
+		Score         int    `json:"score"`
+		UpvoteRatio   float64 `json:"upvote_ratio"`
+	}
+	type RedditPostsRequest struct {
+//		Kind string `json:"kind"`
+		Data struct {
+//			After   string `json:"after"`
+//			Before  string `json:"before"`
+			Children []struct {
+//				Kind string `json:"kind"`
+				RedditPost RedditPost `json:"data"`
+			} `json:"children"`
+		} `json:"data"`
+	}
+	var videos []RedditPost
+	{
+		resp, err := http.Get("https://www.reddit.com/r/potpissers/new.json?limit=100")
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer func(Body io.ReadCloser) {
+			err := Body.Close()
+			if err != nil {
+				log.Fatal(err)
+			}
+		}(resp.Body)
+
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		var redditVideosRequest RedditPostsRequest
+		err = json.Unmarshal(body, &redditVideosRequest)
+
+		for _, child := range redditVideosRequest.Data.Children {
+			url := child.RedditPost.URL
+			if strings.Contains(url, "youtube.com") || strings.Contains(url, "youtu.be") {
+				// TODO flair
+				videos = append(videos, child.RedditPost) // TODO -> max length + newest etc
+			}
+		}
+	}
+	http.HandleFunc("/api/videos", func(w http.ResponseWriter, r *http.Request) {
+		// TODO
+	})
+
+//	type Transaction struct {
+//	}
+//	var transactions []Transaction
+//	http.HandleFunc("/api/transactions", func(w http.ResponseWriter, r *http.Request) {
+//
+//	})
+//	 TODO -> square api transactions
+	http.HandleFunc("/api/donations", func(w http.ResponseWriter, r *http.Request) {
+		// TODO
+	})
+
+	// TODO -> announcements
+
+	// TODO -> changelog
 
 	var messages []string
 	http.HandleFunc("/api/chat", func(w http.ResponseWriter, r *http.Request) {
