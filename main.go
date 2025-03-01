@@ -294,7 +294,7 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		print(resp.Body)
+		println(resp.StatusCode)
 		defer func(Body io.ReadCloser) {
 			err := Body.Close()
 			if err != nil {
