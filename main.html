@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>WIP {{block "potpissers" .}}{{end}}</title>
     <link rel="stylesheet" href="static.css">
-    <script defer id="staticjs" src="static.js"></script>
 </head>
 <body class="foo">
 
@@ -123,7 +122,10 @@
         <button>posts</button>
     </div>
     <ul title="videos">
-        <script defer>document.getElementById("staticjs").addEventListener('load', handleRedditVideos)</script>
+        <script defer>
+            document.addEventListener('DOMContentLoaded', () =>
+                document.getElementById("staticjs").addEventListener('load', handleRedditVideos))
+        </script>
 <!--        {{block "videos" .}}{{end}}-->
     </ul>
 </div>
@@ -180,6 +182,8 @@
         <small>github</small>
     </a>
 </footer>
+
+<script id="staticjs" src="static.js"></script>
 
 </body>
 </html>
