@@ -1,12 +1,12 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"html/template"
-	"io"
 	"log"
 	"net/http"
 	"os"
@@ -263,72 +263,6 @@ func main() {
 		}, serverName)
 	}
 
-	type RedditPost struct {
-		//					Subreddit     string `json:"subreddit"`
-		Title         string `json:"title"`
-		//					SelfText      string `json:"selftext"`
-		Author        string `json:"author"`
-		URL           string `json:"url"`
-		FlairText     string `json:"link_flair_text"`
-		CreatedUTC    int64  `json:"created_utc"`
-		//					ID            string `json:"id"`
-		//					Name          string `json:"name"`
-		NumComments   int    `json:"num_comments"`
-		Score         int    `json:"score"`
-		UpvoteRatio   float64 `json:"upvote_ratio"`
-	}
-	type RedditPostsRequest struct {
-//		Kind string `json:"kind"`
-		Data struct {
-//			After   string `json:"after"`
-//			Before  string `json:"before"`
-			Children []struct {
-//				Kind string `json:"kind"`
-				RedditPost RedditPost `json:"data"`
-			} `json:"children"`
-		} `json:"data"`
-	}
-	var videos []RedditPost
-	{
-		req, err := http.NewRequest("GET", "https://www.reddit.com/r/potpissers/new.json?sort=new", nil)
-		if err != nil {
-			log.Fatal(err)
-		}
-		req.Header.Set("User-Agent", "Potpissers-web")
-
-		client := &http.Client{}
-		resp, err := (client).Do(req)
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer func(Body io.ReadCloser) {
-			err := Body.Close()
-			if err != nil {
-				log.Fatal(err)
-			}
-		}(resp.Body)
-		println(resp.StatusCode)
-
-		body, err := io.ReadAll(resp.Body)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		var redditVideosRequest RedditPostsRequest
-		err = json.Unmarshal(body, &redditVideosRequest)
-
-		for _, child := range redditVideosRequest.Data.Children {
-			url := child.RedditPost.URL
-			if strings.Contains(url, "youtube.com") || strings.Contains(url, "youtu.be") {
-				// TODO flair
-				videos = append(videos, child.RedditPost) // TODO -> max length + newest etc
-			}
-		}
-	}
-	http.HandleFunc("/api/videos", func(w http.ResponseWriter, r *http.Request) {
-		// TODO
-	})
-
 //	type Transaction struct {
 //	}
 //	var transactions []Transaction
@@ -356,9 +290,10 @@ func main() {
 		}
 		return mainTemplate
 	}
-	home, mz, hcf := getMainTemplate("main-home.html"), getMainTemplate("main-mz.html"), getMainTemplate("main-hcf.html")
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		err := home.Execute(w, struct {
+	homeTemplate, mzTemplate, hcfTemplate := getMainTemplate("main-home.html"), getMainTemplate("main-mz.html"), getMainTemplate("main-hcf.html")
+	getHome := func() []byte {
+		var buffer bytes.Buffer
+		err := homeTemplate.Execute(&buffer, struct {
 			NetworkPlayers []string
 			ServerPlayers []string
 			NewPlayers []NewPlayer
@@ -378,10 +313,12 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-	})
-	http.HandleFunc("/mz", func(w http.ResponseWriter, r *http.Request) {
+		return buffer.Bytes()
+	}
+	getMz := func() []byte {
+		var buffer bytes.Buffer
 		mzData := serverDatas["mz"]
-		err := mz.Execute(w, struct {
+		err := mzTemplate.Execute(&buffer, struct {
 			NetworkPlayers []string
 			ServerPlayers []string
 			NewPlayers []NewPlayer
@@ -411,10 +348,12 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-	})
-	http.HandleFunc("/hcf", func(w http.ResponseWriter, r *http.Request) {
+		return buffer.Bytes()
+	}
+	getHcf := func() []byte {
+		var buffer bytes.Buffer
 		serverData := serverDatas["hcf"]
-		err := hcf.Execute(w, struct {
+		err := hcfTemplate.Execute(&buffer, struct {
 			NetworkPlayers []string
 			ServerPlayers []string
 			NewPlayers []NewPlayer
@@ -471,6 +410,26 @@ func main() {
 			ClassTips: cubecoreClassTips,
 			Factions: serverData.Factions,
 			})
+		if err != nil {
+			log.Fatal(err)
+		}
+		return buffer.Bytes()
+	}
+	home, mz, hcf := getHome(), getMz(), getHcf()
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		_, err := w.Write(home)
+		if err != nil {
+			log.Fatal(err)
+		}
+	})
+	http.HandleFunc("/mz", func(w http.ResponseWriter, r *http.Request) {
+		_, err := w.Write(mz)
+		if err != nil {
+			log.Fatal(err)
+		}
+	})
+	http.HandleFunc("/hcf", func(w http.ResponseWriter, r *http.Request) {
+		_, err := w.Write(hcf)
 		if err != nil {
 			log.Fatal(err)
 		}
