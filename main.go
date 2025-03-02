@@ -290,7 +290,7 @@ func main() {
 	}
 	var videos []RedditPost
 	{
-		req, err := http.NewRequest("GET", "http://www.reddit.com/r/potpissers/new.json?sort=new", nil)
+		req, err := http.NewRequest("GET", "https://www.reddit.com/r/potpissers/new.json?sort=new", nil)
 		if err != nil {
 			log.Fatal(err)
 		}
