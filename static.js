@@ -42,6 +42,7 @@ function handleRedditVideos() {
                             li.textContent = post.data.title
                             ul.appendChild(li)
                         }
+                        console.log("hey")
                     })
             }));
 }
