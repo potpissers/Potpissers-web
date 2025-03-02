@@ -124,7 +124,7 @@
     </div>
     <ul title="videos">
         <script defer>
-            document.getElementById("staticjs").addEventListener('load', handleRedditVideos)
+            document.addEventListener('DOMContentLoaded', handleRedditVideos);
         </script>
 <!--        {{block "videos" .}}{{end}}-->
     </ul>
