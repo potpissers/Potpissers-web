@@ -30,7 +30,6 @@ function handleContentMaximizeButtonClick(isAnnouncements) {
     }
 }
 function handleRedditVideos() {
-    console.log("hi")
     fetch("https://www.reddit.com/r/potpissers/new.json?limit=100")
         .then(response => response.json()
             .then(data => {
@@ -38,7 +37,7 @@ function handleRedditVideos() {
                 data.data.children
                     .forEach(post => {
                         const url = post.data.url
-                        if (url.contains("youtube.com") || url.contains("youtu.be")) {
+                        if (url.includes("youtube.com") || url.includes("youtu.be")) {
                             const li = document.createElement("li")
                             li.textContent = post.data.title
                             ul.appendChild(li)
