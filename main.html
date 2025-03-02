@@ -121,7 +121,10 @@
         <button style="">videos</button>
         <button>posts</button>
     </div>
-    {{block "videos" .}}{{end}}
+    <ul title="videos">
+        <script defer>getRedditVideos()</script>
+<!--        {{block "videos" .}}{{end}}-->
+    </ul>
 </div>
 
 <div class="foo bar" style="text-align: center">

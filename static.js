@@ -29,3 +29,19 @@ function handleContentMaximizeButtonClick(isAnnouncements) {
         }
     }
 }
+function getRedditVideos() {
+    fetch("https://www.reddit.com/r/potpissers/new.json?limit=100")
+        .then(response => response.json()
+            .then(data => {
+                const ul = document.getElementById("videos")
+                data.data.children
+                    .forEach(post => {
+                        const url = post.data.url
+                        if (url.contains("youtube.com") || url.contains("youtu.be")) {
+                            const li = document.createElement("li")
+                            li.textContent = post.data.title
+                            ul.appendChild(li)
+                        }
+                    })
+            }));
+}
