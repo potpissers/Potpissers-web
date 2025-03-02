@@ -30,6 +30,7 @@ function handleContentMaximizeButtonClick(isAnnouncements) {
     }
 }
 function handleRedditVideos() {
+    console.log("hi")
     fetch("https://www.reddit.com/r/potpissers/new.json?limit=100")
         .then(response => response.json()
             .then(data => {
