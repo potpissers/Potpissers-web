@@ -290,11 +290,17 @@ func main() {
 	}
 	var videos []RedditPost
 	{
-		resp, err := http.Get("https://www.reddit.com/r/potpissers/new.json?limit=100")
+		req, err := http.NewRequest("GET", "https://www.reddit.com/r/potpissers/new.json?limit=100", nil)
 		if err != nil {
 			log.Fatal(err)
 		}
-		println(resp.StatusCode)
+		req.Header.Set("User-Agent", "Potpissers-web")
+
+		client := &http.Client{}
+		resp, err := (client).Do(req)
+		if err != nil {
+			log.Fatal(err)
+		}
 		defer func(Body io.ReadCloser) {
 			err := Body.Close()
 			if err != nil {
