@@ -38,12 +38,11 @@ function handleRedditVideos() {
                     .forEach(post => {
                         const url = post.data.url
                         if (url.includes("youtube.com") || url.includes("youtu.be")) {
-                            const li = document.createElement("li")
-                            li.textContent = post.data.title
-
                             const a = document.createElement("a")
+                            a.textContent = post.data.title
                             a.href = url
 
+                            const li = document.createElement("li")
                             li.appendChild(a)
                             ul.appendChild(li)
                         }
