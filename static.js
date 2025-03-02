@@ -40,9 +40,13 @@ function handleRedditVideos() {
                         if (url.includes("youtube.com") || url.includes("youtu.be")) {
                             const li = document.createElement("li")
                             li.textContent = post.data.title
+
+                            const a = document.createElement("a")
+                            a.href = url
+
+                            li.appendChild(a)
                             ul.appendChild(li)
                         }
-                        console.log("hey")
                     })
             }));
 }
