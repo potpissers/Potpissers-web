@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>WIP {{block "potpissers" .}}{{end}}</title>
     <link rel="stylesheet" href="static.css">
-    <script id="staticjs" src="static.js"></script>
+    <script defer id="staticjs" src="static.js"></script>
 </head>
 <body class="foo">
 
@@ -125,7 +125,6 @@
     <ul title="videos">
         <script defer>
             document.getElementById("staticjs").addEventListener('load', handleRedditVideos)
-            console.log("hey1")
         </script>
 <!--        {{block "videos" .}}{{end}}-->
     </ul>
