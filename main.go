@@ -307,6 +307,7 @@ func main() {
 				log.Fatal(err)
 			}
 		}(resp.Body)
+		println(resp.StatusCode)
 
 		body, err := io.ReadAll(resp.Body)
 		if err != nil {
