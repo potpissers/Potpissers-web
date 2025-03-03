@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"github.com/bwmarrin/discordgo"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"html/template"
@@ -274,11 +275,21 @@ func main() {
 		// TODO
 	})
 
-	// TODO -> announcements
+	var announcements []string
+	var changelog []string
+	var discordMessages []string
+	{
+		bot, err := discordgo.New("Bot " + "")
+		if err != nil {
+			log.Fatal(err)
+		}
+		err = bot.Open()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 
-	// TODO -> changelog
-
-	var messages []string
+	var messages []string // TODO -> make player name clickable
 	http.HandleFunc("/api/chat", func(w http.ResponseWriter, r *http.Request) {
 		// TODO messages + ServerData.Messages
 	})
