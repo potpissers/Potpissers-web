@@ -275,26 +275,12 @@ func main() {
 		// TODO
 	})
 
-	type Embed struct {
-		Type        string `json:"type"`
-		URL         string `json:"url"`
-		Title       string `json:"title"`
-		Description string `json:"description"`
-		Color       int    `json:"color"`
-		Author      struct {
-			Name string `json:"name"`
-			URL  string `json:"url"`
-		} `json:"author"`
-		Provider struct {
-			Name string `json:"name"`
-			URL  string `json:"url"`
-		} `json:"provider"`
-		Thumbnail struct {
-			URL string `json:"url"`
-		} `json:"thumbnail"`
-		Video struct {
-			URL string `json:"url"`
-		} `json:"video"`
+	type Author struct {
+		ID            string `json:"id"`
+		Username      string `json:"username"`
+		Avatar        string `json:"avatar"`
+		Discriminator string `json:"discriminator"`
+		GlobalName    string `json:"global_name"`
 	}
 	type Attachment struct {
 		ID          string `json:"id"`
@@ -306,15 +292,6 @@ func main() {
 		Height      int    `json:"height"`
 		ContentType string `json:"content_type"`
 	}
-	type Author struct {
-		ID            string `json:"id"`
-		Username      string `json:"username"`
-		Avatar        string `json:"avatar"`
-		Discriminator string `json:"discriminator"`
-		PublicFlags   int    `json:"public_flags"`
-		Flags         int    `json:"flags"`
-		GlobalName    string `json:"global_name"`
-	}
 	type Reaction struct {
 		Emoji struct {
 			ID   string `json:"id"`
@@ -323,22 +300,22 @@ func main() {
 		Count int `json:"count"`
 	}
 	type Message struct {
-		Type             int       `json:"type"`
-		Content          string    `json:"content"`
-		Mentions         []string  `json:"mentions"`
-		MentionRoles     []string  `json:"mention_roles"`
-		Attachments      []Attachment `json:"attachments"`
-		Embeds           []Embed   `json:"embeds"`
-		Timestamp        time.Time `json:"timestamp"`
-		EditedTimestamp  *time.Time `json:"edited_timestamp"`
-		Flags            int       `json:"flags"`
-		Components       []string  `json:"components"`
-		ID               string    `json:"id"`
-		ChannelID        string    `json:"channel_id"`
-		Author           Author    `json:"author"`
-		Pinned           bool      `json:"pinned"`
-		MentionEveryone  bool      `json:"mention_everyone"`
-		Reactions        []Reaction `json:"reactions"`
+		Type           int           `json:"type"`
+		Content        string        `json:"content"`
+		Mentions       []interface{} `json:"mentions"`
+		MentionRoles   []interface{} `json:"mention_roles"`
+		Attachments    []Attachment  `json:"attachments"`
+		Embeds         []interface{} `json:"embeds"`
+		Timestamp      string        `json:"timestamp"`
+		EditedTimestamp interface{}   `json:"edited_timestamp"`
+		Flags          int           `json:"flags"`
+		Components     []interface{} `json:"components"`
+		ID             string        `json:"id"`
+		ChannelID      string        `json:"channel_id"`
+		Author         Author        `json:"author"`
+		Pinned         bool          `json:"pinned"`
+		MentionEveryone bool         `json:"mention_everyone"`
+		Reactions      []Reaction    `json:"reactions"`
 	}
 	getDiscordMessages := func(channelId string) []Message {
 		req, err := http.NewRequest("GET", "https://discord.com/api/v10/channels/" + channelId + "/messages?limit=50", nil)
