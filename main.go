@@ -439,7 +439,7 @@ func main() {
 		return mainTemplate
 	}
 	homeTemplate, mzTemplate, hcfTemplate := getMainTemplate("main-home.html"), getMainTemplate("main-mz.html"), getMainTemplate("main-hcf.html")
-	type HomeTemplateData struct {
+	type MainTemplateData struct {
 		NetworkPlayers []string
 		ServerPlayers []string
 		NewPlayers []NewPlayer
@@ -454,7 +454,7 @@ func main() {
 	}
 	getHome := func() []byte {
 		var buffer bytes.Buffer
-		err := homeTemplate.Execute(&buffer, HomeTemplateData {
+		err := homeTemplate.Execute(&buffer, MainTemplateData {
 			NetworkPlayers: currentPlayers,
 			ServerPlayers: serverDatas["hub"].CurrentPlayers,
 			NewPlayers: newPlayers,
@@ -476,14 +476,14 @@ func main() {
 		var buffer bytes.Buffer
 		mzData := serverDatas["mz"]
 		err := mzTemplate.Execute(&buffer, struct {
-			HomeTemplateData HomeTemplateData
+			MainTemplateData MainTemplateData
 
 			AttackSpeed string
 
 			MzTips []string
 			Bandits []Bandit
 		}{
-			HomeTemplateData: HomeTemplateData {
+			MainTemplateData: MainTemplateData {
 				NetworkPlayers: currentPlayers,
 				ServerPlayers: mzData.CurrentPlayers,
 				NewPlayers: newPlayers,
@@ -511,7 +511,7 @@ func main() {
 		var buffer bytes.Buffer
 		serverData := serverDatas["hcf"]
 		err := hcfTemplate.Execute(&buffer, struct {
-			HomeTemplateData HomeTemplateData
+			MainTemplateData MainTemplateData
 
 			AttackSpeed string
 
@@ -533,7 +533,7 @@ func main() {
 			ClassTips []string
 			Factions []Faction
 		}{
-			HomeTemplateData: HomeTemplateData{
+			MainTemplateData: MainTemplateData{
 				NetworkPlayers: currentPlayers,
 				ServerPlayers: serverData.CurrentPlayers,
 				NewPlayers: newPlayers,
