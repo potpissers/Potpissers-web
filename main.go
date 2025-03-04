@@ -327,7 +327,13 @@ func main() {
 		Reactions      []Reaction `json:"reactions"`
 	}
 	getDiscordMessages := func(channelId string) []Message {
-		resp, err := http.Get("https://discord.com/api/v10/channels/" + channelId + "/messages?limit=50" + os.Getenv("DISCORD_BOT_TOKEN"))
+		req, err := http.NewRequest("GET", "https://discord.com/api/v10/channels/" + channelId + "/messages?limit=50", nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+		req.Header.Set("Authorization", "Bot " + os.Getenv("DISCORD_BOT_TOKEN"))
+
+		resp, err := (&http.Client{}).Do(req)
 		if err != nil {
 			log.Fatal(err)
 		}
