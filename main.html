@@ -159,16 +159,18 @@
 
             <button onclick="handleContentMaximizeButtonClick(true)" style="margin-left: auto"></button>
         </div>
-        <ul style="overflow-y: scroll">
-            {{range .Announcements}}
-            <li>{{.Content}}</li>
-            {{end}}
-        </ul>
-        <ul>
-            {{range .Changelog}}
-            <li>{{.Content}}</li>
-            {{end}}
-        </ul>
+        <div style="overflow-y: scroll">
+            <ul>
+                {{range .Announcements}}
+                <li>{{.Content}}</li>
+                {{end}}
+            </ul>
+            <ul>
+                {{range .Changelog}}
+                <li>{{.Content}}</li>
+                {{end}}
+            </ul>
+        </div>
     </div>
     <div class="foo baz" style="display: flex; flex-direction: column; align-items: center; overflow-y: auto">
         <div style="display: flex">
