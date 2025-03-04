@@ -264,13 +264,26 @@ func main() {
 		}, serverName)
 	}
 
-//	type Transaction struct {
-//	}
-//	var transactions []Transaction
-//	http.HandleFunc("/api/transactions", func(w http.ResponseWriter, r *http.Request) {
-//
-//	})
-//	 TODO -> square api transactions
+	type Donation struct {
+		Payments []struct {
+			ID            string `json:"id"`
+			AmountMoney   struct {
+				Amount   int    `json:"amount"`
+				Currency string `json:"currency"`
+			} `json:"amount_money"`
+			CreatedAt string `json:"created_at"`
+		} `json:"payments"`
+	}
+	donations := func() []Donation {
+		req, err := http.NewRequest("GET", "https://connect.squareup.com/v2/locations/" + os.Getenv("SQUARE_LOCATION_ID") + "/transactions", nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+		req.Header.Add("Authorization", "Bearer " + os.Getenv("SQUARE_ACCESS_TOKEN"))
+		req.Header.Add("Content-Type", "application/json") // TODO ?
+
+		return getJsonTSlice[Donation](req)
+	}()
 	http.HandleFunc("/api/donations", func(w http.ResponseWriter, r *http.Request) {
 		// TODO
 	})
@@ -323,27 +336,7 @@ func main() {
 			log.Fatal(err)
 		}
 		req.Header.Set("Authorization", "Bot " + os.Getenv("DISCORD_BOT_TOKEN"))
-
-		resp, err := (&http.Client{}).Do(req)
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer func(Body io.ReadCloser) {
-			err := Body.Close()
-			if err != nil {
-
-			}
-		}(resp.Body)
-		body, err := io.ReadAll(resp.Body)
-		if err != nil {
-			log.Fatal(err)
-		}
-		var messages []Message
-		err = json.Unmarshal(body, &messages)
-		if err != nil {
-			log.Fatal(err)
-		}
-		return messages
+		return getJsonTSlice[Message](req)
 	}
 	discordAnnouncements, changelog, discordMessages := getDiscordMessages("1265836245678948464"), getDiscordMessages("1346008874830008375"), getDiscordMessages("1245300045188956255")
 	// TODO -> store last checked time and then check for every join or something + refresh button + reddit too
@@ -353,6 +346,59 @@ func main() {
 		// TODO messages + ServerData.Messages
 	})
 
+	{
+		type Money struct {
+			Amount   int64  `json:"amount"`  // cents
+			Currency string `json:"currency"`
+		}
+		type PaymentLinkRequest struct {
+			AmountMoney Money  `json:"amount_money"`
+			Title       string `json:"title"`
+			Description string `json:"description"`
+		}
+		type PaymentLinkResponse struct {
+			PaymentLink struct {
+				ID  string `json:"id"`
+				URL string `json:"url"`
+			} `json:"payment_link"`
+		}
+		reqData := PaymentLinkRequest{
+			AmountMoney: Money{
+				Amount:   1000,
+				Currency: "USD",
+			},
+			Title:       "Minecraft Donation",
+			Description: "Payment for Minecraft server donation",
+		}
+		reqBody, err := json.Marshal(reqData)
+		if err != nil {
+			log.Fatal(err)
+		}
+		req, err := http.NewRequest("POST", "https://connect.squareupsandbox.com/v2/payment-links", bytes.NewBuffer(reqBody))
+		if err != nil {
+			log.Fatal(err)
+		}
+		req.Header.Set("Authorization", "Bearer " + os.Getenv("SQUARE_ACCESS_TOKEN"))
+		req.Header.Set("Content-Type", "application/json") // TODO ?
+
+		resp, err := (&http.Client{}).Do(req)
+		if err != nil {
+			log.Fatalf("Error making request: %v", err)
+			return
+		}
+		defer func(Body io.ReadCloser) {
+			err := Body.Close()
+			if err != nil {
+
+			}
+		}(resp.Body)
+		var paymentLinkResp PaymentLinkResponse
+		if err := json.NewDecoder(resp.Body).Decode(&paymentLinkResp); err != nil {
+			log.Fatal(err)
+		}
+		println(paymentLinkResp.PaymentLink.URL)
+	}
+
 	getMainTemplate := func(fileName string) *template.Template {
 		mainTemplate, err := template.ParseFiles("main.html", fileName)
 		if err != nil {
@@ -361,20 +407,22 @@ func main() {
 		return mainTemplate
 	}
 	homeTemplate, mzTemplate, hcfTemplate := getMainTemplate("main-home.html"), getMainTemplate("main-mz.html"), getMainTemplate("main-hcf.html")
+	type HomeTemplateData struct {
+		NetworkPlayers []string
+		ServerPlayers []string
+		NewPlayers []NewPlayer
+		PotpissersTips []string
+		Deaths []Death
+		Messages []string
+		Events []Event
+		Announcements []Message
+		Changelog []Message
+		DiscordMessages []Message
+		Donations []Donation
+	}
 	getHome := func() []byte {
 		var buffer bytes.Buffer
-		err := homeTemplate.Execute(&buffer, struct {
-			NetworkPlayers []string
-			ServerPlayers []string
-			NewPlayers []NewPlayer
-			PotpissersTips []string
-			Deaths []Death
-			Messages []string
-			Events []Event
-			Announcements []Message
-			Changelog []Message
-			DiscordMessages []Message
-		}{
+		err := homeTemplate.Execute(&buffer, HomeTemplateData {
 			NetworkPlayers: currentPlayers,
 			ServerPlayers: serverDatas["hub"].CurrentPlayers,
 			NewPlayers: newPlayers,
@@ -385,6 +433,7 @@ func main() {
 			Announcements: discordAnnouncements,
 			Changelog: changelog,
 			DiscordMessages: discordMessages,
+			Donations: donations,
 			})
 		if err != nil {
 			log.Fatal(err)
@@ -395,32 +444,26 @@ func main() {
 		var buffer bytes.Buffer
 		mzData := serverDatas["mz"]
 		err := mzTemplate.Execute(&buffer, struct {
-			NetworkPlayers []string
-			ServerPlayers []string
-			NewPlayers []NewPlayer
-			PotpissersTips []string
-			Deaths []Death
-			Messages []string
-			Events []Event
-			Announcements []Message
-			Changelog []Message
-			DiscordMessages []Message
+			HomeTemplateData HomeTemplateData
 
 			AttackSpeed string
 
 			MzTips []string
 			Bandits []Bandit
 		}{
-			NetworkPlayers: currentPlayers,
-			ServerPlayers: mzData.CurrentPlayers,
-			NewPlayers: newPlayers,
-			PotpissersTips: potpissersTips,
-			Deaths: mzData.Deaths,
-			Messages: mzData.Messages,
-			Events: mzData.Events,
-			Announcements: discordAnnouncements,
-			Changelog: changelog,
-			DiscordMessages: discordMessages,
+			HomeTemplateData: HomeTemplateData {
+				NetworkPlayers: currentPlayers,
+				ServerPlayers: mzData.CurrentPlayers,
+				NewPlayers: newPlayers,
+				PotpissersTips: potpissersTips,
+				Deaths: mzData.Deaths,
+				Messages: mzData.Messages,
+				Events: mzData.Events,
+				Announcements: discordAnnouncements,
+				Changelog: changelog,
+				DiscordMessages: discordMessages,
+				Donations: donations,
+			},
 
 			AttackSpeed: mzData.AttackSpeedName,
 
@@ -436,16 +479,7 @@ func main() {
 		var buffer bytes.Buffer
 		serverData := serverDatas["hcf"]
 		err := hcfTemplate.Execute(&buffer, struct {
-			NetworkPlayers []string
-			ServerPlayers []string
-			NewPlayers []NewPlayer
-			PotpissersTips []string
-			Deaths []Death
-			Messages []string
-			Events []Event
-			Announcements []Message
-			Changelog []Message
-			DiscordMessages []Message
+			HomeTemplateData HomeTemplateData
 
 			AttackSpeed string
 
@@ -467,16 +501,19 @@ func main() {
 			ClassTips []string
 			Factions []Faction
 		}{
-			NetworkPlayers: currentPlayers,
-			ServerPlayers: serverData.CurrentPlayers,
-			NewPlayers: newPlayers,
-			PotpissersTips: potpissersTips,
-			Deaths: deaths,
-			Messages: messages,
-			Events: serverData.Events,
-			Announcements: discordAnnouncements,
-			Changelog: changelog,
-			DiscordMessages: discordMessages,
+			HomeTemplateData: HomeTemplateData{
+				NetworkPlayers: currentPlayers,
+				ServerPlayers: serverData.CurrentPlayers,
+				NewPlayers: newPlayers,
+				PotpissersTips: potpissersTips,
+				Deaths: deaths,
+				Messages: messages,
+				Events: serverData.Events,
+				Announcements: discordAnnouncements,
+				Changelog: changelog,
+				DiscordMessages: discordMessages,
+				Donations: donations,
+			},
 
 			AttackSpeed: serverData.AttackSpeedName,
 
@@ -673,4 +710,26 @@ func handlePutJson[T any](r *http.Request, decodeJson func(*T, *http.Request) er
 			mutex.Unlock()
 		}
 	}
+}
+func getJsonTSlice[T any](request *http.Request) []T {
+	resp, err := (&http.Client{}).Do(request)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+
+		}
+	}(resp.Body)
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+	var messages []T
+	err = json.Unmarshal(body, &messages)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return messages
 }
