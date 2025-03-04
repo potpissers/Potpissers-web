@@ -23,7 +23,7 @@
         </span>
     </div>
     <ul style="overflow-x: hidden; overflow-y: scroll">
-        {{range .Deaths}}
+        {{range .MainTemplateData.Deaths}}
         <li style="">({{.ServerName}}) {{.DeathMessage}}</li>
         {{end}}
     </ul>
@@ -68,18 +68,18 @@
     <div style="display: flex; height: 100%;">
         <div style="display: flex; flex-direction: column; flex: 1">
             <ul style="overflow-y: scroll; flex: 0;">
-                {{range .ServerPlayers}}
+                {{range .MainTemplateData.ServerPlayers}}
                 <li>
                     {{.Name}}
                 </li>
                 {{end}}
             </ul>
             <ul style="overflow-y: scroll; flex: 0;">
-                {{range .DiscordMessages}}
+                {{range .HomeTemplateData.DiscordMessages}}
                 {{end}}
             </ul>
             <ul style="overflow-y: scroll; flex: 1; direction: rtl">
-                {{range .Messages}}
+                {{range .HomeTemplateData.Messages}}
                 <li>
                     {{.Message}}
                 </li>
@@ -102,7 +102,7 @@
         <div style="display: flex; flex-direction: column; justify-content: space-between; flex: 1">
             <div style="flex: 1; display: flex; flex-direction: column-reverse; text-align: right">
                 <ul style="">
-                    {{range .NewPlayers}}
+                    {{range .MainTemplateData.NewPlayers}}
                     <li>
                         {{.Timestamp}}: {{.PlayerUuid}} ({{.Referrer}}) [{{.RowNumber}}]
                     </li>
@@ -145,7 +145,7 @@
 <div class="foo bar" style="text-align: center">
     <button>events</button>
     <ul>
-        {{range .Events}}
+        {{range .HomeTemplateData.Events}}
         <li>{{.CapMessage}}</li>
         {{end}}
     </ul>
@@ -160,12 +160,12 @@
             <button onclick="handleContentMaximizeButtonClick(true)" style="margin-left: auto"></button>
         </div>
         <ul style="overflow-y: auto">
-            {{range .Announcements}}
+            {{range .HomeTemplateData.Announcements}}
             <li>{{.Content}}</li>
             {{end}}
         </ul>
         <ul style="overflow-y: auto" hidden>
-            {{range .Changelog}}
+            {{range .HomeTemplateData.Changelog}}
             <li>{{.Content}}</li>
             {{end}}
         </ul>
