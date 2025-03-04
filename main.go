@@ -726,7 +726,7 @@ func getJsonTSlice[T any](request *http.Request) []T {
 	if err != nil {
 		log.Fatal(err)
 	}
-	println(body)
+	println(string(body))
 	var messages []T
 	err = json.Unmarshal(body, &messages)
 	if err != nil {
