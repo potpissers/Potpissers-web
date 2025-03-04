@@ -454,19 +454,23 @@ func main() {
 	}
 	getHome := func() []byte {
 		var buffer bytes.Buffer
-		err := homeTemplate.Execute(&buffer, MainTemplateData {
-			NetworkPlayers: currentPlayers,
-			ServerPlayers: serverDatas["hub"].CurrentPlayers,
-			NewPlayers: newPlayers,
-			PotpissersTips: potpissersTips,
-			Deaths: deaths,
-			Messages: messages,
-			Events: events,
-			Announcements: discordAnnouncements,
-			Changelog: changelog,
-			DiscordMessages: discordMessages,
-			Donations: donations,
-			})
+		err := homeTemplate.Execute(&buffer, struct {
+			MainTemplateData MainTemplateData
+		}{
+			MainTemplateData {
+				NetworkPlayers: currentPlayers,
+				ServerPlayers: serverDatas["hub"].CurrentPlayers,
+				NewPlayers: newPlayers,
+				PotpissersTips: potpissersTips,
+				Deaths: deaths,
+				Messages: messages,
+				Events: events,
+				Announcements: discordAnnouncements,
+				Changelog: changelog,
+				DiscordMessages: discordMessages,
+				Donations: donations,
+				},
+		})
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -533,7 +537,7 @@ func main() {
 			ClassTips []string
 			Factions []Faction
 		}{
-			MainTemplateData: MainTemplateData{
+			MainTemplateData: MainTemplateData {
 				NetworkPlayers: currentPlayers,
 				ServerPlayers: serverData.CurrentPlayers,
 				NewPlayers: newPlayers,
