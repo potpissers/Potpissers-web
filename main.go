@@ -312,8 +312,8 @@ func main() {
 		Content         string    `json:"content"`
 //		Mentions        []string  `json:"mentions"`
 //		MentionRoles    []string  `json:"mention_roles"`
-		Attachments     []string  `json:"attachments"`
-		Embeds          []string  `json:"embeds"`
+//		Attachments     []string  `json:"attachments"`
+//		Embeds          []string  `json:"embeds"`
 		Timestamp       time.Time `json:"timestamp"`
 //		EditedTimestamp *time.Time `json:"edited_timestamp"`
 //		Flags           int       `json:"flags"`
