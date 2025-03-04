@@ -265,26 +265,27 @@ func main() {
 	}
 
 	type Donation struct {
-		Transactions []struct {
-			ID          string `json:"id"`
-			LocationID  string `json:"location_id"`
-			CreatedAt   string `json:"created_at"`
-			Tenders     []struct {
-				ID            string `json:"id"`
-				AmountMoney   struct {
-					Amount   int    `json:"amount"`
-					Currency string `json:"currency"`
-				} `json:"amount_money"`
-				CreatedAt string `json:"created_at"`
-			} `json:"tenders"`
-			Refunds     []struct {
-				ID            string `json:"id"`
-				AmountMoney   struct {
-					Amount   int    `json:"amount"`
-					Currency string `json:"currency"`
-				} `json:"amount_money"`
-			} `json:"refunds"`
-		} `json:"transactions"`
+		ID          string `json:"id"`
+		LocationID  string `json:"location_id"`
+		CreatedAt   string `json:"created_at"`
+		Tenders     []struct {
+			ID            string `json:"id"`
+			AmountMoney   struct {
+				Amount   int    `json:"amount"`
+				Currency string `json:"currency"`
+			} `json:"amount_money"`
+			CreatedAt string `json:"created_at"`
+		} `json:"tenders"`
+		Refunds     []struct {
+			ID            string `json:"id"`
+			AmountMoney   struct {
+				Amount   int    `json:"amount"`
+				Currency string `json:"currency"`
+			} `json:"amount_money"`
+		} `json:"refunds"`
+	}
+	type DonationsResponse struct {
+		Transactions []Donation `json:"transactions"`
 	}
 	donations := func() []Donation {
 		req, err := http.NewRequest("GET", "https://connect.squareup.com/v2/locations/" + os.Getenv("SQUARE_LOCATION_ID") + "/transactions", nil)
@@ -294,7 +295,26 @@ func main() {
 		req.Header.Add("Authorization", "Bearer " + os.Getenv("SQUARE_ACCESS_TOKEN"))
 		req.Header.Add("Content-Type", "application/json") // TODO ?
 
-		return getJsonTSlice[Donation](req)
+		resp, err := (&http.Client{}).Do(req)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer func(Body io.ReadCloser) {
+			err := Body.Close()
+			if err != nil {
+				log.Fatal(err)
+			}
+		}(resp.Body)
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			log.Fatal(err)
+		}
+		var donationsResponse DonationsResponse
+		err = json.Unmarshal(body, &donationsResponse)
+		if err != nil {
+			log.Fatal(err)
+		}
+		return donationsResponse.Transactions
 	}()
 	http.HandleFunc("/api/donations", func(w http.ResponseWriter, r *http.Request) {
 		// TODO
@@ -731,14 +751,13 @@ func getJsonTSlice[T any](request *http.Request) []T {
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {
-
+			log.Fatal(err)
 		}
 	}(resp.Body)
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		log.Fatal(err)
 	}
-	println(string(body))
 	var messages []T
 	err = json.Unmarshal(body, &messages)
 	if err != nil {
