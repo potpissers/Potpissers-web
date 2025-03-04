@@ -326,6 +326,9 @@ func main() {
 //		TTs             bool      `json:"tts"`
 		Reactions      []Reaction `json:"reactions"`
 	}
+	type DiscordResponse struct {
+		Messages []Message `json:"messages"`
+	}
 	getDiscordMessages := func(channelId string) []Message {
 		req, err := http.NewRequest("GET", "https://discord.com/api/v10/channels/" + channelId + "/messages?limit=50", nil)
 		if err != nil {
@@ -347,12 +350,12 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		var messages []Message
-		err = json.Unmarshal(body, &messages)
+		var discordResponse DiscordResponse
+		err = json.Unmarshal(body, &discordResponse)
 		if err != nil {
 			log.Fatal(err)
 		}
-		return messages
+		return discordResponse.Messages
 	}
 	discordAnnouncements, changelog, discordMessages := getDiscordMessages("1265836245678948464"), getDiscordMessages("1346008874830008375"), getDiscordMessages("1245300045188956255")
 	// TODO -> store last checked time and then check for every join or something + refresh button + reddit too
