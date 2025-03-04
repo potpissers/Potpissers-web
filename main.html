@@ -152,14 +152,14 @@
 </div>
 
 <div id="content" class="foo" style="background: #33383D; display: grid; grid-template-columns: 3fr 1fr; grid-template-rows: 1fr 1fr">
-    <div class="foo baz" style="">
+    <div class="foo baz" style="overflow-y: auto">
         <div style="display: flex; text-align: center">
             <button>announcements</button>
             <button>changelog</button>
 
             <button onclick="handleContentMaximizeButtonClick(true)" style="margin-left: auto"></button>
         </div>
-        <div style="overflow-y: scroll">
+        <div style="overflow-y: auto">
             <ul>
                 {{range .Announcements}}
                 <li>{{.Content}}</li>
