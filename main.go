@@ -318,7 +318,7 @@ func main() {
 		Reactions      []Reaction    `json:"reactions"`
 	}
 	getDiscordMessages := func(channelId string) []Message {
-		req, err := http.NewRequest("GET", "https://discord.com/api/v10/channels/" + channelId + "/messages?limit=50", nil)
+		req, err := http.NewRequestWithContext(context.Background(), "GET", "https://discord.com/api/v10/channels/" + channelId + "/messages?limit=50", nil)
 		if err != nil {
 			log.Fatal(err)
 		}
