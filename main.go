@@ -265,14 +265,26 @@ func main() {
 	}
 
 	type Donation struct {
-		Payments []struct {
-			ID            string `json:"id"`
-			AmountMoney   struct {
-				Amount   int    `json:"amount"`
-				Currency string `json:"currency"`
-			} `json:"amount_money"`
-			CreatedAt string `json:"created_at"`
-		} `json:"payments"`
+		Transactions []struct {
+			ID          string `json:"id"`
+			LocationID  string `json:"location_id"`
+			CreatedAt   string `json:"created_at"`
+			Tenders     []struct {
+				ID            string `json:"id"`
+				AmountMoney   struct {
+					Amount   int    `json:"amount"`
+					Currency string `json:"currency"`
+				} `json:"amount_money"`
+				CreatedAt string `json:"created_at"`
+			} `json:"tenders"`
+			Refunds     []struct {
+				ID            string `json:"id"`
+				AmountMoney   struct {
+					Amount   int    `json:"amount"`
+					Currency string `json:"currency"`
+				} `json:"amount_money"`
+			} `json:"refunds"`
+		} `json:"transactions"`
 	}
 	donations := func() []Donation {
 		req, err := http.NewRequest("GET", "https://connect.squareup.com/v2/locations/" + os.Getenv("SQUARE_LOCATION_ID") + "/transactions", nil)
