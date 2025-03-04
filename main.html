@@ -75,11 +75,11 @@
                 {{end}}
             </ul>
             <ul style="overflow-y: scroll; flex: 0;">
-                {{range .HomeTemplateData.DiscordMessages}}
+                {{range .MainTemplateData.DiscordMessages}}
                 {{end}}
             </ul>
             <ul style="overflow-y: scroll; flex: 1; direction: rtl">
-                {{range .HomeTemplateData.Messages}}
+                {{range .MainTemplateData.Messages}}
                 <li>
                     {{.Message}}
                 </li>
@@ -145,7 +145,7 @@
 <div class="foo bar" style="text-align: center">
     <button>events</button>
     <ul>
-        {{range .HomeTemplateData.Events}}
+        {{range .MainTemplateData.Events}}
         <li>{{.CapMessage}}</li>
         {{end}}
     </ul>
@@ -160,12 +160,12 @@
             <button onclick="handleContentMaximizeButtonClick(true)" style="margin-left: auto"></button>
         </div>
         <ul style="overflow-y: auto">
-            {{range .HomeTemplateData.Announcements}}
+            {{range .MainTemplateData.Announcements}}
             <li>{{.Content}}</li>
             {{end}}
         </ul>
         <ul style="overflow-y: auto" hidden>
-            {{range .HomeTemplateData.Changelog}}
+            {{range .MainTemplateData.Changelog}}
             <li>{{.Content}}</li>
             {{end}}
         </ul>
