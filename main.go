@@ -323,7 +323,6 @@ func main() {
 			log.Fatal(err)
 		}
 		req.Header.Set("Authorization", "Bot " + os.Getenv("DISCORD_BOT_TOKEN"))
-		req.Header.Set("User-Agent", "YourUserAgentString") // You can set this as appropriate
 
 		resp, err := (&http.Client{}).Do(req)
 		if err != nil {
@@ -339,7 +338,6 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		println(string(body))
 		var messages []Message
 		err = json.Unmarshal(body, &messages)
 		if err != nil {
