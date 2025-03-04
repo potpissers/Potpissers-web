@@ -275,59 +275,70 @@ func main() {
 		// TODO
 	})
 
-	type Emoji struct {
-		ID   *string `json:"id"`
-		Name string  `json:"name"`
+	type Embed struct {
+		Type        string `json:"type"`
+		URL         string `json:"url"`
+		Title       string `json:"title"`
+		Description string `json:"description"`
+		Color       int    `json:"color"`
+		Author      struct {
+			Name string `json:"name"`
+			URL  string `json:"url"`
+		} `json:"author"`
+		Provider struct {
+			Name string `json:"name"`
+			URL  string `json:"url"`
+		} `json:"provider"`
+		Thumbnail struct {
+			URL string `json:"url"`
+		} `json:"thumbnail"`
+		Video struct {
+			URL string `json:"url"`
+		} `json:"video"`
 	}
-	type Reaction struct {
-		Emoji        Emoji `json:"emoji"`
-		Count        int   `json:"count"`
-//		CountDetails struct {
-//			Burst  int `json:"burst"`
-//			Normal int `json:"normal"`
-//		} `json:"count_details"`
-//		BurstColors []interface{} `json:"burst_colors"`
-//		MeBurst     bool          `json:"me_burst"`
-//		BurstMe     bool          `json:"burst_me"`
-//		Me          bool          `json:"me"`
-//		BurstCount  int           `json:"burst_count"`
+	type Attachment struct {
+		ID          string `json:"id"`
+		Filename    string `json:"filename"`
+		Size        int    `json:"size"`
+		URL         string `json:"url"`
+		ProxyURL    string `json:"proxy_url"`
+		Width       int    `json:"width"`
+		Height      int    `json:"height"`
+		ContentType string `json:"content_type"`
 	}
 	type Author struct {
-//		ID                   string      `json:"id"`
-//		Username             string      `json:"username"`
-//		Avatar               string      `json:"avatar"`
-//		Discriminator        string      `json:"discriminator"`
-//		PublicFlags          int         `json:"public_flags"`
-//		Flags                int         `json:"flags"`
-//		Banner               *string     `json:"banner"`
-//		AccentColor          *string     `json:"accent_color"`
-		GlobalName           *string     `json:"global_name"`
-//		AvatarDecorationData *string     `json:"avatar_decoration_data"`
-//		BannerColor          *string     `json:"banner_color"`
-//		Clan                 *string     `json:"clan"`
-//		PrimaryGuild         *string     `json:"primary_guild"`
+		ID            string `json:"id"`
+		Username      string `json:"username"`
+		Avatar        string `json:"avatar"`
+		Discriminator string `json:"discriminator"`
+		PublicFlags   int    `json:"public_flags"`
+		Flags         int    `json:"flags"`
+		GlobalName    string `json:"global_name"`
+	}
+	type Reaction struct {
+		Emoji struct {
+			ID   string `json:"id"`
+			Name string `json:"name"`
+		} `json:"emoji"`
+		Count int `json:"count"`
 	}
 	type Message struct {
-//		Type            int       `json:"type"`
-		Content         string    `json:"content"`
-//		Mentions        []string  `json:"mentions"`
-//		MentionRoles    []string  `json:"mention_roles"`
-//		Attachments     []string  `json:"attachments"`
-//		Embeds          []string  `json:"embeds"`
-		Timestamp       time.Time `json:"timestamp"`
-//		EditedTimestamp *time.Time `json:"edited_timestamp"`
-//		Flags           int       `json:"flags"`
-//		Components      []string  `json:"components"`
-		ID              string    `json:"id"`
-//		ChannelID       string    `json:"channel_id"`
-		Author          Author    `json:"author"`
-//		Pinned          bool      `json:"pinned"`
-//		MentionEveryone bool      `json:"mention_everyone"`
-//		TTs             bool      `json:"tts"`
-		Reactions      []Reaction `json:"reactions"`
-	}
-	type DiscordResponse struct {
-		Messages []Message `json:"messages"`
+		Type             int       `json:"type"`
+		Content          string    `json:"content"`
+		Mentions         []string  `json:"mentions"`
+		MentionRoles     []string  `json:"mention_roles"`
+		Attachments      []Attachment `json:"attachments"`
+		Embeds           []Embed   `json:"embeds"`
+		Timestamp        time.Time `json:"timestamp"`
+		EditedTimestamp  *time.Time `json:"edited_timestamp"`
+		Flags            int       `json:"flags"`
+		Components       []string  `json:"components"`
+		ID               string    `json:"id"`
+		ChannelID        string    `json:"channel_id"`
+		Author           Author    `json:"author"`
+		Pinned           bool      `json:"pinned"`
+		MentionEveryone  bool      `json:"mention_everyone"`
+		Reactions        []Reaction `json:"reactions"`
 	}
 	getDiscordMessages := func(channelId string) []Message {
 		req, err := http.NewRequest("GET", "https://discord.com/api/v10/channels/" + channelId + "/messages?limit=50", nil)
@@ -350,12 +361,12 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		var discordResponse DiscordResponse
-		err = json.Unmarshal(body, &discordResponse)
+		var messages []Message
+		err = json.Unmarshal(body, &messages)
 		if err != nil {
 			log.Fatal(err)
 		}
-		return discordResponse.Messages
+		return messages
 	}
 	discordAnnouncements, changelog, discordMessages := getDiscordMessages("1265836245678948464"), getDiscordMessages("1346008874830008375"), getDiscordMessages("1245300045188956255")
 	// TODO -> store last checked time and then check for every join or something + refresh button + reddit too
