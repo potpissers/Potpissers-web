@@ -4,10 +4,10 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"github.com/bwmarrin/discordgo"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"html/template"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -275,19 +275,81 @@ func main() {
 		// TODO
 	})
 
-	var announcements []string
-	var changelog []string
-	var discordMessages []string
-	{
-		bot, err := discordgo.New("Bot " + "")
-		if err != nil {
-			log.Fatal(err)
-		}
-		err = bot.Open()
-		if err != nil {
-			log.Fatal(err)
-		}
+	type Emoji struct {
+		ID   *string `json:"id"`
+		Name string  `json:"name"`
 	}
+	type Reaction struct {
+		Emoji        Emoji `json:"emoji"`
+		Count        int   `json:"count"`
+//		CountDetails struct {
+//			Burst  int `json:"burst"`
+//			Normal int `json:"normal"`
+//		} `json:"count_details"`
+//		BurstColors []interface{} `json:"burst_colors"`
+//		MeBurst     bool          `json:"me_burst"`
+//		BurstMe     bool          `json:"burst_me"`
+//		Me          bool          `json:"me"`
+//		BurstCount  int           `json:"burst_count"`
+	}
+	type Author struct {
+//		ID                   string      `json:"id"`
+//		Username             string      `json:"username"`
+//		Avatar               string      `json:"avatar"`
+//		Discriminator        string      `json:"discriminator"`
+//		PublicFlags          int         `json:"public_flags"`
+//		Flags                int         `json:"flags"`
+//		Banner               *string     `json:"banner"`
+//		AccentColor          *string     `json:"accent_color"`
+		GlobalName           *string     `json:"global_name"`
+//		AvatarDecorationData *string     `json:"avatar_decoration_data"`
+//		BannerColor          *string     `json:"banner_color"`
+//		Clan                 *string     `json:"clan"`
+//		PrimaryGuild         *string     `json:"primary_guild"`
+	}
+	type Message struct {
+//		Type            int       `json:"type"`
+		Content         string    `json:"content"`
+//		Mentions        []string  `json:"mentions"`
+//		MentionRoles    []string  `json:"mention_roles"`
+		Attachments     []string  `json:"attachments"`
+		Embeds          []string  `json:"embeds"`
+		Timestamp       time.Time `json:"timestamp"`
+//		EditedTimestamp *time.Time `json:"edited_timestamp"`
+//		Flags           int       `json:"flags"`
+//		Components      []string  `json:"components"`
+		ID              string    `json:"id"`
+//		ChannelID       string    `json:"channel_id"`
+		Author          Author    `json:"author"`
+//		Pinned          bool      `json:"pinned"`
+//		MentionEveryone bool      `json:"mention_everyone"`
+//		TTs             bool      `json:"tts"`
+		Reactions      []Reaction `json:"reactions"`
+	}
+	getDiscordMessages := func(channelId string) []Message {
+		resp, err := http.Get("https://discord.com/api/v10/channels/" + channelId + "/messages?limit=50" + os.Getenv("DISCORD_BOT_TOKEN"))
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer func(Body io.ReadCloser) {
+			err := Body.Close()
+			if err != nil {
+
+			}
+		}(resp.Body)
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			log.Fatal(err)
+		}
+		var messages []Message
+		err = json.Unmarshal(body, &messages)
+		if err != nil {
+			log.Fatal(err)
+		}
+		return messages
+	}
+	discordAnnouncements, changelog, discordMessages := getDiscordMessages("1265836245678948464"), getDiscordMessages("1346008874830008375"), getDiscordMessages("1245300045188956255")
+	// TODO -> store last checked time and then check for every join or something + refresh button + reddit too
 
 	var messages []string // TODO -> make player name clickable
 	http.HandleFunc("/api/chat", func(w http.ResponseWriter, r *http.Request) {
@@ -312,6 +374,9 @@ func main() {
 			Deaths []Death
 			Messages []string
 			Events []Event
+			Announcements []Message
+			Changelog []Message
+			DiscordMessages []Message
 		}{
 			NetworkPlayers: currentPlayers,
 			ServerPlayers: serverDatas["hub"].CurrentPlayers,
@@ -320,6 +385,9 @@ func main() {
 			Deaths: deaths,
 			Messages: messages,
 			Events: events,
+			Announcements: discordAnnouncements,
+			Changelog: changelog,
+			DiscordMessages: discordMessages,
 			})
 		if err != nil {
 			log.Fatal(err)
@@ -337,6 +405,9 @@ func main() {
 			Deaths []Death
 			Messages []string
 			Events []Event
+			Announcements []Message
+			Changelog []Message
+			DiscordMessages []Message
 
 			AttackSpeed string
 
@@ -350,6 +421,9 @@ func main() {
 			Deaths: mzData.Deaths,
 			Messages: mzData.Messages,
 			Events: mzData.Events,
+			Announcements: discordAnnouncements,
+			Changelog: changelog,
+			DiscordMessages: discordMessages,
 
 			AttackSpeed: mzData.AttackSpeedName,
 
@@ -372,6 +446,9 @@ func main() {
 			Deaths []Death
 			Messages []string
 			Events []Event
+			Announcements []Message
+			Changelog []Message
+			DiscordMessages []Message
 
 			AttackSpeed string
 
@@ -400,6 +477,9 @@ func main() {
 			Deaths: deaths,
 			Messages: messages,
 			Events: serverData.Events,
+			Announcements: discordAnnouncements,
+			Changelog: changelog,
+			DiscordMessages: discordMessages,
 
 			AttackSpeed: serverData.AttackSpeedName,
 
