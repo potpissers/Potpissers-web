@@ -361,6 +361,7 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+		println(string(body))
 		var messages []Message
 		err = json.Unmarshal(body, &messages)
 		if err != nil {
