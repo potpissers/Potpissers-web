@@ -74,6 +74,10 @@
                 </li>
                 {{end}}
             </ul>
+            <ul style="overflow-y: scroll; flex: 0;">
+                {{range .DiscordMessages}}
+                {{end}}
+            </ul>
             <ul style="overflow-y: scroll; flex: 1; direction: rtl">
                 {{range .Messages}}
                 <li>
@@ -156,7 +160,14 @@
             <button onclick="handleContentMaximizeButtonClick(true)" style="margin-left: auto"></button>
         </div>
         <ul style="overflow-y: scroll">
-
+            {{range .Announcements}}
+            <li>{{.Content}}</li>
+            {{end}}
+        </ul>
+        <ul>
+            {{range .Changelog}}
+            <li>{{.Content}}</li>
+            {{end}}
         </ul>
     </div>
     <div class="foo baz" style="text-align: center">
