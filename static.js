@@ -49,3 +49,14 @@ function handleRedditVideos() {
                     })
             }));
 }
+function fetchPaymentLink(username, itemName, itemAmountInt) {
+    fetch("https://www.potpissers.com/api/donate", {
+        method: "POST", body: JSON.stringify({
+            username: username,
+            line_item_name: itemName,
+            line_item_amount: itemAmountInt
+        })
+    })
+        .then(response => response.text())
+        .then(url => window.open(url, "_blank"))
+}
