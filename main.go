@@ -484,7 +484,7 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		req, err := http.NewRequest("POST", "https://connect.squareupsandbox.com/v2/payment-links", bytes.NewBuffer(reqBody))
+		req, err := http.NewRequest("POST", "https://connect.squareup.com/v2/online-checkout/payment-links", bytes.NewBuffer(reqBody))
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -502,7 +502,7 @@ func main() {
 				log.Fatal(err)
 			}
 		}(resp.Body)
-//		println(io.ReadAll(resp.Body))
+		println(io.ReadAll(resp.Body))
 
 		type PaymentLink struct {
 			ID                 string         `json:"id"`
@@ -524,7 +524,6 @@ func main() {
 		if err := json.NewDecoder(resp.Body).Decode(&paymentLinkResp); err != nil {
 			log.Fatal(err)
 		}
-		println(paymentLinkResp.PaymentLink.URL)
 	}
 
 	getMainTemplate := func(fileName string) *template.Template {
