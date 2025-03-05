@@ -309,6 +309,7 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+		println(body) // TODO -> use Decode
 		var donationsResponse DonationsResponse
 		err = json.Unmarshal(body, &donationsResponse)
 		if err != nil {
@@ -379,29 +380,106 @@ func main() {
 	})
 
 	{
-		type Money struct {
-			Amount   int64  `json:"amount"`  // cents
+		type BasePriceMoney struct {
+			Amount   int    `json:"amount"`
 			Currency string `json:"currency"`
 		}
-		type PaymentLinkRequest struct {
-			AmountMoney Money  `json:"amount_money"`
-			Title       string `json:"title"`
+		type LineItem struct {
+			Quantity       string `json:"quantity"`
+			ItemType       string `json:"item_type"`
+			Name           string `json:"name"`
+			BasePriceMoney BasePriceMoney `json:"base_price_money"`
+
+			UID                      string `json:"uid"`
+			VariationTotalPriceMoney BasePriceMoney  `json:"variation_total_price_money"`
+			GrossSalesMoney          BasePriceMoney  `json:"gross_sales_money"`
+			TotalTaxMoney            BasePriceMoney  `json:"total_tax_money"`
+			TotalDiscountMoney       BasePriceMoney  `json:"total_discount_money"`
+			TotalMoney               BasePriceMoney  `json:"total_money"`
+			TotalServiceChargeMoney  BasePriceMoney  `json:"total_service_charge_money"`
+		}
+		type Source struct {
+			Name string `json:"name"`
+		}
+		type Fulfillment struct {
+			UID  string `json:"uid"`
+			Type string `json:"type"`
+			State string `json:"state"`
+		}
+		type NetAmounts struct {
+			TotalMoney           BasePriceMoney `json:"total_money"`
+			TaxMoney             BasePriceMoney `json:"tax_money"`
+			DiscountMoney        BasePriceMoney `json:"discount_money"`
+			TipMoney             BasePriceMoney `json:"tip_money"`
+			ServiceChargeMoney   BasePriceMoney `json:"service_charge_money"`
+		}
+		type Order struct {
+			LocationID string `json:"location_id"`
+			LineItems  []LineItem `json:"line_items"`
+
+			ID                    string        `json:"id"`
+			Source                Source        `json:"source"`
+			Fulfillments          []Fulfillment `json:"fulfillments"`
+			NetAmounts            NetAmounts    `json:"net_amounts"`
+			CreatedAt             time.Time     `json:"created_at"`
+			UpdatedAt             time.Time     `json:"updated_at"`
+			State                 string        `json:"state"`
+			Version               int           `json:"version"`
+			TotalMoney            BasePriceMoney         `json:"total_money"`
+			TotalTaxMoney         BasePriceMoney         `json:"total_tax_money"`
+			TotalDiscountMoney    BasePriceMoney         `json:"total_discount_money"`
+			TotalTipMoney         BasePriceMoney         `json:"total_tip_money"`
+			TotalServiceChargeMoney BasePriceMoney       `json:"total_service_charge_money"`
+			NetAmountDueMoney     BasePriceMoney         `json:"net_amount_due_money"`
+		}
+		type AcceptedPaymentMethods struct {
+			AfterpayClearpay bool `json:"afterpay_clearpay"`
+			ApplePay         bool `json:"apple_pay"`
+			CashAppPay       bool `json:"cash_app_pay"`
+			GooglePay        bool `json:"google_pay"`
+		}
+		type CheckoutOptions struct {
+			AllowTipping          bool `json:"allow_tipping"`
+			AcceptedPaymentMethods AcceptedPaymentMethods `json:"accepted_payment_methods"`
+			AskForShippingAddress bool   `json:"ask_for_shipping_address"`
+			EnableCoupon          bool   `json:"enable_coupon"`
+			EnableLoyalty         bool   `json:"enable_loyalty"`
+			MerchantSupportEmail  string `json:"merchant_support_email"`
+			RedirectURL           string `json:"redirect_url"`
+		}
+		reqData := struct {
+			CheckoutOptions CheckoutOptions `json:"checkout_options"`
 			Description string `json:"description"`
-		}
-		type PaymentLinkResponse struct {
-			PaymentLink struct {
-				ID  string `json:"id"`
-				URL string `json:"url"`
-			} `json:"payment_link"`
-		}
-		reqData := PaymentLinkRequest{
-			AmountMoney: Money{
-				Amount:   1000,
-				Currency: "USD",
-			},
-			Title:       "Minecraft Donation",
-			Description: "Payment for Minecraft server donation",
-		}
+			Order     Order   `json:"order"`
+		} {
+			CheckoutOptions: CheckoutOptions {
+				AllowTipping: true,
+				AcceptedPaymentMethods: AcceptedPaymentMethods{
+					AfterpayClearpay: false,
+					ApplePay: true,
+					CashAppPay: true,
+					GooglePay: true,
+					},
+					AskForShippingAddress: false,
+					EnableCoupon: false,
+					EnableLoyalty: false,
+					MerchantSupportEmail: "potpissers@gmail.com",
+					RedirectURL: "potpissers.com",
+					},
+					Description: "foo",
+					Order: Order {
+				LocationID: os.Getenv("SQUARE_LOCATION_ID"),
+				LineItems: []LineItem {{
+					Quantity: "1",
+					ItemType: "life",
+					Name: "life",
+					BasePriceMoney: BasePriceMoney{
+						Amount: 500,
+						Currency: "USD",
+						},
+						}},
+						},
+						}
 		reqBody, err := json.Marshal(reqData)
 		if err != nil {
 			log.Fatal(err)
@@ -410,8 +488,9 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+		req.Header.Set("Square-Version", "2025-02-20")
 		req.Header.Set("Authorization", "Bearer " + os.Getenv("SQUARE_ACCESS_TOKEN"))
-		req.Header.Set("Content-Type", "application/json") // TODO ?
+		req.Header.Set("Content-Type", "application/json")
 
 		resp, err := (&http.Client{}).Do(req)
 		if err != nil {
@@ -424,7 +503,24 @@ func main() {
 			}
 		}(resp.Body)
 		println(io.ReadAll(resp.Body))
-		var paymentLinkResp PaymentLinkResponse
+
+		type PaymentLink struct {
+			ID                 string         `json:"id"`
+			Version           int            `json:"version"`
+			Description       string         `json:"description"`
+			OrderID           string         `json:"order_id"`
+			CheckoutOptions   CheckoutOptions `json:"checkout_options"`
+			URL               string         `json:"url"`
+			LongURL           string         `json:"long_url"`
+			CreatedAt         time.Time      `json:"created_at"`
+		}
+		type RelatedResources struct {
+			Orders []Order `json:"orders"`
+		}
+		var paymentLinkResp struct {
+			PaymentLink      PaymentLink      `json:"payment_link"`
+			RelatedResources RelatedResources `json:"related_resources"`
+		}
 		if err := json.NewDecoder(resp.Body).Decode(&paymentLinkResp); err != nil {
 			log.Fatal(err)
 		}
@@ -757,12 +853,8 @@ func getJsonTSlice[T any](request *http.Request) []T {
 			log.Fatal(err)
 		}
 	}(resp.Body)
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatal(err)
-	}
 	var messages []T
-	err = json.Unmarshal(body, &messages) // TODO -> use Decode for this
+	err = json.NewDecoder(resp.Body).Decode(&messages)
 	if err != nil {
 		log.Fatal(err)
 	}
