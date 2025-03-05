@@ -417,20 +417,20 @@ func main() {
 			LocationID string `json:"location_id"`
 			LineItems  []LineItem `json:"line_items"`
 
-			ID                    string        `json:"id"`
-			Source                Source        `json:"source"`
-			Fulfillments          []Fulfillment `json:"fulfillments"`
-			NetAmounts            NetAmounts    `json:"net_amounts"`
-			CreatedAt             time.Time     `json:"created_at"`
-			UpdatedAt             time.Time     `json:"updated_at"`
-			State                 string        `json:"state"`
-			Version               int           `json:"version"`
-			TotalMoney            BasePriceMoney         `json:"total_money"`
-			TotalTaxMoney         BasePriceMoney         `json:"total_tax_money"`
-			TotalDiscountMoney    BasePriceMoney         `json:"total_discount_money"`
-			TotalTipMoney         BasePriceMoney         `json:"total_tip_money"`
-			TotalServiceChargeMoney BasePriceMoney       `json:"total_service_charge_money"`
-			NetAmountDueMoney     BasePriceMoney         `json:"net_amount_due_money"`
+//			ID                    string        `json:"id"`
+//			Source                Source        `json:"source"`
+//			Fulfillments          []Fulfillment `json:"fulfillments"`
+//			NetAmounts            NetAmounts    `json:"net_amounts"`
+//			CreatedAt             time.Time     `json:"created_at"`
+//			UpdatedAt             time.Time     `json:"updated_at"`
+//			State                 string        `json:"state"`
+//			Version               int           `json:"version"`
+//			TotalMoney            BasePriceMoney         `json:"total_money"`
+//			TotalTaxMoney         BasePriceMoney         `json:"total_tax_money"`
+//			TotalDiscountMoney    BasePriceMoney         `json:"total_discount_money"`
+//			TotalTipMoney         BasePriceMoney         `json:"total_tip_money"`
+//			TotalServiceChargeMoney BasePriceMoney       `json:"total_service_charge_money"`
+//			NetAmountDueMoney     BasePriceMoney         `json:"net_amount_due_money"`
 		}
 		type AcceptedPaymentMethods struct {
 			AfterpayClearpay bool `json:"afterpay_clearpay"`
