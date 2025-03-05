@@ -502,7 +502,7 @@ func main() {
 				log.Fatal(err)
 			}
 		}(resp.Body)
-		println(io.ReadAll(resp.Body))
+//		println(io.ReadAll(resp.Body))
 
 		type PaymentLink struct {
 			ID                 string         `json:"id"`
@@ -524,6 +524,7 @@ func main() {
 		if err := json.NewDecoder(resp.Body).Decode(&paymentLinkResp); err != nil {
 			log.Fatal(err)
 		}
+		println(paymentLinkResp.PaymentLink.LongURL)
 	}
 
 	getMainTemplate := func(fileName string) *template.Template {
