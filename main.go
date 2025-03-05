@@ -415,15 +415,15 @@ func main() {
 
 		resp, err := (&http.Client{}).Do(req)
 		if err != nil {
-			log.Fatalf("Error making request: %v", err)
-			return
+			log.Fatal(err)
 		}
 		defer func(Body io.ReadCloser) {
 			err := Body.Close()
 			if err != nil {
-
+				log.Fatal(err)
 			}
 		}(resp.Body)
+		println(resp.Body)
 		var paymentLinkResp PaymentLinkResponse
 		if err := json.NewDecoder(resp.Body).Decode(&paymentLinkResp); err != nil {
 			log.Fatal(err)
