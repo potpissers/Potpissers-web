@@ -507,7 +507,7 @@ func main() {
 		if err != nil {
 			log.Fatal("Error reading response body:", err)
 		}
-		println(body)
+		println(string(body))
 
 		type PaymentLink struct {
 			ID                 string         `json:"id"`
