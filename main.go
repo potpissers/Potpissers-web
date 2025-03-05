@@ -471,7 +471,7 @@ func main() {
 				LocationID: os.Getenv("SQUARE_LOCATION_ID"),
 				LineItems: []LineItem {{
 					Quantity: "1",
-					ItemType: "life",
+					ItemType: "ITEM",
 					Name: "life",
 					BasePriceMoney: BasePriceMoney{
 						Amount: 500,
