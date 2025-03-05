@@ -390,13 +390,13 @@ func main() {
 			Name           string `json:"name"`
 			BasePriceMoney BasePriceMoney `json:"base_price_money"`
 
-			UID                      string `json:"uid"`
-			VariationTotalPriceMoney BasePriceMoney  `json:"variation_total_price_money"`
-			GrossSalesMoney          BasePriceMoney  `json:"gross_sales_money"`
-			TotalTaxMoney            BasePriceMoney  `json:"total_tax_money"`
-			TotalDiscountMoney       BasePriceMoney  `json:"total_discount_money"`
-			TotalMoney               BasePriceMoney  `json:"total_money"`
-			TotalServiceChargeMoney  BasePriceMoney  `json:"total_service_charge_money"`
+//			UID                      string `json:"uid"`
+//			VariationTotalPriceMoney BasePriceMoney  `json:"variation_total_price_money"`
+//			GrossSalesMoney          BasePriceMoney  `json:"gross_sales_money"`
+//			TotalTaxMoney            BasePriceMoney  `json:"total_tax_money"`
+//			TotalDiscountMoney       BasePriceMoney  `json:"total_discount_money"`
+//			TotalMoney               BasePriceMoney  `json:"total_money"`
+//			TotalServiceChargeMoney  BasePriceMoney  `json:"total_service_charge_money"`
 		}
 		type Source struct {
 			Name string `json:"name"`
