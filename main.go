@@ -524,6 +524,7 @@ func main() {
 		if err := json.NewDecoder(resp.Body).Decode(&paymentLinkResp); err != nil {
 			log.Fatal(err)
 		}
+		println(paymentLinkResp.PaymentLink.URL)
 	}
 
 	getMainTemplate := func(fileName string) *template.Template {
