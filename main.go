@@ -309,7 +309,7 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		println(body) // TODO -> use Decode
+//		println(body) // TODO -> use Decode
 		var donationsResponse DonationsResponse
 		err = json.Unmarshal(body, &donationsResponse)
 		if err != nil {
@@ -502,7 +502,7 @@ func main() {
 				log.Fatal(err)
 			}
 		}(resp.Body)
-		println(io.ReadAll(resp.Body))
+//		println(io.ReadAll(resp.Body))
 
 		type PaymentLink struct {
 			ID                 string         `json:"id"`
