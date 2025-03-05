@@ -423,12 +423,11 @@ func main() {
 				log.Fatal(err)
 			}
 		}(resp.Body)
-		println(resp.Body)
+		println(io.ReadAll(resp.Body))
 		var paymentLinkResp PaymentLinkResponse
 		if err := json.NewDecoder(resp.Body).Decode(&paymentLinkResp); err != nil {
 			log.Fatal(err)
 		}
-		println(paymentLinkResp.PaymentLink.URL)
 	}
 
 	getMainTemplate := func(fileName string) *template.Template {
@@ -763,7 +762,7 @@ func getJsonTSlice[T any](request *http.Request) []T {
 		log.Fatal(err)
 	}
 	var messages []T
-	err = json.Unmarshal(body, &messages)
+	err = json.Unmarshal(body, &messages) // TODO -> use Decode for this
 	if err != nil {
 		log.Fatal(err)
 	}
