@@ -389,14 +389,6 @@ func main() {
 			ItemType       string `json:"item_type"`
 			Name           string `json:"name"`
 			BasePriceMoney BasePriceMoney `json:"base_price_money"`
-
-//			UID                      string `json:"uid"`
-//			VariationTotalPriceMoney BasePriceMoney  `json:"variation_total_price_money"`
-//			GrossSalesMoney          BasePriceMoney  `json:"gross_sales_money"`
-//			TotalTaxMoney            BasePriceMoney  `json:"total_tax_money"`
-//			TotalDiscountMoney       BasePriceMoney  `json:"total_discount_money"`
-//			TotalMoney               BasePriceMoney  `json:"total_money"`
-//			TotalServiceChargeMoney  BasePriceMoney  `json:"total_service_charge_money"`
 		}
 		type Source struct {
 			Name string `json:"name"`
@@ -416,21 +408,6 @@ func main() {
 		type Order struct {
 			LocationID string `json:"location_id"`
 			LineItems  []LineItem `json:"line_items"`
-
-//			ID                    string        `json:"id"`
-//			Source                Source        `json:"source"`
-//			Fulfillments          []Fulfillment `json:"fulfillments"`
-//			NetAmounts            NetAmounts    `json:"net_amounts"`
-//			CreatedAt             time.Time     `json:"created_at"`
-//			UpdatedAt             time.Time     `json:"updated_at"`
-//			State                 string        `json:"state"`
-//			Version               int           `json:"version"`
-//			TotalMoney            BasePriceMoney         `json:"total_money"`
-//			TotalTaxMoney         BasePriceMoney         `json:"total_tax_money"`
-//			TotalDiscountMoney    BasePriceMoney         `json:"total_discount_money"`
-//			TotalTipMoney         BasePriceMoney         `json:"total_tip_money"`
-//			TotalServiceChargeMoney BasePriceMoney       `json:"total_service_charge_money"`
-//			NetAmountDueMoney     BasePriceMoney         `json:"net_amount_due_money"`
 		}
 		type AcceptedPaymentMethods struct {
 			AfterpayClearpay bool `json:"afterpay_clearpay"`
@@ -509,6 +486,42 @@ func main() {
 		}
 		println(string(body))
 
+		type LineItemResponse struct {
+			Quantity       string `json:"quantity"`
+			ItemType       string `json:"item_type"`
+			Name           string `json:"name"`
+			BasePriceMoney BasePriceMoney `json:"base_price_money"`
+
+			UID                      string `json:"uid"`
+			VariationTotalPriceMoney BasePriceMoney  `json:"variation_total_price_money"`
+			GrossSalesMoney          BasePriceMoney  `json:"gross_sales_money"`
+			TotalTaxMoney            BasePriceMoney  `json:"total_tax_money"`
+			TotalDiscountMoney       BasePriceMoney  `json:"total_discount_money"`
+			TotalMoney               BasePriceMoney  `json:"total_money"`
+			TotalServiceChargeMoney  BasePriceMoney  `json:"total_service_charge_money"`
+		}
+		type OrderResponse struct {
+			LocationID string `json:"location_id"`
+			LineItems  []LineItemResponse `json:"line_items"`
+
+			ID                    string        `json:"id"`
+			Source                Source        `json:"source"`
+			Fulfillments          []Fulfillment `json:"fulfillments"`
+			NetAmounts            NetAmounts    `json:"net_amounts"`
+			CreatedAt             time.Time     `json:"created_at"`
+			UpdatedAt             time.Time     `json:"updated_at"`
+			State                 string        `json:"state"`
+			Version               int           `json:"version"`
+			TotalMoney            BasePriceMoney         `json:"total_money"`
+			TotalTaxMoney         BasePriceMoney         `json:"total_tax_money"`
+			TotalDiscountMoney    BasePriceMoney         `json:"total_discount_money"`
+			TotalTipMoney         BasePriceMoney         `json:"total_tip_money"`
+			TotalServiceChargeMoney BasePriceMoney       `json:"total_service_charge_money"`
+			NetAmountDueMoney     BasePriceMoney         `json:"net_amount_due_money"`
+		}
+		type RelatedResources struct {
+			Orders []OrderResponse `json:"orders"`
+		}
 		type PaymentLink struct {
 			ID                 string         `json:"id"`
 			Version           int            `json:"version"`
@@ -518,9 +531,6 @@ func main() {
 			URL               string         `json:"url"`
 			LongURL           string         `json:"long_url"`
 			CreatedAt         time.Time      `json:"created_at"`
-		}
-		type RelatedResources struct {
-			Orders []Order `json:"orders"`
 		}
 		var paymentLinkResp struct {
 			PaymentLink      PaymentLink      `json:"payment_link"`
