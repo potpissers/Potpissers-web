@@ -480,11 +480,11 @@ func main() {
 			}
 		}(resp.Body)
 
-		body, err := io.ReadAll(resp.Body)
-		if err != nil {
-			log.Fatal("Error reading response body:", err)
-		}
-		println(string(body))
+//		body, err := io.ReadAll(resp.Body)
+//		if err != nil {
+//			log.Fatal("Error reading response body:", err)
+//		}
+//		println(string(body))
 
 		type LineItemResponse struct {
 			Quantity       string `json:"quantity"`
