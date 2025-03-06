@@ -446,6 +446,11 @@ func main() {
 					donationRequest[i].LineItemAmount = 1
 					donationRequest[i].LineItemCostInCents = 1000
 				}
+				case "mz-gold-name": {
+					// TODO -> check if exists
+					donationRequest[i].LineItemAmount = 1
+					donationRequest[i].LineItemCostInCents = 1200
+				}
 
 				default:
 					return // door nigga from game of thrones
@@ -614,6 +619,26 @@ func main() {
 					if err != nil {
 						log.Fatal(err)
 					}
+		}
+	})
+
+	http.HandleFunc("/api/proxy/mojang/user/", func(w http.ResponseWriter, r *http.Request) {
+		resp, err := http.Get("https://api.mojang.com/users/profiles/minecraft/" + strings.TrimPrefix(r.URL.Path, "/api/proxy/mojang/user/"))
+		if err != nil {
+			log.Println(err)
+		}
+		defer func(Body io.ReadCloser) {
+			err := Body.Close()
+			if err != nil {
+				log.Println(err)
+			}
+		}(resp.Body)
+
+		// TODO -> headers ?
+
+		_, err = io.Copy(w, resp.Body)
+		if err != nil {
+			log.Println(err)
 		}
 	})
 
