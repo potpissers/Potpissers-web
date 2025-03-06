@@ -28,8 +28,8 @@ function handleMcNameCheck(inputElement) {
                 inputElement.classList.add(res.status !== 404 ? "input-valid" : "input-invalid")
             })
             .catch(err => {
-                if (err.name !== "AbortError")
-                    console.error(err.message)
+                // if (err.name !== "AbortError")
+                //     console.error(err.message)
             });
     }
 }
