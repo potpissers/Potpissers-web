@@ -66,7 +66,7 @@ function handleAddLineItemJson(itemName, itemAmountString) {
     })
     document.getElementById("checkout").hidden = false
 }
-function fetchPaymentLink(username, itemName, itemAmountInt) {
+function fetchPaymentLink() {
     fetch("https://www.potpissers.com/api/donate", {
         method: "POST", body: JSON.stringify(privateJsonLineItems),
     })
