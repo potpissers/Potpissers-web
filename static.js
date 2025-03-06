@@ -5,6 +5,12 @@ function handleTipsButtonClick(otherButtonsIds, clickedId) {
 
     document.getElementById(clickedId).hidden = false
 }
+function handleClassHiddenToggle(className) {
+    const elements = document.getElementsByClassName(className)
+    const newValue = !elements[0].hidden
+    for (let i = 0; i < elements.length; i++)
+        elements[i].hidden = newValue
+}
 
 function handleContentMaximizeButtonClick(isAnnouncements) {
     let contentElement = document.getElementById("content")
