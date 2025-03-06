@@ -27,10 +27,7 @@ function handleMcNameCheck(inputElement) {
             .then(res => {
                 inputElement.classList.add(res.status !== 404 ? "input-valid" : "input-invalid")
             })
-            .catch(err => {
-                // if (err.name !== "AbortError")
-                //     console.error(err.message)
-            });
+            .catch();
     }
 }
 
