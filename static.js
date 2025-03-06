@@ -58,11 +58,11 @@ function handleRedditVideos() {
             }));
 }
 const privateJsonLineItems = []
-function handleAddLineItemJson(username, itemName, itemAmountInt) {
+function handleAddLineItemJson(itemName, itemAmountString) {
     privateJsonLineItems.push({
-        username: username,
+        username: document.getElementById("donateusername").value,
         line_item_name: itemName,
-        line_item_amount: itemAmountInt,
+        line_item_amount: parseInt(itemAmountString, 10),
     })
     document.getElementById("checkout").hidden = false
 }
