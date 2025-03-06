@@ -180,11 +180,12 @@
             <!--                <li>-->
             <!--                    <button style="width: fit-content">unmute</button>-->
             <!--                </li>-->
+<!--            <button>shoutout</button>-->
 
             <li>
                 <button onclick="handleClassHiddenToggle('hcflife')">hcf life</button>
                 <p class=hcflife hidden>removes account's deathban with /revive (alts aren't affected)</p>
-                <input class=hcflife hidden placeholder="amount" style="width: 5rem">
+                <input class=hcflife hidden placeholder="amount" type=number style="width: 5rem" min=1 value=1 step=1>
                 <button class=hcflife hidden style="font-size: 75%">add</button>
             </li>
             <li>
@@ -215,6 +216,7 @@
             <li>
                 <button style="width: fit-content">mz ruby</button>
             </li>
+<!--            <button>gold name</button>-->
             <!--            <button style="width: fit-content">hcf big dog</button>-->
         </ul>
         <button id="checkout" style="font-size: 75%">checkout</button>
