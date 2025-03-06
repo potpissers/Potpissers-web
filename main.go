@@ -637,6 +637,7 @@ func main() {
 			}(resp.Body)
 
 			// TODO -> headers ?
+			w.WriteHeader(resp.StatusCode)
 
 			_, err = io.Copy(w, resp.Body)
 			if err != nil {
