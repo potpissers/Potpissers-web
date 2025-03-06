@@ -180,16 +180,14 @@
 <!--            <button>shoutout</button>-->
 
             <li>
-                <div style="display: flex; width: 100%">
-                    <button onclick="handleClassHiddenToggle('hcflife')">hcf life</button>
-                    <span style="width: 100%; background-color: pink">
-                    <input id="donateusername" class="fi hcflife" hidden style="width: 1fr" placeholder="username"
-                           onblur="handleMcNameBlur(this)">
-                    <script defer>
-                        document.getElementById("donateusername").addEventListener("keydown", (e) => handleMcNameKeyDown(e))
-                    </script>
-                </span>
-                </div>
+                <button onclick="handleClassHiddenToggle('hcflife')">hcf life</button>
+
+                <input id="donateusername" class="fi hcflife" hidden style="width: 4rem" placeholder="username"
+                       onblur="handleMcNameBlur(this)">
+                <script defer>
+                    document.getElementById("donateusername").addEventListener("keydown", (e) => handleMcNameKeyDown(e))
+                </script>
+
                 <p class=hcflife hidden>removes account's deathban with /revive (alts aren't affected)</p>
                 <div style="display: flex">
                     <input id="hcflifeamount" placeholder=amount type=number style="width: 2rem; margin-left: auto" min=1 value=1 step=1 class="hcflife" hidden>
