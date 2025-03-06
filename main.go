@@ -9,8 +9,10 @@ import (
 	"html/template"
 	"io"
 	"log"
+	"math"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -379,168 +381,231 @@ func main() {
 		// TODO messages + ServerData.Messages
 	})
 
-	{
-		type BasePriceMoney struct {
-			Amount   int    `json:"amount"`
-			Currency string `json:"currency"`
-		}
-		type LineItem struct {
-			Quantity       string `json:"quantity"`
-			ItemType       string `json:"item_type"`
-			Name           string `json:"name"`
-			BasePriceMoney BasePriceMoney `json:"base_price_money"`
-		}
-		type Source struct {
-			Name string `json:"name"`
-		}
-		type Fulfillment struct {
-			UID  string `json:"uid"`
-			Type string `json:"type"`
-			State string `json:"state"`
-		}
-		type NetAmounts struct {
-			TotalMoney           BasePriceMoney `json:"total_money"`
-			TaxMoney             BasePriceMoney `json:"tax_money"`
-			DiscountMoney        BasePriceMoney `json:"discount_money"`
-			TipMoney             BasePriceMoney `json:"tip_money"`
-			ServiceChargeMoney   BasePriceMoney `json:"service_charge_money"`
-		}
-		type Order struct {
-			LocationID string `json:"location_id"`
-			LineItems  []LineItem `json:"line_items"`
-		}
-		type AcceptedPaymentMethods struct {
-			AfterpayClearpay bool `json:"afterpay_clearpay"`
-			ApplePay         bool `json:"apple_pay"`
-			CashAppPay       bool `json:"cash_app_pay"`
-			GooglePay        bool `json:"google_pay"`
-		}
-		type CheckoutOptions struct {
-			AllowTipping          bool `json:"allow_tipping"`
-			AcceptedPaymentMethods AcceptedPaymentMethods `json:"accepted_payment_methods"`
-			AskForShippingAddress bool   `json:"ask_for_shipping_address"`
-			EnableCoupon          bool   `json:"enable_coupon"`
-			EnableLoyalty         bool   `json:"enable_loyalty"`
-			MerchantSupportEmail  string `json:"merchant_support_email"`
-			RedirectURL           string `json:"redirect_url"`
-		}
-		reqData := struct {
-			CheckoutOptions CheckoutOptions `json:"checkout_options"`
-			Description string `json:"description"`
-			Order     Order   `json:"order"`
-		} {
-			CheckoutOptions: CheckoutOptions {
-				AllowTipping: true,
-				AcceptedPaymentMethods: AcceptedPaymentMethods{
-					AfterpayClearpay: false,
-					ApplePay: true,
-					CashAppPay: true,
-					GooglePay: true,
-					},
-					AskForShippingAddress: false,
-					EnableCoupon: false,
-					EnableLoyalty: false,
-					MerchantSupportEmail: "potpissers@gmail.com",
-					RedirectURL: "potpissers.com",
-					},
-					Description: "foo",
-					Order: Order {
-				LocationID: os.Getenv("SQUARE_LOCATION_ID"),
-				LineItems: []LineItem {{
-					Quantity: "1",
+	http.HandleFunc("/api/donate", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "POST" {
+			var donationRequest []struct {
+				Username string `json:"username"`
+				LineItemName string `json:"line_item_name"`
+				LineItemAmount int `json:"line_item_amount"`
+
+				LineItemCostInCents int
+			}
+			err := json.NewDecoder(r.Body).Decode(&donationRequest)
+			if err != nil {
+				log.Println(err)
+				return;
+			}
+			for i := range donationRequest {
+				switch donationRequest[i].LineItemName {
+				case "hcf-life": {
+					donationRequest[i].LineItemAmount = int(math.Min(float64(donationRequest[i].LineItemAmount), 1))
+					donationRequest[i].LineItemCostInCents = 500
+				}
+				case "hcf-basic": {// 20%
+					donationRequest[i].LineItemCostInCents = 1000
+				}
+				case "hcf-gold": {// 40%
+					donationRequest[i].LineItemCostInCents = 2000
+				}
+				case "hcf-platinum": {// 60%
+					donationRequest[i].LineItemCostInCents = 3000
+				}
+				case "hcf-ruby": {// 80%
+					donationRequest[i].LineItemCostInCents = 4000
+				}
+				case "hcf-big-dog": { // 100%
+					donationRequest[i].LineItemCostInCents = 10000
+				}
+
+				case "mz-life": {
+					donationRequest[i].LineItemAmount = int(math.Min(float64(donationRequest[i].LineItemAmount), 1))
+					donationRequest[i].LineItemCostInCents = 400
+				}
+				case "mz-basic": {
+					donationRequest[i].LineItemCostInCents = 400
+				}
+				case "mz-gold": {
+					donationRequest[i].LineItemCostInCents = 800
+				}
+				case "mz-platinum": {
+					donationRequest[i].LineItemCostInCents = 1200
+				}
+				case "mz-ruby": {
+					donationRequest[i].LineItemCostInCents = 1600
+				}
+				case "mz-sign": {
+					donationRequest[i].LineItemCostInCents = 1000
+				}
+
+				default:
+					return // door nigga from game of thrones
+				}
+			}
+
+			type BasePriceMoney struct {
+				Amount   int    `json:"amount"`
+				Currency string `json:"currency"`
+			}
+			type LineItem struct {
+				Quantity       string `json:"quantity"`
+				ItemType       string `json:"item_type"`
+				Name           string `json:"name"`
+				BasePriceMoney BasePriceMoney `json:"base_price_money"`
+			}
+			var lineItems []LineItem
+			for _, lineItem := range donationRequest {
+				lineItems = append(lineItems, LineItem {
+					Quantity: strconv.Itoa(lineItem.LineItemAmount),
 					ItemType: "ITEM",
-					Name: "life",
-					BasePriceMoney: BasePriceMoney{
-						Amount: 500,
+					Name: lineItem.LineItemName + "," + lineItem.Username,
+					BasePriceMoney: BasePriceMoney {
+						Amount: lineItem.LineItemCostInCents,
 						Currency: "USD",
 						},
-						}},
-						},
-						}
-		reqBody, err := json.Marshal(reqData)
-		if err != nil {
-			log.Fatal(err)
-		}
-		req, err := http.NewRequest("POST", "https://connect.squareup.com/v2/online-checkout/payment-links", bytes.NewBuffer(reqBody))
-		if err != nil {
-			log.Fatal(err)
-		}
-		req.Header.Set("Square-Version", "2025-02-20")
-		req.Header.Set("Authorization", "Bearer " + os.Getenv("SQUARE_ACCESS_TOKEN"))
-		req.Header.Set("Content-Type", "application/json")
-
-		resp, err := (&http.Client{}).Do(req)
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer func(Body io.ReadCloser) {
-			err := Body.Close()
-			if err != nil {
-				log.Fatal(err)
+						})
 			}
-		}(resp.Body)
 
-//		body, err := io.ReadAll(resp.Body)
-//		if err != nil {
-//			log.Fatal("Error reading response body:", err)
-//		}
-//		println(string(body))
+			type Source struct {
+				Name string `json:"name"`
+			}
+			type Fulfillment struct {
+				UID  string `json:"uid"`
+				Type string `json:"type"`
+				State string `json:"state"`
+			}
+			type NetAmounts struct {
+				TotalMoney           BasePriceMoney `json:"total_money"`
+				TaxMoney             BasePriceMoney `json:"tax_money"`
+				DiscountMoney        BasePriceMoney `json:"discount_money"`
+				TipMoney             BasePriceMoney `json:"tip_money"`
+				ServiceChargeMoney   BasePriceMoney `json:"service_charge_money"`
+			}
+			type Order struct {
+				LocationID string `json:"location_id"`
+				LineItems  []LineItem `json:"line_items"`
+			}
+			type AcceptedPaymentMethods struct {
+				AfterpayClearpay bool `json:"afterpay_clearpay"`
+				ApplePay         bool `json:"apple_pay"`
+				CashAppPay       bool `json:"cash_app_pay"`
+				GooglePay        bool `json:"google_pay"`
+			}
+			type CheckoutOptions struct {
+				AllowTipping          bool `json:"allow_tipping"`
+				AcceptedPaymentMethods AcceptedPaymentMethods `json:"accepted_payment_methods"`
+				AskForShippingAddress bool   `json:"ask_for_shipping_address"`
+				EnableCoupon          bool   `json:"enable_coupon"`
+				EnableLoyalty         bool   `json:"enable_loyalty"`
+				MerchantSupportEmail  string `json:"merchant_support_email"`
+				RedirectURL           string `json:"redirect_url"`
+			}
+			reqData := struct {
+				CheckoutOptions CheckoutOptions `json:"checkout_options"`
+				Description string `json:"description"`
+				Order     Order   `json:"order"`
+			} {
+				CheckoutOptions: CheckoutOptions {
+					AllowTipping: true,
+					AcceptedPaymentMethods: AcceptedPaymentMethods{
+						AfterpayClearpay: false,
+						ApplePay: true,
+						CashAppPay: true,
+						GooglePay: true,
+						},
+						AskForShippingAddress: false,
+						EnableCoupon: false,
+						EnableLoyalty: false,
+						MerchantSupportEmail: "potpissers@gmail.com",
+						RedirectURL: "potpissers.com/donate",
+						},
+						Description: "hey",
+						Order: Order {
+					LocationID: os.Getenv("SQUARE_LOCATION_ID"),
+					LineItems: lineItems,
+					},
+					}
+					reqBody, err := json.Marshal(reqData)
+					if err != nil {
+						log.Fatal(err)
+					}
+					req, err := http.NewRequest("POST", "https://connect.squareup.com/v2/online-checkout/payment-links", bytes.NewBuffer(reqBody))
+					if err != nil {
+						log.Fatal(err)
+					}
+					req.Header.Set("Square-Version", "2025-02-20")
+					req.Header.Set("Authorization", "Bearer " + os.Getenv("SQUARE_ACCESS_TOKEN"))
+					req.Header.Set("Content-Type", "application/json")
 
-		type LineItemResponse struct {
-			Quantity       string `json:"quantity"`
-			ItemType       string `json:"item_type"`
-			Name           string `json:"name"`
-			BasePriceMoney BasePriceMoney `json:"base_price_money"`
+					resp, err := (&http.Client{}).Do(req)
+					if err != nil {
+						log.Fatal(err)
+					}
+					defer func(Body io.ReadCloser) {
+						err := Body.Close()
+						if err != nil {
+							log.Fatal(err)
+						}
+					}(resp.Body)
 
-			UID                      string `json:"uid"`
-			VariationTotalPriceMoney BasePriceMoney  `json:"variation_total_price_money"`
-			GrossSalesMoney          BasePriceMoney  `json:"gross_sales_money"`
-			TotalTaxMoney            BasePriceMoney  `json:"total_tax_money"`
-			TotalDiscountMoney       BasePriceMoney  `json:"total_discount_money"`
-			TotalMoney               BasePriceMoney  `json:"total_money"`
-			TotalServiceChargeMoney  BasePriceMoney  `json:"total_service_charge_money"`
-		}
-		type OrderResponse struct {
-			LocationID string `json:"location_id"`
-			LineItems  []LineItemResponse `json:"line_items"`
+					type LineItemResponse struct {
+						Quantity       string `json:"quantity"`
+						ItemType       string `json:"item_type"`
+						Name           string `json:"name"`
+						BasePriceMoney BasePriceMoney `json:"base_price_money"`
 
-			ID                    string        `json:"id"`
-			Source                Source        `json:"source"`
-			Fulfillments          []Fulfillment `json:"fulfillments"`
-			NetAmounts            NetAmounts    `json:"net_amounts"`
-			CreatedAt             time.Time     `json:"created_at"`
-			UpdatedAt             time.Time     `json:"updated_at"`
-			State                 string        `json:"state"`
-			Version               int           `json:"version"`
-			TotalMoney            BasePriceMoney         `json:"total_money"`
-			TotalTaxMoney         BasePriceMoney         `json:"total_tax_money"`
-			TotalDiscountMoney    BasePriceMoney         `json:"total_discount_money"`
-			TotalTipMoney         BasePriceMoney         `json:"total_tip_money"`
-			TotalServiceChargeMoney BasePriceMoney       `json:"total_service_charge_money"`
-			NetAmountDueMoney     BasePriceMoney         `json:"net_amount_due_money"`
+						UID                      string `json:"uid"`
+						VariationTotalPriceMoney BasePriceMoney  `json:"variation_total_price_money"`
+						GrossSalesMoney          BasePriceMoney  `json:"gross_sales_money"`
+						TotalTaxMoney            BasePriceMoney  `json:"total_tax_money"`
+						TotalDiscountMoney       BasePriceMoney  `json:"total_discount_money"`
+						TotalMoney               BasePriceMoney  `json:"total_money"`
+						TotalServiceChargeMoney  BasePriceMoney  `json:"total_service_charge_money"`
+					}
+					type OrderResponse struct {
+						LocationID string `json:"location_id"`
+						LineItems  []LineItemResponse `json:"line_items"`
+
+						ID                    string        `json:"id"`
+						Source                Source        `json:"source"`
+						Fulfillments          []Fulfillment `json:"fulfillments"`
+						NetAmounts            NetAmounts    `json:"net_amounts"`
+						CreatedAt             time.Time     `json:"created_at"`
+						UpdatedAt             time.Time     `json:"updated_at"`
+						State                 string        `json:"state"`
+						Version               int           `json:"version"`
+						TotalMoney            BasePriceMoney         `json:"total_money"`
+						TotalTaxMoney         BasePriceMoney         `json:"total_tax_money"`
+						TotalDiscountMoney    BasePriceMoney         `json:"total_discount_money"`
+						TotalTipMoney         BasePriceMoney         `json:"total_tip_money"`
+						TotalServiceChargeMoney BasePriceMoney       `json:"total_service_charge_money"`
+						NetAmountDueMoney     BasePriceMoney         `json:"net_amount_due_money"`
+					}
+					type RelatedResources struct {
+						Orders []OrderResponse `json:"orders"`
+					}
+					type PaymentLink struct {
+						ID                 string         `json:"id"`
+						Version           int            `json:"version"`
+						Description       string         `json:"description"`
+						OrderID           string         `json:"order_id"`
+						CheckoutOptions   CheckoutOptions `json:"checkout_options"`
+						URL               string         `json:"url"`
+						LongURL           string         `json:"long_url"`
+						CreatedAt         time.Time      `json:"created_at"`
+					}
+					var paymentLinkResp struct {
+						PaymentLink      PaymentLink      `json:"payment_link"`
+						RelatedResources RelatedResources `json:"related_resources"`
+					}
+					if err := json.NewDecoder(resp.Body).Decode(&paymentLinkResp); err != nil {
+						log.Fatal(err)
+					}
+					_, err = w.Write([]byte(paymentLinkResp.PaymentLink.URL))
+					if err != nil {
+						log.Fatal(err)
+					}
 		}
-		type RelatedResources struct {
-			Orders []OrderResponse `json:"orders"`
-		}
-		type PaymentLink struct {
-			ID                 string         `json:"id"`
-			Version           int            `json:"version"`
-			Description       string         `json:"description"`
-			OrderID           string         `json:"order_id"`
-			CheckoutOptions   CheckoutOptions `json:"checkout_options"`
-			URL               string         `json:"url"`
-			LongURL           string         `json:"long_url"`
-			CreatedAt         time.Time      `json:"created_at"`
-		}
-		var paymentLinkResp struct {
-			PaymentLink      PaymentLink      `json:"payment_link"`
-			RelatedResources RelatedResources `json:"related_resources"`
-		}
-		if err := json.NewDecoder(resp.Body).Decode(&paymentLinkResp); err != nil {
-			log.Fatal(err)
-		}
-		println(paymentLinkResp.PaymentLink.LongURL)
-	}
+	})
 
 	getMainTemplate := func(fileName string) *template.Template {
 		mainTemplate, err := template.ParseFiles("main.html", fileName)
