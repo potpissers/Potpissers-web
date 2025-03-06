@@ -13,6 +13,21 @@ function handleClassHiddenToggle(className) {
     for (let i = 0; i < elements.length; i++)
         elements[i].hidden = newValue
 }
+let nameCheckController = null;
+function handleMcNameCheck(inputElement) {
+    if (nameCheckController)
+        nameCheckController.abort()
+
+    const username = inputElement.value
+    if (username === "")
+        inputElement.classList.remove("input-valid", "input-invalid");
+    else {
+        nameCheckController = new AbortController();
+        fetch(`https://api.mojang.com/users/profiles/minecraft/${username}`, { signal: nameCheckController.signal })
+            .then(res =>
+                inputElement.classList.add(res.status !== 404 ? "input-valid" : "input-invalid"))
+    }
+}
 
 function handleContentMaximizeButtonClick(isAnnouncements) {
     let contentElement = document.getElementById("content")

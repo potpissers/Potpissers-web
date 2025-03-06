@@ -47,6 +47,12 @@ li {
 
     border-radius: .25rem
 }
+.input-valid {
+    border: .2rem solid green;
+}
+.input-invalid {
+    border: .2rem solid red;
+}
 button {
     font-size: 106.25%;
     gap: .5rem;
