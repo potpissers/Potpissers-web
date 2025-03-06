@@ -26,8 +26,6 @@ function handleMcNameCheck(inputElement) {
         fetch("https://potpissers.com/api/proxy/mojang/username/" + username, { signal: nameCheckController.signal })
             .then(res => {
                 inputElement.classList.add(res.status !== 404 ? "input-valid" : "input-invalid")
-                if (res.status === 404)
-                    console.log("hey")
             })
             .catch(err => {
                 if (err.name !== "AbortError")
