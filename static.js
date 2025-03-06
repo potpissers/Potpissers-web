@@ -25,7 +25,7 @@ function handleMcNameBlur(inputElement) {
         })
         .catch(err => {});
 }
-function handleMcNameInput(inputElement) {
+function handleMcNameKeyDown(inputElement) {
     inputElement.classList.remove("input-valid", "input-invalid");
 }
 
