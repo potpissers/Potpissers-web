@@ -6,6 +6,8 @@ function handleTipsButtonClick(otherButtonsIds, clickedId) {
     document.getElementById(clickedId).hidden = false
 }
 function handleClassHiddenToggle(className) {
+    document.getElementById("donateusername").hidden = false
+
     const elements = document.getElementsByClassName(className)
     const newValue = !elements[0].hidden
     for (let i = 0; i < elements.length; i++)
