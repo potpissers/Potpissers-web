@@ -183,19 +183,21 @@
                 <button onclick="handleClassHiddenToggle('hcflife')">hcf life</button>
 
                 <p class=hcflife hidden>removes account's deathban with /revive (alts aren't affected)</p>
+                <div style="display: flex">
 
+                    <input id="donateusername" class="fi hcflife" hidden style="width: 35%" placeholder="username"
+                           onblur="handleMcNameBlur(this)">
+                    <script defer>
+                        document.getElementById("donateusername").addEventListener("keydown", (e) => handleMcNameKeyDown(e))
+                    </script>
 
-                <input id="donateusername" class="fi hcflife" hidden style="width: 25%" placeholder="username"
-                       onblur="handleMcNameBlur(this)">
-                <script defer>
-                    document.getElementById("donateusername").addEventListener("keydown", (e) => handleMcNameKeyDown(e))
-                </script>
+                    <input id="hcflifeamount" placeholder=amount type=number style="width: 25%" min=1 value=1 step=1 class="hcflife" hidden>
 
-                <input id="hcflifeamount" placeholder=amount type=number style="width: 20%" min=1 value=1 step=1 class="hcflife" hidden>
-                <button style="font-size: 75%" class="hcflife" hidden
-                        onclick="handleAddLineItemJson('hcf-life', document.getElementById('hcflifeamount').value)">
-                    add
-                </button>
+                    <button style="font-size: 75%" class="hcflife" hidden
+                            onclick="handleAddLineItemJson('hcf-life', document.getElementById('hcflifeamount').value)">
+                        add
+                    </button>
+                </div>
             </li>
             <li>
                 <button style="width: fit-content">hcf basic</button>
