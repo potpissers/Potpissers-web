@@ -622,25 +622,28 @@ func main() {
 		}
 	})
 
-	http.HandleFunc("/api/proxy/mojang/user/", func(w http.ResponseWriter, r *http.Request) {
-		resp, err := http.Get("https://api.mojang.com/users/profiles/minecraft/" + strings.TrimPrefix(r.URL.Path, "/api/proxy/mojang/user/"))
-		if err != nil {
-			log.Println(err)
-		}
-		defer func(Body io.ReadCloser) {
-			err := Body.Close()
+	{
+		mojangUsernameProxyEndpoint := "/api/proxy/mojang/username/"
+		http.HandleFunc(mojangUsernameProxyEndpoint, func(w http.ResponseWriter, r *http.Request) {
+			resp, err := http.Get("https://api.mojang.com/users/profiles/minecraft/" + strings.TrimPrefix(r.URL.Path, mojangUsernameProxyEndpoint))
 			if err != nil {
 				log.Println(err)
 			}
-		}(resp.Body)
+			defer func(Body io.ReadCloser) {
+				err := Body.Close()
+				if err != nil {
+					log.Println(err)
+				}
+			}(resp.Body)
 
-		// TODO -> headers ?
+			// TODO -> headers ?
 
-		_, err = io.Copy(w, resp.Body)
-		if err != nil {
-			log.Println(err)
-		}
-	})
+			_, err = io.Copy(w, resp.Body)
+			if err != nil {
+				log.Println(err)
+			}
+		})
+	}
 
 	getMainTemplate := func(fileName string) *template.Template {
 		mainTemplate, err := template.ParseFiles("main.html", fileName)
