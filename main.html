@@ -182,7 +182,7 @@
             <li>
                 <div>
                     <button onclick="handleClassHiddenToggle('hcflife')">hcf life</button>
-                    <input class="fi hcflife" hidden style="text-align: center" placeholder="username"
+                    <input id="donateusername" class="fi hcflife" hidden style="text-align: center" placeholder="username"
                            onblur="handleMcNameBlur(this)">
                     <script defer>
                         document.getElementById("donateusername").addEventListener("keydown", (e) => handleMcNameKeyDown(e))
