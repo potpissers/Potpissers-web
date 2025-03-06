@@ -25,8 +25,11 @@ function handleMcNameBlur(inputElement) {
         })
         .catch(err => {});
 }
-function handleMcNameKeyDown(inputElement) {
-    inputElement.classList.remove("input-valid", "input-invalid");
+function handleMcNameKeyDown(event, inputElement) {
+    if (event.key === "Enter")
+        inputElement.blur()
+    else
+        inputElement.classList.remove("input-valid", "input-invalid");
 }
 
 function handleContentMaximizeButtonClick(isAnnouncements) {
