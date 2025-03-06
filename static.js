@@ -23,7 +23,7 @@ function handleMcNameBlur(inputElement) {
         .then(res => {
             inputElement.classList.add(res.status !== 404 ? "input-valid" : "input-invalid")
         })
-        .catch(err => {});
+        .catch(err => {}); // TODO -> warning when hasn't played before
 }
 function handleMcNameKeyDown(event) {
     if (event.key === "Enter")
