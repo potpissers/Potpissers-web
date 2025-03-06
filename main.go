@@ -625,7 +625,7 @@ func main() {
 	{
 		mojangUsernameProxyEndpoint := "/api/proxy/mojang/username/"
 		http.HandleFunc(mojangUsernameProxyEndpoint, func(w http.ResponseWriter, r *http.Request) {
-			resp, err := http.Get("https://api.mojang.com/users/profiles/minecraft/" + strings.TrimPrefix(r.URL.Path, mojangUsernameProxyEndpoint))
+			resp, err := http.Get("https://api.minecraftservices.com/minecraft/profile/lookup/name/" + strings.TrimPrefix(r.URL.Path, mojangUsernameProxyEndpoint))
 			if err != nil {
 				log.Println(err)
 			}
