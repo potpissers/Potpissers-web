@@ -49,13 +49,18 @@ function handleRedditVideos() {
                     })
             }));
 }
+const privateJsonLineItems = []
+function handleAddLineItemJson(username, itemName, itemAmountInt) {
+    privateJsonLineItems.push({
+        username: username,
+        line_item_name: itemName,
+        line_item_amount: itemAmountInt,
+    })
+    document.getElementById("checkout").hidden = false
+}
 function fetchPaymentLink(username, itemName, itemAmountInt) {
     fetch("https://www.potpissers.com/api/donate", {
-        method: "POST", body: JSON.stringify({
-            username: username,
-            line_item_name: itemName,
-            line_item_amount: itemAmountInt
-        })
+        method: "POST", body: JSON.stringify(privateJsonLineItems),
     })
         .then(response => response.text())
         .then(url => window.open(url, "_blank"))
