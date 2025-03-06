@@ -14,21 +14,19 @@ function handleClassHiddenToggle(className) {
         elements[i].hidden = newValue
 }
 let nameCheckController = null;
-function handleMcNameCheck(inputElement) {
+function handleMcNameBlur(inputElement) {
     if (nameCheckController)
         nameCheckController.abort()
 
-    const username = inputElement.value
-    if (username === "")
-        inputElement.classList.remove("input-valid", "input-invalid");
-    else {
-        nameCheckController = new AbortController()
-        fetch("https://potpissers.com/api/proxy/mojang/username/" + username, { signal: nameCheckController.signal })
-            .then(res => {
-                inputElement.classList.add(res.status !== 404 ? "input-valid" : "input-invalid")
-            })
-            .catch(err => {});
-    }
+    nameCheckController = new AbortController()
+    fetch("https://potpissers.com/api/proxy/mojang/username/" + inputElement.value, { signal: nameCheckController.signal })
+        .then(res => {
+            inputElement.classList.add(res.status !== 404 ? "input-valid" : "input-invalid")
+        })
+        .catch(err => {});
+}
+function handleMcNameInput(inputElement) {
+    inputElement.classList.remove("input-valid", "input-invalid");
 }
 
 function handleContentMaximizeButtonClick(isAnnouncements) {
