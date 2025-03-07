@@ -90,6 +90,7 @@ function handleAddLineItemJson(itemName, itemAmountString) {
     })
     document.getElementById("checkout").classList.remove("h")
     document.getElementById("donatebutton").hidden = true
+    document.getElementById("donatesidebutton").classList.add("r")
 }
 
 function fetchPaymentLink() {
@@ -100,6 +101,7 @@ function fetchPaymentLink() {
     document.getElementById("checkoutbalance").innerText = ""
     document.getElementById("checkout").classList.add("h")
     document.getElementById("donatebutton").hidden = false
+    document.getElementById("donatesidebutton").classList.remove("r")
 
     fetch("https://potpissers.com/api/donate", {
         method: "POST", body: json,

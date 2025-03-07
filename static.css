@@ -135,3 +135,7 @@ footer {
 .h {
     display: none !important;
 }
+
+.r {
+    background-color: indianred;
+}
