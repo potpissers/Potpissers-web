@@ -399,7 +399,7 @@ func main() {
 				switch donationRequest[i].LineItemName {
 				case "hcf-life": { // TODO -> pointer (?)
 					donationRequest[i].LineItemAmount = int(math.Max(float64(donationRequest[i].LineItemAmount), 1))
-					donationRequest[i].LineItemCostInCents = 500
+					donationRequest[i].LineItemCostInCents = 400
 				}
 				case "hcf-basic": {// 20%
 					donationRequest[i].LineItemAmount = 1
