@@ -131,3 +131,7 @@ footer {
     flex-direction: column;
     width: 85%
 }
+
+.h {
+    display: none !important;
+}
