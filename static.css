@@ -132,6 +132,5 @@ footer {
 .fc85 {
     display: flex;
     flex-direction: column;
-    width: 85%;
-    text-align: left
+    width: 85%
 }
