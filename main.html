@@ -41,7 +41,8 @@
         </div>
         <div class="foo"
              style="align-items: center; justify-self: center; display: inline-flex; background-color: #CEE3F8; padding-left: 0">
-            <img style="cursor: pointer; height: 2.5rem; width: 2.5rem; margin: 0; border-radius: .5rem" src="potpisser.jpg" alt="image of calvin pissing"
+            <img style="cursor: pointer; height: 2.5rem; width: 2.5rem; margin: 0; border-radius: .5rem"
+                 src="potpisser.jpg" alt="image of calvin pissing"
                  onclick="window.location.href='/';">
             <select style="width: 11.75rem; text-align: right" onchange="window.location.href=this.value">
                 {{block "gamemodes" .}}{{end}}
@@ -135,7 +136,7 @@
         <script defer>
             document.addEventListener('DOMContentLoaded', () => handleRedditVideos());
         </script>
-<!--        {{block "videos" .}}TODO {{end}}-->
+        <!--        {{block "videos" .}}TODO {{end}}-->
     </ul>
     <button style="font-size: 75%; margin-top: auto; margin-left: auto">
         refresh
@@ -151,7 +152,8 @@
     </ul>
 </div>
 
-<div id="content" class="foo" style="background: #33383D; display: grid; grid-template-columns: 3fr 1fr; grid-template-rows: 1fr 1fr">
+<div id="content" class="foo"
+     style="background: #33383D; display: grid; grid-template-columns: 3fr 1fr; grid-template-rows: 1fr 1fr">
     <div class="foo baz" style="display: flex; flex-direction: column; overflow-y: auto">
         <div style="display: flex; text-align: center">
             <button>announcements</button>
@@ -179,16 +181,18 @@
             <!--                <li>-->
             <!--                    <button style="width: fit-content">unmute</button>-->
             <!--                </li>-->
-<!--            <button>shoutout</button>-->
+            <!--            <button>shoutout</button>-->
 
             <li style="display: flex; flex-direction: column">
                 <button onclick="handleClassHiddenToggle('hcflife')">hcf life: $4</button>
 
                 <p class=hcflife hidden>
-                    /revive (username). removes deathban (alts aren't affected). current revive life cost: {{ .MainTemplateData.OffPeakLivesNeeded }} & {{ .MainTemplateData.PeakLivesNeeded }} during events
+                    /revive (username). removes deathban (alts aren't affected). current revive life cost: {{
+                    .MainTemplateData.OffPeakLivesNeeded }} & {{ .MainTemplateData.PeakLivesNeeded }} during events
                 </p>
 
-                <input id="hcflifeamount" style="align-self: end; width: 20%" placeholder=amount type=number min=1 value=1 step=1 class="hcflife" hidden>
+                <input id="hcflifeamount" style="align-self: end; width: 20%" placeholder=amount type=number min=1
+                       value=1 step=1 class="hcflife" hidden>
                 <div style="display: flex">
                     <input id="donateusername" class="fi hcflife" hidden style="width: 60%" placeholder="username"
                            onblur="handleMcNameBlur(this)">
@@ -230,7 +234,7 @@
             <li>
                 <button style="width: fit-content">mz ruby: $24</button>
             </li>
-<!--            <button>gold name</button>-->
+            <!--            <button>gold name</button>-->
             <!--            <button style="width: fit-content">hcf big dog</button>-->
         </ul>
     </div>
