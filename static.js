@@ -95,6 +95,15 @@ function handleAddLineItemJson(itemName, itemAmountString) {
 
 function fetchPaymentLink() {
     const json = JSON.stringify(privateJsonLineItems)
+    doLineItemReset()
+
+    fetch("https://potpissers.com/api/donate", {
+        method: "POST", body: json,
+    })
+        .then(response => response.text())
+        .then(url => window.open(url, "_blank"))
+}
+function doLineItemReset() {
     privateJsonLineItems.length = 0
     currentLineItemsCost = 0
 
@@ -102,10 +111,4 @@ function fetchPaymentLink() {
     document.getElementById("checkout").classList.add("h")
     document.getElementById("donatebutton").hidden = false
     document.getElementById("donatesidebutton").classList.remove("r")
-
-    fetch("https://potpissers.com/api/donate", {
-        method: "POST", body: json,
-    })
-        .then(response => response.text())
-        .then(url => window.open(url, "_blank"))
 }
