@@ -381,6 +381,107 @@ func main() {
 		// TODO messages + ServerData.Messages
 	})
 
+	type LineItemData struct {
+		ServerName string
+		ItemName string
+		ItemPriceInDollars int
+		ItemPriceInCents int
+		ItemDescription string
+		IsPlural bool
+	}
+	lineItemDataImmutable := map[string]LineItemData {
+		"hcf-life": {
+			ServerName: "hcf",
+			ItemName: "life",
+			ItemPriceInDollars: 4,
+			ItemPriceInCents: 400,
+			ItemDescription: `/revive (username). removes deathban (alts aren't affected). current revive life cost: {{
+.MainTemplateData.OffPeakLivesNeeded }} & {{ .MainTemplateData.PeakLivesNeeded }} during events`, // TODO -> db + ingame
+			IsPlural: true,
+		},
+		"hcf-basic": {
+			ServerName: "hcf",
+			ItemName: "basic",
+			ItemPriceInDollars: 8,
+			ItemPriceInCents: 800,
+			ItemDescription: `/revive (username). removes deathban (alts aren't affected). current revive life cost: {{
+.MainTemplateData.OffPeakLivesNeeded }} & {{ .MainTemplateData.PeakLivesNeeded }} during events`, // TODO -> db + ingame
+			IsPlural: false,
+		},
+		"hcf-gold": {
+			ServerName: "hcf",
+			ItemName: "gold",
+			ItemPriceInDollars: 16,
+			ItemPriceInCents: 1600,
+			ItemDescription: `/revive (username). removes deathban (alts aren't affected). current revive life cost: {{
+.MainTemplateData.OffPeakLivesNeeded }} & {{ .MainTemplateData.PeakLivesNeeded }} during events`, // TODO -> db + ingame
+			IsPlural: false,
+		},
+		"hcf-diamond": {
+			ServerName: "hcf",
+			ItemName: "diamond",
+			ItemPriceInDollars: 24,
+			ItemPriceInCents: 2400,
+			ItemDescription: `/revive (username). removes deathban (alts aren't affected). current revive life cost: {{
+.MainTemplateData.OffPeakLivesNeeded }} & {{ .MainTemplateData.PeakLivesNeeded }} during events`, // TODO -> db + ingame
+			IsPlural: false,
+		},
+		"hcf-ruby": {
+			ServerName: "hcf",
+			ItemName: "ruby",
+			ItemPriceInDollars: 32,
+			ItemPriceInCents: 3200,
+			ItemDescription: `/revive (username). removes deathban (alts aren't affected). current revive life cost: {{
+.MainTemplateData.OffPeakLivesNeeded }} & {{ .MainTemplateData.PeakLivesNeeded }} during events`, // TODO -> db + ingame
+			IsPlural: false,
+		},
+
+		"mz-life": {
+			ServerName: "mz",
+			ItemName: "life",
+			ItemPriceInDollars: 4,
+			ItemPriceInCents: 400,
+			ItemDescription: `/revive (username). removes deathban (alts aren't affected). current revive life cost: {{
+.MainTemplateData.OffPeakLivesNeeded }} & {{ .MainTemplateData.PeakLivesNeeded }} during events`, // TODO -> db + ingame
+			IsPlural: true,
+		},
+		"mz-basic": {
+			ServerName: "mz",
+			ItemName: "basic",
+			ItemPriceInDollars: 6,
+			ItemPriceInCents: 600,
+			ItemDescription: `/revive (username). removes deathban (alts aren't affected). current revive life cost: {{
+.MainTemplateData.OffPeakLivesNeeded }} & {{ .MainTemplateData.PeakLivesNeeded }} during events`, // TODO -> db + ingame
+			IsPlural: false,
+		},
+		"mz-gold": {
+			ServerName: "mz",
+			ItemName: "gold",
+			ItemPriceInDollars: 12,
+			ItemPriceInCents: 1200,
+			ItemDescription: `/revive (username). removes deathban (alts aren't affected). current revive life cost: {{
+.MainTemplateData.OffPeakLivesNeeded }} & {{ .MainTemplateData.PeakLivesNeeded }} during events`, // TODO -> db + ingame
+			IsPlural: false,
+		},
+		"mz-diamond": {
+			ServerName: "mz",
+			ItemName: "diamond",
+			ItemPriceInDollars: 18,
+			ItemPriceInCents: 1800,
+			ItemDescription: `/revive (username). removes deathban (alts aren't affected). current revive life cost: {{
+.MainTemplateData.OffPeakLivesNeeded }} & {{ .MainTemplateData.PeakLivesNeeded }} during events`, // TODO -> db + ingame
+			IsPlural: false,
+		},
+		"mz-ruby": {
+			ServerName: "mz",
+			ItemName: "ruby",
+			ItemPriceInDollars: 24,
+			ItemPriceInCents: 2400,
+			ItemDescription: `/revive (username). removes deathban (alts aren't affected). current revive life cost: {{
+.MainTemplateData.OffPeakLivesNeeded }} & {{ .MainTemplateData.PeakLivesNeeded }} during events`, // TODO -> db + ingame
+			IsPlural: false,
+		},
+	}
 	http.HandleFunc("/api/donate", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "POST" {
 			var donationRequest []struct {
@@ -396,59 +497,34 @@ func main() {
 				return
 			}
 			for i := range donationRequest {
-				switch donationRequest[i].LineItemName {
-				case "hcf-life": { // TODO -> pointer (?)
-					donationRequest[i].LineItemAmount = int(math.Max(float64(donationRequest[i].LineItemAmount), 1))
-					donationRequest[i].LineItemCostInCents = 400
-				}
-				case "hcf-basic": {// 20%
-					donationRequest[i].LineItemAmount = 1
-					donationRequest[i].LineItemCostInCents = 1000
-				}
-				case "hcf-gold": {// 40%
-					donationRequest[i].LineItemAmount = 1
-					donationRequest[i].LineItemCostInCents = 2000
-				}
-				case "hcf-platinum": {// 60%
-					donationRequest[i].LineItemAmount = 1
-					donationRequest[i].LineItemCostInCents = 3000
-				}
-				case "hcf-ruby": {// 80%
-					donationRequest[i].LineItemAmount = 1
-					donationRequest[i].LineItemCostInCents = 4000
-				}
-				case "hcf-big-dog": { // 100%
-					donationRequest[i].LineItemAmount = 1
-					donationRequest[i].LineItemCostInCents = 10000
-				}
-
-				case "mz-life": {
-					donationRequest[i].LineItemAmount = int(math.Max(float64(donationRequest[i].LineItemAmount), 1))
-					donationRequest[i].LineItemCostInCents = 400
-				}
-				case "mz-basic": {
-					donationRequest[i].LineItemAmount = 1
-					donationRequest[i].LineItemCostInCents = 400
-				}
-				case "mz-gold": {
-					donationRequest[i].LineItemAmount = 1
-					donationRequest[i].LineItemCostInCents = 800
-				}
-				case "mz-platinum": {
-					donationRequest[i].LineItemAmount = 1
-					donationRequest[i].LineItemCostInCents = 1200
-				}
-				case "mz-ruby": {
-					donationRequest[i].LineItemAmount = 1
-					donationRequest[i].LineItemCostInCents = 1600
-				}
-				case "mz-sign": {
-					donationRequest[i].LineItemAmount = 1
-					donationRequest[i].LineItemCostInCents = 1000
-				}
-
-				default:
+//				var foo []LineItemData
+//				bar := func() {
+//					for j := range foo {
+//						if foo[j].ServerName + "-" + foo[j].ItemName == donationRequest[i].LineItemName {
+//							if foo[j].IsPlural {
+//								donationRequest[i].LineItemAmount = int(math.Max(float64(donationRequest[i].LineItemAmount), 1))
+//							} else {
+//								donationRequest[i].LineItemAmount = 1 // TODO -> maybe allow 0 amount
+//							}
+//							donationRequest[i].LineItemCostInCents = foo[j].ItemPriceInCents
+//							return
+//						}
+//					}
+//					// else
+//					log.Println("error: invalid donationRequest line item")
+//					return // door nigga from game of thrones
+//				}
+				data, exists := lineItemDataImmutable[donationRequest[i].LineItemName]
+				if !exists {
+					log.Println("error: invalid donationRequest line item")
 					return // door nigga from game of thrones
+				} else {
+					if data.IsPlural {
+						donationRequest[i].LineItemAmount = int(math.Max(float64(donationRequest[i].LineItemAmount), 1))
+					} else {
+						donationRequest[i].LineItemAmount = 1 // TODO -> maybe allow 0 amount
+					}
+					donationRequest[i].LineItemCostInCents = data.ItemPriceInCents
 				}
 			}
 
@@ -663,6 +739,7 @@ func main() {
 		Donations []Donation
 		OffPeakLivesNeeded float32
 		PeakLivesNeeded float32
+		LineItemData map[string]LineItemData
 	}
 	getHome := func() []byte {
 		var buffer bytes.Buffer
@@ -674,16 +751,17 @@ func main() {
 				NetworkPlayers: currentPlayers,
 				ServerPlayers: serverDatas["hub"].CurrentPlayers,
 				NewPlayers: newPlayers,
-				PotpissersTips: potpissersTips,
-				Deaths: deaths,
-				Messages: messages,
-				Events: events,
-				Announcements: discordAnnouncements,
-				Changelog: changelog,
-				DiscordMessages: discordMessages,
-				Donations: donations,
+				PotpissersTips:     potpissersTips,
+				Deaths:             deaths,
+				Messages:           messages,
+				Events:             events,
+				Announcements:      discordAnnouncements,
+				Changelog:          changelog,
+				DiscordMessages:    discordMessages,
+				Donations:          donations,
 				OffPeakLivesNeeded: offPeakLivesNeeded,
-				PeakLivesNeeded: offPeakLivesNeeded / 2,
+				PeakLivesNeeded:    offPeakLivesNeeded / 2,
+				LineItemData:       lineItemDataImmutable,
 				},
 		})
 		if err != nil {
@@ -717,6 +795,7 @@ func main() {
 				Donations: donations,
 				OffPeakLivesNeeded: offPeakLivesNeeded,
 				PeakLivesNeeded: offPeakLivesNeeded / 2,
+				LineItemData:       lineItemDataImmutable,
 			},
 
 			AttackSpeed: mzData.AttackSpeedName,
@@ -769,6 +848,7 @@ func main() {
 				Donations: donations,
 				OffPeakLivesNeeded: offPeakLivesNeeded,
 				PeakLivesNeeded: offPeakLivesNeeded / 2,
+				LineItemData:       lineItemDataImmutable,
 			},
 
 			AttackSpeed: serverData.AttackSpeedName,
