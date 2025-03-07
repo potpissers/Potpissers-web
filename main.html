@@ -175,7 +175,7 @@
     <div class="foo baz" style="display: flex; flex-direction: column; overflow-y: auto">
         <span style="align-self: center">
             <button id="donatebutton">donate</button>
-            <button hidden onclick="fetchPaymentLink()" id="checkout" style="width: 100%">checkout</button>
+            <button hidden onclick="fetchPaymentLink()" id="checkout"><span id="checkoutbalance"></span> checkout</button>
         </span>
         <ul style="overflow-y: scroll">
             <!--                <li>-->
@@ -269,4 +269,18 @@
 
 </html>
 
-<script id="staticjs" src="static.js"></script>
+<script id="staticjs" src="static.js">
+    const currentPrices = {
+        "hcf-life": 400,
+        "hcf-basic": 800,
+        "hcf-gold": 1600,
+        "hcf-platinum": 2400,
+        "hcf-ruby": 3200,
+
+        "mz-life": 400,
+        "mz-basic": 400,
+        "mz-gold": 800,
+        "mz-platinum": 1200,
+        "mz-ruby": 1600
+    }
+</script>

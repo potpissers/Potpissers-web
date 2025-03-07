@@ -78,8 +78,9 @@ function handleRedditVideos() {
 }
 
 const privateJsonLineItems = []
-
 function handleAddLineItemJson(itemName, itemAmountString) {
+    const balance = document.getElementById("checkoutbalance")
+    balance.innerText = (parseFloat(balance.innerText) || 0) + currentPrices[itemName] * parseInt(itemAmountString)
     privateJsonLineItems.push({
         username: document.getElementById("donateusername").value,
         line_item_name: itemName,
