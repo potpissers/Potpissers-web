@@ -661,6 +661,7 @@ func main() {
 		Changelog []Message
 		DiscordMessages []Message
 		Donations []Donation
+		OffPeakLivesNeeded float32
 	}
 	getHome := func() []byte {
 		var buffer bytes.Buffer
@@ -679,6 +680,7 @@ func main() {
 				Changelog: changelog,
 				DiscordMessages: discordMessages,
 				Donations: donations,
+				OffPeakLivesNeeded: float32(serverDatas["hcf"].OffPeakLivesNeededAsCents) / 100.0,
 				},
 		})
 		if err != nil {
@@ -709,6 +711,7 @@ func main() {
 				Changelog: changelog,
 				DiscordMessages: discordMessages,
 				Donations: donations,
+				OffPeakLivesNeeded: float32(serverDatas["hcf"].OffPeakLivesNeededAsCents) / 100.0,
 			},
 
 			AttackSpeed: mzData.AttackSpeedName,
@@ -730,7 +733,6 @@ func main() {
 			AttackSpeed string
 
 			DeathBanMinutes int
-			OffPeakLivesNeeded float32
 			LootFactor int
 			BorderSize int
 
@@ -759,12 +761,12 @@ func main() {
 				Changelog: changelog,
 				DiscordMessages: discordMessages,
 				Donations: donations,
+				OffPeakLivesNeeded: float32(serverData.OffPeakLivesNeededAsCents) / 100.0,
 			},
 
 			AttackSpeed: serverData.AttackSpeedName,
 
 			DeathBanMinutes: serverData.DeathBanMinutes,
-			OffPeakLivesNeeded: float32(serverData.OffPeakLivesNeededAsCents) / 100.0,
 //			LootFactor: serverDatas["hcf"]., // TODO -> defaultLootFactor
 			BorderSize: serverData.WorldBorderRadius,
 
