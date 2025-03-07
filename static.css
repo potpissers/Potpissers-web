@@ -123,3 +123,8 @@ footer {
     display: inline-flex;
     flex-direction: column
 }
+
+.fsb {
+    display: flex;
+    justify-content: space-between;
+}
