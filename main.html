@@ -163,12 +163,12 @@
             </div>
             <button onclick="handleContentMaximizeButtonClick(true)" style="margin-left: auto"></button>
         </div>
-        <ul style="overflow-y: auto">
+        <ul style="overflow-y: scroll">
             {{range .MainTemplateData.Announcements}}
             <li>{{.Content}}</li>
             {{end}}
         </ul>
-        <ul style="overflow-y: auto" hidden>
+        <ul style="overflow-y: scroll" hidden>
             {{range .MainTemplateData.Changelog}}
             <li>{{.Content}}</li>
             {{end}}
