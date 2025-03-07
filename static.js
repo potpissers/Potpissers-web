@@ -84,11 +84,14 @@ function handleAddLineItemJson(itemName, itemAmountString) {
     document.getElementById("donatebutton").classList.add("fs75")
 }
 function fetchPaymentLink() {
+    const json = JSON.stringify(privateJsonLineItems)
+    privateJsonLineItems.length = 0
+
     document.getElementById("checkout").hidden = true
     document.getElementById("donatebutton").classList.remove("fs75")
 
     fetch("https://potpissers.com/api/donate", {
-        method: "POST", body: JSON.stringify(privateJsonLineItems),
+        method: "POST", body: json,
     })
         .then(response => response.text())
         .then(url => window.open(url, "_blank"))
