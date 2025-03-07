@@ -62,10 +62,6 @@ li {
     border: .1rem solid red;
 }
 
-.fs75 {
-    font-size: 75%
-}
-
 button {
     font-size: 106.25%;
     gap: .5rem;
