@@ -662,9 +662,11 @@ func main() {
 		DiscordMessages []Message
 		Donations []Donation
 		OffPeakLivesNeeded float32
+		PeakLivesNeeded float32
 	}
 	getHome := func() []byte {
 		var buffer bytes.Buffer
+		offPeakLivesNeeded := float32(serverDatas["hcf"].OffPeakLivesNeededAsCents / 100.0)
 		err := homeTemplate.Execute(&buffer, struct {
 			MainTemplateData MainTemplateData
 		}{
@@ -680,7 +682,8 @@ func main() {
 				Changelog: changelog,
 				DiscordMessages: discordMessages,
 				Donations: donations,
-				OffPeakLivesNeeded: float32(serverDatas["hcf"].OffPeakLivesNeededAsCents) / 100.0,
+				OffPeakLivesNeeded: offPeakLivesNeeded,
+				PeakLivesNeeded: offPeakLivesNeeded / 2,
 				},
 		})
 		if err != nil {
@@ -691,6 +694,7 @@ func main() {
 	getMz := func() []byte {
 		var buffer bytes.Buffer
 		mzData := serverDatas["mz"]
+		offPeakLivesNeeded := float32(serverDatas["hcf"].OffPeakLivesNeededAsCents / 100.0)
 		err := mzTemplate.Execute(&buffer, struct {
 			MainTemplateData MainTemplateData
 
@@ -711,7 +715,8 @@ func main() {
 				Changelog: changelog,
 				DiscordMessages: discordMessages,
 				Donations: donations,
-				OffPeakLivesNeeded: float32(serverDatas["hcf"].OffPeakLivesNeededAsCents) / 100.0,
+				OffPeakLivesNeeded: offPeakLivesNeeded,
+				PeakLivesNeeded: offPeakLivesNeeded / 2,
 			},
 
 			AttackSpeed: mzData.AttackSpeedName,
@@ -727,6 +732,7 @@ func main() {
 	getHcf := func() []byte {
 		var buffer bytes.Buffer
 		serverData := serverDatas["hcf"]
+		offPeakLivesNeeded := float32(serverData.OffPeakLivesNeededAsCents / 100.0)
 		err := hcfTemplate.Execute(&buffer, struct {
 			MainTemplateData MainTemplateData
 
@@ -761,7 +767,8 @@ func main() {
 				Changelog: changelog,
 				DiscordMessages: discordMessages,
 				Donations: donations,
-				OffPeakLivesNeeded: float32(serverData.OffPeakLivesNeededAsCents) / 100.0,
+				OffPeakLivesNeeded: offPeakLivesNeeded,
+				PeakLivesNeeded: offPeakLivesNeeded / 2,
 			},
 
 			AttackSpeed: serverData.AttackSpeedName,
