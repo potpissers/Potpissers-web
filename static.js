@@ -81,7 +81,7 @@ const privateJsonLineItems = []
 let currentLineItemsCost = 0
 function handleAddLineItemJson(itemName, itemAmountString) {
     currentLineItemsCost += currentPrices[itemName] * parseInt(itemAmountString)
-    document.getElementById("checkoutbalance").innerText = "$" + currentLineItemsCost / 100 + ".00"
+    document.getElementById("checkoutbalance").innerText = "$" + currentLineItemsCost / 100
 
     privateJsonLineItems.push({
         username: document.getElementById("donateusername").value,
