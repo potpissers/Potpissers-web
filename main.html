@@ -185,7 +185,7 @@
                 <button onclick="handleClassHiddenToggle('hcflife')">hcf life: $4</button>
 
                 <p class=hcflife hidden>
-                    /revive (username). removes deathban (alts aren't affected). current revive life cost: {{ .OffPeakLivesNeeded }} & {{ .PeakLivesNeeded }} during events
+                    /revive (username). removes deathban (alts aren't affected). current revive life cost: {{ .MainTemplateData.OffPeakLivesNeeded }} & {{ .MainTemplateData.PeakLivesNeeded }} during events
                 </p>
 
                 <input id="hcflifeamount" style="align-self: end; width: 20%" placeholder=amount type=number min=1 value=1 step=1 class="hcflife" hidden>
