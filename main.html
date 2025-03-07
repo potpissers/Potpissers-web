@@ -192,10 +192,10 @@
                     .MainTemplateData.OffPeakLivesNeeded }} & {{ .MainTemplateData.PeakLivesNeeded }} during events
                 </p>
 
-                <input id="hcflifeamount" style="align-self: end; width: 20%" placeholder=amount type=number min=1
+                <input id="hcflifeamount" style="align-self: end; width: 20%; font-size: 75%" placeholder=amount type=number min=1
                        value=1 step=1 class="hcflife" hidden>
                 <div style="display: flex">
-                    <input id="donateusername" class="fi hcflife" hidden style="width: 60%" placeholder="username"
+                    <input id="donateusername" class="fi hcflife" hidden style="width: 60%; font-size: 75%" placeholder="username"
                            onblur="handleMcNameBlur(this)">
                     <script defer>
                         document.getElementById("donateusername").addEventListener("keydown", (e) => handleMcNameKeyDown(e))
