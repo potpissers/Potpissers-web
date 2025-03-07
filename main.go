@@ -446,11 +446,6 @@ func main() {
 					donationRequest[i].LineItemAmount = 1
 					donationRequest[i].LineItemCostInCents = 1000
 				}
-				case "mz-gold-name": {
-					// TODO -> check if exists
-					donationRequest[i].LineItemAmount = 1
-					donationRequest[i].LineItemCostInCents = 1200
-				}
 
 				default:
 					return // door nigga from game of thrones
