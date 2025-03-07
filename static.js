@@ -97,6 +97,7 @@ function fetchPaymentLink() {
     privateJsonLineItems.length = 0
     currentLineItemsCost = 0
 
+    document.getElementById("checkoutbalance").innerText = ""
     document.getElementById("checkout").hidden = true
     document.getElementById("donatebutton").hidden = false
 
