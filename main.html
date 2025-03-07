@@ -214,7 +214,7 @@
                 </div>
             </li>
 
-            {{range _, $value := .MainTemplateData.LineItemData}}
+            {{range .MainTemplateData.LineItemData}}
             <li class="fc85">
                 <button onclick="handleClassHiddenToggle('{{$value.ServerName}}-{{$value.ItemName}}')" class="fsb">
                     {{$value.ServerName}}<br>{{$value.ItemName}}<span>$4</span>
@@ -280,7 +280,7 @@
 <script defer id="staticdonatejs" src="static-donate.js"></script>
 <script defer>
     const currentPrices = {
-    {{range _, $value := .MainTemplateData.LineItemData}}
+    {{range .MainTemplateData.LineItemData}}
     {{$value.ServerName}}-{{$value.ItemName}}: {{$value.ItemPriceInCents}},
     {{end}}
     }
