@@ -213,34 +213,35 @@
                     </button>
                 </div>
             </li>
-            <li class="fc85">
-                <button class="fsb">hcf<br>basic<span>$8</span></button>
-            </li>
-            <li class="fc85">
-                <button class="fsb">hcf<br>gold<span>$16</span></button>
-            </li>
-            <li class="fc85">
-                <button class="fsb">hcf<br>platinum<span>$24</span></button>
-            </li>
-            <li class="fc85">
-                <button class="fsb">hcf<br>ruby<span>$32</span></button>
-            </li>
 
+            {{range .MainTemplateData.LineItemData}}
             <li class="fc85">
-                <button class="fsb">mz<br>life<span>$4</span></button>
+                <button onclick="handleClassHiddenToggle('{{.ServerName}}-{{.ItemName}}')" class="fsb">
+                    {{.ServerName}}<br>{{.ItemName}}<span>$4</span>
+                </button>
+
+                <p class={{.ServerName}}-{{.ItemName}} hidden>
+                    {{.ItemDescription}}
+                </p>
+
+                {{if .IsPlural}}
+                <input id="{{.ServerName}}-{{.ItemName}}-amount" style="align-self: end; width: 20%; font-size: 75%" placeholder=amount type=number min=1
+                       value=1 step=1 class="{{.ServerName}}-{{.ItemName}}" hidden>
+                {{end}}
+                <div style="display: flex">
+                    <input id="donate-username" class="fi {{.ServerName}}-{{.ItemName}}" hidden style="width: 60%; font-size: 75%" placeholder="username"
+                           onblur="handleMcNameBlur(this)">
+                    <script defer>
+                        document.getElementById("donate-username").addEventListener("keydown", (e) => handleMcNameKeyDown(e))
+                    </script>
+
+                    <button style="font-size: 75%" class="{{.ServerName}}-{{.ItemName}}" hidden
+                            onclick="handleAddLineItemJson('{{.ServerName}}-{{.ItemName}}', {{if .IsPlural}}document.getElementById('{{.ServerName}}-{{.ItemName}}-amount').value{{else}}1{{end}})">
+                        add
+                    </button>
+                </div>
             </li>
-            <li class="fc85">
-                <button class="fsb">mz<br>basic<span>$6</span></button>
-            </li>
-            <li class="fc85">
-                <button class="fsb">mz<br>gold<span>$12</span></button>
-            </li>
-            <li class="fc85">
-                <button class="fsb">mz<br>platinum<span>$18</span></button>
-            </li>
-            <li class="fc85">
-                <button class="fsb">mz<br>ruby<span>$24</span></button>
-            </li>
+            {{end}}
             <!--            <button>gold name</button>-->
             <!--            <button style="width: fit-content">hcf big dog</button>-->
         </ul>
@@ -275,19 +276,12 @@
 
 </html>
 
-<script id="staticjs" src="static.js"></script>
-<script>
+<script defer id="staticjs" src="static.js"></script>
+<script defer id="staticdonatejs" src="static-donate.js"></script>
+<script defer>
     const currentPrices = {
-        "hcf-life": 400,
-        "hcf-basic": 800,
-        "hcf-gold": 1600,
-        "hcf-platinum": 2400,
-        "hcf-ruby": 3200,
-
-        "mz-life": 400,
-        "mz-basic": 400,
-        "mz-gold": 800,
-        "mz-platinum": 1200,
-        "mz-ruby": 1600
+    {{range .MainTemplateData.LineItemData}}
+    {{.ServerName}}-{{.ItemName}}: {{.ItemPriceInCents}},
+    {{end}}
     }
 </script>
