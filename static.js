@@ -81,8 +81,12 @@ function handleAddLineItemJson(itemName, itemAmountString) {
         line_item_amount: parseInt(itemAmountString, 10),
     })
     document.getElementById("checkout").hidden = false
+    document.getElementById("donatebutton").classList.add("fs75")
 }
 function fetchPaymentLink() {
+    document.getElementById("checkout").hidden = true
+    document.getElementById("donatebutton").classList.remove("fs75")
+
     fetch("https://potpissers.com/api/donate", {
         method: "POST", body: JSON.stringify(privateJsonLineItems),
     })
