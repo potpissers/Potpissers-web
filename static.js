@@ -5,24 +5,29 @@ function handleTipsButtonClick(otherButtonsIds, clickedId) {
 
     document.getElementById(clickedId).hidden = false
 }
+
 function handleClassHiddenToggle(className) {
     const elements = document.getElementsByClassName(className)
     const newValue = !elements[0].hidden
     for (let i = 0; i < elements.length; i++)
         elements[i].hidden = newValue
 }
+
 let nameCheckController = null;
+
 function handleMcNameBlur(inputElement) {
     if (nameCheckController)
         nameCheckController.abort()
 
     nameCheckController = new AbortController()
-    fetch("https://potpissers.com/api/proxy/mojang/username/" + inputElement.value, { signal: nameCheckController.signal })
+    fetch("https://potpissers.com/api/proxy/mojang/username/" + inputElement.value, {signal: nameCheckController.signal})
         .then(res => {
             inputElement.classList.add(res.status !== 404 ? "input-valid" : "input-invalid")
         })
-        .catch(err => {}); // TODO -> warning when hasn't played before
+        .catch(err => {
+        }); // TODO -> warning when hasn't played before
 }
+
 function handleMcNameKeyDown(event) {
     if (event.key === "Enter")
         event.target.blur()
@@ -36,23 +41,21 @@ function handleContentMaximizeButtonClick(isAnnouncements) {
         if (contentElement.style.gridTemplateRows === "auto 1fr") {
             contentElement.style.gridTemplateRows = "1fr 1fr"
             document.body.style.gridTemplateRows = "44vh 44vh auto"
-        }
-        else {
+        } else {
             contentElement.style.gridTemplateRows = "auto 1fr"
             document.body.style.gridTemplateRows = "44vh auto auto"
         }
-    }
-    else {
+    } else {
         if (contentElement.style.gridTemplateRows === "1fr auto") {
             contentElement.style.gridTemplateRows = "1fr 1fr"
             document.body.style.gridTemplateRows = "44vh 44vh auto"
-        }
-        else {
+        } else {
             contentElement.style.gridTemplateRows = "1fr auto"
             document.body.style.gridTemplateRows = "44vh auto auto"
         }
     }
 }
+
 function handleRedditVideos() {
     fetch("https://www.reddit.com/r/potpissers/new.json?limit=100")
         .then(response => response.json()
@@ -73,7 +76,9 @@ function handleRedditVideos() {
                     })
             }));
 }
+
 const privateJsonLineItems = []
+
 function handleAddLineItemJson(itemName, itemAmountString) {
     privateJsonLineItems.push({
         username: document.getElementById("donateusername").value,
@@ -83,6 +88,7 @@ function handleAddLineItemJson(itemName, itemAmountString) {
     document.getElementById("checkout").hidden = false
     document.getElementById("donatebutton").classList.add("fs75")
 }
+
 function fetchPaymentLink() {
     const json = JSON.stringify(privateJsonLineItems)
     privateJsonLineItems.length = 0

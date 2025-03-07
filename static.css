@@ -1,6 +1,7 @@
 html {
     background-color: #A0AFBF
 }
+
 body {
     backdrop-filter: blur(10px);
     background-color: rgba(0, 0, 0, .5);
@@ -9,14 +10,17 @@ body {
     grid-template-columns: 20% 1fr 20%;
     grid-template-rows: 44vh 44vh auto;
 }
+
 body::-webkit-scrollbar {
     display: none;
 }
+
 ul {
     margin: 0;
     padding: 0;
     list-style: none;
 }
+
 li {
     gap: .5rem;
     padding-left: .5rem;
@@ -29,6 +33,7 @@ li {
     margin-bottom: .5rem;
     width: fit-content
 }
+
 .foo {
     gap: .5rem;
     padding-left: .5rem;
@@ -37,6 +42,7 @@ li {
     box-shadow: .1rem .1rem .1rem black;
     border-radius: .5rem
 }
+
 .fi {
     font-size: 106.25%;
     gap: .5rem;
@@ -47,15 +53,19 @@ li {
 
     border-radius: .25rem
 }
+
 .input-valid {
     border: .1rem solid green;
 }
+
 .input-invalid {
     border: .1rem solid red;
 }
+
 .fs75 {
     font-size: 75%
 }
+
 button {
     font-size: 106.25%;
     gap: .5rem;
@@ -66,6 +76,7 @@ button {
 
     width: fit-content
 }
+
 select {
     font-size: 106.25%;
     gap: .5rem;
@@ -76,6 +87,7 @@ select {
 
     border-radius: .25rem
 }
+
 table {
     gap: .5rem;
     padding-left: .5rem;
@@ -84,13 +96,16 @@ table {
     box-shadow: .1rem .1rem .1rem black;
     border-radius: .5rem;
 }
+
 td {
     vertical-align: top;
     font-size: 75%
 }
+
 img {
     /*TODO */
 }
+
 footer {
     grid-column: 2;
     text-align: center;
@@ -100,10 +115,12 @@ footer {
     color: #A0ADB8;
     background-color: #33383D;
 }
+
 .baz {
     color: #DEDEE3;
     background-color: #4F565E
 }
+
 .ifc {
     display: inline-flex;
     flex-direction: column
