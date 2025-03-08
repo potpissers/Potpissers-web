@@ -64,15 +64,12 @@ function handleRedditVideos() { // TODO -> server handle this
                     .forEach(post => {
                         const url = post.data.url
                         if (url.includes("youtube.com") || url.includes("youtu.be")) {
-                            const blockquote = document.createElement("blockquote")
-                            blockquote.classList.add("reddit-card")
                             const a = document.createElement("a")
                             a.href = "https://www.reddit.com" + post.data.permalink
-                            a.textContent = "Link to Reddit Post"
+                            a.textContent = post.data.title
 
-                            blockquote.appendChild(a)
                             const li = document.createElement("li")
-                            li.appendChild(blockquote)
+                            li.appendChild(a)
                             ul.appendChild(li)
                         }
                     })
