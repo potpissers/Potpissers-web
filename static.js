@@ -74,6 +74,8 @@ function handleRedditVideos() { // TODO -> server handle this
                             const li = document.createElement("li")
                             li.appendChild(blockquote)
                             ul.appendChild(li)
+
+                            window.RLQ.push()
                         }
                     })
             }));
