@@ -73,6 +73,7 @@ function handleRedditVideos() { // TODO -> server handle this
                             img.style.width = "50%"
 
                             const li = document.createElement("li")
+                            li.classList.add("fsb")
                             li.appendChild(a)
                             li.appendChild(img)
                             ul.appendChild(li)
