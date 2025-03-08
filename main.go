@@ -898,6 +898,7 @@ func main() {
 	http.Handle("/static.css", http.StripPrefix("/", http.FileServer(http.Dir("."))))
 	http.Handle("/static.js", http.StripPrefix("/", http.FileServer(http.Dir("."))))
 	http.Handle("/potpisser.jpg", http.StripPrefix("/", http.FileServer(http.Dir("."))))
+	http.Handle("/static-donate.js", http.StripPrefix("/", http.FileServer(http.Dir("."))))
 	err := http.ListenAndServeTLS(":443", "/etc/letsencrypt/live/potpissers.com/fullchain.pem",  "/etc/letsencrypt/live/potpissers.com/privkey.pem", nil)
 	if err != nil {
 		log.Fatal(err)
