@@ -66,12 +66,8 @@ function handleRedditVideos() { // TODO -> server handle this
                         if (url.includes("youtube.com") || url.includes("youtu.be")) {
                             const blockquote = document.createElement("blockquote")
                             blockquote.classList.add("reddit-card")
-                            blockquote.setAttribute("data-card-created", "1624585200")
-
-                            const postUrl = "https://www.reddit.com" + post.data.permalink
-                            blockquote.setAttribute("data-post", postUrl)
                             const a = document.createElement("a")
-                            a.href = postUrl
+                            a.href = "https://www.reddit.com" + post.data.permalink
                             a.textContent = "Link to Reddit Post"
 
                             blockquote.appendChild(a)
