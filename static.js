@@ -69,7 +69,7 @@ function handleRedditVideos() { // TODO -> server handle this
                             a.textContent = post.data.title
 
                             const iframe = document.createElement("iframe")
-                            iframe.src = "https://www.youtube.com/embed/XBUsRVepF-8?autoplay=1&controls=1&modestbranding=1&fs=0&rel=0&showinfo=0&iv_load_policy=3"
+                            iframe.src = "https://www.youtube.com/embed/XBUsRVepF-8"
                             iframe.allowfullscreen = false
                             iframe.width = "100%"
                             iframe.width = "56.25%"
