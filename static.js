@@ -63,10 +63,11 @@ function handleRedditVideos() { // TODO -> server handle this
                 data.data.children
                     .forEach(post => {
                         const url = post.data.url
-                        if (url.includes("youtube.com") || url.includes("youtu.be")) {
+                        if (url && (url.includes("youtube.com") || url.includes("youtu.be"))) {
                             const img = document.createElement("img")
                             img.src = "https://img.youtube.com/vi/XBUsRVepF-8/hqdefault.jpg"
                             img.style.width = "50%"
+
 
                             const a = document.createElement("a")
                             a.href = "https://www.reddit.com" + post.data.permalink
