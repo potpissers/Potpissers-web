@@ -68,6 +68,13 @@ function handleRedditVideos() { // TODO -> server handle this
                             a.href = "https://www.reddit.com" + post.data.permalink
                             a.textContent = post.data.title
 
+                            const iframe = document.createElement("iframe")
+                            iframe.src = "https://www.youtube.com/embed/{video_id}?autoplay=1&controls=1&modestbranding=1&fs=0&rel=0&showinfo=0&iv_load_policy=3"
+                            iframe.allowfullscreen = false
+
+                            //     <iframe width="560" height="315"
+                            // frameborder="0"
+
                             const li = document.createElement("li")
                             li.appendChild(a)
                             ul.appendChild(li)
