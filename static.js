@@ -66,11 +66,11 @@ function handleRedditVideos() { // TODO -> server handle this
                         if (url.includes("youtube.com") || url.includes("youtu.be")) {
                             const iframe = document.createElement("iframe")
                             iframe.src = url.replace("watch?v=", "embed/");
-                            iframe.width = "560";
-                            iframe.height = "315";
-                            iframe.frameborder = "0";
-                            iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-                            iframe.allowfullscreen = true;  // Allow fullscreen
+                            // iframe.width = "";
+                            // iframe.height = "315";
+                            // iframe.frameborder = "0";
+                            // iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+                            // iframe.allowfullscreen = true;  // Allow fullscreen
 
                             // const li = document.createElement("li");
                             // li.appendChild(iframe);
