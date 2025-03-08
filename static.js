@@ -68,17 +68,12 @@ function handleRedditVideos() { // TODO -> server handle this
                             a.href = "https://www.reddit.com" + post.data.permalink
                             a.textContent = post.data.title
 
-                            const iframe = document.createElement("iframe")
-                            iframe.src = "https://www.youtube.com/embed/XBUsRVepF-8?modestbranding=1"
-                            iframe.allowfullscreen = false
-                            iframe.width = "100%"
-                            iframe.width = "56.25%"
-
-                            // frameborder="0"
+                            const img = document.createElement("img")
+                            img.src = "https://img.youtube.com/vi/XBUsRVepF-8/hqdefault.jpg"
 
                             const li = document.createElement("li")
                             li.appendChild(a)
-                            li.appendChild(iframe)
+                            li.appendChild(img)
                             ul.appendChild(li)
                         }
                     })
