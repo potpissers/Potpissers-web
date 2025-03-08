@@ -281,7 +281,7 @@
 <script defer>
     const currentPrices = {
     {{range .MainTemplateData.LineItemData}}
-    {{.ServerName}}-{{.ItemName}}: {{.ItemPriceInCents}},
+    "{{.ServerName}}-{{.ItemName}}": {{.ItemPriceInCents}},
     {{end}}
     }
 </script>
