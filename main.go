@@ -610,7 +610,7 @@ func main() {
 						EnableCoupon: false,
 						EnableLoyalty: false,
 						MerchantSupportEmail: "potpissers@gmail.com",
-						RedirectURL: "potpissers.com/donate",
+						RedirectURL: "potpissers.com/donations",
 						},
 						Description: "hey",
 						Order: Order {
@@ -902,6 +902,8 @@ func main() {
 			log.Fatal(err)
 		}
 	})
+//	http.HandleFunc("/reddit")
+//	http.HandleFunc("/discord") // TODO
 
 	http.Handle("/static.css", http.StripPrefix("/", http.FileServer(http.Dir("."))))
 	http.Handle("/static.js", http.StripPrefix("/", http.FileServer(http.Dir("."))))
