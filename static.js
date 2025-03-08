@@ -70,7 +70,7 @@ function handleRedditVideos() { // TODO -> server handle this
 
                             const img = document.createElement("img")
                             img.src = "https://img.youtube.com/vi/XBUsRVepF-8/hqdefault.jpg"
-                            img.width = "50%"
+                            img.width = "50%";
 
                             const li = document.createElement("li")
                             li.appendChild(a)
