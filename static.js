@@ -41,7 +41,7 @@ function handleContentMaximizeButtonClick(isAnnouncements) {
             contentElement.style.gridTemplateRows = "1fr 1fr"
             document.body.style.gridTemplateRows = "44vh 44vh auto"
         } else {
-            contentElement.style.gridTemplateRows = "auto 1fr"
+            contentElement.style.gridTemplateRows = "auto 22vh"
             document.body.style.gridTemplateRows = "44vh auto auto"
         }
     } else {
@@ -49,7 +49,7 @@ function handleContentMaximizeButtonClick(isAnnouncements) {
             contentElement.style.gridTemplateRows = "1fr 1fr"
             document.body.style.gridTemplateRows = "44vh 44vh auto"
         } else {
-            contentElement.style.gridTemplateRows = "1fr auto"
+            contentElement.style.gridTemplateRows = "22vh auto"
             document.body.style.gridTemplateRows = "44vh auto auto"
         }
     }
