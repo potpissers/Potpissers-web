@@ -133,9 +133,13 @@
         </span>
     </div>
     <ul id="videos" style="text-align: center">
-        <script defer>
+        <script async>
             document.addEventListener('DOMContentLoaded', () => handleRedditVideos());
         </script>
+        <script async src="https://embed.redditmedia.com/widgets/platform.js" charset="UTF-8"></script>
+        <blockquote class="reddit-card" data-card-created="1624585200" data-post="https://www.reddit.com/r/potpissers/comments/xyz123">
+            <a href="https://www.reddit.com/r/potpissers/comments/1j0nxt5/hey/">Link to Reddit Post</a>
+        </blockquote>
         <!--        {{block "videos" .}}TODO {{end}}-->
     </ul>
     <button style="font-size: 75%; margin-top: auto; margin-left: auto">
@@ -203,7 +207,7 @@
                 <div style="display: flex">
                     <input id="donateusername" class="fi hcflife" hidden style="width: 60%; font-size: 75%" placeholder="username"
                            onblur="handleMcNameBlur(this)">
-                    <script defer>
+                    <script async>
                         document.getElementById("donateusername").addEventListener("keydown", (e) => handleMcNameKeyDown(e))
                     </script>
 
@@ -231,7 +235,7 @@
                 <div style="display: flex">
                     <input id="donate-username" class="fi {{.ServerName}}-{{.ItemName}}" hidden style="width: 60%; font-size: 75%" placeholder="username"
                            onblur="handleMcNameBlur(this)">
-                    <script defer>
+                    <script async>
                         document.getElementById("donate-username").addEventListener("keydown", (e) => handleMcNameKeyDown(e))
                     </script>
 
@@ -276,9 +280,9 @@
 
 </html>
 
-<script defer id="staticjs" src="static.js"></script>
-<script defer id="staticdonatejs" src="static-donate.js"></script>
-<script defer>
+<script async id="staticjs" src="static.js"></script>
+<script async id="staticdonatejs" src="static-donate.js"></script>
+<script async>
     const currentPrices = {
     {{range .MainTemplateData.LineItemData}}
     "{{.ServerName}}-{{.ItemName}}": {{.ItemPriceInCents}},
