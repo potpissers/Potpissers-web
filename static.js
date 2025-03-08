@@ -64,12 +64,18 @@ function handleRedditVideos() { // TODO -> server handle this
                     .forEach(post => {
                         const url = post.data.url
                         if (url.includes("youtube.com") || url.includes("youtu.be")) {
-                            const iframe = document.createElement("iframe")
-                            iframe.src = "https://www.reddit.com" + post.data.permalink + ".embed"
-                            // iframe.width = "100%"
-                            // iframe.height = "56.25%" // 16:9 of 100%
-                            // iframe.allowfullscreen = true;
-                            //
+                            const blockquote = document.createElement("blockquote")
+                            blockquote.classList.add("reddit-card")
+                            blockquote.setAttribute("data-card-created", "1624585200")
+
+                            const postUrl = "https://www.reddit.com" + post.data.permalink
+                            blockquote.setAttribute("data-post", postUrl)
+                            const a = document.createElement("a")
+                            a.href = postUrl
+
+                        //         <blockquote class="reddit-card" data-card-created="" data-post="https://www.reddit.com/r/potpissers/comments/xyz123">
+                        //         <a href="https://www.reddit.com/r/potpissers/comments/1j0nxt5/hey/">Link to Reddit Post</a>
+                        // </blockquote>
                             const li = document.createElement("li")
                             li.appendChild(iframe)
                             ul.appendChild(li)
