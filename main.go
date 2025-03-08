@@ -902,6 +902,7 @@ func main() {
 			log.Fatal(err)
 		}
 	})
+//	http.HandleFunc("/github")
 //	http.HandleFunc("/reddit")
 //	http.HandleFunc("/discord") // TODO
 
