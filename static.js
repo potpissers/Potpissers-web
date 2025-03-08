@@ -37,7 +37,7 @@ function handleMcNameKeyDown(event) {
 function handleContentMaximizeButtonClick(isAnnouncements) {
     let contentElement = document.getElementById("content")
     if (isAnnouncements) {
-        if (contentElement.style.gridTemplateRows === "auto 1fr") {
+        if (contentElement.style.gridTemplateRows === "auto 22vh") {
             contentElement.style.gridTemplateRows = "1fr 1fr"
             document.body.style.gridTemplateRows = "44vh 44vh auto"
         } else {
@@ -45,7 +45,7 @@ function handleContentMaximizeButtonClick(isAnnouncements) {
             document.body.style.gridTemplateRows = "44vh auto auto"
         }
     } else {
-        if (contentElement.style.gridTemplateRows === "1fr auto") {
+        if (contentElement.style.gridTemplateRows === "22vh auto") {
             contentElement.style.gridTemplateRows = "1fr 1fr"
             document.body.style.gridTemplateRows = "44vh 44vh auto"
         } else {
