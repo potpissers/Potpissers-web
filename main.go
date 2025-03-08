@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"html/template"
@@ -389,14 +390,14 @@ func main() {
 		ItemDescription string
 		IsPlural bool
 	}
+	offPeakLivesNeeded := float32(serverDatas["hcf"].OffPeakLivesNeededAsCents) / 100.0
 	lineItemDataImmutable := map[string]LineItemData {
 		"hcf-life": {
 			ServerName: "hcf",
 			ItemName: "life",
 			ItemPriceInDollars: 4,
 			ItemPriceInCents: 400,
-			ItemDescription: `/revive (username). removes deathban (alts aren't affected). current revive life cost: {{
-.MainTemplateData.OffPeakLivesNeeded }} & {{ .MainTemplateData.PeakLivesNeeded }} during events`, // TODO -> db + ingame
+			ItemDescription: fmt.Sprintf("/revive (username). removes deathban (alts aren't affected). current revive life cost: %f & %f during events", offPeakLivesNeeded, offPeakLivesNeeded / 2), // TODO -> db + ingame
 			IsPlural: true,
 		},
 		"hcf-basic": {
@@ -404,8 +405,7 @@ func main() {
 			ItemName: "basic",
 			ItemPriceInDollars: 8,
 			ItemPriceInCents: 800,
-			ItemDescription: `/revive (username). removes deathban (alts aren't affected). current revive life cost: {{
-.MainTemplateData.OffPeakLivesNeeded }} & {{ .MainTemplateData.PeakLivesNeeded }} during events`, // TODO -> db + ingame
+			ItemDescription: "green name, basic server slot, and revive cost + deathban reduced to 80%",
 			IsPlural: false,
 		},
 		"hcf-gold": {
@@ -413,8 +413,7 @@ func main() {
 			ItemName: "gold",
 			ItemPriceInDollars: 16,
 			ItemPriceInCents: 1600,
-			ItemDescription: `/revive (username). removes deathban (alts aren't affected). current revive life cost: {{
-.MainTemplateData.OffPeakLivesNeeded }} & {{ .MainTemplateData.PeakLivesNeeded }} during events`, // TODO -> db + ingame
+			ItemDescription: "yellow name, gold server slot, and revive cost + deathban reduced to 60%",
 			IsPlural: false,
 		},
 		"hcf-diamond": {
@@ -422,8 +421,7 @@ func main() {
 			ItemName: "diamond",
 			ItemPriceInDollars: 24,
 			ItemPriceInCents: 2400,
-			ItemDescription: `/revive (username). removes deathban (alts aren't affected). current revive life cost: {{
-.MainTemplateData.OffPeakLivesNeeded }} & {{ .MainTemplateData.PeakLivesNeeded }} during events`, // TODO -> db + ingame
+			ItemDescription: "aqua name, diamond server slot, and revive cost + deathban reduced to 40%",
 			IsPlural: false,
 		},
 		"hcf-ruby": {
@@ -431,8 +429,7 @@ func main() {
 			ItemName: "ruby",
 			ItemPriceInDollars: 32,
 			ItemPriceInCents: 3200,
-			ItemDescription: `/revive (username). removes deathban (alts aren't affected). current revive life cost: {{
-.MainTemplateData.OffPeakLivesNeeded }} & {{ .MainTemplateData.PeakLivesNeeded }} during events`, // TODO -> db + ingame
+			ItemDescription: "red name, ruby server slot, and revive cost + deathban reduced to 20%",
 			IsPlural: false,
 		},
 
@@ -441,8 +438,7 @@ func main() {
 			ItemName: "life",
 			ItemPriceInDollars: 4,
 			ItemPriceInCents: 400,
-			ItemDescription: `/revive (username). removes deathban (alts aren't affected). current revive life cost: {{
-.MainTemplateData.OffPeakLivesNeeded }} & {{ .MainTemplateData.PeakLivesNeeded }} during events`, // TODO -> db + ingame
+			ItemDescription: "/revive (username). removes alt deathban",
 			IsPlural: true,
 		},
 		"mz-basic": {
@@ -450,8 +446,7 @@ func main() {
 			ItemName: "basic",
 			ItemPriceInDollars: 6,
 			ItemPriceInCents: 600,
-			ItemDescription: `/revive (username). removes deathban (alts aren't affected). current revive life cost: {{
-.MainTemplateData.OffPeakLivesNeeded }} & {{ .MainTemplateData.PeakLivesNeeded }} during events`, // TODO -> db + ingame
+			ItemDescription: "green name, basic server slot",
 			IsPlural: false,
 		},
 		"mz-gold": {
@@ -459,8 +454,7 @@ func main() {
 			ItemName: "gold",
 			ItemPriceInDollars: 12,
 			ItemPriceInCents: 1200,
-			ItemDescription: `/revive (username). removes deathban (alts aren't affected). current revive life cost: {{
-.MainTemplateData.OffPeakLivesNeeded }} & {{ .MainTemplateData.PeakLivesNeeded }} during events`, // TODO -> db + ingame
+			ItemDescription: "yellow name, gold server slot",
 			IsPlural: false,
 		},
 		"mz-diamond": {
@@ -468,8 +462,7 @@ func main() {
 			ItemName: "diamond",
 			ItemPriceInDollars: 18,
 			ItemPriceInCents: 1800,
-			ItemDescription: `/revive (username). removes deathban (alts aren't affected). current revive life cost: {{
-.MainTemplateData.OffPeakLivesNeeded }} & {{ .MainTemplateData.PeakLivesNeeded }} during events`, // TODO -> db + ingame
+			ItemDescription: "aqua name, diamond server slot",
 			IsPlural: false,
 		},
 		"mz-ruby": {
@@ -477,8 +470,7 @@ func main() {
 			ItemName: "ruby",
 			ItemPriceInDollars: 24,
 			ItemPriceInCents: 2400,
-			ItemDescription: `/revive (username). removes deathban (alts aren't affected). current revive life cost: {{
-.MainTemplateData.OffPeakLivesNeeded }} & {{ .MainTemplateData.PeakLivesNeeded }} during events`, // TODO -> db + ingame
+			ItemDescription: "red name, ruby server slot",
 			IsPlural: false,
 		},
 	}
