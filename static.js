@@ -64,16 +64,15 @@ function handleRedditVideos() { // TODO -> server handle this
                     .forEach(post => {
                         const url = post.data.url
                         if (url.includes("youtube.com") || url.includes("youtu.be")) {
-                            // const iframe = document.createElement("iframe")
-                            console.log(post.data.permalink)
-                            // iframe.src = url.replace("watch?v=", "embed/")
+                            const iframe = document.createElement("iframe")
+                            iframe.src = "https://www.reddit.com" + post.data.permalink + ".embed"
                             // iframe.width = "100%"
                             // iframe.height = "56.25%" // 16:9 of 100%
                             // iframe.allowfullscreen = true;
                             //
-                            // const li = document.createElement("li")
-                            // li.appendChild(iframe)
-                            // ul.appendChild(li)
+                            const li = document.createElement("li")
+                            li.appendChild(iframe)
+                            ul.appendChild(li)
                         }
                     })
             }));
