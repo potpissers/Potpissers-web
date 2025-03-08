@@ -72,7 +72,7 @@ function handleRedditVideos() { // TODO -> server handle this
                             blockquote.setAttribute("data-post", postUrl)
                             const a = document.createElement("a")
                             a.href = postUrl
-                            a.innerText = "Link to Reddit Post"
+                            a.textContent = "Link to Reddit Post"
 
                             blockquote.appendChild(a)
                             const li = document.createElement("li")
