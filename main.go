@@ -348,7 +348,7 @@ func main() {
 		} `json:"emoji"`
 		Count int `json:"count"`
 	}
-	type Message struct {
+	type DiscordMessage struct {
 		Type           int           `json:"type"`
 		Content        string        `json:"content"`
 		Mentions       []interface{} `json:"mentions"`
@@ -366,15 +366,25 @@ func main() {
 		MentionEveryone bool         `json:"mention_everyone"`
 		Reactions      []Reaction    `json:"reactions"`
 	}
-	getDiscordMessages := func(channelId string) []Message {
+	getDiscordMessages := func(channelId string) []DiscordMessage {
 		req, err := http.NewRequest("GET", "https://discord.com/api/v10/channels/" + channelId + "/messages?limit=50", nil)
 		if err != nil {
 			log.Fatal(err)
 		}
 		req.Header.Set("Authorization", "Bot " + os.Getenv("DISCORD_BOT_TOKEN"))
-		return getJsonTSlice[Message](req)
+		return getJsonTSlice[DiscordMessage](req)
 	}
-	discordAnnouncements, changelog, discordMessages := getDiscordMessages("1265836245678948464"), getDiscordMessages("1346008874830008375"), getDiscordMessages("1245300045188956255")
+	changelog, discordMessages := getDiscordMessages("1346008874830008375"), getDiscordMessages("1245300045188956255")
+	announcements := func() []DiscordMessage {
+		allAnnouncementsMessages := getDiscordMessages("1265836245678948464")
+		var importantAnnouncementsMessages []DiscordMessage
+		for _, discordMessage := range allAnnouncementsMessages {
+			if discordMessage.MentionEveryone {
+				importantAnnouncementsMessages = append(importantAnnouncementsMessages, discordMessage)
+			}
+		}
+		return importantAnnouncementsMessages
+	}()
 	// TODO -> store last checked time and then check for every join or something + refresh button + reddit too
 
 	var messages []string // TODO -> make player name clickable
@@ -396,8 +406,8 @@ func main() {
 			ServerName: "hcf",
 			ItemName: "life",
 			ItemPriceInDollars: 4,
-			ItemPriceInCents: 400,
-			ItemDescription: fmt.Sprintf("/revive (username). removes deathban (alts aren't affected). current revive life cost: %f & %f during events", offPeakLivesNeeded, offPeakLivesNeeded / 2), // TODO -> db + ingame
+			ItemPriceInCents: 400, // TODO -> db + ingame
+			ItemDescription: fmt.Sprintf("/revive (username). removes deathban (alts aren't affected). current revive life cost: %g & %g during events", offPeakLivesNeeded, offPeakLivesNeeded / 2),
 			IsPlural: true,
 		},
 		"hcf-basic": {
@@ -474,6 +484,12 @@ func main() {
 			IsPlural: false,
 		},
 	}
+//	for key, value := range lineItemDataImmutable {
+//		_, err := postgresPool.Exec(context.Background(), InsertServerTips, key, value)
+//		if err != nil {
+//			log.Fatal(err)
+//		}
+//	} // TODO -> handle this
 	http.HandleFunc("/api/donate", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "POST" {
 			var donationRequest []struct {
@@ -725,9 +741,9 @@ func main() {
 		Deaths []Death
 		Messages []string
 		Events []Event
-		Announcements []Message
-		Changelog []Message
-		DiscordMessages []Message
+		Announcements []DiscordMessage
+		Changelog []DiscordMessage
+		DiscordMessages []DiscordMessage
 		Donations []Donation
 		OffPeakLivesNeeded float32
 		PeakLivesNeeded float32
@@ -747,7 +763,7 @@ func main() {
 				Deaths:             deaths,
 				Messages:           messages,
 				Events:             events,
-				Announcements:      discordAnnouncements,
+				Announcements:      announcements,
 				Changelog:          changelog,
 				DiscordMessages:    discordMessages,
 				Donations:          donations,
@@ -781,7 +797,7 @@ func main() {
 				Deaths: mzData.Deaths,
 				Messages: mzData.Messages,
 				Events: mzData.Events,
-				Announcements: discordAnnouncements,
+				Announcements: announcements,
 				Changelog: changelog,
 				DiscordMessages: discordMessages,
 				Donations: donations,
@@ -834,7 +850,7 @@ func main() {
 				Deaths: deaths,
 				Messages: messages,
 				Events: serverData.Events,
-				Announcements: discordAnnouncements,
+				Announcements: announcements,
 				Changelog: changelog,
 				DiscordMessages: discordMessages,
 				Donations: donations,
@@ -1024,6 +1040,8 @@ WHERE bandits.server_id = (SELECT id FROM servers WHERE name = $1)
   AND expiration_timestamp > NOW()
 ORDER BY timestamp DESC
 LIMIT 7`
+const InsertServerTips = `INSERT INTO server_tips (tip_message, server_id)
+VALUES ($1, $2)`
 
 func handlePutJson[T any](r *http.Request, decodeJson func(*T, *http.Request) error, mutex *sync.RWMutex, collection *[]T) {
 	if r.Method == "PATCH" {
