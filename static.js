@@ -68,7 +68,8 @@ function handleRedditVideos() { // TODO -> server handle this
                             blockquote.classList.add("reddit-card")
                             blockquote.setAttribute("data-card-created", "1624585200")
 
-                            const postUrl = "https://www.reddit.com" + post.data.permalink
+                            console.log(post.data.permalink)
+                            const postUrl = "https://www.reddit.com/" + post.data.permalink
                             blockquote.setAttribute("data-post", postUrl)
                             const a = document.createElement("a")
                             a.href = postUrl
