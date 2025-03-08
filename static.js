@@ -65,7 +65,7 @@ function handleRedditVideos() { // TODO -> server handle this
                         const url = post.data.url
                         if (url && (url.includes("youtube.com") || url.includes("youtu.be"))) {
                             const img = document.createElement("img")
-                            img.src = "https://img.youtube.com/vi/" + url.match(/(?:youtu\.be\/|youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=))([a-zA-Z0-9_-]{11})/) + "/hqdefault.jpg"
+                            img.src = "https://img.youtube.com/vi/" + url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/))([a-zA-Z0-9_-]{11})/) + "/hqdefault.jpg"
                             img.style.width = "50%"
 
 
