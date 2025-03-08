@@ -68,7 +68,7 @@ function handleRedditVideos() { // TODO -> server handle this
                             iframe.src = url.replace("watch?v=", "embed/")
                             iframe.width = "100%"
                             iframe.height = "56.25%" // 16:9 of 100%
-                            // iframe.frameborder = "0";
+                            iframe.frameborder = "0";
                             // iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
                             // iframe.allowfullscreen = true;  // Allow fullscreen
 
