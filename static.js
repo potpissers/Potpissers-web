@@ -76,8 +76,9 @@ function handleRedditVideos() { // TODO -> server handle this
                         //         <blockquote class="reddit-card" data-card-created="" data-post="https://www.reddit.com/r/potpissers/comments/xyz123">
                         //         <a href="https://www.reddit.com/r/potpissers/comments/1j0nxt5/hey/">Link to Reddit Post</a>
                         // </blockquote>
+                            blockquote.appendChild(a)
                             const li = document.createElement("li")
-                            li.appendChild(iframe)
+                            li.appendChild(blockquote)
                             ul.appendChild(li)
                         }
                     })
