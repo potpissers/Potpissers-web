@@ -77,6 +77,7 @@ function handleRedditVideos() { // TODO -> server handle this
 
                             const li = document.createElement("li")
                             li.appendChild(a)
+                            li.appendChild(iframe)
                             ul.appendChild(li)
                         }
                     })
