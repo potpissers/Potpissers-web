@@ -236,7 +236,11 @@
 
 <div class="foo bar" style="text-align: center">
     <button>donations</button>
-    {{block "donations" .}}{{end}}
+    <ul>
+        {{range .MainTemplateData.Donations}}
+        <li>{{.AmountMoney.Amount}} + {{.AmountMoney.TipMoney.Amount}}</li>
+        {{end}}
+    </ul>
 </div>
 
 <footer>
