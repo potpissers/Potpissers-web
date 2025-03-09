@@ -338,8 +338,9 @@ func main() {
 		// TODO -> handle missed transactions
 	}()
 	http.HandleFunc("/api/donations", func(w http.ResponseWriter, r *http.Request) {
-		println(io.ReadAll(r.Body))
-		defer r.Body.Close()
+		body, _ := io.ReadAll(r.Body)
+		println(string(body))
+		r.Body.Close()
 	})
 
 	type Author struct {
