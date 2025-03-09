@@ -312,7 +312,7 @@ func main() {
 		Payments []Payment `json:"payments"`
 	}
 	donations := func() []Payment {
-		req, err := http.NewRequest("GET", "https://connect.squareup.com/v2/payments?location_id=" + os.Getenv("SQUARE_LOCATION_ID") + "&limit=12", nil)
+		req, err := http.NewRequest("GET", "https://connect.squareup.com/v2/payments?location_id=" + os.Getenv("SQUARE_LOCATION_ID"), nil)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -335,9 +335,11 @@ func main() {
 			log.Fatal(err)
 		}
 		return donationsResponse.Payments
+		// TODO -> handle missed transactions
 	}()
 	http.HandleFunc("/api/donations", func(w http.ResponseWriter, r *http.Request) {
-		// TODO
+		println(io.ReadAll(r.Body))
+		defer r.Body.Close()
 	})
 
 	type Author struct {
