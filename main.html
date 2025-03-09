@@ -238,7 +238,7 @@
     <button>donations</button>
     <ul>
         {{range .MainTemplateData.Donations}}
-        <li>{{.AmountMoney.Amount}} + {{.AmountMoney.TipMoney.Amount}}</li>
+        <li>{{.AmountMoney.Amount}} + {{.TipMoney.Amount}}</li>
         {{end}}
     </ul>
 </div>
