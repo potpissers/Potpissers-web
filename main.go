@@ -267,31 +267,52 @@ func main() {
 		}, serverName)
 	}
 
-	type Donation struct {
-		ID          string `json:"id"`
-		LocationID  string `json:"location_id"`
-		CreatedAt   string `json:"created_at"`
-		Tenders     []struct {
-			ID            string `json:"id"`
-			AmountMoney   struct {
-				Amount   int    `json:"amount"`
-				Currency string `json:"currency"`
-			} `json:"amount_money"`
-			CreatedAt string `json:"created_at"`
-		} `json:"tenders"`
-		Refunds     []struct {
-			ID            string `json:"id"`
-			AmountMoney   struct {
-				Amount   int    `json:"amount"`
-				Currency string `json:"currency"`
-			} `json:"amount_money"`
-		} `json:"refunds"`
+	type Money struct {
+		Amount   int    `json:"amount"`
+		Currency string `json:"currency"`
 	}
-	type DonationsResponse struct {
-		Transactions []Donation `json:"transactions"`
+//	type CardPaymentTimeline struct {
+//		AuthorizedAt time.Time `json:"authorized_at"`
+//		CapturedAt   time.Time `json:"captured_at"`
+//	}
+	type ProcessingFee struct {
+//		EffectiveAt time.Time `json:"effective_at"`
+//		Type        string    `json:"type"`
+		AmountMoney Money     `json:"amount_money"`
 	}
-	donations := func() []Donation {
-		req, err := http.NewRequest("GET", "https://connect.squareup.com/v2/locations/" + os.Getenv("SQUARE_LOCATION_ID") + "/transactions", nil)
+	type Payment struct {
+//		ID             string         `json:"id"`
+		CreatedAt      time.Time      `json:"created_at"`
+		UpdatedAt      time.Time      `json:"updated_at"`
+		AmountMoney    Money          `json:"amount_money"`
+		TipMoney       Money          `json:"tip_money"`
+		Status         string         `json:"status"`
+//		DelayDuration  string         `json:"delay_duration"`
+//		SourceType     string         `json:"source_type"`
+//		CardDetails    CardDetails    `json:"card_details"`
+//		LocationID     string         `json:"location_id"`
+		OrderID        string         `json:"order_id"`
+		RefundIDs      []string       `json:"refund_ids"`
+//		RiskEvaluation RiskEvaluation `json:"risk_evaluation"`
+		ProcessingFee  []ProcessingFee `json:"processing_fee"`
+		BuyerEmail     string         `json:"buyer_email_address"`
+//		BillingAddress Address        `json:"billing_address"`
+//		ShippingAddress Address       `json:"shipping_address"`
+//		CustomerID     string         `json:"customer_id"`
+		TotalMoney     Money          `json:"total_money"`
+		ApprovedMoney  Money          `json:"approved_money"`
+//		ReceiptNumber  string         `json:"receipt_number"`
+		ReceiptURL     string         `json:"receipt_url"`
+//		DelayAction    string         `json:"delay_action"`
+//		DelayedUntil   time.Time      `json:"delayed_until"`
+//		ApplicationDetails ApplicationDetails `json:"application_details"`
+//		VersionToken   string         `json:"version_token"`
+	}
+	type PaymentResponse struct {
+		Payments []Payment `json:"payments"`
+	}
+	donations := func() []Payment {
+		req, err := http.NewRequest("GET", "https://connect.squareup.com/v2/payments?location_id=" + os.Getenv("SQUARE_LOCATION_ID") + "&limit=12", nil)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -308,12 +329,12 @@ func main() {
 				log.Fatal(err)
 			}
 		}(resp.Body)
-		var donationsResponse DonationsResponse
+		var donationsResponse PaymentResponse
 		err = json.NewDecoder(resp.Body).Decode(&donationsResponse)
 		if err != nil {
 			log.Fatal(err)
 		}
-		return donationsResponse.Transactions
+		return donationsResponse.Payments
 	}()
 	http.HandleFunc("/api/donations", func(w http.ResponseWriter, r *http.Request) {
 		// TODO
@@ -531,15 +552,11 @@ func main() {
 				}
 			}
 
-			type BasePriceMoney struct {
-				Amount   int    `json:"amount"`
-				Currency string `json:"currency"`
-			}
 			type LineItem struct {
 				Quantity       string `json:"quantity"`
 				ItemType       string `json:"item_type"`
 				Name           string `json:"name"`
-				BasePriceMoney BasePriceMoney `json:"base_price_money"`
+				BasePriceMoney Money `json:"base_price_money"`
 			}
 			var lineItems []LineItem
 			for _, lineItem := range donationRequest {
@@ -547,7 +564,7 @@ func main() {
 					Quantity: strconv.Itoa(lineItem.LineItemAmount),
 					ItemType: "ITEM",
 					Name: lineItem.LineItemName + "," + lineItem.Username,
-					BasePriceMoney: BasePriceMoney {
+					BasePriceMoney: Money {
 						Amount: lineItem.LineItemCostInCents,
 						Currency: "USD",
 						},
@@ -563,11 +580,11 @@ func main() {
 				State string `json:"state"`
 			}
 			type NetAmounts struct {
-				TotalMoney           BasePriceMoney `json:"total_money"`
-				TaxMoney             BasePriceMoney `json:"tax_money"`
-				DiscountMoney        BasePriceMoney `json:"discount_money"`
-				TipMoney             BasePriceMoney `json:"tip_money"`
-				ServiceChargeMoney   BasePriceMoney `json:"service_charge_money"`
+				TotalMoney           Money `json:"total_money"`
+				TaxMoney             Money `json:"tax_money"`
+				DiscountMoney        Money `json:"discount_money"`
+				TipMoney             Money `json:"tip_money"`
+				ServiceChargeMoney   Money `json:"service_charge_money"`
 			}
 			type Order struct {
 				LocationID string `json:"location_id"`
@@ -640,15 +657,15 @@ func main() {
 						Quantity       string `json:"quantity"`
 						ItemType       string `json:"item_type"`
 						Name           string `json:"name"`
-						BasePriceMoney BasePriceMoney `json:"base_price_money"`
+						BasePriceMoney Money `json:"base_price_money"`
 
 						UID                      string `json:"uid"`
-						VariationTotalPriceMoney BasePriceMoney  `json:"variation_total_price_money"`
-						GrossSalesMoney          BasePriceMoney  `json:"gross_sales_money"`
-						TotalTaxMoney            BasePriceMoney  `json:"total_tax_money"`
-						TotalDiscountMoney       BasePriceMoney  `json:"total_discount_money"`
-						TotalMoney               BasePriceMoney  `json:"total_money"`
-						TotalServiceChargeMoney  BasePriceMoney  `json:"total_service_charge_money"`
+						VariationTotalPriceMoney Money  `json:"variation_total_price_money"`
+						GrossSalesMoney          Money  `json:"gross_sales_money"`
+						TotalTaxMoney            Money  `json:"total_tax_money"`
+						TotalDiscountMoney       Money  `json:"total_discount_money"`
+						TotalMoney               Money  `json:"total_money"`
+						TotalServiceChargeMoney  Money  `json:"total_service_charge_money"`
 					}
 					type OrderResponse struct {
 						LocationID string `json:"location_id"`
@@ -662,12 +679,12 @@ func main() {
 						UpdatedAt             time.Time     `json:"updated_at"`
 						State                 string        `json:"state"`
 						Version               int           `json:"version"`
-						TotalMoney            BasePriceMoney         `json:"total_money"`
-						TotalTaxMoney         BasePriceMoney         `json:"total_tax_money"`
-						TotalDiscountMoney    BasePriceMoney         `json:"total_discount_money"`
-						TotalTipMoney         BasePriceMoney         `json:"total_tip_money"`
-						TotalServiceChargeMoney BasePriceMoney       `json:"total_service_charge_money"`
-						NetAmountDueMoney     BasePriceMoney         `json:"net_amount_due_money"`
+						TotalMoney            Money         `json:"total_money"`
+						TotalTaxMoney         Money         `json:"total_tax_money"`
+						TotalDiscountMoney    Money         `json:"total_discount_money"`
+						TotalTipMoney         Money         `json:"total_tip_money"`
+						TotalServiceChargeMoney Money       `json:"total_service_charge_money"`
+						NetAmountDueMoney     Money         `json:"net_amount_due_money"`
 					}
 					type RelatedResources struct {
 						Orders []OrderResponse `json:"orders"`
@@ -739,7 +756,7 @@ func main() {
 		Announcements []DiscordMessage
 		Changelog []DiscordMessage
 		DiscordMessages []DiscordMessage
-		Donations []Donation
+		Donations []Payment
 		OffPeakLivesNeeded float32
 		PeakLivesNeeded float32
 		LineItemData map[string]LineItemData
