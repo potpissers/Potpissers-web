@@ -296,7 +296,7 @@ func main() {
 			log.Fatal(err)
 		}
 		req.Header.Add("Authorization", "Bearer " + os.Getenv("SQUARE_ACCESS_TOKEN"))
-		req.Header.Add("Content-Type", "application/json") // TODO ?
+		req.Header.Add("Content-Type", "application/json")
 
 		resp, err := (&http.Client{}).Do(req)
 		if err != nil {
@@ -308,13 +308,8 @@ func main() {
 				log.Fatal(err)
 			}
 		}(resp.Body)
-		body, err := io.ReadAll(resp.Body)
-		if err != nil {
-			log.Fatal(err)
-		}
-//		println(body) // TODO -> use Decode
 		var donationsResponse DonationsResponse
-		err = json.Unmarshal(body, &donationsResponse)
+		err = json.NewDecoder(resp.Body).Decode(&donationsResponse)
 		if err != nil {
 			log.Fatal(err)
 		}
