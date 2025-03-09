@@ -5,7 +5,7 @@ function handleAddLineItemJson(itemName, itemAmountString) {
     document.getElementById("checkoutbalance").innerText = "$" + currentLineItemsCost / 100
 
     privateJsonLineItems.push({
-        username: document.getElementById("donateusername").value,
+        username: document.getElementById("donate-username").value,
         line_item_name: itemName,
         line_item_amount: parseInt(itemAmountString, 10),
     })
