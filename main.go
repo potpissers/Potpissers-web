@@ -401,7 +401,7 @@ func main() {
 		IsPlural bool
 	}
 	offPeakLivesNeeded := float32(serverDatas["hcf"].OffPeakLivesNeededAsCents) / 100.0
-	lineItemDataImmutable := map[string]LineItemData {
+	lineItemDataImmutable := map[string]LineItemData { // TODO -> this doesn't store order FUCK!!!!
 		"hcf-life": {
 			ServerName: "hcf",
 			ItemName: "life",
@@ -902,9 +902,15 @@ func main() {
 			log.Fatal(err)
 		}
 	})
-//	http.HandleFunc("/github")
-//	http.HandleFunc("/reddit")
-//	http.HandleFunc("/discord") // TODO
+	http.HandleFunc("/github", func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, "https://github.com/potpissers", http.StatusMovedPermanently)
+	})
+	http.HandleFunc("/reddit", func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, "https://www.reddit.com/r/potpissers/", http.StatusMovedPermanently)
+	})
+	http.HandleFunc("/discord", func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, "https://discord.gg/Cqnvktf7EF", http.StatusFound)
+	})
 
 	http.Handle("/static.css", http.StripPrefix("/", http.FileServer(http.Dir("."))))
 	http.Handle("/static.js", http.StripPrefix("/", http.FileServer(http.Dir("."))))
