@@ -11,9 +11,7 @@ import (
 )
 var postgresPool = func() *pgxpool.Pool {
 	pool, err := pgxpool.New(context.Background(), os.Getenv("POSTGRES_CONNECTION_STRING"))
-	if err != nil {
-		log.Fatal(err)
-	}
+	handleFatalErr(err)
 	return pool
 	// defer'd => main
 }()
@@ -24,9 +22,7 @@ func main() {
 	mojangUsernameProxyEndpoint := "/api/proxy/mojang/username/"
 	http.HandleFunc(mojangUsernameProxyEndpoint, func(w http.ResponseWriter, r *http.Request) {
 		resp, err := http.Get("https://api.minecraftservices.com/minecraft/profile/lookup/name/" + strings.TrimPrefix(r.URL.Path, mojangUsernameProxyEndpoint))
-		if err != nil {
-			log.Println(err)
-		}
+		handleNonFatalErr(err)
 		defer func(Body io.ReadCloser) {
 			err := Body.Close()
 			if err != nil {
@@ -38,19 +34,20 @@ func main() {
 		w.WriteHeader(resp.StatusCode)
 
 		_, err = io.Copy(w, resp.Body)
-		if err != nil {
-			log.Println(err)
-		}
+		handleNonFatalErr(err)
 	})
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		log.Fatal(w.Write(home))
+		_, err := w.Write(home)
+		handleFatalErr(err)
 	})
 	http.HandleFunc("/mz", func(w http.ResponseWriter, r *http.Request) {
-		log.Fatal(w.Write(mz))
+		_, err := w.Write(mz)
+		handleFatalErr(err)
 	})
 	http.HandleFunc("/hcf", func(w http.ResponseWriter, r *http.Request) {
-		log.Fatal(w.Write(hcf))
+		_, err := w.Write(hcf)
+		handleFatalErr(err)
 	})
 	http.HandleFunc("/github", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "https://github.com/potpissers", http.StatusMovedPermanently)
@@ -67,5 +64,5 @@ func main() {
 	http.Handle("/potpisser.jpg", http.StripPrefix("/", http.FileServer(http.Dir("."))))
 	http.Handle("/static-donate.js", http.StripPrefix("/", http.FileServer(http.Dir("."))))
 
-	log.Fatal(http.ListenAndServeTLS(":443", "/etc/letsencrypt/live/potpissers.com/fullchain.pem",  "/etc/letsencrypt/live/potpissers.com/privkey.pem", nil))
+	log.Println(http.ListenAndServeTLS(":443", "/etc/letsencrypt/live/potpissers.com/fullchain.pem",  "/etc/letsencrypt/live/potpissers.com/privkey.pem", nil))
 }

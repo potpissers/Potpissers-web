@@ -127,8 +127,6 @@ WHERE bandits.server_id = (SELECT id FROM servers WHERE name = $1)
   AND expiration_timestamp > NOW()
 ORDER BY timestamp DESC
 LIMIT 7`
-const InsertServerTips = `INSERT INTO server_tips (tip_message, server_id)
-VALUES ($1, $2)`
 const ReturnUnsuccessfulTransactions = `SELECT order_id
 FROM unnest($1) AS order_id
 WHERE order_id NOT IN (SELECT square_order_id
