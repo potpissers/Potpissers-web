@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/jackc/pgx/v5"
 	"html/template"
+	"io"
 	"log"
 	"math"
 	"net/http"
@@ -46,8 +47,12 @@ var newPlayers = func() []newPlayer {
 	return newPlayers
 }()
 func init() {
-	http.HandleFunc("/api/new-players", func(w http.ResponseWriter, r *http.Request) {
-		handleLocalhostPutJson[newPlayer](r, func(newT *newPlayer, r *http.Request) error {return json.NewDecoder(r.Body).Decode(&newT)}, &newPlayersMu, &newPlayers)
+	http.HandleFunc("/api/players/new", func(w http.ResponseWriter, r *http.Request) {
+		handleLocalhostJsonPatch[newPlayer](r, func(newT *newPlayer, r *http.Request) error {return json.NewDecoder(r.Body).Decode(&newT)}, &newPlayersMu, &newPlayers)
+		home = getHome()
+		mz = getMz()
+		hcf = getMz()
+		// TODO -> sse
 	})
 }
 var newPlayersMu sync.RWMutex
@@ -78,8 +83,13 @@ var deaths = func() []death {
 	return deaths
 }()
 func init() {
-	http.HandleFunc("/api/deaths", func(w http.ResponseWriter, r *http.Request) {
-		handleLocalhostPutJson[death](r, func(newDeath *death, r *http.Request) error {return json.NewDecoder(r.Body).Decode(&newDeath)}, &deathsMu, &deaths)
+	http.HandleFunc("/api/hcf/deaths", func(w http.ResponseWriter, r *http.Request) {
+		handleLocalhostJsonPatch[death](r, func(newDeath *death, r *http.Request) error {return json.NewDecoder(r.Body).Decode(&newDeath)}, &deathsMu, &deaths)
+		// TODO -> get and re-render server
+	})
+	http.HandleFunc("/api/mz/deaths", func(w http.ResponseWriter, r *http.Request) {
+		handleLocalhostJsonPatch[death](r, func(newDeath *death, r *http.Request) error {return json.NewDecoder(r.Body).Decode(&newDeath)}, &deathsMu, &deaths)
+		// TODO -> get and re-render server
 	})
 }
 var deathsMu sync.RWMutex
@@ -112,8 +122,13 @@ var events = func() []event {
 	return events
 }()
 func init() {
-	http.HandleFunc("/api/events", func(w http.ResponseWriter, r *http.Request) {
-		handleLocalhostPutJson[event](r, func(newDeath *event, r *http.Request) error {return json.NewDecoder(r.Body).Decode(&newDeath)}, &eventsMu, &events)
+	http.HandleFunc("/api/hcf/events", func(w http.ResponseWriter, r *http.Request) {
+		handleLocalhostJsonPatch[event](r, func(newDeath *event, r *http.Request) error {return json.NewDecoder(r.Body).Decode(&newDeath)}, &eventsMu, &events)
+		// TODO ->
+	})
+	http.HandleFunc("/api/mz/events", func(w http.ResponseWriter, r *http.Request) {
+		handleLocalhostJsonPatch[event](r, func(newDeath *event, r *http.Request) error {return json.NewDecoder(r.Body).Decode(&newDeath)}, &eventsMu, &events)
+		// TODO ->
 	})
 }
 var eventsMu sync.RWMutex
@@ -155,7 +170,7 @@ type serverData struct {
 	currentPlayers []string
 	deaths []death
 	events []event
-	//		Transaction []Transaction TODO
+	donations []order // TODO impl
 	messages []string
 	videos []string
 
@@ -174,7 +189,10 @@ var serverDatas = func() map[string]*serverData {
 	return serverDatas
 }()
 func init() {
-	http.HandleFunc("/api/servers/", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/api/hcf/", func(w http.ResponseWriter, r *http.Request) {
+		// TODO
+	})
+	http.HandleFunc("/api/mz/", func(w http.ResponseWriter, r *http.Request) {
 		// TODO
 	})
 }
@@ -193,7 +211,10 @@ var currentPlayers = func() []string  {
 	return currentPlayers
 }()
 func init() {
-	http.HandleFunc("/api/online", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/api/hcf/online", func(w http.ResponseWriter, r *http.Request) {
+		// TODO
+	})
+	http.HandleFunc("/api/mz/online", func(w http.ResponseWriter, r *http.Request) {
 		// TODO
 	})
 
@@ -291,6 +312,11 @@ type payment struct {
 	//		VersionToken   string         `json:"version_token"`
 }
 var donations = func() []order {
+	getFatalRequest := func(url string, body io.Reader) *http.Request {
+		req, err := http.NewRequest("GET", url, body)
+		handleFatalErr(err)
+		return req
+	}
 	req := getFatalRequest("https://connect.squareup.com/v2/payments?location_id=" + os.Getenv("SQUARE_LOCATION_ID"), nil)
 	addSquareHeaders := func(request *http.Request) {
 		request.Header.Add("Authorization", "Bearer " + os.Getenv("SQUARE_ACCESS_TOKEN"))
@@ -299,7 +325,7 @@ var donations = func() []order {
 	addSquareHeaders(req)
 
 	var paymentIds []string
-	for _, payment := range getJsonT[struct {Payments []payment `json:"payments"`}](req).Payments {
+	for _, payment := range getFatalJsonT[struct {Payments []payment `json:"payments"`}](req).Payments {
 		paymentIds = append(paymentIds, payment.OrderID)
 	}
 
@@ -314,7 +340,7 @@ var donations = func() []order {
 	req = getFatalRequest("https://connect.squareup.com/v2/orders/batch-retrieve", bytes.NewBuffer(requestJson))
 	addSquareHeaders(req) // shirley this keeps their correct order
 
-	orders := getJsonT[struct {Orders []order `json:"orders"`}](req).Orders
+	orders := getFatalJsonT[struct {Orders []order `json:"orders"`}](req).Orders
 	var orderIds []string
 	for _, orderId := range orders {
 		orderIds = append(orderIds, orderId.ID)
@@ -330,10 +356,12 @@ var donations = func() []order {
 	return orders
 }()
 func init() {
-	http.HandleFunc("/api/donations", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/api/hcf", func(w http.ResponseWriter, r *http.Request) {
+	})
+	http.HandleFunc("/api/mz", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case "GET": { // square's payment.create
-			payment := getJsonT[struct {
+			payment := getFatalJsonT[struct {
 //				NotificationURL string  `json:"notification_url"`
 //				StatusCode      int     `json:"status_code"`
 //				PassesFilter    bool    `json:"passes_filter"`
@@ -578,7 +606,7 @@ func getDiscordMessages(channelId string) []DiscordMessage {
 		log.Fatal(err)
 	}
 	req.Header.Set("Authorization", "Bot " + os.Getenv("DISCORD_BOT_TOKEN"))
-	return getJsonT[[]DiscordMessage](req)
+	return getFatalJsonT[[]DiscordMessage](req)
 }
 var discordMessages = getDiscordMessages("1245300045188956255")
 var changelog = getDiscordMessages("1346008874830008375")
@@ -594,7 +622,10 @@ var announcements = func() []DiscordMessage {
 }() // TODO -> store last checked time and then check for every join or something + refresh button + reddit too
 var messages []string // TODO -> make player name clickable, maybe velocity/paper will let me query message history
 func init() {
-	http.HandleFunc("/api/chat", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/api/hcf/chat", func(w http.ResponseWriter, r *http.Request) {
+		// TODO messages + ServerData.Messages
+	})
+	http.HandleFunc("/api/mz/chat", func(w http.ResponseWriter, r *http.Request) {
 		// TODO messages + ServerData.Messages
 	})
 }
@@ -612,6 +643,7 @@ var lineItemDatas = func() []lineItemData {
 	offPeakLivesNeeded := float32(serverDatas["hcf"].offPeakLivesNeededAsCents) / 100.0
 	lineItemData := []LineItemData {}
 }()
+
 func getMainTemplate(fileName string) *template.Template {
 	mainTemplate, err := template.ParseFiles("main.html", fileName)
 	handleFatalErr(err)
@@ -620,6 +652,9 @@ func getMainTemplate(fileName string) *template.Template {
 var homeTemplate = getMainTemplate("main-home.html")
 var mzTemplate = getMainTemplate("main-mz.html")
 var hcfTemplate = getMainTemplate("main-hcf.html")
+var home = getHome()
+var mz = getMz()
+var hcf = getHcf()
 type mainTemplateData struct {
 	networkPlayers []string
 	serverPlayers []string
@@ -636,6 +671,128 @@ type mainTemplateData struct {
 	peakLivesNeeded float32
 	lineItemData []lineItemData
 }
-var home = getHome()
-var mz = getMz()
-var hcf = getHcf()
+func getHome() []byte {
+	var buffer bytes.Buffer
+	offPeakLivesNeeded := float32(serverDatas["hcf"].offPeakLivesNeededAsCents / 100.0)
+	handleFatalErr(homeTemplate.Execute(&buffer, struct {
+		mainTemplateData mainTemplateData
+	}{
+		mainTemplateData {
+			networkPlayers: currentPlayers,
+			serverPlayers: serverDatas["hub"].currentPlayers,
+			newPlayers: newPlayers,
+			potpissersTips:     potpissersTips,
+			deaths:             deaths,
+			messages:           messages,
+			events:             events,
+			announcements:      announcements,
+			changelog:          changelog,
+			discordMessages:    discordMessages,
+			donations:          donations,
+			offPeakLivesNeeded: offPeakLivesNeeded,
+			peakLivesNeeded:    offPeakLivesNeeded / 2,
+			lineItemData:       lineItemDatas,
+			},
+			}))
+	return buffer.Bytes()
+}
+func getMz() []byte {
+	var buffer bytes.Buffer
+	mzData := serverDatas["mz"]
+	offPeakLivesNeeded := float32(serverDatas["hcf"].offPeakLivesNeededAsCents / 100.0)
+	handleFatalErr(mzTemplate.Execute(&buffer, struct {
+		MainTemplateData mainTemplateData
+
+		AttackSpeed string
+
+		MzTips []string
+		Bandits []bandit
+	}{
+		MainTemplateData: mainTemplateData {
+			networkPlayers: currentPlayers,
+			serverPlayers: mzData.currentPlayers,
+			newPlayers: newPlayers,
+			potpissersTips: potpissersTips,
+			deaths: mzData.deaths,
+			messages: mzData.messages,
+			events: mzData.events,
+			announcements: announcements,
+			changelog: changelog,
+			discordMessages: discordMessages,
+			donations: donations,
+			offPeakLivesNeeded: offPeakLivesNeeded,
+			peakLivesNeeded: offPeakLivesNeeded / 2,
+			lineItemData:       lineItemDatas,
+			},
+
+			AttackSpeed: mzData.attackSpeedName,
+
+			MzTips: mzTips,
+			Bandits: mzData.bandits,
+			}))
+	return buffer.Bytes()
+}
+func getHcf() []byte {
+	var buffer bytes.Buffer
+	serverData := serverDatas["hcf"]
+	offPeakLivesNeeded := float32(serverData.offPeakLivesNeededAsCents / 100.0)
+	handleFatalErr(hcfTemplate.Execute(&buffer, struct {
+		MainTemplateData mainTemplateData
+
+		AttackSpeed string
+
+		DeathBanMinutes int
+		LootFactor int
+		BorderSize int
+
+		SharpnessLimit int
+		ProtectionLimit int
+		PowerLimit int
+		RegenLimit int
+		StrengthLimit int
+		IsWeaknessEnabled bool
+		IsBardPassiveDebuffingEnabled bool
+		DtrMax float32
+
+		CubecoreTips []string
+		ClassTips []string
+		Factions []faction
+	}{
+		MainTemplateData: mainTemplateData {
+			networkPlayers: currentPlayers,
+			serverPlayers: serverData.currentPlayers,
+			newPlayers: newPlayers,
+			potpissersTips: potpissersTips,
+			deaths: deaths,
+			messages: messages,
+			events: serverData.events,
+			announcements: announcements,
+			changelog: changelog,
+			discordMessages: discordMessages,
+			donations: donations,
+			offPeakLivesNeeded: offPeakLivesNeeded,
+			peakLivesNeeded: offPeakLivesNeeded / 2,
+			lineItemData:       lineItemDatas,
+			},
+
+			AttackSpeed: serverData.attackSpeedName,
+
+			DeathBanMinutes: serverData.deathBanMinutes,
+			//			LootFactor: serverDatas["hcf"]., // TODO -> defaultLootFactor
+			BorderSize: serverData.worldBorderRadius,
+
+			SharpnessLimit: serverData.sharpnessLimit,
+			ProtectionLimit: serverData.protectionLimit,
+			PowerLimit: serverData.powerLimit,
+			RegenLimit: serverData.regenLimit,
+			StrengthLimit: serverData.strengthLimit,
+			IsWeaknessEnabled: serverData.isWeaknessEnabled,
+			IsBardPassiveDebuffingEnabled: serverData.isBardPassiveDebuffingEnabled,
+			DtrMax: serverData.dtrMax,
+
+			CubecoreTips: cubecoreTips,
+			ClassTips: cubecoreClassTips,
+			Factions: serverData.factions,
+			}))
+	return buffer.Bytes()
+}

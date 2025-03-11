@@ -19,35 +19,36 @@ var postgresPool = func() *pgxpool.Pool {
 func main() {
 	defer postgresPool.Close()
 
-	mojangUsernameProxyEndpoint := "/api/proxy/mojang/username/"
+	const mojangUsernameProxyEndpoint = "/api/proxy/mojang/username/"
 	http.HandleFunc(mojangUsernameProxyEndpoint, func(w http.ResponseWriter, r *http.Request) {
 		resp, err := http.Get("https://api.minecraftservices.com/minecraft/profile/lookup/name/" + strings.TrimPrefix(r.URL.Path, mojangUsernameProxyEndpoint))
-		handleNonFatalErr(err)
-		defer func(Body io.ReadCloser) {
-			err := Body.Close()
+		if err != nil {
+			log.Println(err)
+			return
+		} else {
+			defer resp.Body.Close()
+
+			// TODO -> headers ?
+			w.WriteHeader(resp.StatusCode)
+			_, err = io.Copy(w, resp.Body)
 			if err != nil {
 				log.Println(err)
+				return
 			}
-		}(resp.Body)
-
-		// TODO -> headers ?
-		w.WriteHeader(resp.StatusCode)
-
-		_, err = io.Copy(w, resp.Body)
-		handleNonFatalErr(err)
+		}
 	})
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		_, err := w.Write(home)
+	handleFatalRequestWrite := func(_ int, err error) {
 		handleFatalErr(err)
+	}
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		handleFatalRequestWrite(w.Write(home))
 	})
 	http.HandleFunc("/mz", func(w http.ResponseWriter, r *http.Request) {
-		_, err := w.Write(mz)
-		handleFatalErr(err)
+		handleFatalRequestWrite(w.Write(mz))
 	})
 	http.HandleFunc("/hcf", func(w http.ResponseWriter, r *http.Request) {
-		_, err := w.Write(hcf)
-		handleFatalErr(err)
+		handleFatalRequestWrite(w.Write(hcf))
 	})
 	http.HandleFunc("/github", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "https://github.com/potpissers", http.StatusMovedPermanently)
