@@ -38,18 +38,23 @@ func main() {
 		}
 	})
 
-	handleFatalRequestWrite := func(_ int, err error) {
-		handleFatalErr(err)
-	}
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		handleFatalRequestWrite(w.Write(home))
-	})
-	http.HandleFunc("/mz", func(w http.ResponseWriter, r *http.Request) {
-		handleFatalRequestWrite(w.Write(mz))
-	})
-	http.HandleFunc("/hcf", func(w http.ResponseWriter, r *http.Request) {
-		handleFatalRequestWrite(w.Write(hcf))
-	})
+	for _, data := range []struct {
+		endpoint string
+		bytes    []byte
+	} {
+		{endpoint: "/", bytes: home},
+		{endpoint: "/hub", bytes: home},
+		{endpoint: "/mz", bytes: mz},
+		{endpoint: "/kollusion", bytes: kollusion},
+		{endpoint: "/hcf", bytes: hcf},
+		{endpoint: "/cubecore", bytes: cubecore},
+		} {
+		http.HandleFunc(data.endpoint, func(w http.ResponseWriter, r *http.Request) {
+			_, err := w.Write(data.bytes)
+			handleFatalErr(err)
+		})
+		}
+
 	http.HandleFunc("/github", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "https://github.com/potpissers", http.StatusMovedPermanently)
 	})
