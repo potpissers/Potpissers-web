@@ -2,15 +2,16 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"github.com/jackc/pgx/v5"
 	"html/template"
-	"io"
 	"log"
 	"math"
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 )
@@ -333,16 +334,7 @@ type payment struct {
 }
 
 var donations = func() []order {
-	getFatalRequest := func(url string, body io.Reader) *http.Request {
-		req, err := http.NewRequest("GET", url, body)
-		handleFatalErr(err)
-		return req
-	}
-	req := getFatalRequest("https://connect.squareup.com/v2/payments?location_id="+os.Getenv("SQUARE_LOCATION_ID"), nil)
-	addSquareHeaders := func(request *http.Request) {
-		request.Header.Add("Authorization", "Bearer "+os.Getenv("SQUARE_ACCESS_TOKEN"))
-		request.Header.Add("Content-Type", "application/json")
-	}
+	req := getFatalRequest("GET", "https://connect.squareup.com/v2/payments?location_id="+os.Getenv("SQUARE_LOCATION_ID"), nil)
 	addSquareHeaders(req)
 
 	var paymentIds []string
@@ -360,7 +352,7 @@ var donations = func() []order {
 		OrderIDs:   paymentIds,
 	})
 	handleFatalErr(err)
-	req = getFatalRequest("https://connect.squareup.com/v2/orders/batch-retrieve", bytes.NewBuffer(requestJson))
+	req = getFatalRequest("POST", "https://connect.squareup.com/v2/orders/batch-retrieve", bytes.NewBuffer(requestJson))
 	addSquareHeaders(req) // shirley this keeps their correct order
 
 	orders := getFatalJsonT[struct {
@@ -565,30 +557,56 @@ func init() {
 		}
 	})
 	http.HandleFunc("/api/donations", func(w http.ResponseWriter, r *http.Request) { // square's payment.create webhook
-		foo // TODO -> header auth
+		if !strings.Contains(r.Header.Get("Authorization"), os.Getenv("SQUARE_ACCESS_TOKEN")) {
+			log.Println("err: square webhook auth")
+			return
+		} else {
+			payment := getFatalJsonT[struct {
+				//				NotificationURL string  `json:"notification_url"`
+				//				StatusCode      int     `json:"status_code"`
+				//				PassesFilter    bool    `json:"passes_filter"`
+				Payload struct {
+					//					MerchantID string `json:"merchant_id"`
+					//							Type       string `json:"type"`
+					//							EventID    string `json:"event_id"`
+					//							CreatedAt  string `json:"created_at"`
+					Data struct {
+						//		Type   string `json:"type"`
+						//		ID     string `json:"id"`
+						Object struct {
+							Payment payment `json:"payment"`
+						} `json:"object"`
+					} `json:"data"`
+				} `json:"payload"`
+			}](r).Payload.Data.Object.Payment
 
-		payment := getFatalJsonT[struct {
-			//				NotificationURL string  `json:"notification_url"`
-			//				StatusCode      int     `json:"status_code"`
-			//				PassesFilter    bool    `json:"passes_filter"`
-			Payload struct {
-				//					MerchantID string `json:"merchant_id"`
-				//							Type       string `json:"type"`
-				//							EventID    string `json:"event_id"`
-				//							CreatedAt  string `json:"created_at"`
-				Data struct {
-					//		Type   string `json:"type"`
-					//		ID     string `json:"id"`
-					Object struct {
-						Payment payment `json:"payment"`
-					} `json:"object"`
-				} `json:"data"`
-			} `json:"payload"`
-		}](r).Payload.Data.Object.Payment
+			req := getFatalRequest("GET", "https://connect.squareup.com/v2/orders/" + payment.OrderID, nil)
+			defer req.Body.Close()
+			order := getFatalJsonT[order](r)
+
+			for _, lineItem := range order.LineItems {
+				parts := strings.Split(lineItem.ItemType, ",")
+				for {
+					foo // TODO -> get uuid
+				}
+				for {
+					_, err := postgresPool.Exec(context.Background(), InsertSuccessfulTransaction, payment.OrderID, uuid, parts[0], parts[1], payment.AmountMoney.Amount - payment.TipMoney.Amount)
+					if err != nil {
+						log.Println(err)
+						time.Sleep(30 * time.Second)
+						continue
+					} else {
+						foo // TODO -> apply benefits
+
+						break
+					}
+				}
+			}
+		}
 	})
 }
 
-type DiscordMessage struct {
+type discordMessage struct {
 	Type         int           `json:"type"`
 	Content      string        `json:"content"`
 	Mentions     []interface{} `json:"mentions"`
@@ -628,20 +646,20 @@ type DiscordMessage struct {
 	} `json:"reactions"`
 }
 
-func getDiscordMessages(channelId string) []DiscordMessage {
+func getDiscordMessages(channelId string) []discordMessage {
 	req, err := http.NewRequest("GET", "https://discord.com/api/v10/channels/"+channelId+"/messages?limit=50", nil)
 	if err != nil {
 		log.Fatal(err)
 	}
 	req.Header.Set("Authorization", "Bot "+os.Getenv("DISCORD_BOT_TOKEN"))
-	return getFatalJsonT[[]DiscordMessage](req)
+	return getFatalJsonT[[]discordMessage](req)
 }
 
 var discordMessages = getDiscordMessages("1245300045188956255")
 var changelog = getDiscordMessages("1346008874830008375")
-var announcements = func() []DiscordMessage {
+var announcements = func() []discordMessage {
 	allAnnouncementsMessages := getDiscordMessages("1265836245678948464")
-	var importantAnnouncementsMessages []DiscordMessage
+	var importantAnnouncementsMessages []discordMessage
 	for _, discordMessage := range allAnnouncementsMessages {
 		if discordMessage.MentionEveryone {
 			importantAnnouncementsMessages = append(importantAnnouncementsMessages, discordMessage)
@@ -696,9 +714,9 @@ type mainTemplateData struct {
 	deaths             []death
 	messages           []string
 	events             []event
-	announcements      []DiscordMessage
-	changelog          []DiscordMessage
-	discordMessages    []DiscordMessage
+	announcements      []discordMessage
+	changelog          []discordMessage
+	discordMessages    []discordMessage
 	donations          []order
 	offPeakLivesNeeded float32
 	peakLivesNeeded    float32

@@ -5,8 +5,10 @@ import (
 	"encoding/json"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
+	"io"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 	"sync"
 )
@@ -47,4 +49,14 @@ func handleLocalhostJsonPatch[T any](r *http.Request, decodeJson func(*T, *http.
 			mutex.Unlock()
 		}
 	}
+}
+
+func getFatalRequest(method string, url string, body io.Reader) *http.Request {
+	req, err := http.NewRequest(method, url, body)
+	handleFatalErr(err)
+	return req
+}
+func addSquareHeaders(request *http.Request) {
+	request.Header.Add("Authorization", "Bearer "+ os.Getenv("SQUARE_ACCESS_TOKEN"))
+	request.Header.Add("Content-Type", "application/json")
 }

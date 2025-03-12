@@ -131,3 +131,7 @@ const ReturnUnsuccessfulTransactions = `SELECT order_id
 FROM unnest($1) AS order_id
 WHERE order_id NOT IN (SELECT square_order_id
                        FROM successful_transactions)`
+const InsertSuccessfulTransaction = `INSERT INTO successful_transactions (square_order_id, user_uuid, line_item_id, line_item_player_name,
+                                     amount_as_cents, referrer)
+VALUES ($1, $2, (SELECT id FROM line_items WHERE line_item_name = $3), $4, $5,
+        (SELECT referrer FROM user_referrals WHERE user_uuid = $2))`
