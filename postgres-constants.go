@@ -128,7 +128,7 @@ WHERE bandits.server_id = (SELECT id FROM servers WHERE name = $1)
 ORDER BY timestamp DESC
 LIMIT 7`
 const ReturnUnsuccessfulTransactions = `SELECT order_id
-FROM unnest($1) AS order_id
+FROM unnest($1::TEXT[]) AS order_id
 WHERE order_id NOT IN (SELECT square_order_id
                        FROM successful_transactions)`
 const InsertSuccessfulTransaction = `INSERT INTO successful_transactions (square_order_id, user_uuid, line_item_id, line_item_player_name,
