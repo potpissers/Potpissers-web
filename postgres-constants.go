@@ -2,8 +2,7 @@ package main
 
 const ReturnServerTips = `SELECT tip_message
 FROM server_tips
-         JOIN servers ON server_tips.server_id = servers.id
-WHERE name = $1`
+WHERE game_mode_name = $1`
 const Return12Deaths = `SELECT name,
        victim_user_fight_id,
        timestamp,

@@ -28,10 +28,10 @@ func getTipsBlocking(tipsName string) []string {
 	return tips
 }
 
-var potpissersTips = getTipsBlocking("null")
+var potpissersTips = getTipsBlocking("potpissers")
 var cubecoreTips = getTipsBlocking("cubecore")
 var cubecoreClassTips = getTipsBlocking("cubecore_classes")
-var mzTips = getTipsBlocking("minez")
+var mzTips = getTipsBlocking("mz")
 
 type newPlayer struct {
 	PlayerUuid string    `json:"playerUuid"`
