@@ -15,7 +15,7 @@ import (
 	"sync"
 	"time"
 )
-
+const minecraftUsernameLookupUrl = "https://api.minecraftservices.com/minecraft/profile/lookup/name/"
 func getTipsBlocking(tipsName string) []string {
 	var tips []string
 	getRowsBlocking(ReturnServerTips, func(rows pgx.Rows) {
@@ -732,9 +732,16 @@ type lineItemData struct {
 }
 
 var lineItemDatas = func() []lineItemData {
-	// TODO query
-	offPeakLivesNeeded := float32(serverDatas["hcf"].offPeakLivesNeededAsCents) / 100.0
-	lineItemData := []LineItemData{}
+	var slice []lineItemData
+	getRowsBlocking(ReturnAllLineItems, func(rows pgx.Rows) {
+		var death lineItemData
+		handleFatalPgx(pgx.ForEachRow(rows, []any{&death.gamemodeName, &death.itemName, &death.itemPriceInCents, &death.itemDescription, &death.isPlural}, func() error {
+			death.itemPriceInDollars = death.itemPriceInCents / 100.0
+			slice = append(slice, death)
+			return nil
+		}))
+	})
+	return slice
 }()
 
 func getMainTemplate(fileName string) *template.Template {

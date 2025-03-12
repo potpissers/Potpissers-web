@@ -9,15 +9,12 @@ import (
 	"os"
 	"strings"
 )
-
 var postgresPool = func() *pgxpool.Pool {
 	pool, err := pgxpool.New(context.Background(), os.Getenv("POSTGRES_CONNECTION_STRING"))
 	handleFatalErr(err)
 	return pool
 	// defer'd => main
 }()
-
-const minecraftUsernameLookupUrl = "https://api.minecraftservices.com/minecraft/profile/lookup/name/"
 
 func main() {
 	defer postgresPool.Close()
@@ -48,9 +45,9 @@ func main() {
 		{endpoint: "/", bytes: home},
 		{endpoint: "/hub", bytes: home},
 		{endpoint: "/mz", bytes: mz},
-		{endpoint: "/kollusion", bytes: kollusion},
+//		{endpoint: "/kollusion", bytes: kollusion}, // TODO
 		{endpoint: "/hcf", bytes: hcf},
-		{endpoint: "/cubecore", bytes: cubecore},
+//		{endpoint: "/cubecore", bytes: cubecore},
 	} {
 		http.HandleFunc(data.endpoint, func(w http.ResponseWriter, r *http.Request) {
 			_, err := w.Write(data.bytes)

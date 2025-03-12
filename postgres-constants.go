@@ -136,3 +136,7 @@ const InsertSuccessfulTransaction = `INSERT INTO successful_transactions (square
                                      amount_as_cents, referrer)
 VALUES ($1, $2, (SELECT id FROM line_items WHERE line_item_name = $3), $4, $5, $6,
         (SELECT referrer FROM user_referrals WHERE user_uuid = $2))`
+
+const ReturnAllLineItems = `SELECT game_mode_name, line_item_name, value_in_cents, description, is_plural
+FROM line_items
+ORDER BY id`
