@@ -17,12 +17,14 @@ var postgresPool = func() *pgxpool.Pool {
 	// defer'd => main
 }()
 
+const minecraftUsernameLookupUrl = "https://api.minecraftservices.com/minecraft/profile/lookup/name/"
+
 func main() {
 	defer postgresPool.Close()
 
 	const mojangUsernameProxyEndpoint = "/api/proxy/mojang/username/"
 	http.HandleFunc(mojangUsernameProxyEndpoint, func(w http.ResponseWriter, r *http.Request) {
-		resp, err := http.Get("https://api.minecraftservices.com/minecraft/profile/lookup/name/" + strings.TrimPrefix(r.URL.Path, mojangUsernameProxyEndpoint))
+		resp, err := http.Get(minecraftUsernameLookupUrl + strings.TrimPrefix(r.URL.Path, mojangUsernameProxyEndpoint))
 		if err != nil {
 			log.Println(err)
 			return

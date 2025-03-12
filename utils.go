@@ -22,13 +22,21 @@ func handleFatalPgx(_ pgconn.CommandTag, err error) {
 		log.Fatal(err)
 	}
 }
-func getFatalJsonT[T any](request *http.Request) T {
+func handleGetFatalJsonT[T any](request *http.Request) T {
 	resp, err := (&http.Client{}).Do(request)
 	handleFatalErr(err)
 	defer resp.Body.Close()
+	return getFatalJsonT[T](resp)
+}
+
+func getFatalJsonT[T any](resp *http.Response) T {
 	var messages T
 	handleFatalErr(json.NewDecoder(resp.Body).Decode(&messages))
 	return messages
+}
+
+func getMojangApiUuidRequest(username string) (*http.Response, error) {
+	return http.Get(minecraftUsernameLookupUrl + username)
 }
 
 func getRowsBlocking(query string, bar func(rows pgx.Rows), params ...any) {
