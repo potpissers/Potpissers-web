@@ -9,6 +9,7 @@ import (
 	"os"
 	"strings"
 )
+
 var postgresPool = func() *pgxpool.Pool {
 	pool, err := pgxpool.New(context.Background(), os.Getenv("POSTGRES_CONNECTION_STRING"))
 	handleFatalErr(err)
@@ -41,19 +42,19 @@ func main() {
 	for _, data := range []struct {
 		endpoint string
 		bytes    []byte
-	} {
+	}{
 		{endpoint: "/", bytes: home},
 		{endpoint: "/hub", bytes: home},
 		{endpoint: "/mz", bytes: mz},
 		{endpoint: "/kollusion", bytes: kollusion},
 		{endpoint: "/hcf", bytes: hcf},
 		{endpoint: "/cubecore", bytes: cubecore},
-		} {
+	} {
 		http.HandleFunc(data.endpoint, func(w http.ResponseWriter, r *http.Request) {
 			_, err := w.Write(data.bytes)
 			handleFatalErr(err)
 		})
-		}
+	}
 
 	http.HandleFunc("/github", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "https://github.com/potpissers", http.StatusMovedPermanently)
@@ -70,5 +71,5 @@ func main() {
 	http.Handle("/potpisser.jpg", http.StripPrefix("/", http.FileServer(http.Dir("."))))
 	http.Handle("/static-donate.js", http.StripPrefix("/", http.FileServer(http.Dir("."))))
 
-	log.Println(http.ListenAndServeTLS(":443", "/etc/letsencrypt/live/potpissers.com/fullchain.pem",  "/etc/letsencrypt/live/potpissers.com/privkey.pem", nil))
+	log.Println(http.ListenAndServeTLS(":443", "/etc/letsencrypt/live/potpissers.com/fullchain.pem", "/etc/letsencrypt/live/potpissers.com/privkey.pem", nil))
 }

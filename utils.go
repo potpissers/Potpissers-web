@@ -10,7 +10,6 @@ import (
 	"strings"
 	"sync"
 )
-
 func handleFatalErr(err error) {
 	if err != nil {
 		log.Fatal(err)
