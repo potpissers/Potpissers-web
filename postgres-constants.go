@@ -100,7 +100,7 @@ const ReturnAllServerData = `SELECT death_ban_minutes,
        bard_radius,
        rogue_radius,
        servers.name,
-       attack_speeds.attack_speed_name
+       attack_speeds.name
 FROM server_data
          JOIN servers ON id = server_id
          JOIN attack_speeds ON attack_speed_id = attack_speeds.id`
