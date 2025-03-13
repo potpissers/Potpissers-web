@@ -753,10 +753,6 @@ func getMainTemplate(fileName string) *template.Template {
 var homeTemplate = getMainTemplate("main-home.html")
 var mzTemplate = getMainTemplate("main-mz.html")
 var hcfTemplate = getMainTemplate("main-hcf.html")
-var home = getHome()
-var mz = getMz()
-var hcf = getHcf()
-
 type mainTemplateData struct {
 	networkPlayers     []string
 	serverPlayers      []string
@@ -899,3 +895,6 @@ func getHcf() []byte {
 	}))
 	return buffer.Bytes()
 }
+var home = getHome()
+var mz = getMz()
+var hcf = getHcf()
