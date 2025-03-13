@@ -47,7 +47,7 @@ func getRowsBlocking(query string, bar func(rows pgx.Rows), params ...any) {
 }
 
 func handleLocalhostJsonPatch[T any](r *http.Request, decodeJson func(*T, *http.Request) error, mutex *sync.RWMutex, collection *[]T) {
-	if r.Method == "PATCH" {
+	if r.Method == "POST" {
 		if strings.HasPrefix(r.RemoteAddr, "127.0.0.1") {
 			var newT T
 			handleFatalErr(decodeJson(&newT, r))

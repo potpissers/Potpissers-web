@@ -15,7 +15,9 @@ import (
 	"sync"
 	"time"
 )
+
 const minecraftUsernameLookupUrl = "https://api.minecraftservices.com/minecraft/profile/lookup/name/"
+
 func getTipsBlocking(tipsName string) []string {
 	var tips []string
 	getRowsBlocking(ReturnServerTips, func(rows pgx.Rows) {
@@ -93,11 +95,11 @@ var deaths = func() []death {
 }()
 
 func init() {
-	http.HandleFunc("/api/hcf/deaths", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/api/deaths/hcf", func(w http.ResponseWriter, r *http.Request) {
 		handleLocalhostJsonPatch[death](r, func(newDeath *death, r *http.Request) error { return json.NewDecoder(r.Body).Decode(&newDeath) }, &deathsMu, &deaths)
 		// TODO -> get and re-render server
 	})
-	http.HandleFunc("/api/mz/deaths", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/api/death/mz", func(w http.ResponseWriter, r *http.Request) {
 		handleLocalhostJsonPatch[death](r, func(newDeath *death, r *http.Request) error { return json.NewDecoder(r.Body).Decode(&newDeath) }, &deathsMu, &deaths)
 		// TODO -> get and re-render server
 	})
@@ -136,11 +138,11 @@ var events = func() []event {
 }()
 
 func init() {
-	http.HandleFunc("/api/hcf/events", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/api/events/hcf", func(w http.ResponseWriter, r *http.Request) {
 		handleLocalhostJsonPatch[event](r, func(newDeath *event, r *http.Request) error { return json.NewDecoder(r.Body).Decode(&newDeath) }, &eventsMu, &events)
 		// TODO ->
 	})
-	http.HandleFunc("/api/mz/events", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/api/events/mz", func(w http.ResponseWriter, r *http.Request) {
 		handleLocalhostJsonPatch[event](r, func(newDeath *event, r *http.Request) error { return json.NewDecoder(r.Body).Decode(&newDeath) }, &eventsMu, &events)
 		// TODO ->
 	})
@@ -180,6 +182,7 @@ type serverData struct {
 	offPeakLivesNeededAsCents     int
 	bardRadius                    int
 	rogueRadius                   int
+	timestamp                     time.Time
 	serverName                    string
 	attackSpeedName               string
 
@@ -194,23 +197,29 @@ type serverData struct {
 	bandits  []bandit
 }
 
+var currentHcfServerName string
 var serverDatas = func() map[string]*serverData {
 	serverDatas := make(map[string]*serverData)
 	getRowsBlocking(ReturnAllServerData, func(rows pgx.Rows) {
 		var serverData serverData
-		handleFatalPgx(pgx.ForEachRow(rows, []any{&serverData.deathBanMinutes, &serverData.worldBorderRadius, &serverData.sharpnessLimit, &serverData.powerLimit, &serverData.protectionLimit, &serverData.regenLimit, &serverData.strengthLimit, &serverData.isWeaknessEnabled, &serverData.isBardPassiveDebuffingEnabled, &serverData.dtrFreezeTimer, &serverData.dtrMax, &serverData.dtrMaxTime, &serverData.dtrOffPeakFreezeTime, &serverData.offPeakLivesNeededAsCents, &serverData.bardRadius, &serverData.rogueRadius, &serverData.serverName, &serverData.attackSpeedName}, func() error {
+		handleFatalPgx(pgx.ForEachRow(rows, []any{&serverData.deathBanMinutes, &serverData.worldBorderRadius, &serverData.sharpnessLimit, &serverData.powerLimit, &serverData.protectionLimit, &serverData.regenLimit, &serverData.strengthLimit, &serverData.isWeaknessEnabled, &serverData.isBardPassiveDebuffingEnabled, &serverData.dtrFreezeTimer, &serverData.dtrMax, &serverData.dtrMaxTime, &serverData.dtrOffPeakFreezeTime, &serverData.offPeakLivesNeededAsCents, &serverData.bardRadius, &serverData.rogueRadius, &serverData.timestamp, &serverData.serverName, &serverData.attackSpeedName}, func() error {
 			serverDatas[serverData.serverName] = &serverData
 			return nil
 		}))
 	})
+	var currentPotentialHcfServerTimestamp time.Time
+	for _, data := range serverDatas {
+		if strings.Contains(data.serverName, "hcf") && data.timestamp.After(currentPotentialHcfServerTimestamp) {
+			currentHcfServerName = data.serverName
+			currentPotentialHcfServerTimestamp = data.timestamp
+		}
+	}
+
 	return serverDatas
 }()
 
 func init() {
-	http.HandleFunc("/api/hcf/", func(w http.ResponseWriter, r *http.Request) {
-		// TODO
-	})
-	http.HandleFunc("/api/mz/", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/api/servers/", func(w http.ResponseWriter, r *http.Request) {
 		// TODO
 	})
 }
@@ -231,10 +240,10 @@ var currentPlayers = func() []string {
 }()
 
 func init() {
-	http.HandleFunc("/api/hcf/online", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/api/online/hcf", func(w http.ResponseWriter, r *http.Request) {
 		// TODO
 	})
-	http.HandleFunc("/api/mz/online", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/api/online/mz", func(w http.ResponseWriter, r *http.Request) {
 		// TODO
 	})
 
@@ -713,10 +722,10 @@ var announcements = func() []discordMessage {
 }()                   // TODO -> store last checked time and then check for every join or something + refresh button + reddit too
 var messages []string // TODO -> make player name clickable, maybe velocity/paper will let me query message history
 func init() {
-	http.HandleFunc("/api/hcf/chat", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/api/chat/hcf", func(w http.ResponseWriter, r *http.Request) {
 		// TODO messages + ServerData.Messages
 	})
-	http.HandleFunc("/api/mz/chat", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/api/chat/mz", func(w http.ResponseWriter, r *http.Request) {
 		// TODO messages + ServerData.Messages
 	})
 }
@@ -753,6 +762,7 @@ func getMainTemplate(fileName string) *template.Template {
 var homeTemplate = getMainTemplate("main-home.html")
 var mzTemplate = getMainTemplate("main-mz.html")
 var hcfTemplate = getMainTemplate("main-hcf.html")
+
 type mainTemplateData struct {
 	networkPlayers     []string
 	serverPlayers      []string
@@ -772,7 +782,7 @@ type mainTemplateData struct {
 
 func getHome() []byte {
 	var buffer bytes.Buffer
-	offPeakLivesNeeded := float32(1)//float32(serverDatas["hcf"].offPeakLivesNeededAsCents / 100.0)
+	offPeakLivesNeeded := float32(serverDatas[currentHcfServerName].offPeakLivesNeededAsCents / 100.0)
 	handleFatalErr(homeTemplate.Execute(&buffer, struct {
 		mainTemplateData mainTemplateData
 	}{
@@ -798,7 +808,7 @@ func getHome() []byte {
 func getMz() []byte {
 	var buffer bytes.Buffer
 	mzData := serverDatas["mz"]
-	offPeakLivesNeeded := float32(1)//float32(serverDatas["hcf"].offPeakLivesNeededAsCents / 100.0)
+	offPeakLivesNeeded := float32(serverDatas[currentHcfServerName].offPeakLivesNeededAsCents / 100.0)
 	handleFatalErr(mzTemplate.Execute(&buffer, struct {
 		MainTemplateData mainTemplateData
 
@@ -833,8 +843,8 @@ func getMz() []byte {
 }
 func getHcf() []byte {
 	var buffer bytes.Buffer
-	serverData := serverDatas["hcf"]
-	offPeakLivesNeeded := float32(1)//float32(serverData.offPeakLivesNeededAsCents / 100.0)
+	serverData := serverDatas[currentHcfServerName]
+	offPeakLivesNeeded := float32(serverData.offPeakLivesNeededAsCents / 100.0)
 	handleFatalErr(hcfTemplate.Execute(&buffer, struct {
 		MainTemplateData mainTemplateData
 
@@ -895,6 +905,7 @@ func getHcf() []byte {
 	}))
 	return buffer.Bytes()
 }
+
 var home = getHome()
 var mz = getMz()
 var hcf = getHcf()
