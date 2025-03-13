@@ -772,7 +772,7 @@ type mainTemplateData struct {
 
 func getHome() []byte {
 	var buffer bytes.Buffer
-	offPeakLivesNeeded := float32(serverDatas["hcf"].offPeakLivesNeededAsCents / 100.0)
+	offPeakLivesNeeded := float32(1)//float32(serverDatas["hcf"].offPeakLivesNeededAsCents / 100.0)
 	handleFatalErr(homeTemplate.Execute(&buffer, struct {
 		mainTemplateData mainTemplateData
 	}{
@@ -798,7 +798,7 @@ func getHome() []byte {
 func getMz() []byte {
 	var buffer bytes.Buffer
 	mzData := serverDatas["mz"]
-	offPeakLivesNeeded := float32(serverDatas["hcf"].offPeakLivesNeededAsCents / 100.0)
+	offPeakLivesNeeded := float32(1)//float32(serverDatas["hcf"].offPeakLivesNeededAsCents / 100.0)
 	handleFatalErr(mzTemplate.Execute(&buffer, struct {
 		MainTemplateData mainTemplateData
 
@@ -834,7 +834,7 @@ func getMz() []byte {
 func getHcf() []byte {
 	var buffer bytes.Buffer
 	serverData := serverDatas["hcf"]
-	offPeakLivesNeeded := float32(serverData.offPeakLivesNeededAsCents / 100.0)
+	offPeakLivesNeeded := float32(1)//float32(serverData.offPeakLivesNeededAsCents / 100.0)
 	handleFatalErr(hcfTemplate.Execute(&buffer, struct {
 		MainTemplateData mainTemplateData
 
