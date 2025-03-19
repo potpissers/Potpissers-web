@@ -224,7 +224,6 @@ var serverDatas = func() map[string]*serverData {
 	})
 	var currentPotentialHcfServerTimestamp time.Time
 	for _, data := range serverDatas {
-		println(data.serverName)
 		if strings.Contains(data.serverName, "hcf") && data.timestamp.After(currentPotentialHcfServerTimestamp) {
 			currentHcfServerName = data.serverName
 			currentPotentialHcfServerTimestamp = data.timestamp
@@ -798,7 +797,6 @@ type mainTemplateData struct {
 
 func getHome() []byte {
 	var buffer bytes.Buffer
-	println(currentHcfServerName == "")
 	offPeakLivesNeeded := float32(serverDatas[currentHcfServerName].offPeakLivesNeededAsCents / 100.0)
 	handleFatalErr(homeTemplate.Execute(&buffer, struct {
 		mainTemplateData mainTemplateData
