@@ -27,15 +27,15 @@ func handleGetFatalJsonT[T any](request *http.Request) T {
 	resp, err := (&http.Client{}).Do(request)
 	handleFatalErr(err)
 	defer resp.Body.Close()
-	rawJson, _ := ioutil.ReadAll(resp.Body)
-	println(rawJson)
-    handleFatalErr(err)
 	return getFatalJsonT[T](resp)
 }
 
 func getFatalJsonT[T any](resp *http.Response) T {
 	var messages T
-	handleFatalErr(json.NewDecoder(resp.Body).Decode(&messages))
+	body, err := ioutil.ReadAll(resp.Body)
+    handleFatalErr(err)
+	println(body)
+	handleFatalErr(json.Unmarshal(body, &messages))
 	return messages
 }
 
