@@ -779,20 +779,20 @@ var mzTemplate = getMainTemplate("main-mz.html")
 var hcfTemplate = getMainTemplate("main-hcf.html")
 
 type mainTemplateData struct {
-	networkPlayers []string
-	serverPlayers  []string
-	newPlayers     []newPlayer
-	potpissersTips []string
-	deaths         []death
-	messages       []string
-	events   []event
-	announcements []discordMessage
-	changelog     []discordMessage
-	discordMessages []discordMessage
-	donations          []order
-	offPeakLivesNeeded float32
-	peakLivesNeeded float32
-	lineItemData    []lineItemData
+	NetworkPlayers []string
+	ServerPlayers  []string
+	NewPlayers     []newPlayer
+	PotpissersTips []string
+	Deaths         []death
+	Messages       []string
+	Events   []event
+	Announcements []discordMessage
+	Changelog     []discordMessage
+	DiscordMessages []discordMessage
+	Donations          []order
+	OffPeakLivesNeeded float32
+	PeakLivesNeeded float32
+	LineItemData    []lineItemData
 }
 
 func getHome() []byte {
@@ -802,20 +802,20 @@ func getHome() []byte {
 		MainTemplateData mainTemplateData
 	}{
 		mainTemplateData{
-			networkPlayers:  currentPlayers,
-			serverPlayers:   serverDatas["hub"].currentPlayers,
-			newPlayers:      newPlayers,
-			potpissersTips:  potpissersTips,
-			deaths:          deaths,
-			messages:        messages,
-			events:          events,
-			announcements:   announcements,
-			changelog:       changelog,
-			discordMessages: discordMessages,
-			donations:       donations,
-			offPeakLivesNeeded: offPeakLivesNeeded,
-			peakLivesNeeded:    offPeakLivesNeeded / 2,
-			lineItemData:       lineItemDatas,
+			NetworkPlayers:  currentPlayers,
+			ServerPlayers:   serverDatas["hub"].currentPlayers,
+			NewPlayers:      newPlayers,
+			PotpissersTips:  potpissersTips,
+			Deaths:          deaths,
+			Messages:        messages,
+			Events:          events,
+			Announcements:   announcements,
+			Changelog:       changelog,
+			DiscordMessages: discordMessages,
+			Donations:       donations,
+			OffPeakLivesNeeded: offPeakLivesNeeded,
+			PeakLivesNeeded:    offPeakLivesNeeded / 2,
+			LineItemData:       lineItemDatas,
 		},
 	}))
 	return buffer.Bytes()
@@ -833,20 +833,20 @@ func getMz() []byte {
 		Bandits []bandit
 	}{
 		MainTemplateData: mainTemplateData{
-			networkPlayers:  currentPlayers,
-			serverPlayers:   mzData.currentPlayers,
-			newPlayers:      newPlayers,
-			potpissersTips:  potpissersTips,
-			deaths:          mzData.deaths,
-			messages:        mzData.messages,
-			events:          mzData.events,
-			announcements:   announcements,
-			changelog:       changelog,
-			discordMessages: discordMessages,
-			donations:       donations,
-			offPeakLivesNeeded: offPeakLivesNeeded,
-			peakLivesNeeded:    offPeakLivesNeeded / 2,
-			lineItemData:       lineItemDatas,
+			NetworkPlayers:  currentPlayers,
+			ServerPlayers:   mzData.currentPlayers,
+			NewPlayers:      newPlayers,
+			PotpissersTips:  potpissersTips,
+			Deaths:          mzData.deaths,
+			Messages:        mzData.messages,
+			Events:          mzData.events,
+			Announcements:   announcements,
+			Changelog:       changelog,
+			DiscordMessages: discordMessages,
+			Donations:       donations,
+			OffPeakLivesNeeded: offPeakLivesNeeded,
+			PeakLivesNeeded:    offPeakLivesNeeded / 2,
+			LineItemData:       lineItemDatas,
 		},
 
 		AttackSpeed: mzData.attackSpeedName,
@@ -883,20 +883,20 @@ func getHcf() []byte {
 		Factions     []faction
 	}{
 		MainTemplateData: mainTemplateData{
-			networkPlayers:  currentPlayers,
-			serverPlayers:   serverData.currentPlayers,
-			newPlayers:      newPlayers,
-			potpissersTips:  potpissersTips,
-			deaths:          deaths,
-			messages:        messages,
-			events:          serverData.events,
-			announcements:   announcements,
-			changelog:       changelog,
-			discordMessages: discordMessages,
-			donations:       donations,
-			offPeakLivesNeeded: offPeakLivesNeeded,
-			peakLivesNeeded:    offPeakLivesNeeded / 2,
-			lineItemData:       lineItemDatas,
+			NetworkPlayers:  currentPlayers,
+			ServerPlayers:   serverData.currentPlayers,
+			NewPlayers:      newPlayers,
+			PotpissersTips:  potpissersTips,
+			Deaths:          deaths,
+			Messages:        messages,
+			Events:          serverData.events,
+			Announcements:   announcements,
+			Changelog:       changelog,
+			DiscordMessages: discordMessages,
+			Donations:       donations,
+			OffPeakLivesNeeded: offPeakLivesNeeded,
+			PeakLivesNeeded:    offPeakLivesNeeded / 2,
+			LineItemData:       lineItemDatas,
 		},
 
 		AttackSpeed: serverData.attackSpeedName,
