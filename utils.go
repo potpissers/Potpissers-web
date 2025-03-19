@@ -6,6 +6,7 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -26,6 +27,9 @@ func handleGetFatalJsonT[T any](request *http.Request) T {
 	resp, err := (&http.Client{}).Do(request)
 	handleFatalErr(err)
 	defer resp.Body.Close()
+	rawJson, _ := ioutil.ReadAll(resp.Body)
+	println(rawJson)
+    handleFatalErr(err)
 	return getFatalJsonT[T](resp)
 }
 
