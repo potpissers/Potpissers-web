@@ -47,7 +47,7 @@ func init() {
 
 type newPlayer struct {
 	PlayerUuid string    `json:"playerUuid"`
-	Referrer   string    `json:"referrer"`
+	Referrer   *string    `json:"referrer"`
 	Timestamp  time.Time `json:"timestamp"`
 	RowNumber  int       `json:"rowNumber"`
 }
