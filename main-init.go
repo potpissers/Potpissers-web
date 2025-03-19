@@ -922,6 +922,6 @@ func getHcf() []byte {
 	return buffer.Bytes()
 }
 
-var home = getHome()
-var mz = getMz()
-var hcf = getHcf()
+var home []byte
+var mz []byte
+var hcf []byte

@@ -191,7 +191,7 @@
             {{range .MainTemplateData.LineItemData}}
             <li class="fc85">
                 <button onclick="handleClassHiddenToggle('{{.GamemodeName}}-{{.ItemName}}')" class="fsb">
-                    {{.GamemodeName}}<br>{{.ItemName}}<span>$4</span>
+                    {{.GamemodeName}}<br>{{.ItemName}}<span>${{.ItemPriceInDollars}}</span>
                 </button>
 
                 <p class={{.GamemodeName}}-{{.ItemName}} hidden>

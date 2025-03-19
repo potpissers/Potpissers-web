@@ -38,6 +38,10 @@ func main() {
 		}
 	})
 
+	home = getHome()
+	hcf = getHcf()
+	mz = getMz()
+
 	for _, data := range []struct {
 		endpoint string
 		bytes    []byte
