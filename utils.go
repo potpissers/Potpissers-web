@@ -6,7 +6,6 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -32,10 +31,7 @@ func handleGetFatalJsonT[T any](request *http.Request) T {
 
 func getFatalJsonT[T any](resp *http.Response) T {
 	var messages T
-	body, err := ioutil.ReadAll(resp.Body)
-    handleFatalErr(err)
-	println(string(body))
-	handleFatalErr(json.Unmarshal(body, &messages))
+	handleFatalErr(json.NewDecoder(resp.Body).Decode(&messages))
 	return messages
 }
 
