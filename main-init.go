@@ -51,17 +51,45 @@ type newPlayer struct {
 	Referrer   *string   `json:"referrer"`
 	Timestamp  time.Time `json:"timestamp"`
 	RowNumber  int       `json:"rowNumber"`
+
+	PlayerName string `json:"playerName"`
 }
 
 var newPlayers = func() []newPlayer {
 	var newPlayers []newPlayer
-	getRowsBlocking("SELECT * FROM get_12_newest_players()", func(rows pgx.Rows) {
+	getRowsBlocking("SELECT * FROM get_10_newest_players()", func(rows pgx.Rows) {
 		var death newPlayer
 		handleFatalPgx(pgx.ForEachRow(rows, []any{&death.PlayerUuid, &death.Referrer, &death.Timestamp, &death.RowNumber}, func() error {
 			newPlayers = append(newPlayers, death)
 			return nil
 		}))
 	})
+
+	var uuids []string
+	for i := range newPlayers {
+		uuids = append(uuids, newPlayers[i].PlayerUuid)
+	}
+	jsonData, err := json.Marshal(uuids)
+	if err != nil {
+		log.Fatal(err)
+	}
+	resp, err := http.Post("https://api.minecraftservices.com/minecraft/profile/lookup/bulk/byname", "application/json", bytes.NewBuffer(jsonData))
+	if err != nil {
+		log.Fatal(err)
+	}
+	var result []map[string]interface{}
+	err = json.NewDecoder(resp.Body).Decode(&result)
+	if err != nil {
+	    log.Fatal(err)
+	}
+	for i, item := range result {
+		if newPlayers[i].PlayerName != item["name"] {
+			log.Fatal("mojang api data err")
+		} else {
+			newPlayers[i].PlayerName = item["name"].(string)
+		}
+	}
+
 	return newPlayers
 }()
 
