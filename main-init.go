@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"github.com/jackc/pgx/v5"
 	"html/template"
+	"io"
 	"log"
 	"math"
 	"net/http"
@@ -619,6 +620,12 @@ func init() {
 	http.HandleFunc("/api/donations", func(w http.ResponseWriter, r *http.Request) { // square's payment.create webhook
 		if !strings.Contains(r.Header.Get("Authorization"), os.Getenv("SQUARE_ACCESS_TOKEN")) {
 			log.Println("err: square webhook auth")
+			bodyBytes, err := io.ReadAll(r.Body)
+			if err != nil {
+				log.Println("Failed to read body:", err)
+			} else {
+				log.Printf("Request Body: %s", string(bodyBytes))
+			}
 			return
 		} else {
 			payment := handleGetFatalJsonT[struct {
