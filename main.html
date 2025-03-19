@@ -258,7 +258,7 @@
 <script async>
     const currentPrices = {
     {{range .MainTemplateData.LineItemData}}
-    "{{.ServerName}}-{{.ItemName}}": {{.ItemPriceInCents}},
+    "{{.GamemodeName}}-{{.ItemName}}": {{.ItemPriceInCents}},
     {{end}}
     }
 </script>
