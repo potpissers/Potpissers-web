@@ -229,6 +229,7 @@ var serverDatas = func() map[string]*serverData {
 			println(data.serverName)
 		}
 	}
+	println(currentHcfServerName == "")
 
 	return serverDatas
 }()
@@ -797,6 +798,7 @@ type mainTemplateData struct {
 
 func getHome() []byte {
 	var buffer bytes.Buffer
+	println(currentHcfServerName == "")
 	offPeakLivesNeeded := float32(serverDatas[currentHcfServerName].offPeakLivesNeededAsCents / 100.0)
 	handleFatalErr(homeTemplate.Execute(&buffer, struct {
 		mainTemplateData mainTemplateData
