@@ -18,22 +18,32 @@ import (
 
 const minecraftUsernameLookupUrl = "https://api.minecraftservices.com/minecraft/profile/lookup/name/"
 
-func getTipsBlocking(tipsName string) []string {
-	var tips []string
-	getRowsBlocking(ReturnServerTips, func(rows pgx.Rows) {
-		var tipMessage string
-		handleFatalPgx(pgx.ForEachRow(rows, []any{&tipMessage}, func() error {
-			tips = append(tips, tipMessage)
+var potpissersTips []string
+var cubecoreTips []string
+var cubecoreClassTips []string
+var mzTips []string
+func init() {
+	getRowsBlocking("SELECT * FROM get_tips()", func(rows pgx.Rows) {
+		var tipMessage struct {
+			gameModeName string
+			tipTitle string
+			tipMessage string
+		}
+		handleFatalPgx(pgx.ForEachRow(rows, []any{&tipMessage.gameModeName, &tipMessage.tipTitle, &tipMessage.tipMessage}, func() error {
+			switch tipMessage.gameModeName {
+			case "potpissers":
+				potpissersTips = append(potpissersTips, tipMessage.tipTitle + ": " + tipMessage.tipMessage)
+				case "cubecore":
+					cubecoreTips = append(cubecoreTips, tipMessage.tipTitle + ": " + tipMessage.tipMessage)
+					case "cubecore_classes":
+						cubecoreClassTips = append(cubecoreClassTips, tipMessage.tipTitle + ": " + tipMessage.tipMessage)
+						case "mz":
+							mzTips = append(mzTips, tipMessage.tipTitle + ": " + tipMessage.tipMessage)
+			}
 			return nil
 		}))
-	}, tipsName)
-	return tips
+	})
 }
-
-var potpissersTips = getTipsBlocking("potpissers")
-var cubecoreTips = getTipsBlocking("cubecore")
-var cubecoreClassTips = getTipsBlocking("cubecore_classes")
-var mzTips = getTipsBlocking("mz")
 
 type newPlayer struct {
 	PlayerUuid string    `json:"playerUuid"`
@@ -44,7 +54,7 @@ type newPlayer struct {
 
 var newPlayers = func() []newPlayer {
 	var newPlayers []newPlayer
-	getRowsBlocking(Return12NewPlayers, func(rows pgx.Rows) {
+	getRowsBlocking("SELECT * FROM get_12_newest_players()", func(rows pgx.Rows) {
 		var death newPlayer
 		handleFatalPgx(pgx.ForEachRow(rows, []any{&death.PlayerUuid, &death.Referrer, &death.Timestamp, &death.RowNumber}, func() error {
 			newPlayers = append(newPlayers, death)
@@ -82,9 +92,10 @@ type death struct {
 	// TODO killer inventory
 }
 
+var deathsMu sync.RWMutex
 var deaths = func() []death {
 	var deaths []death
-	getRowsBlocking(Return12Deaths, func(rows pgx.Rows) {
+	getRowsBlocking("SELECT * FROM get_12_latest_network_deaths()", func(rows pgx.Rows) {
 		var death death
 		handleFatalPgx(pgx.ForEachRow(rows, []any{&death.ServerName, &death.VictimUserFightId, &death.Timestamp, &death.VictimUuid, nil, &death.DeathWorldName, &death.DeathX, &death.DeathY, &death.DeathZ, &death.DeathMessage, &death.KillerUuid, nil, nil}, func() error {
 			deaths = append(deaths, death)
@@ -105,9 +116,9 @@ func init() {
 	})
 }
 
-var deathsMu sync.RWMutex
-
 type event struct {
+	rowNumber int
+
 	StartTimestamp       time.Time `json:"startTimestamp"`
 	LootFactor           int       `json:"lootFactor"`
 	MaxTimer             int       `json:"maxTimer"`
@@ -127,9 +138,9 @@ type event struct {
 
 var events = func() []event {
 	var events []event
-	getRowsBlocking(Return14Events, func(rows pgx.Rows) {
+	getRowsBlocking("SELECT * FROM get_14_newest_network_koths()", func(rows pgx.Rows) {
 		var event event
-		handleFatalPgx(pgx.ForEachRow(rows, []any{&event.StartTimestamp, &event.LootFactor, &event.MaxTimer, &event.IsMovementRestricted, &event.CappingUserUUID, &event.EndTimestamp, &event.CappingPartyUUID, &event.CapMessage, &event.World, &event.X, &event.Y, &event.Z, &event.ServerName, &event.ArenaName, &event.Creator}, func() error {
+		handleFatalPgx(pgx.ForEachRow(rows, []any{&event.rowNumber, &event.StartTimestamp, &event.LootFactor, &event.MaxTimer, &event.IsMovementRestricted, &event.CappingUserUUID, &event.EndTimestamp, &event.CappingPartyUUID, &event.CapMessage, &event.World, &event.X, &event.Y, &event.Z, &event.ServerName, &event.ArenaName, &event.Creator}, func() error {
 			events = append(events, event)
 			return nil
 		}))
@@ -153,6 +164,9 @@ var eventsMu sync.RWMutex
 type faction struct {
 	name      string
 	partyUuid string
+	frozenUntil time.Time
+	currentMaxDtr float32
+	currentRegenAdjustedDtr float32
 }
 type bandit struct {
 	userUuid            string
@@ -200,7 +214,7 @@ type serverData struct {
 var currentHcfServerName string
 var serverDatas = func() map[string]*serverData {
 	serverDatas := make(map[string]*serverData)
-	getRowsBlocking(ReturnAllServerData, func(rows pgx.Rows) {
+	getRowsBlocking("SELECT * FROM get_server_datas()", func(rows pgx.Rows) {
 		var serverData serverData
 		handleFatalPgx(pgx.ForEachRow(rows, []any{&serverData.deathBanMinutes, &serverData.worldBorderRadius, &serverData.sharpnessLimit, &serverData.powerLimit, &serverData.protectionLimit, &serverData.regenLimit, &serverData.strengthLimit, &serverData.isWeaknessEnabled, &serverData.isBardPassiveDebuffingEnabled, &serverData.dtrFreezeTimer, &serverData.dtrMax, &serverData.dtrMaxTime, &serverData.dtrOffPeakFreezeTime, &serverData.offPeakLivesNeededAsCents, &serverData.bardRadius, &serverData.rogueRadius, &serverData.timestamp, &serverData.serverName, &serverData.attackSpeedName}, func() error {
 			serverDatas[serverData.serverName] = &serverData
@@ -226,7 +240,7 @@ func init() {
 
 var currentPlayers = func() []string {
 	var currentPlayers []string
-	getRowsBlocking(ReturnAllOnlinePlayers, func(rows pgx.Rows) {
+	getRowsBlocking("SELECT * FROM get_online_players()", func(rows pgx.Rows) {
 		var playerName string
 		var serverName string
 		handleFatalPgx(pgx.ForEachRow(rows, []any{&playerName, &serverName}, func() error {
@@ -248,28 +262,28 @@ func init() {
 	})
 
 	for serverName, serverData := range serverDatas {
-		getRowsBlocking(Return12ServerDeaths, func(rows pgx.Rows) {
+		getRowsBlocking("SELECT * FROM get_12_server_deaths($1)", func(rows pgx.Rows) {
 			var death death
 			handleFatalPgx(pgx.ForEachRow(rows, []any{&death.ServerName, &death.VictimUserFightId, &death.Timestamp, &death.VictimUuid, nil, &death.DeathWorldName, &death.DeathX, &death.DeathY, &death.DeathZ, &death.DeathMessage, &death.KillerUuid, nil, nil}, func() error {
 				serverData.deaths = append(serverData.deaths, death)
 				return nil
 			}))
 		}, serverName)
-		getRowsBlocking(Return14ServerEvents, func(rows pgx.Rows) {
+		getRowsBlocking("SELECT * FROM get_14_newest_server_koths($1)", func(rows pgx.Rows) {
 			var event event
 			handleFatalPgx(pgx.ForEachRow(rows, []any{&event.StartTimestamp, &event.LootFactor, &event.MaxTimer, &event.IsMovementRestricted, &event.CappingUserUUID, &event.EndTimestamp, &event.CappingPartyUUID, &event.CapMessage, &event.World, &event.X, &event.Y, &event.Z, &event.ServerName, &event.ArenaName, &event.Creator}, func() error {
 				serverData.events = append(serverData.events, event)
 				return nil
 			}))
 		}, serverName)
-		getRowsBlocking(Return7ServerFactions, func(rows pgx.Rows) {
+		getRowsBlocking("SELECT * FROM get_7_factions", func(rows pgx.Rows) {
 			var faction faction
-			handleFatalPgx(pgx.ForEachRow(rows, []any{&faction.name, &faction.partyUuid}, func() error {
+			handleFatalPgx(pgx.ForEachRow(rows, []any{&faction.name, &faction.partyUuid, &faction.frozenUntil, &faction.currentMaxDtr, &faction.currentRegenAdjustedDtr}, func() error {
 				serverData.factions = append(serverData.factions, faction)
 				return nil
 			}))
 		}, serverName)
-		getRowsBlocking(Return7ServerBandits, func(rows pgx.Rows) {
+		getRowsBlocking("SELECT * FROM get_7_newest_bandits($1)", func(rows pgx.Rows) {
 			var bandit bandit
 			handleFatalPgx(pgx.ForEachRow(rows, []any{&bandit.userUuid, &bandit.deathId, &bandit.timestamp, &bandit.expirationTimestamp, &bandit.deathMessage, &bandit.deathWorld, &bandit.deathX, &bandit.deathY, &bandit.deathZ}, func() error {
 				serverData.bandits = append(serverData.bandits, bandit)
@@ -371,7 +385,7 @@ var donations = func() []order {
 	for _, orderId := range orders {
 		orderIds = append(orderIds, orderId.ID)
 	}
-	getRowsBlocking(ReturnUnsuccessfulTransactions, func(rows pgx.Rows) {
+	getRowsBlocking("SELECT * FROM get_unsuccessful_transactions($1)", func(rows pgx.Rows) {
 		var missedOrderId string
 		handleFatalPgx(pgx.ForEachRow(rows, []any{&missedOrderId}, func() error {
 			// TODO -> handle missed transactions
@@ -649,7 +663,7 @@ func init() {
 							}
 						}
 					}
-					_, err := postgresPool.Exec(context.Background(), InsertSuccessfulTransaction, payment.OrderID, bodyJson.ID, parts[0], parts[1], lineItem.Quantity, payment.AmountMoney.Amount-payment.TipMoney.Amount)
+					_, err := postgresPool.Exec(context.Background(), "CALL insert_successful_transaction($1, $2, $3, $4, $5, $6)", payment.OrderID, bodyJson.ID, parts[0], parts[1], lineItem.Quantity, payment.AmountMoney.Amount-payment.TipMoney.Amount)
 					if err != nil {
 						log.Fatal(err)
 					}
@@ -742,7 +756,7 @@ type lineItemData struct {
 
 var lineItemDatas = func() []lineItemData {
 	var slice []lineItemData
-	getRowsBlocking(ReturnAllLineItems, func(rows pgx.Rows) {
+	getRowsBlocking("SELECT * FROM get_line_items()", func(rows pgx.Rows) {
 		var death lineItemData
 		handleFatalPgx(pgx.ForEachRow(rows, []any{&death.gamemodeName, &death.itemName, &death.itemPriceInCents, &death.itemDescription, &death.isPlural}, func() error {
 			death.itemPriceInDollars = death.itemPriceInCents / 100.0
