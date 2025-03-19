@@ -101,8 +101,8 @@
         </div>
 
         <div style="display: flex; flex-direction: column; justify-content: space-between; flex: 1">
-            <div style="flex: 1; display: flex; flex-direction: column-reverse; align-items: flex-end">
-                <ul style="text-align: right">
+            <div style="flex: 1; display: flex; flex-direction: column-reverse">
+                <ul style="display: flex; align-items: flex-end">
                     {{range .MainTemplateData.NewPlayers}}
                     <li title="{{.Timestamp}}">
                         {{.PlayerName}} ({{.Referrer}}) [{{.RowNumber}}]
