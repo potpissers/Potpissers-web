@@ -34,7 +34,7 @@ func getFatalJsonT[T any](resp *http.Response) T {
 	var messages T
 	body, err := ioutil.ReadAll(resp.Body)
     handleFatalErr(err)
-	println(body)
+	println(string(body))
 	handleFatalErr(json.Unmarshal(body, &messages))
 	return messages
 }
