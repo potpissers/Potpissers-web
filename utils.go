@@ -26,6 +26,7 @@ func handleGetFatalJsonT[T any](request *http.Request) T {
 	resp, err := (&http.Client{}).Do(request)
 	handleFatalErr(err)
 	defer resp.Body.Close()
+	println(resp.StatusCode)
 	return getFatalJsonT[T](resp)
 }
 
