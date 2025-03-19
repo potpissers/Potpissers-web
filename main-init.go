@@ -65,30 +65,17 @@ var newPlayers = func() []newPlayer {
 		}))
 	})
 
-	var uuids []string
 	for i := range newPlayers {
-		uuids = append(uuids, newPlayers[i].PlayerUuid)
-	}
-	jsonData, err := json.Marshal(uuids)
-	if err != nil {
-		log.Fatal(err)
-	}
-	resp, err := http.Post("https://api.minecraftservices.com/minecraft/profile/lookup/bulk/byname", "application/json", bytes.NewBuffer(jsonData))
-	if err != nil {
-		log.Fatal(err)
-	}
-	println(resp.StatusCode)
-	var result []map[string]any
-	err = json.NewDecoder(resp.Body).Decode(&result)
-	if err != nil {
-	    log.Fatal(err)
-	}
-	for i, item := range result {
-		if newPlayers[i].PlayerName != item["name"] {
-			log.Fatal("mojang api data err")
-		} else {
-			newPlayers[i].PlayerName = item["name"].(string)
+		resp, err := http.Get("https://api.minecraftservices.com/minecraft/profile/lookup/" + newPlayers[i].PlayerUuid)
+		if err != nil {
+			log.Fatal(err)
 		}
+		var result map[string]any
+		err = json.NewDecoder(resp.Body).Decode(&result)
+		if err != nil {
+		    log.Fatal(err)
+		}
+		newPlayers[i].PlayerName = result["name"].(string)
 	}
 
 	return newPlayers
