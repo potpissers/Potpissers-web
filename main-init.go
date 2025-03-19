@@ -779,7 +779,7 @@ var homeTemplate = getMainTemplate("main-home.html")
 var mzTemplate = getMainTemplate("main-mz.html")
 var hcfTemplate = getMainTemplate("main-hcf.html")
 
-type MainTemplateData struct {
+type mainTemplateData struct {
 	NetworkPlayers     []string
 	ServerPlayers      []string
 	NewPlayers         []newPlayer
@@ -800,9 +800,9 @@ func getHome() []byte {
 	var buffer bytes.Buffer
 	offPeakLivesNeeded := float32(serverDatas[currentHcfServerName].offPeakLivesNeededAsCents / 100.0)
 	handleFatalErr(homeTemplate.Execute(&buffer, struct {
-		MainTemplateData MainTemplateData
+		MainTemplateData mainTemplateData
 	}{
-		MainTemplateData: MainTemplateData{
+		MainTemplateData: mainTemplateData{
 			NetworkPlayers:     currentPlayers,
 			ServerPlayers:      serverDatas["hub"].currentPlayers,
 			NewPlayers:         newPlayers,
@@ -826,14 +826,14 @@ func getMz() []byte {
 	mzData := serverDatas["mz"]
 	offPeakLivesNeeded := float32(serverDatas[currentHcfServerName].offPeakLivesNeededAsCents / 100.0)
 	handleFatalErr(mzTemplate.Execute(&buffer, struct {
-		MainTemplateData MainTemplateData
+		MainTemplateData mainTemplateData
 
 		AttackSpeed string
 
 		MzTips  []string
 		Bandits []bandit
 	}{
-		MainTemplateData: MainTemplateData{
+		MainTemplateData: mainTemplateData{
 			NetworkPlayers:     currentPlayers,
 			ServerPlayers:      mzData.currentPlayers,
 			NewPlayers:         newPlayers,
@@ -862,7 +862,7 @@ func getHcf() []byte {
 	serverData := serverDatas[currentHcfServerName]
 	offPeakLivesNeeded := float32(serverData.offPeakLivesNeededAsCents / 100.0)
 	handleFatalErr(hcfTemplate.Execute(&buffer, struct {
-		MainTemplateData MainTemplateData
+		MainTemplateData mainTemplateData
 
 		AttackSpeed string
 
@@ -883,7 +883,7 @@ func getHcf() []byte {
 		ClassTips    []string
 		Factions     []faction
 	}{
-		MainTemplateData: MainTemplateData{
+		MainTemplateData: mainTemplateData{
 			NetworkPlayers:     currentPlayers,
 			ServerPlayers:      serverData.currentPlayers,
 			NewPlayers:         newPlayers,

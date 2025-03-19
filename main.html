@@ -23,7 +23,7 @@
         </span>
     </div>
     <ul style="overflow-x: hidden; overflow-y: scroll">
-        {{range .mainTemplateData.deaths}}
+        {{range .MainTemplateData.Deaths}}
         <li style="">({{.ServerName}}) {{.DeathMessage}}</li>
         {{end}}
     </ul>
@@ -69,18 +69,18 @@
     <div style="display: flex; height: 100%;">
         <div style="display: flex; flex-direction: column; flex: 1">
             <ul style="overflow-y: scroll; flex: 0;">
-                {{range .mainTemplateData.ServerPlayers}}
+                {{range .MainTemplateData.ServerPlayers}}
                 <li>
                     {{.Name}}
                 </li>
                 {{end}}
             </ul>
             <ul style="overflow-y: scroll; flex: 0;">
-                {{range .mainTemplateData.DiscordMessages}}
+                {{range .MainTemplateData.DiscordMessages}}
                 {{end}}
             </ul>
             <ul style="overflow-y: scroll; flex: 1; direction: rtl">
-                {{range .mainTemplateData.Messages}}
+                {{range .MainTemplateData.Messages}}
                 <li>
                     {{.Message}}
                 </li>
@@ -103,7 +103,7 @@
         <div style="display: flex; flex-direction: column; justify-content: space-between; flex: 1">
             <div style="flex: 1; display: flex; flex-direction: column-reverse; text-align: right">
                 <ul style="">
-                    {{range .mainTemplateData.NewPlayers}}
+                    {{range .MainTemplateData.NewPlayers}}
                     <li>
                         {{.Timestamp}}: {{.PlayerUuid}} ({{.Referrer}}) [{{.RowNumber}}]
                     </li>
@@ -146,7 +146,7 @@
 <div class="foo bar" style="text-align: center">
     <button>events</button>
     <ul>
-        {{range .mainTemplateData.Events}}
+        {{range .MainTemplateData.Events}}
         <li>{{.CapMessage}}</li>
         {{end}}
     </ul>
@@ -164,12 +164,12 @@
             <button onclick="handleContentMaximizeButtonClick(true)" style="margin-left: auto"></button>
         </div>
         <ul style="overflow-y: scroll">
-            {{range .mainTemplateData.Announcements}}
+            {{range .MainTemplateData.Announcements}}
             <li>{{.Content}}</li>
             {{end}}
         </ul>
         <ul style="overflow-y: scroll" hidden>
-            {{range .mainTemplateData.Changelog}}
+            {{range .MainTemplateData.Changelog}}
             <li>{{.Content}}</li>
             {{end}}
         </ul>
@@ -188,7 +188,7 @@
             <!--                    <button style="width: fit-content">unmute</button>-->
             <!--                </li>-->
             <!--            <button>shoutout</button>-->
-            {{range .mainTemplateData.LineItemData}}
+            {{range .MainTemplateData.LineItemData}}
             <li class="fc85">
                 <button onclick="handleClassHiddenToggle('{{.ServerName}}-{{.ItemName}}')" class="fsb">
                     {{.ServerName}}<br>{{.ItemName}}<span>$4</span>
@@ -237,7 +237,7 @@
 <div class="foo bar" style="text-align: center">
     <button>donations</button>
     <ul>
-        {{range .mainTemplateData.Donations}}
+        {{range .MainTemplateData.Donations}}
         <li>{{.AmountMoney.Amount}} + {{.TipMoney.Amount}}</li>
         {{end}}
     </ul>
@@ -257,7 +257,7 @@
 <script async id="staticdonatejs" src="static-donate.js"></script>
 <script async>
     const currentPrices = {
-    {{range .mainTemplateData.LineItemData}}
+    {{range .MainTemplateData.LineItemData}}
     "{{.ServerName}}-{{.ItemName}}": {{.ItemPriceInCents}},
     {{end}}
     }
