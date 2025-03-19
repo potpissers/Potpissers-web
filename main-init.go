@@ -223,13 +223,12 @@ var serverDatas = func() map[string]*serverData {
 	})
 	var currentPotentialHcfServerTimestamp time.Time
 	for _, data := range serverDatas {
+		println(data.serverName)
 		if strings.Contains(data.serverName, "hcf") && data.timestamp.After(currentPotentialHcfServerTimestamp) {
 			currentHcfServerName = data.serverName
 			currentPotentialHcfServerTimestamp = data.timestamp
-			println(data.serverName)
 		}
 	}
-	println(currentHcfServerName == "")
 
 	return serverDatas
 }()
