@@ -215,9 +215,10 @@ var currentHcfServerName string
 var serverDatas = func() map[string]*serverData {
 	serverDatas := make(map[string]*serverData)
 	getRowsBlocking("SELECT * FROM get_server_datas()", func(rows pgx.Rows) {
-		var serverData serverData
-		handleFatalPgx(pgx.ForEachRow(rows, []any{&serverData.deathBanMinutes, &serverData.worldBorderRadius, &serverData.sharpnessLimit, &serverData.powerLimit, &serverData.protectionLimit, &serverData.regenLimit, &serverData.strengthLimit, &serverData.isWeaknessEnabled, &serverData.isBardPassiveDebuffingEnabled, &serverData.dtrFreezeTimer, &serverData.dtrMax, &serverData.dtrMaxTime, &serverData.dtrOffPeakFreezeTime, &serverData.offPeakLivesNeededAsCents, &serverData.bardRadius, &serverData.rogueRadius, &serverData.timestamp, &serverData.serverName, &serverData.attackSpeedName}, func() error {
-			serverDatas[serverData.serverName] = &serverData
+		var serverDataBuffer serverData
+		handleFatalPgx(pgx.ForEachRow(rows, []any{&serverDataBuffer.deathBanMinutes, &serverDataBuffer.worldBorderRadius, &serverDataBuffer.sharpnessLimit, &serverDataBuffer.powerLimit, &serverDataBuffer.protectionLimit, &serverDataBuffer.regenLimit, &serverDataBuffer.strengthLimit, &serverDataBuffer.isWeaknessEnabled, &serverDataBuffer.isBardPassiveDebuffingEnabled, &serverDataBuffer.dtrFreezeTimer, &serverDataBuffer.dtrMax, &serverDataBuffer.dtrMaxTime, &serverDataBuffer.dtrOffPeakFreezeTime, &serverDataBuffer.offPeakLivesNeededAsCents, &serverDataBuffer.bardRadius, &serverDataBuffer.rogueRadius, &serverDataBuffer.timestamp, &serverDataBuffer.serverName, &serverDataBuffer.attackSpeedName}, func() error {
+			serverData := serverDataBuffer
+			serverDatas[serverDataBuffer.serverName] = &serverData
 			return nil
 		}))
 	})
