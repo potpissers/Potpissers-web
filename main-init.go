@@ -799,7 +799,7 @@ func getHome() []byte {
 	var buffer bytes.Buffer
 	offPeakLivesNeeded := float32(serverDatas[currentHcfServerName].offPeakLivesNeededAsCents / 100.0)
 	handleFatalErr(homeTemplate.Execute(&buffer, struct {
-		mainTemplateData mainTemplateData
+		MainTemplateData mainTemplateData
 	}{
 		mainTemplateData{
 			networkPlayers:     currentPlayers,
