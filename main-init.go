@@ -779,20 +779,20 @@ var mzTemplate = getMainTemplate("main-mz.html")
 var hcfTemplate = getMainTemplate("main-hcf.html")
 
 type mainTemplateData struct {
-	networkPlayers     []string
-	serverPlayers      []string
-	newPlayers         []newPlayer
-	potpissersTips     []string
-	deaths             []death
-	messages           []string
-	events             []event
-	announcements      []discordMessage
-	changelog          []discordMessage
-	discordMessages    []discordMessage
+	networkPlayers []string
+	serverPlayers  []string
+	newPlayers     []newPlayer
+	potpissersTips []string
+	deaths         []death
+	messages       []string
+	events   []event
+	announcements []discordMessage
+	changelog     []discordMessage
+	discordMessages []discordMessage
 	donations          []order
 	offPeakLivesNeeded float32
-	peakLivesNeeded    float32
-	lineItemData       []lineItemData
+	peakLivesNeeded float32
+	lineItemData    []lineItemData
 }
 
 func getHome() []byte {
@@ -802,17 +802,17 @@ func getHome() []byte {
 		MainTemplateData mainTemplateData
 	}{
 		mainTemplateData{
-			networkPlayers:     currentPlayers,
-			serverPlayers:      serverDatas["hub"].currentPlayers,
-			newPlayers:         newPlayers,
-			potpissersTips:     potpissersTips,
-			deaths:             deaths,
-			messages:           messages,
-			events:             events,
-			announcements:      announcements,
-			changelog:          changelog,
-			discordMessages:    discordMessages,
-			donations:          donations,
+			networkPlayers:  currentPlayers,
+			serverPlayers:   serverDatas["hub"].currentPlayers,
+			newPlayers:      newPlayers,
+			potpissersTips:  potpissersTips,
+			deaths:          deaths,
+			messages:        messages,
+			events:          events,
+			announcements:   announcements,
+			changelog:       changelog,
+			discordMessages: discordMessages,
+			donations:       donations,
 			offPeakLivesNeeded: offPeakLivesNeeded,
 			peakLivesNeeded:    offPeakLivesNeeded / 2,
 			lineItemData:       lineItemDatas,
@@ -833,17 +833,17 @@ func getMz() []byte {
 		Bandits []bandit
 	}{
 		MainTemplateData: mainTemplateData{
-			networkPlayers:     currentPlayers,
-			serverPlayers:      mzData.currentPlayers,
-			newPlayers:         newPlayers,
-			potpissersTips:     potpissersTips,
-			deaths:             mzData.deaths,
-			messages:           mzData.messages,
-			events:             mzData.events,
-			announcements:      announcements,
-			changelog:          changelog,
-			discordMessages:    discordMessages,
-			donations:          donations,
+			networkPlayers:  currentPlayers,
+			serverPlayers:   mzData.currentPlayers,
+			newPlayers:      newPlayers,
+			potpissersTips:  potpissersTips,
+			deaths:          mzData.deaths,
+			messages:        mzData.messages,
+			events:          mzData.events,
+			announcements:   announcements,
+			changelog:       changelog,
+			discordMessages: discordMessages,
+			donations:       donations,
 			offPeakLivesNeeded: offPeakLivesNeeded,
 			peakLivesNeeded:    offPeakLivesNeeded / 2,
 			lineItemData:       lineItemDatas,
@@ -883,17 +883,17 @@ func getHcf() []byte {
 		Factions     []faction
 	}{
 		MainTemplateData: mainTemplateData{
-			networkPlayers:     currentPlayers,
-			serverPlayers:      serverData.currentPlayers,
-			newPlayers:         newPlayers,
-			potpissersTips:     potpissersTips,
-			deaths:             deaths,
-			messages:           messages,
-			events:             serverData.events,
-			announcements:      announcements,
-			changelog:          changelog,
-			discordMessages:    discordMessages,
-			donations:          donations,
+			networkPlayers:  currentPlayers,
+			serverPlayers:   serverData.currentPlayers,
+			newPlayers:      newPlayers,
+			potpissersTips:  potpissersTips,
+			deaths:          deaths,
+			messages:        messages,
+			events:          serverData.events,
+			announcements:   announcements,
+			changelog:       changelog,
+			discordMessages: discordMessages,
+			donations:       donations,
 			offPeakLivesNeeded: offPeakLivesNeeded,
 			peakLivesNeeded:    offPeakLivesNeeded / 2,
 			lineItemData:       lineItemDatas,
