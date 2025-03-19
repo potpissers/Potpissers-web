@@ -801,7 +801,7 @@ func getHome() []byte {
 	handleFatalErr(homeTemplate.Execute(&buffer, struct {
 		MainTemplateData mainTemplateData
 	}{
-		mainTemplateData{
+		MainTemplateData: mainTemplateData{
 			NetworkPlayers:  currentPlayers,
 			ServerPlayers:   serverDatas["hub"].currentPlayers,
 			NewPlayers:      newPlayers,
