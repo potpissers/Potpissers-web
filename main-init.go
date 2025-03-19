@@ -218,6 +218,8 @@ var serverDatas = func() map[string]*serverData {
 		var serverData serverData
 		handleFatalPgx(pgx.ForEachRow(rows, []any{&serverData.deathBanMinutes, &serverData.worldBorderRadius, &serverData.sharpnessLimit, &serverData.powerLimit, &serverData.protectionLimit, &serverData.regenLimit, &serverData.strengthLimit, &serverData.isWeaknessEnabled, &serverData.isBardPassiveDebuffingEnabled, &serverData.dtrFreezeTimer, &serverData.dtrMax, &serverData.dtrMaxTime, &serverData.dtrOffPeakFreezeTime, &serverData.offPeakLivesNeededAsCents, &serverData.bardRadius, &serverData.rogueRadius, &serverData.timestamp, &serverData.serverName, &serverData.attackSpeedName}, func() error {
 			serverDatas[serverData.serverName] = &serverData
+			println(serverData.offPeakLivesNeededAsCents)
+			println(serverData.bardRadius)
 			return nil
 		}))
 	})
@@ -796,8 +798,6 @@ type mainTemplateData struct {
 
 func getHome() []byte {
 	var buffer bytes.Buffer
-	println(currentHcfServerName)
-	println(serverDatas[currentHcfServerName].offPeakLivesNeededAsCents)
 	offPeakLivesNeeded := float32(serverDatas[currentHcfServerName].offPeakLivesNeededAsCents / 100.0)
 	handleFatalErr(homeTemplate.Execute(&buffer, struct {
 		mainTemplateData mainTemplateData
