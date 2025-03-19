@@ -422,14 +422,14 @@ func init() {
 				defer waitGroup.Done()
 				var potentialFinalRequest donateRequest
 				for _, data := range lineItemDatas {
-					if data.gamemodeName+"-"+data.itemName == request.LineItemName {
+					if data.GamemodeName+"-"+data.ItemName == request.LineItemName {
 						potentialFinalRequest.LineItemName = request.LineItemName
-						if data.isPlural {
+						if data.IsPlural {
 							potentialFinalRequest.LineItemAmount = int(math.Max(float64(request.LineItemAmount), 1))
 						} else {
 							potentialFinalRequest.LineItemAmount = 1 // TODO -> allow 0 amount
 						}
-						potentialFinalRequest.lineItemCostInCents = data.itemPriceInCents
+						potentialFinalRequest.lineItemCostInCents = data.ItemPriceInCents
 
 						for {
 							resp, err := getMojangApiUuidRequest(request.Username)
@@ -747,21 +747,21 @@ func init() {
 }
 
 type lineItemData struct {
-	gamemodeName     string
-	itemName         string
-	itemPriceInCents int
-	itemDescription  string
-	isPlural         bool
+	GamemodeName     string
+	ItemName         string
+	ItemPriceInCents int
+	ItemDescription  string
+	IsPlural         bool
 
-	itemPriceInDollars int
+	ItemPriceInDollars int
 }
 
 var lineItemDatas = func() []lineItemData {
 	var slice []lineItemData
 	getRowsBlocking("SELECT * FROM get_line_items()", func(rows pgx.Rows) {
 		var death lineItemData
-		handleFatalPgx(pgx.ForEachRow(rows, []any{&death.gamemodeName, &death.itemName, &death.itemPriceInCents, &death.itemDescription, &death.isPlural}, func() error {
-			death.itemPriceInDollars = death.itemPriceInCents / 100.0
+		handleFatalPgx(pgx.ForEachRow(rows, []any{&death.GamemodeName, &death.ItemName, &death.ItemPriceInCents, &death.ItemDescription, &death.IsPlural}, func() error {
+			death.ItemPriceInDollars = death.ItemPriceInCents / 100.0
 			slice = append(slice, death)
 			return nil
 		}))
