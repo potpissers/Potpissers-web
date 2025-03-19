@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"github.com/jackc/pgx/v5"
 	"html/template"
-	"io"
 	"log"
 	"math"
 	"net/http"
@@ -400,7 +399,7 @@ var donations = func() []order {
 }()
 
 func init() {
-	http.HandleFunc("/api/donate", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/api/donations/payments", func(w http.ResponseWriter, r *http.Request) {
 		type donateRequest struct {
 			Username       string `json:"username"`
 			LineItemName   string `json:"line_item_name"`
@@ -617,16 +616,9 @@ func init() {
 			}
 		}
 	})
-	http.HandleFunc("/api/donations", func(w http.ResponseWriter, r *http.Request) { // square's payment.create webhook
+	http.HandleFunc("/api/donations/webhook", func(w http.ResponseWriter, r *http.Request) { // square's payment.create webhook
 		if !strings.Contains(r.Header.Get("Authorization"), os.Getenv("SQUARE_ACCESS_TOKEN")) {
 			log.Println("err: square webhook auth")
-			println(r.Header.Get("Authorization"))
-			bodyBytes, err := io.ReadAll(r.Body)
-			if err != nil {
-				log.Println("Failed to read body:", err)
-			} else {
-				log.Printf("Request Body: %s", string(bodyBytes))
-			}
 			return
 		} else {
 			payment := handleGetFatalJsonT[struct {
