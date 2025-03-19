@@ -218,8 +218,6 @@ var serverDatas = func() map[string]*serverData {
 		var serverData serverData
 		handleFatalPgx(pgx.ForEachRow(rows, []any{&serverData.deathBanMinutes, &serverData.worldBorderRadius, &serverData.sharpnessLimit, &serverData.powerLimit, &serverData.protectionLimit, &serverData.regenLimit, &serverData.strengthLimit, &serverData.isWeaknessEnabled, &serverData.isBardPassiveDebuffingEnabled, &serverData.dtrFreezeTimer, &serverData.dtrMax, &serverData.dtrMaxTime, &serverData.dtrOffPeakFreezeTime, &serverData.offPeakLivesNeededAsCents, &serverData.bardRadius, &serverData.rogueRadius, &serverData.timestamp, &serverData.serverName, &serverData.attackSpeedName}, func() error {
 			serverDatas[serverData.serverName] = &serverData
-			println(serverData.offPeakLivesNeededAsCents)
-			println(serverData.bardRadius)
 			return nil
 		}))
 	})
@@ -228,6 +226,7 @@ var serverDatas = func() map[string]*serverData {
 		if strings.Contains(data.serverName, "hcf") && data.timestamp.After(currentPotentialHcfServerTimestamp) {
 			currentHcfServerName = data.serverName
 			currentPotentialHcfServerTimestamp = data.timestamp
+			println(data.serverName)
 		}
 	}
 
