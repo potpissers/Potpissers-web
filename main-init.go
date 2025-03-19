@@ -77,7 +77,8 @@ var newPlayers = func() []newPlayer {
 	if err != nil {
 		log.Fatal(err)
 	}
-	var result []map[string]interface{}
+	println(resp.StatusCode)
+	var result []map[string]any
 	err = json.NewDecoder(resp.Body).Decode(&result)
 	if err != nil {
 	    log.Fatal(err)
