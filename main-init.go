@@ -620,6 +620,7 @@ func init() {
 	http.HandleFunc("/api/donations", func(w http.ResponseWriter, r *http.Request) { // square's payment.create webhook
 		if !strings.Contains(r.Header.Get("Authorization"), os.Getenv("SQUARE_ACCESS_TOKEN")) {
 			log.Println("err: square webhook auth")
+			println(r.Header.Get("Authorization"))
 			bodyBytes, err := io.ReadAll(r.Body)
 			if err != nil {
 				log.Println("Failed to read body:", err)
