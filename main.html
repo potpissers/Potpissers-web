@@ -104,8 +104,8 @@
             <div style="flex: 1; display: flex; flex-direction: column-reverse; text-align: right">
                 <ul style="">
                     {{range .MainTemplateData.NewPlayers}}
-                    <li>
-                        {{.Timestamp.Format "2006-01-02 15:04:05"}}: {{.PlayerName}} ({{.Referrer}}) [{{.RowNumber}}]
+                    <li title="{{.Timestamp}}">
+                        {{.PlayerName}} ({{.Referrer}}) [{{.RowNumber}}]
                     </li>
                     {{end}}
                 </ul>
