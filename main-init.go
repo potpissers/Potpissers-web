@@ -276,7 +276,7 @@ func init() {
 				return nil
 			}))
 		}, serverName)
-		getRowsBlocking("SELECT * FROM get_7_factions", func(rows pgx.Rows) {
+		getRowsBlocking("SELECT * FROM get_7_factions($1)", func(rows pgx.Rows) {
 			var faction faction
 			handleFatalPgx(pgx.ForEachRow(rows, []any{&faction.name, &faction.partyUuid, &faction.frozenUntil, &faction.currentMaxDtr, &faction.currentRegenAdjustedDtr}, func() error {
 				serverData.factions = append(serverData.factions, faction)
