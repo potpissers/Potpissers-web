@@ -796,7 +796,7 @@ type mainTemplateData struct {
 
 func getHome() []byte {
 	var buffer bytes.Buffer
-	log.Println(currentHcfServerName)
+	println(currentHcfServerName)
 	println(serverDatas[currentHcfServerName].offPeakLivesNeededAsCents)
 	offPeakLivesNeeded := float32(serverDatas[currentHcfServerName].offPeakLivesNeededAsCents / 100.0)
 	handleFatalErr(homeTemplate.Execute(&buffer, struct {
