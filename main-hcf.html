@@ -28,7 +28,7 @@
     </tr>
     <tr>
         <td>{{ .DeathBanMinutes }}m</td>
-        <td>{{ .MainTemplateData.OffPeakLivesNeeded }}x</td>
+        <td>{{ .mainTemplateData.OffPeakLivesNeeded }}x</td>
         <td>{{ .LootFactor }}x</td>
         <td>{{ .BorderSize }}</td>
     </tr>
@@ -58,7 +58,7 @@
 {{end}}
 {{define "server tips data"}}
 <ul id="tips" style="overflow-y: scroll; flex: 1" hidden>
-    {{range .MainTemplateData.PotpissersTips}}
+    {{range .mainTemplateData.PotpissersTips}}
     <li>{{.}}</li>
     {{end}}
 </ul>
