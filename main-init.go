@@ -22,23 +22,24 @@ var potpissersTips []string
 var cubecoreTips []string
 var cubecoreClassTips []string
 var mzTips []string
+
 func init() {
 	getRowsBlocking("SELECT * FROM get_tips()", func(rows pgx.Rows) {
 		var tipMessage struct {
 			gameModeName string
-			tipTitle string
-			tipMessage string
+			tipTitle     string
+			tipMessage   string
 		}
 		handleFatalPgx(pgx.ForEachRow(rows, []any{&tipMessage.gameModeName, &tipMessage.tipTitle, &tipMessage.tipMessage}, func() error {
 			switch tipMessage.gameModeName {
 			case "potpissers":
-				potpissersTips = append(potpissersTips, tipMessage.tipTitle + ": " + tipMessage.tipMessage)
-				case "cubecore":
-					cubecoreTips = append(cubecoreTips, tipMessage.tipTitle + ": " + tipMessage.tipMessage)
-					case "cubecore_classes":
-						cubecoreClassTips = append(cubecoreClassTips, tipMessage.tipTitle + ": " + tipMessage.tipMessage)
-						case "mz":
-							mzTips = append(mzTips, tipMessage.tipTitle + ": " + tipMessage.tipMessage)
+				potpissersTips = append(potpissersTips, tipMessage.tipTitle+": "+tipMessage.tipMessage)
+			case "cubecore":
+				cubecoreTips = append(cubecoreTips, tipMessage.tipTitle+": "+tipMessage.tipMessage)
+			case "cubecore_classes":
+				cubecoreClassTips = append(cubecoreClassTips, tipMessage.tipTitle+": "+tipMessage.tipMessage)
+			case "mz":
+				mzTips = append(mzTips, tipMessage.tipTitle+": "+tipMessage.tipMessage)
 			}
 			return nil
 		}))
@@ -47,7 +48,7 @@ func init() {
 
 type newPlayer struct {
 	PlayerUuid string    `json:"playerUuid"`
-	Referrer   *string    `json:"referrer"`
+	Referrer   *string   `json:"referrer"`
 	Timestamp  time.Time `json:"timestamp"`
 	RowNumber  int       `json:"rowNumber"`
 }
@@ -162,10 +163,10 @@ func init() {
 var eventsMu sync.RWMutex
 
 type faction struct {
-	name      string
-	partyUuid string
-	frozenUntil time.Time
-	currentMaxDtr float32
+	name                    string
+	partyUuid               string
+	frozenUntil             time.Time
+	currentMaxDtr           float32
 	currentRegenAdjustedDtr float32
 }
 type bandit struct {
@@ -778,41 +779,41 @@ var homeTemplate = getMainTemplate("main-home.html")
 var mzTemplate = getMainTemplate("main-mz.html")
 var hcfTemplate = getMainTemplate("main-hcf.html")
 
-type mainTemplateData struct {
-	NetworkPlayers []string
-	ServerPlayers  []string
-	NewPlayers     []newPlayer
-	PotpissersTips []string
-	Deaths         []death
-	Messages       []string
-	Events   []event
-	Announcements []discordMessage
-	Changelog     []discordMessage
-	DiscordMessages []discordMessage
+type MainTemplateData struct {
+	NetworkPlayers     []string
+	ServerPlayers      []string
+	NewPlayers         []newPlayer
+	PotpissersTips     []string
+	Deaths             []death
+	Messages           []string
+	Events             []event
+	Announcements      []discordMessage
+	Changelog          []discordMessage
+	DiscordMessages    []discordMessage
 	Donations          []order
 	OffPeakLivesNeeded float32
-	PeakLivesNeeded float32
-	LineItemData    []lineItemData
+	PeakLivesNeeded    float32
+	LineItemData       []lineItemData
 }
 
 func getHome() []byte {
 	var buffer bytes.Buffer
 	offPeakLivesNeeded := float32(serverDatas[currentHcfServerName].offPeakLivesNeededAsCents / 100.0)
 	handleFatalErr(homeTemplate.Execute(&buffer, struct {
-		MainTemplateData mainTemplateData
+		MainTemplateData MainTemplateData
 	}{
-		MainTemplateData: mainTemplateData{
-			NetworkPlayers:  currentPlayers,
-			ServerPlayers:   serverDatas["hub"].currentPlayers,
-			NewPlayers:      newPlayers,
-			PotpissersTips:  potpissersTips,
-			Deaths:          deaths,
-			Messages:        messages,
-			Events:          events,
-			Announcements:   announcements,
-			Changelog:       changelog,
-			DiscordMessages: discordMessages,
-			Donations:       donations,
+		MainTemplateData: MainTemplateData{
+			NetworkPlayers:     currentPlayers,
+			ServerPlayers:      serverDatas["hub"].currentPlayers,
+			NewPlayers:         newPlayers,
+			PotpissersTips:     potpissersTips,
+			Deaths:             deaths,
+			Messages:           messages,
+			Events:             events,
+			Announcements:      announcements,
+			Changelog:          changelog,
+			DiscordMessages:    discordMessages,
+			Donations:          donations,
 			OffPeakLivesNeeded: offPeakLivesNeeded,
 			PeakLivesNeeded:    offPeakLivesNeeded / 2,
 			LineItemData:       lineItemDatas,
@@ -825,25 +826,25 @@ func getMz() []byte {
 	mzData := serverDatas["mz"]
 	offPeakLivesNeeded := float32(serverDatas[currentHcfServerName].offPeakLivesNeededAsCents / 100.0)
 	handleFatalErr(mzTemplate.Execute(&buffer, struct {
-		MainTemplateData mainTemplateData
+		MainTemplateData MainTemplateData
 
 		AttackSpeed string
 
 		MzTips  []string
 		Bandits []bandit
 	}{
-		MainTemplateData: mainTemplateData{
-			NetworkPlayers:  currentPlayers,
-			ServerPlayers:   mzData.currentPlayers,
-			NewPlayers:      newPlayers,
-			PotpissersTips:  potpissersTips,
-			Deaths:          mzData.deaths,
-			Messages:        mzData.messages,
-			Events:          mzData.events,
-			Announcements:   announcements,
-			Changelog:       changelog,
-			DiscordMessages: discordMessages,
-			Donations:       donations,
+		MainTemplateData: MainTemplateData{
+			NetworkPlayers:     currentPlayers,
+			ServerPlayers:      mzData.currentPlayers,
+			NewPlayers:         newPlayers,
+			PotpissersTips:     potpissersTips,
+			Deaths:             mzData.deaths,
+			Messages:           mzData.messages,
+			Events:             mzData.events,
+			Announcements:      announcements,
+			Changelog:          changelog,
+			DiscordMessages:    discordMessages,
+			Donations:          donations,
 			OffPeakLivesNeeded: offPeakLivesNeeded,
 			PeakLivesNeeded:    offPeakLivesNeeded / 2,
 			LineItemData:       lineItemDatas,
@@ -861,7 +862,7 @@ func getHcf() []byte {
 	serverData := serverDatas[currentHcfServerName]
 	offPeakLivesNeeded := float32(serverData.offPeakLivesNeededAsCents / 100.0)
 	handleFatalErr(hcfTemplate.Execute(&buffer, struct {
-		MainTemplateData mainTemplateData
+		MainTemplateData MainTemplateData
 
 		AttackSpeed string
 
@@ -882,18 +883,18 @@ func getHcf() []byte {
 		ClassTips    []string
 		Factions     []faction
 	}{
-		MainTemplateData: mainTemplateData{
-			NetworkPlayers:  currentPlayers,
-			ServerPlayers:   serverData.currentPlayers,
-			NewPlayers:      newPlayers,
-			PotpissersTips:  potpissersTips,
-			Deaths:          deaths,
-			Messages:        messages,
-			Events:          serverData.events,
-			Announcements:   announcements,
-			Changelog:       changelog,
-			DiscordMessages: discordMessages,
-			Donations:       donations,
+		MainTemplateData: MainTemplateData{
+			NetworkPlayers:     currentPlayers,
+			ServerPlayers:      serverData.currentPlayers,
+			NewPlayers:         newPlayers,
+			PotpissersTips:     potpissersTips,
+			Deaths:             deaths,
+			Messages:           messages,
+			Events:             serverData.events,
+			Announcements:      announcements,
+			Changelog:          changelog,
+			DiscordMessages:    discordMessages,
+			Donations:          donations,
 			OffPeakLivesNeeded: offPeakLivesNeeded,
 			PeakLivesNeeded:    offPeakLivesNeeded / 2,
 			LineItemData:       lineItemDatas,
