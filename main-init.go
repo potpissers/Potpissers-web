@@ -22,23 +22,24 @@ var potpissersTips []string
 var cubecoreTips []string
 var cubecoreClassTips []string
 var mzTips []string
+
 func init() {
 	getRowsBlocking("SELECT * FROM get_tips()", func(rows pgx.Rows) {
 		var tipMessage struct {
 			gameModeName string
-			tipTitle string
-			tipMessage string
+			tipTitle     string
+			tipMessage   string
 		}
 		handleFatalPgx(pgx.ForEachRow(rows, []any{&tipMessage.gameModeName, &tipMessage.tipTitle, &tipMessage.tipMessage}, func() error {
 			switch tipMessage.gameModeName {
 			case "potpissers":
-				potpissersTips = append(potpissersTips, tipMessage.tipTitle + ": " + tipMessage.tipMessage)
-				case "cubecore":
-					cubecoreTips = append(cubecoreTips, tipMessage.tipTitle + ": " + tipMessage.tipMessage)
-					case "cubecore_classes":
-						cubecoreClassTips = append(cubecoreClassTips, tipMessage.tipTitle + ": " + tipMessage.tipMessage)
-						case "mz":
-							mzTips = append(mzTips, tipMessage.tipTitle + ": " + tipMessage.tipMessage)
+				potpissersTips = append(potpissersTips, tipMessage.tipTitle+": "+tipMessage.tipMessage)
+			case "cubecore":
+				cubecoreTips = append(cubecoreTips, tipMessage.tipTitle+": "+tipMessage.tipMessage)
+			case "cubecore_classes":
+				cubecoreClassTips = append(cubecoreClassTips, tipMessage.tipTitle+": "+tipMessage.tipMessage)
+			case "mz":
+				mzTips = append(mzTips, tipMessage.tipTitle+": "+tipMessage.tipMessage)
 			}
 			return nil
 		}))
@@ -47,7 +48,7 @@ func init() {
 
 type newPlayer struct {
 	PlayerUuid string    `json:"playerUuid"`
-	Referrer   *string    `json:"referrer"`
+	Referrer   *string   `json:"referrer"`
 	Timestamp  time.Time `json:"timestamp"`
 	RowNumber  int       `json:"rowNumber"`
 }
@@ -162,10 +163,10 @@ func init() {
 var eventsMu sync.RWMutex
 
 type faction struct {
-	name      string
-	partyUuid string
-	frozenUntil time.Time
-	currentMaxDtr float32
+	name                    string
+	partyUuid               string
+	frozenUntil             time.Time
+	currentMaxDtr           float32
 	currentRegenAdjustedDtr float32
 }
 type bandit struct {
@@ -516,7 +517,7 @@ func init() {
 					EnableCoupon:          false,
 					EnableLoyalty:         false,
 					MerchantSupportEmail:  "potpissers@gmail.com",
-					RedirectURL:           "potpissers.com/donations",
+					RedirectURL:           "potpissers.com/Donations",
 				},
 				Description: "hey",
 				Order: Order{
@@ -715,7 +716,7 @@ type discordMessage struct {
 }
 
 func getDiscordMessages(channelId string) []discordMessage {
-	req, err := http.NewRequest("GET", "https://discord.com/api/v10/channels/"+channelId+"/messages?limit=50", nil)
+	req, err := http.NewRequest("GET", "https://discord.com/api/v10/channels/"+channelId+"/Messages?limit=50", nil)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -738,10 +739,10 @@ var announcements = func() []discordMessage {
 var messages []string // TODO -> make player name clickable, maybe velocity/paper will let me query message history
 func init() {
 	http.HandleFunc("/api/chat/hcf", func(w http.ResponseWriter, r *http.Request) {
-		// TODO messages + ServerData.Messages
+		// TODO Messages + ServerData.Messages
 	})
 	http.HandleFunc("/api/chat/mz", func(w http.ResponseWriter, r *http.Request) {
-		// TODO messages + ServerData.Messages
+		// TODO Messages + ServerData.Messages
 	})
 }
 
@@ -779,20 +780,20 @@ var mzTemplate = getMainTemplate("main-mz.html")
 var hcfTemplate = getMainTemplate("main-hcf.html")
 
 type mainTemplateData struct {
-	networkPlayers     []string
-	serverPlayers      []string
-	newPlayers         []newPlayer
-	potpissersTips     []string
-	deaths             []death
-	messages           []string
-	events             []event
-	announcements      []discordMessage
-	changelog          []discordMessage
-	discordMessages    []discordMessage
-	donations          []order
-	offPeakLivesNeeded float32
-	peakLivesNeeded    float32
-	lineItemData       []lineItemData
+	NetworkPlayers     []string
+	ServerPlayers      []string
+	NewPlayers         []newPlayer
+	PotpissersTips     []string
+	Deaths             []death
+	Messages           []string
+	Events             []event
+	Announcements      []discordMessage
+	Changelog          []discordMessage
+	DiscordMessages    []discordMessage
+	Donations          []order
+	OffPeakLivesNeeded float32
+	PeakLivesNeeded    float32
+	LineItemData       []lineItemData
 }
 
 func getHome() []byte {
@@ -802,20 +803,20 @@ func getHome() []byte {
 		MainTemplateData mainTemplateData
 	}{
 		mainTemplateData{
-			networkPlayers:     currentPlayers,
-			serverPlayers:      serverDatas["hub"].currentPlayers,
-			newPlayers:         newPlayers,
-			potpissersTips:     potpissersTips,
-			deaths:             deaths,
-			messages:           messages,
-			events:             events,
-			announcements:      announcements,
-			changelog:          changelog,
-			discordMessages:    discordMessages,
-			donations:          donations,
-			offPeakLivesNeeded: offPeakLivesNeeded,
-			peakLivesNeeded:    offPeakLivesNeeded / 2,
-			lineItemData:       lineItemDatas,
+			NetworkPlayers:     currentPlayers,
+			ServerPlayers:      serverDatas["hub"].currentPlayers,
+			NewPlayers:         newPlayers,
+			PotpissersTips:     potpissersTips,
+			Deaths:             deaths,
+			Messages:           messages,
+			Events:             events,
+			Announcements:      announcements,
+			Changelog:          changelog,
+			DiscordMessages:    discordMessages,
+			Donations:          donations,
+			OffPeakLivesNeeded: offPeakLivesNeeded,
+			PeakLivesNeeded:    offPeakLivesNeeded / 2,
+			LineItemData:       lineItemDatas,
 		},
 	}))
 	return buffer.Bytes()
@@ -833,20 +834,20 @@ func getMz() []byte {
 		Bandits []bandit
 	}{
 		MainTemplateData: mainTemplateData{
-			networkPlayers:     currentPlayers,
-			serverPlayers:      mzData.currentPlayers,
-			newPlayers:         newPlayers,
-			potpissersTips:     potpissersTips,
-			deaths:             mzData.deaths,
-			messages:           mzData.messages,
-			events:             mzData.events,
-			announcements:      announcements,
-			changelog:          changelog,
-			discordMessages:    discordMessages,
-			donations:          donations,
-			offPeakLivesNeeded: offPeakLivesNeeded,
-			peakLivesNeeded:    offPeakLivesNeeded / 2,
-			lineItemData:       lineItemDatas,
+			NetworkPlayers:     currentPlayers,
+			ServerPlayers:      mzData.currentPlayers,
+			NewPlayers:         newPlayers,
+			PotpissersTips:     potpissersTips,
+			Deaths:             mzData.deaths,
+			Messages:           mzData.messages,
+			Events:             mzData.events,
+			Announcements:      announcements,
+			Changelog:          changelog,
+			DiscordMessages:    discordMessages,
+			Donations:          donations,
+			OffPeakLivesNeeded: offPeakLivesNeeded,
+			PeakLivesNeeded:    offPeakLivesNeeded / 2,
+			LineItemData:       lineItemDatas,
 		},
 
 		AttackSpeed: mzData.attackSpeedName,
@@ -883,20 +884,20 @@ func getHcf() []byte {
 		Factions     []faction
 	}{
 		MainTemplateData: mainTemplateData{
-			networkPlayers:     currentPlayers,
-			serverPlayers:      serverData.currentPlayers,
-			newPlayers:         newPlayers,
-			potpissersTips:     potpissersTips,
-			deaths:             deaths,
-			messages:           messages,
-			events:             serverData.events,
-			announcements:      announcements,
-			changelog:          changelog,
-			discordMessages:    discordMessages,
-			donations:          donations,
-			offPeakLivesNeeded: offPeakLivesNeeded,
-			peakLivesNeeded:    offPeakLivesNeeded / 2,
-			lineItemData:       lineItemDatas,
+			NetworkPlayers:     currentPlayers,
+			ServerPlayers:      serverData.currentPlayers,
+			NewPlayers:         newPlayers,
+			PotpissersTips:     potpissersTips,
+			Deaths:             deaths,
+			Messages:           messages,
+			Events:             serverData.events,
+			Announcements:      announcements,
+			Changelog:          changelog,
+			DiscordMessages:    discordMessages,
+			Donations:          donations,
+			OffPeakLivesNeeded: offPeakLivesNeeded,
+			PeakLivesNeeded:    offPeakLivesNeeded / 2,
+			LineItemData:       lineItemDatas,
 		},
 
 		AttackSpeed: serverData.attackSpeedName,
