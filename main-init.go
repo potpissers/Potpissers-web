@@ -262,7 +262,7 @@ func init() {
 	})
 
 	for serverName, serverData := range serverDatas {
-		getRowsBlocking("SELECT * FROM get_12_server_deaths($1)", func(rows pgx.Rows) {
+		getRowsBlocking("SELECT * FROM get_12_latest_server_deaths($1)", func(rows pgx.Rows) {
 			var death death
 			handleFatalPgx(pgx.ForEachRow(rows, []any{&death.ServerName, &death.VictimUserFightId, &death.Timestamp, &death.VictimUuid, nil, &death.DeathWorldName, &death.DeathX, &death.DeathY, &death.DeathZ, &death.DeathMessage, &death.KillerUuid, nil, nil}, func() error {
 				serverData.deaths = append(serverData.deaths, death)
