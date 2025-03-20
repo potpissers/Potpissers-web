@@ -105,12 +105,12 @@ footer {
 
 .bar {
     color: #A0ADB8;
-    backdrop-filter: blur(2px);
+    backdrop-filter: blur(10px);
 }
 
 .baz {
     color: #DEDEE3;
-    backdrop-filter: blur(2px);
+    backdrop-filter: blur(10px);
 }
 
 .ifc {
