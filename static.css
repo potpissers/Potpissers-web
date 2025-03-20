@@ -36,8 +36,6 @@ li {
 
     margin-bottom: .5rem;
     width: fit-content;
-
-    background: rgba(240, 240, 240, 0.2)
 }
 
 p {
@@ -70,6 +68,8 @@ ul {
     margin: 0;
     padding: 0;
     list-style: none;
+
+    background: rgba(240, 240, 240, 0.2)
 }
 
 input {
