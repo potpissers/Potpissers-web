@@ -152,11 +152,11 @@
      style="display: grid; grid-template-columns: 3fr 1fr; grid-template-rows: 1fr 1fr">
     <div style="display: flex; flex-direction: column; overflow-y: auto">
         <div style="display: flex">
-            <div style="align-self: center; justify-self: center">
+            <div style="">
                 <button>announcements</button>
                 <button>changelog</button>
             </div>
-            <button onclick="handleContentMaximizeButtonClick(true)" style="margin-left: auto"></button>
+            <button onclick="handleContentMaximizeButtonClick(true)" style=""></button>
         </div>
         <ul style="overflow-y: scroll">
             {{range .MainTemplateData.Announcements}}
