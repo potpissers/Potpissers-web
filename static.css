@@ -27,7 +27,7 @@ body {
     box-shadow: .1rem .1rem .1rem black;
     border-radius: .5rem;
 
-    background: hsla(0, 0%, 80%, 0.2);
+    background: hsla(0, 80%, 80%, 0.2);
 }
 
 /*.mbd {*/
