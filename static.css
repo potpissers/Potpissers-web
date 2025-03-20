@@ -12,7 +12,7 @@ body {
     border-radius: .5rem;
 
     backdrop-filter: blur(.1rem);
-    background: hsla(0, 0%, 80%, 0.2);
+    background: rgba(206, 227, 248, 0.2);
     font-family: sans-serif;
     display: grid;
     grid-template-columns: 20% 1fr 20%;
@@ -27,7 +27,7 @@ body {
     box-shadow: .1rem .1rem .1rem black;
     border-radius: .5rem;
 
-    background: hsla(0, 80%, 80%, 0.2);
+    background: rgba(206, 227, 248, 0.2);
 }
 
 /*.mbd {*/
