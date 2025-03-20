@@ -56,16 +56,27 @@ li {
 /*    border-radius: .5rem*/
 /*}*/
 
-.fi {
+input {
     font-size: 106.25%;
     gap: .5rem;
     padding-left: .5rem;
     padding-right: .5rem;
-    border: .1rem solid black;
+    outline: .1rem solid black;
     box-shadow: .1rem .1rem .1rem black;
 
     border-radius: .25rem
 }
+
+/*.fi {*/
+/*    font-size: 106.25%;*/
+/*    gap: .5rem;*/
+/*    padding-left: .5rem;*/
+/*    padding-right: .5rem;*/
+/*    border: .1rem solid black;*/
+/*    box-shadow: .1rem .1rem .1rem black;*/
+
+/*    border-radius: .25rem*/
+/*}*/
 
 .input-valid {
     border: .1rem solid green;
@@ -109,24 +120,10 @@ td {
     font-size: 75%
 }
 
-img {
-    /*TODO */
-}
-
 footer {
     grid-column: 2;
     text-align: center;
 }
-
-/*.bar {*/
-/*    color: #A0ADB8;*/
-/*    background-color: rgba(0, 0, 0, 0.5)*/
-/*}*/
-
-/*.baz {*/
-/*    color: #DEDEE3;*/
-/*    background-color: rgba(0, 0, 0, 0.5)*/
-/*}*/
 
 .ifc {
     display: inline-flex;
@@ -159,7 +156,4 @@ small {
     border: .1rem solid black;
     box-shadow: .1rem .1rem .1rem black;
     border-radius: .5rem
-}
-div {
-    background-color: rgba(255, 255, 255, 0.5)
 }
