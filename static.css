@@ -2,7 +2,7 @@ html {
 }
 
 body {
-    backdrop-filter: blur(2px);
+    backdrop-filter: blur(1px);
     font-family: sans-serif;
     display: grid;
     grid-template-columns: 20% 1fr 20%;
