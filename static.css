@@ -69,6 +69,8 @@ input {
 
 div {
     gap: .5rem;
+    padding-left: .5rem;
+    padding-right: .5rem;
 }
 
 button {
