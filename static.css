@@ -48,6 +48,8 @@ ul {
     margin: 0;
     padding: 0;
     list-style: none;
+
+    /*background: #f0f0f0*/
 }
 
 li {
@@ -61,6 +63,7 @@ li {
 
     margin-bottom: .5rem;
     width: fit-content;
+    background-color: #f0f0f0
 }
 
 p {
@@ -70,8 +73,6 @@ p {
     border: .1rem solid black;
     box-shadow: .1rem .1rem .1rem black;
     border-radius: .5rem;
-
-    background: #f0f0f0
 }
 
 input {
