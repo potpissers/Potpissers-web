@@ -47,15 +47,6 @@ li {
     background-color: #f0f0f0
 }
 
-/*.foo {*/
-/*    gap: .5rem;*/
-/*    padding-left: .5rem;*/
-/*    padding-right: .5rem;*/
-/*    border: .1rem solid black;*/
-/*    box-shadow: .1rem .1rem .1rem black;*/
-/*    border-radius: .5rem*/
-/*}*/
-
 input {
     font-size: 106.25%;
     gap: .5rem;
@@ -68,22 +59,16 @@ input {
     border-radius: .25rem
 }
 
-/*.fi {*/
-/*    font-size: 106.25%;*/
-/*    gap: .5rem;*/
-/*    padding-left: .5rem;*/
-/*    padding-right: .5rem;*/
-/*    box-shadow: .1rem .1rem .1rem black;*/
-
-/*    border-radius: .25rem*/
-/*}*/
-
 .input-valid {
     border: .1rem solid green;
 }
 
 .input-invalid {
     border: .1rem solid red;
+}
+
+div {
+    gap: .5rem;
 }
 
 button {
@@ -149,6 +134,7 @@ footer {
 .r {
     background-color: indianred;
 }
+
 small {
     gap: .5rem;
     padding-left: .5rem;
