@@ -25,13 +25,13 @@ body::-webkit-scrollbar {
 
 ul {
     gap: .5rem;
-    border: .1rem solid black;
-    box-shadow: .1rem .1rem .1rem black;
+    /*border: .1rem solid black;*/
+    /*box-shadow: .1rem .1rem .1rem black;*/
     border-radius: .5rem;
 
-    width: fit-content;
+    /*width: fit-content;*/
     margin: 0;
-    padding: 0;
+    /*padding: 0;*/
     list-style: none;
 }
 
