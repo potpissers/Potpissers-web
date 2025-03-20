@@ -75,11 +75,11 @@
                 </li>
                 {{end}}
             </ul>
-            <ul style="overflow-y: scroll; flex: 0;">
+            <ul style="flex: 0;">
                 {{range .MainTemplateData.DiscordMessages}}
                 {{end}}
             </ul>
-            <ul style="overflow-y: scroll; flex: 1; direction: rtl">
+            <ul style="flex: 1; direction: rtl">
                 {{range .MainTemplateData.Messages}}
                 <li>
                     {{.Message}}
