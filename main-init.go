@@ -3,12 +3,14 @@ package main
 import (
 	"bytes"
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"github.com/jackc/pgx/v5"
 	"html/template"
 	"log"
 	"math"
 	"net/http"
+	"net/url"
 	"os"
 	"regexp"
 	"strconv"
@@ -789,11 +791,30 @@ var lineItemDatas = func() []lineItemData {
 var redditImageUrls []string
 
 func init() {
-	req, err := http.NewRequest("GET", "https://www.reddit.com/r/potpissers/new.json?limit=100", nil)
+	data := url.Values{}
+	data.Set("grant_type", "client_credentials")
+	req, err := http.NewRequest("POST", "https://www.reddit.com/api/v1/access_token", strings.NewReader(data.Encode()))
 	if err != nil {
 		log.Fatal(err)
 	}
-	req.Header.Set("User-Agent", "potpissers.com /u/camwen")
+	req.Header.Set("Authorization", base64.StdEncoding.EncodeToString([]byte(os.Getenv("REDDIT_CLIENT_ID" + os.Getenv("REDDIT_CLIENT_SECRET")))))
+	client := &http.Client{}
+	authResp, err := client.Do(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer authResp.Body.Close()
+	var result map[string]any
+	if err := json.NewDecoder(authResp.Body).Decode(&result); err != nil {
+		log.Fatal(err)
+	}
+	redditAccessToken := result["access_token"].(string)
+
+	req, err = http.NewRequest("GET", "https://www.reddit.com/r/potpissers/new.json?limit=100", nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	req.Header.Set("Authorization", "Bearer " + redditAccessToken)
 	resp, err := (&http.Client{}).Do(req)
 	if err != nil {
 		log.Fatal(err)
