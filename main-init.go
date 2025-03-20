@@ -9,6 +9,7 @@ import (
 	"html/template"
 	"log"
 	"math"
+	"math/rand"
 	"net/http"
 	"net/url"
 	"os"
@@ -863,6 +864,7 @@ var mzTemplate = getMainTemplate("main-mz.html")
 var hcfTemplate = getMainTemplate("main-hcf.html")
 
 type mainTemplateData struct {
+	BackgroundImageUrl string
 	NetworkPlayers     []string
 	ServerPlayers      []string
 	NewPlayers         []newPlayer
@@ -879,6 +881,7 @@ type mainTemplateData struct {
 	LineItemData       []lineItemData
 }
 
+var currentBackgroundImageUrl = redditImageUrls[rand.New(rand.NewSource(time.Now().UnixNano())).Intn(len(redditImageUrls))]
 func getHome() []byte {
 	var buffer bytes.Buffer
 	offPeakLivesNeeded := float32(serverDatas[currentHcfServerName].offPeakLivesNeededAsCents / 100.0)
@@ -886,6 +889,7 @@ func getHome() []byte {
 		MainTemplateData mainTemplateData
 	}{
 		MainTemplateData: mainTemplateData{
+			BackgroundImageUrl: currentBackgroundImageUrl,
 			NetworkPlayers:     currentPlayers,
 			ServerPlayers:      serverDatas["hub"].currentPlayers,
 			NewPlayers:         newPlayers,
@@ -917,6 +921,7 @@ func getMz() []byte {
 		Bandits []bandit
 	}{
 		MainTemplateData: mainTemplateData{
+			BackgroundImageUrl: currentBackgroundImageUrl,
 			NetworkPlayers:     currentPlayers,
 			ServerPlayers:      mzData.currentPlayers,
 			NewPlayers:         newPlayers,
@@ -967,6 +972,7 @@ func getHcf() []byte {
 		Factions     []faction
 	}{
 		MainTemplateData: mainTemplateData{
+			BackgroundImageUrl: currentBackgroundImageUrl,
 			NetworkPlayers:     currentPlayers,
 			ServerPlayers:      serverData.currentPlayers,
 			NewPlayers:         newPlayers,
