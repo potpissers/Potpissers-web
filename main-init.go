@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"github.com/jackc/pgx/v5"
 	"html/template"
-	"io"
 	"log"
 	"math"
 	"net/http"
@@ -795,11 +794,7 @@ func init() {
 		log.Fatal(err)
 	}
 	defer resp.Body.Close()
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-	    log.Fatal(err)
-	}
-	println(string(body))
+	println(resp.StatusCode)
 	responseJson := getFatalJsonT[struct {
 		Kind string `json:"kind"`
 		Data struct {
