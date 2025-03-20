@@ -50,6 +50,7 @@ ul {
     list-style: none;
 
     /*background: #f0f0f0*/
+    background: rgba(240, 240, 240, 0.2)
 }
 
 li {
@@ -63,7 +64,7 @@ li {
 
     margin-bottom: .5rem;
     width: fit-content;
-    /*background: rgba(240, 240, 240, 0.2)*/
+    background-color: #f0f0f0
 }
 
 p {
@@ -73,8 +74,6 @@ p {
     border: .1rem solid black;
     box-shadow: .1rem .1rem .1rem black;
     border-radius: .5rem;
-
-    background-color: #f0f0f0
 }
 
 input {
