@@ -151,11 +151,13 @@
 <div class="bd mbd" id="content"
      style="display: grid; grid-template-columns: 3fr 1fr; grid-template-rows: 1fr 1fr">
     <div style="display: flex; flex-direction: column; overflow-y: auto">
-        <div style="margin-left: auto">
-            <button>announcements</button>
-            <button>changelog</button>
+        <div style="display: flex">
+            <div style="margin-left: auto">
+                <button>announcements</button>
+                <button>changelog</button>
+            </div>
+            <button onclick="handleContentMaximizeButtonClick(true)" style="margin-left: auto"></button>
         </div>
-        <button onclick="handleContentMaximizeButtonClick(true)" style="margin-left: auto"></button>
         <ul style="overflow-y: scroll">
             {{range .MainTemplateData.Announcements}}
             <li>{{.Content}}</li>
@@ -168,7 +170,7 @@
         </ul>
     </div>
     <div style="display: flex; flex-direction: column; overflow-y: auto">
-        <div style="display: grid; grid-template-columns: 1fr auto 1fr"> <!--            TODO use flex remove spacer div-->
+        <div style="display: flex; justify-content: space-between">
             <button id="donatebutton">donate</button>
             <button onclick="fetchPaymentLink()" id="checkout" class="fsb h"><span style="font-size: 75%">square.com</span><span id="checkoutbalance"></span></button>
 
