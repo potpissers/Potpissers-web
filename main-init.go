@@ -789,12 +789,16 @@ var lineItemDatas = func() []lineItemData {
 var redditImageUrls []string
 
 func init() {
-	resp, err := http.Get("https://www.reddit.com/r/potpissers/new.json?limit=100")
+	req, err := http.NewRequest("GET", "https://www.reddit.com/r/potpissers/new.json?limit=100", nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	req.Header.Set("User-Agent", "potpissers.com /u/camwen")
+	resp, err := (&http.Client{}).Do(req)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer resp.Body.Close()
-	println(resp.StatusCode)
 	responseJson := getFatalJsonT[struct {
 		Kind string `json:"kind"`
 		Data struct {
