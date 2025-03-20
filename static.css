@@ -49,8 +49,8 @@ ul {
     padding: 0;
     list-style: none;
 
-    /*background: #f0f0f0*/
-    background: rgba(240, 240, 240, 0.2)
+    background: black
+    /*background: rgba(240, 240, 240, 0.2)*/
 }
 
 li {
