@@ -797,7 +797,7 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	req.Header.Set("Authorization", base64.StdEncoding.EncodeToString([]byte(os.Getenv("REDDIT_CLIENT_ID" + os.Getenv("REDDIT_CLIENT_SECRET")))))
+	req.Header.Set("Authorization", "Basic " + base64.StdEncoding.EncodeToString([]byte(os.Getenv("REDDIT_CLIENT_ID") + ":" + os.Getenv("REDDIT_CLIENT_SECRET"))))
 	client := &http.Client{}
 	authResp, err := client.Do(req)
 	if err != nil {
