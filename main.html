@@ -91,11 +91,9 @@
         </div>
 
         <div style="flex: 1; display: flex; flex-direction: column">
-            <div>
-                {{block "map" .}}{{end}}
-            </div>
-            <div>
+            <div style="display: flex; justify-content: space-between">
                 {{block "attackspeed" .}}{{end}}
+                {{block "map" .}}{{end}}
             </div>
             {{block "server info" .}}{{end}}
         </div>
