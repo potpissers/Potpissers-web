@@ -789,7 +789,7 @@ var lineItemDatas = func() []lineItemData {
 	return slice
 }()
 
-var redditImageUrls []string
+var redditImageBackground string
 
 func init() {
 	data := url.Values{}
@@ -846,11 +846,13 @@ func init() {
 			} `json:"children"`
 		} `json:"data"`
 	}](resp)
+	var redditImageUrls []string
 	for _, child := range responseJson.Data.Children {
 		if regexp.MustCompile(`(?i)^(https?://)?(i\.redd\.it|i\.imgur\.com)/.*\.(png|jpg|jpeg)$`).MatchString(child.Data.URL) {
 			redditImageUrls = append(redditImageUrls, child.Data.URL)
 		}
 	}
+	redditImageBackground = redditImageUrls[rand.New(rand.NewSource(time.Now().UnixNano())).Intn(len(redditImageUrls))]
 }
 
 func getMainTemplate(fileName string) *template.Template {
@@ -881,7 +883,6 @@ type mainTemplateData struct {
 	LineItemData       []lineItemData
 }
 
-var currentBackgroundImageUrl = redditImageUrls[rand.New(rand.NewSource(time.Now().UnixNano())).Intn(len(redditImageUrls))]
 func getHome() []byte {
 	var buffer bytes.Buffer
 	offPeakLivesNeeded := float32(serverDatas[currentHcfServerName].offPeakLivesNeededAsCents / 100.0)
@@ -889,7 +890,7 @@ func getHome() []byte {
 		MainTemplateData mainTemplateData
 	}{
 		MainTemplateData: mainTemplateData{
-			BackgroundImageUrl: currentBackgroundImageUrl,
+			BackgroundImageUrl: redditImageBackground,
 			NetworkPlayers:     currentPlayers,
 			ServerPlayers:      serverDatas["hub"].currentPlayers,
 			NewPlayers:         newPlayers,
@@ -921,7 +922,7 @@ func getMz() []byte {
 		Bandits []bandit
 	}{
 		MainTemplateData: mainTemplateData{
-			BackgroundImageUrl: currentBackgroundImageUrl,
+			BackgroundImageUrl: redditImageBackground,
 			NetworkPlayers:     currentPlayers,
 			ServerPlayers:      mzData.currentPlayers,
 			NewPlayers:         newPlayers,
@@ -972,7 +973,7 @@ func getHcf() []byte {
 		Factions     []faction
 	}{
 		MainTemplateData: mainTemplateData{
-			BackgroundImageUrl: currentBackgroundImageUrl,
+			BackgroundImageUrl: redditImageBackground,
 			NetworkPlayers:     currentPlayers,
 			ServerPlayers:      serverData.currentPlayers,
 			NewPlayers:         newPlayers,
