@@ -820,7 +820,6 @@ func init() {
 		log.Fatal(err)
 	}
 	defer resp.Body.Close()
-	println(resp.StatusCode)
 	responseJson := getFatalJsonT[struct {
 		Kind string `json:"kind"`
 		Data struct {
