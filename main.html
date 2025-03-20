@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<div class="bar" style="display: flex; flex-direction: column">
+<div style="display: flex; flex-direction: column">
     <div style="text-align: center">
         <span class=ifc>
             <button>fights</button>
@@ -24,7 +24,7 @@
     </div>
     <ul style="overflow-x: hidden; overflow-y: scroll">
         {{range .MainTemplateData.Deaths}}
-        <li style="">({{.ServerName}}) {{.DeathMessage}}</li>
+        <li>({{.ServerName}}) {{.DeathMessage}}</li>
         {{end}}
     </ul>
     {{block "fights" .}}{{end}}
@@ -49,16 +49,16 @@
             </select>
         </div>
         <div style="display: flex; justify-content: end">
-            <input class=fi style="margin-bottom: auto; margin-right: auto; width: 8rem" type="search"
+            <input style="margin-bottom: auto; margin-right: auto; width: 8rem" type="search"
                    placeholder="players">
             <div style="display: flex; flex-direction: column; align-items: flex-end">
                 <a href="https://reddit.com/r/potpissers" style="">
-                    <small style="margin: 0; background-color: #F0F0F0">
+                    <small>
                         /r/potpissers
                     </small>
                 </a>
-                <a style="" href="https://discord.gg/Cqnvktf7EF">
-                    <small style="background-color: #F0F0F0; margin: 0">
+                <a href="https://discord.gg/Cqnvktf7EF">
+                    <small>
                         discord
                     </small>
                 </a>
@@ -86,7 +86,7 @@
                 </li>
                 {{end}}
             </ul>
-            <input style="font-size: 75%" class=fi>
+            <input style="font-size: 75%">
         </div>
 
         <div style="flex: 1; display: flex; flex-direction: column">
@@ -118,7 +118,7 @@
     </div>
 </div>
 
-<div class="bar" style="display: flex; flex-direction: column; align-items: center">
+<div style="display: flex; flex-direction: column; align-items: center">
     <div style="display: grid; grid-template-columns: 1fr auto 1fr;">
         <select style="margin-right: auto; margin-bottom: auto; font-size: 75%">
             <option>new</option>
@@ -143,7 +143,7 @@
     </button>
 </div>
 
-<div class="bar" style="text-align: center">
+<div style="text-align: center">
     <button>events</button>
     <ul>
         {{range .MainTemplateData.Events}}
@@ -154,10 +154,10 @@
 
 <div id="content"
      style="display: grid; grid-template-columns: 3fr 1fr; grid-template-rows: 1fr 1fr">
-    <div class="baz" style="display: flex; flex-direction: column; overflow-y: auto">
+    <div style="display: flex; flex-direction: column; overflow-y: auto">
         <div style="display: grid; grid-template-columns: 1fr auto 1fr"><!--            TODO use flex + remove spacer-->
             <div></div>
-            <div style="">
+            <div>
                 <button>announcements</button>
                 <button>changelog</button>
             </div>
@@ -174,7 +174,7 @@
             {{end}}
         </ul>
     </div>
-    <div class="baz" style="display: flex; flex-direction: column; overflow-y: auto">
+    <div style="display: flex; flex-direction: column; overflow-y: auto">
         <div style="display: grid; grid-template-columns: 1fr auto 1fr"> <!--            TODO use flex remove spacer div-->
             <div></div>
 
@@ -220,7 +220,7 @@
         </ul>
     </div>
 
-    <div class="baz" style="display: flex; flex-direction: column; overflow-y: auto">
+    <div style="display: flex; flex-direction: column; overflow-y: auto">
         <div style="display: flex; text-align: left">
             {{block "server tips buttons" .}}{{end}}
 
@@ -228,13 +228,13 @@
         </div>
         {{block "server tips data" .}}{{end}}
     </div>
-    <div class="baz" style="display: flex; flex-direction: column; align-items: center; overflow-y: auto">
+    <div style="display: flex; flex-direction: column; align-items: center; overflow-y: auto">
         {{block "server ticker buttons" .}}{{end}}
         {{block "server ticker data" .}}{{end}}
     </div>
 </div>
 
-<div class="bar" style="text-align: center">
+<div style="text-align: center">
     <button>donations</button>
     <ul>
         {{range .MainTemplateData.Donations}}
