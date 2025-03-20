@@ -59,18 +59,30 @@
 {{define "server tips data"}}
 <ul id="tips" style="overflow-y: scroll; flex: 1" hidden>
     {{range .MainTemplateData.PotpissersTips}}
-    <li>{{.}}</li>
+    <li>
+        <p>
+            {{.}}
+        </p>
+    </li>
     {{end}}
 </ul>
 
 <ul id="hcftips" style="overflow-y: scroll; flex: 1">
     {{range .CubecoreTips}}
-    <li>{{.}}</li>
+    <li>
+        <p>
+            {{.}}
+        </p>
+    </li>
     {{end}}
 </ul>
 <ul id="classtips" style="overflow-y: scroll; flex: 1" hidden>
     {{range .ClassTips}}
-    <li>{{.}}</li>
+    <li>
+        <p>
+            {{.}}
+        </p>
+    </li>
     {{end}}
 </ul>
 {{end}}
