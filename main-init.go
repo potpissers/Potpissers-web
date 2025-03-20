@@ -810,7 +810,7 @@ func init() {
 	}
 	redditAccessToken := result["access_token"].(string)
 
-	req, err = http.NewRequest("GET", "https://www.reddit.com/r/potpissers/new.json?limit=100", nil)
+	req, err = http.NewRequest("GET", "https://oauth.reddit.com/r/potpissers/new.json?limit=100", nil)
 	if err != nil {
 		log.Fatal(err)
 	}
