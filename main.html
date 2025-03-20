@@ -100,7 +100,7 @@
             {{block "server info" .}}{{end}}
         </div>
 
-        <div style="display: flex; flex-direction: column; justify-content: space-between; flex: 1">
+        <div style="display: flex; flex-direction: column; justify-content: space-between; flex: 1; justify-items: end">
             <div style="flex: 1; display: flex; flex-direction: column-reverse">
                 <ul style="display: flex; flex-direction: column; align-items: flex-end; font-size: 75%">
                     {{range .MainTemplateData.NewPlayers}}
@@ -112,7 +112,7 @@
             </div>
             <div style="display: flex; justify-content: space-between">
                 {{block "events button" .}}{{end}}
-                <button style="justify-content: end; text-align: right; font-size: 75%">new players</button>
+                <button style="text-align: right; font-size: 75%">new players</button>
             </div>
         </div>
     </div>
