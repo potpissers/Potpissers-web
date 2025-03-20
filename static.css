@@ -31,7 +31,8 @@ li {
     border-radius: .25rem;
 
     margin-bottom: .5rem;
-    width: fit-content
+    width: fit-content;
+    background-color: rgba(255, 255, 255, 0.5)
 }
 
 .foo {
