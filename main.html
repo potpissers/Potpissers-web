@@ -214,10 +214,10 @@
     </div>
 
     <div style="display: flex; flex-direction: column; overflow-y: auto">
-        <div style="display: flex">
+        <div>
             {{block "server tips buttons" .}}{{end}}
 
-            <button onclick="handleContentMaximizeButtonClick(false)" style="justify-self: end"></button>
+            <button onclick="handleContentMaximizeButtonClick(false)" style="margin-left: auto"></button>
         </div>
         {{block "server tips data" .}}{{end}}
     </div>
