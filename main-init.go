@@ -10,6 +10,7 @@ import (
 	"math"
 	"net/http"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 	"sync"
@@ -73,7 +74,7 @@ var newPlayers = func() []newPlayer {
 		var result map[string]any
 		err = json.NewDecoder(resp.Body).Decode(&result)
 		if err != nil {
-		    log.Fatal(err)
+			log.Fatal(err)
 		}
 		newPlayers[i].PlayerName = result["name"].(string)
 	}
@@ -784,6 +785,46 @@ var lineItemDatas = func() []lineItemData {
 	})
 	return slice
 }()
+
+var redditImageUrls []string
+
+func init() {
+	resp, err := http.Get("https://www.reddit.com/r/potpissers/new.json?limit=100")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer resp.Body.Close()
+	responseJson := getFatalJsonT[struct {
+		Kind string `json:"kind"`
+		Data struct {
+			After     *string `json:"after"`
+			Dist      int     `json:"dist"`
+			Modhash   string  `json:"modhash"`
+			GeoFilter string  `json:"geo_filter"`
+			Children  []struct {
+				Kind string `json:"kind"`
+				Data struct {
+					Subreddit   string  `json:"subreddit"`
+					Title       string  `json:"title"`
+					Selftext    string  `json:"selftext"`
+					Author      string  `json:"author"`
+					UpvoteRatio float64 `json:"upvote_ratio"`
+					Thumbnail   string  `json:"thumbnail"`
+					URL         string  `json:"url"`
+					NumComments int     `json:"num_comments"`
+					Permalink   string  `json:"permalink"`
+					CreatedUTC  float64 `json:"created_utc"`
+					IsVideo     bool    `json:"is_video"`
+				} `json:"data"`
+			} `json:"children"`
+		} `json:"data"`
+	}](resp)
+	for _, child := range responseJson.Data.Children {
+		if regexp.MustCompile(`(?i)^(https?://)?(i\.redd\.it|i\.imgur\.com)/.*\.(png|jpg|jpeg)$`).MatchString(child.Data.URL) {
+			redditImageUrls = append(redditImageUrls, child.Data.URL)
+		}
+	}
+}
 
 func getMainTemplate(fileName string) *template.Template {
 	mainTemplate, err := template.ParseFiles("main.html", fileName)

@@ -68,7 +68,6 @@ function handleRedditVideos() { // TODO -> server handle this
                             img.src = "https://img.youtube.com/vi/" + url.match(/[?&]v=([a-zA-Z0-9_-]{11})/)[1] + "/hqdefault.jpg"
                             img.style.width = "50%"
 
-
                             const a = document.createElement("a")
                             a.href = "https://www.reddit.com" + post.data.permalink
                             a.textContent = post.data.title
