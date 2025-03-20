@@ -21,7 +21,7 @@ function handleMcNameBlur(inputElement) {
     nameCheckController = new AbortController()
     fetch("https://potpissers.com/api/proxy/mojang/username/" + inputElement.value, {signal: nameCheckController.signal})
         .then(res => {
-            inputElement.classList.add(res.status !== 404 ? "input-valid" : "input-invalid")
+            inputElement.classList.add(res.status !== 404 ? "v" : "iv")
         })
         .catch(err => {
         }); // TODO -> warning when hasn't played before
@@ -31,7 +31,7 @@ function handleMcNameKeyDown(event) {
     if (event.key === "Enter")
         event.target.blur()
     else
-        event.target.classList.remove("input-valid", "input-invalid");
+        event.target.classList.remove("v", "iv");
 }
 
 function handleContentMaximizeButtonClick(isAnnouncements) {

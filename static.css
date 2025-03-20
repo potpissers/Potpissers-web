@@ -1,47 +1,3 @@
-@media (prefers-color-scheme: dark) {
-    body {
-        gap: .5rem;
-        padding-left: .5rem;
-        padding-right: .5rem;
-        border: .1rem solid black;
-        box-shadow: .1rem .1rem .1rem black;
-        border-radius: .5rem;
-
-        backdrop-filter: blur(.1rem);
-        background: rgba(0, 0, 0, 0.2);
-        font-family: sans-serif;
-        display: grid;
-        grid-template-columns: 20% 1fr 20%;
-        grid-template-rows: 44vh 44vh auto;
-    }
-
-    div.bd {
-        gap: .5rem;
-        padding-left: .5rem;
-        padding-right: .5rem;
-        border: .1rem solid black;
-        box-shadow: .1rem .1rem .1rem black;
-        border-radius: .5rem;
-
-        background: rgba(0, 0, 0, 0.2);
-    }
-
-    li {
-        gap: .5rem;
-        padding-left: .5rem;
-        padding-right: .5rem;
-        border: .1rem solid black;
-        box-shadow: .1rem .1rem .1rem black;
-
-        border-radius: .25rem;
-
-        margin-bottom: .5rem;
-        width: fit-content;
-
-        background: rgba(0, 0, 0, 0.2)
-    }
-}
-
 body {
     gap: .5rem;
     padding-left: .5rem;
@@ -131,11 +87,11 @@ input {
     width: fit-content;
 }
 
-.input-valid {
+input.v {
     border: .1rem solid green;
 }
 
-.input-invalid {
+input.iv {
     border: .1rem solid red;
 }
 
