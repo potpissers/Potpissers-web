@@ -83,7 +83,9 @@ input {
     box-shadow: .1rem .1rem .1rem black;
 
     border-radius: .25rem;
-    background-color: #f0f0f0
+    background-color: #f0f0f0;
+
+    width: fit-content;
 }
 
 .input-valid {
