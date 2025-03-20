@@ -120,9 +120,9 @@
 
 <div class="bd" style="display: flex; flex-direction: column; align-items: center">
     <div style="display: grid; grid-template-columns: 1fr auto 1fr;">
-        <select style="align-self: start; justify-self: start; font-size: 75%">
-            <option>new</option>
-        </select>
+        <button style="font-size: 75%">
+            refresh
+        </button>
         <div class=ifc>
             <select>
                 <option selected>videos</option>
@@ -130,6 +130,9 @@
             </select>
             <input name="videos-ticker" type="radio" checked>
         </div>
+        <select style="align-self: start; justify-self: start; font-size: 75%">
+            <option>new</option>
+        </select>
     </div>
     <ul id="videos">
         <script defer>
@@ -137,9 +140,6 @@
         </script>
         <!--        {{block "videos" .}}TODO {{end}}-->
     </ul>
-    <button style="font-size: 75%; margin-top: auto; margin-left: auto">
-        refresh
-    </button>
 </div>
 
 <div class="bd" style="text-align: center">
