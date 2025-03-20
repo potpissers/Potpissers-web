@@ -12,7 +12,7 @@ body {
     border-radius: .5rem;
 
     backdrop-filter: blur(2px);
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.1);
     font-family: sans-serif;
     display: grid;
     grid-template-columns: 20% 1fr 20%;
