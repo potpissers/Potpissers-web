@@ -37,9 +37,7 @@
             <button style="align-self: start; font-size: 75%">
                 leaderboards
             </button>
-            <select style="font-size: 75%">
-                <option>{{block "slash" .}}{{end}}: 000</option>
-            </select>
+            <input type="radio">
         </div>
         <div
              style="align-items: center; justify-self: center; display: inline-flex; background-color: #CEE3F8; padding-left: 0; padding-right: .5rem">
@@ -70,9 +68,9 @@
 
     <div style="display: flex; height: 100%;">
         <div style="display: flex; flex-direction: column; flex: 1">
-            <div style="display: flex; align-self: end">
-                <input type="radio">
-            </div>
+            <select style="font-size: 75%">
+                <option>{{block "slash" .}}{{end}}: 000</option>
+            </select>
             <ul style="overflow-y: scroll; flex: 0;">
                 {{range .MainTemplateData.ServerPlayers}}
                 <li>
