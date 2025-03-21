@@ -85,11 +85,14 @@
             <ul style="flex: 1; direction: rtl">
                 {{range .MainTemplateData.Messages}}
                 <li>
-                    {{.Message}}
+                    <p>
+                        {{.Message}}
+                    </p>
                 </li>
                 {{end}}
             </ul>
             <div style="display: flex">
+                <button hidden style="font-size: 75%">refresh</button>
                 <input style="font-size: 75%">
             </div>
         </div>

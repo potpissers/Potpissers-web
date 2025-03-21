@@ -55,29 +55,29 @@ function handleContentMaximizeButtonClick(isAnnouncements) {
     }
 }
 
-function handleRedditVideos() { // TODO -> server handle this
-    fetch("https://www.reddit.com/r/potpissers/new.json?limit=100")
-        .then(response => response.json()
-            .then(data => {
-                const ul = document.getElementById("videos")
-                data.data.children
-                    .forEach(post => {
-                        const url = post.data.url
-                        if (url && (url.includes("youtube.com") || url.includes("youtu.be"))) {
-                            const img = document.createElement("img")
-                            img.src = "https://img.youtube.com/vi/" + url.match(/[?&]v=([a-zA-Z0-9_-]{11})/)[1] + "/hqdefault.jpg"
-                            img.style.width = "50%"
-
-                            const a = document.createElement("a")
-                            a.href = "https://www.reddit.com" + post.data.permalink
-                            a.textContent = post.data.title
-
-                            const li = document.createElement("li")
-                            li.classList.add("fsb")
-                            li.appendChild(img)
-                            li.appendChild(a)
-                            ul.appendChild(li)
-                        }
-                    })
-            }));
-}
+// function handleRedditVideos() { // TODO -> server handle this
+//     fetch("https://www.reddit.com/r/potpissers/new.json?limit=100")
+//         .then(response => response.json()
+//             .then(data => {
+//                 const ul = document.getElementById("videos")
+//                 data.data.children
+//                     .forEach(post => {
+//                         const url = post.data.url
+//                         if (url && (url.includes("youtube.com") || url.includes("youtu.be"))) {
+//                             const img = document.createElement("img")
+//                             img.src = "https://img.youtube.com/vi/" + url.match(/[?&]v=([a-zA-Z0-9_-]{11})/)[1] + "/hqdefault.jpg"
+//                             img.style.width = "50%"
+//
+//                             const a = document.createElement("a")
+//                             a.href = "https://www.reddit.com" + post.data.permalink
+//                             a.textContent = post.data.title
+//
+//                             const li = document.createElement("li")
+//                             li.classList.add("fsb")
+//                             li.appendChild(img)
+//                             li.appendChild(a)
+//                             ul.appendChild(li)
+//                         }
+//                     })
+//             }));
+// }
