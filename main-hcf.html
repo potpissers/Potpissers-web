@@ -9,7 +9,9 @@
 {{end}}
 
 {{define "attackspeed"}}
-<button style="font-size: 75%">attack speed: {{ .AttackSpeed }}</button>
+<select style="font-size: 75%">
+    <option disabled selected hidden>attack speed: {{ .AttackSpeed }}</option>
+</select>
 {{end}}
 
 {{define "map"}}
