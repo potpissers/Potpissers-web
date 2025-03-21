@@ -94,7 +94,11 @@
 {{define "server ticker data"}}
 <ul style="overflow-y: scroll">
     {{range .Factions}}
-    <li>{{.Name}}</li>
+    <li>
+        <p>
+            {{.Name}}
+        </p>
+    </li>
     {{end}}
 </ul>
 {{end}}

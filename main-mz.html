@@ -19,13 +19,21 @@
 {{define "server tips data"}}
 <ul id="tips" style="overflow-y: scroll; flex: 1" hidden>
     {{range .MainTemplateData.PotpissersTips}}
-    <li>{{.}}</li>
+    <li>
+        <p>
+            {{.}}
+        </p>
+    </li>
     {{end}}
 </ul>
 
 <ul id="mztips" style="overflow-y: scroll; flex: 1">
     {{range .MzTips}}
-    <li>{{.}}</li>
+    <li>
+        <p>
+            {{.}}
+        </p>
+    </li>
     {{end}}
 </ul>
 {{end}}
@@ -46,7 +54,11 @@
 {{define "server ticker data"}}
 <ul>
     {{range .Bandits}}
-    <li>{{.DeathMessage}}</li>
+    <li>
+        <p>
+            {{.DeathMessage}}
+        </p>
+    </li>
     {{end}}
 </ul>
 {{end}}
