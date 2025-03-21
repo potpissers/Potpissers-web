@@ -8,7 +8,9 @@
 {{end}}
 
 {{define "attackspeed"}}
-<button style="width: fit-content; font-size: 75%">attack speed: {{ .AttackSpeed }}</button>
+<select>
+    <option disabled selected hidden>attack speed: {{ .AttackSpeed }}</option>
+</select>
 {{end}}
 
 {{define "server tips buttons"}}
