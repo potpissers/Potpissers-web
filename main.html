@@ -38,9 +38,6 @@
                 leaderboards
             </button>
             <input type="radio" style="align-self: end">
-            <select style="align-self: end; font-size: 75%">
-                <option selected>network: 000</option>
-            </select>
         </div>
         <div
              style="align-items: center; justify-self: center; display: inline-flex; background-color: #CEE3F8; padding-left: 0; padding-right: .5rem">
@@ -73,7 +70,9 @@
         <div style="display: flex; flex-direction: column; flex: 1">
             <div style="display: flex; align-self: end">
                 <input type="radio">
-                <button style="font-size: 75%">{{block "slash" .}}{{end}}: 000</button>
+                <select style="font-size: 75%">
+                    <option>{{block "slash" .}}{{end}}: 000</option>
+                </select>
             </div>
             <ul style="overflow-y: scroll; flex: 0;">
                 {{range .MainTemplateData.ServerPlayers}}
@@ -94,10 +93,6 @@
                 {{end}}
             </ul>
             <div style="display: flex">
-                <select style="font-size: 75%">
-                    <option selected>discord</option>
-                    <option>ingame</option>
-                </select>
                 <input style="font-size: 75%">
             </div>
         </div>
