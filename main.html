@@ -160,12 +160,20 @@
         </div>
         <ul style="overflow-y: scroll">
             {{range .MainTemplateData.Announcements}}
-            <li>{{.Content}}</li>
+            <li>
+                <p>
+                    {{.Content}}
+                </p>
+            </li>
             {{end}}
         </ul>
         <ul style="overflow-y: scroll" hidden>
             {{range .MainTemplateData.Changelog}}
-            <li>{{.Content}}</li>
+            <li>
+                <p>
+                    {{.Content}}
+                </p>
+            </li>
             {{end}}
         </ul>
     </div>
