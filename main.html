@@ -68,7 +68,7 @@
 
     <div style="display: flex; height: 100%;">
         <div style="display: flex; flex-direction: column; flex: 1">
-            <button style="font-size: 75%; align-self: end">server: 000</button>
+            <button style="font-size: 75%; align-self: end">{{block "slash" .}}{{end}}: 000</button>
             <ul style="overflow-y: scroll; flex: 0;">
                 {{range .MainTemplateData.ServerPlayers}}
                 <li>
