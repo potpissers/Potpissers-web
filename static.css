@@ -107,6 +107,8 @@ button {
     padding-right: .5rem;
     outline: .1rem solid black;
     box-shadow: .1rem .1rem .1rem black;
+
+    width: fit-content;
 }
 
 select {
