@@ -103,7 +103,9 @@
                 <ul style="display: flex; flex-direction: column; align-items: flex-end; font-size: 75%">
                     {{range .MainTemplateData.NewPlayers}}
                     <li title="{{.Timestamp}}">
-                        {{.PlayerName}} ({{.Referrer}}) [{{.RowNumber}}]
+                        <p>
+                            {{.PlayerName}} ({{.Referrer}}) [{{.RowNumber}}]
+                        </p>
                     </li>
                     {{end}}
                 </ul>
