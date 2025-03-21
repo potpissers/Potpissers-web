@@ -90,8 +90,10 @@ func init() {
 		handleLocalhostJsonPatch[newPlayer](r, func(newT *newPlayer, r *http.Request) error { return json.NewDecoder(r.Body).Decode(&newT) }, &newPlayersMu, &newPlayers)
 		home = getHome()
 		mz = getMz()
-		hcf = getMz()
-		// TODO -> sse
+		hcf = getHcf()
+		handleSseData(homeConnections, )
+		handleSseData(mzConnections, )
+		handleSseData(hcfConnections, )
 	})
 }
 

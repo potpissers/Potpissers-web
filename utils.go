@@ -35,6 +35,19 @@ func getFatalJsonT[T any](resp *http.Response) T {
 	return messages
 }
 
+func handleSseData(sseConnections []sseConnection, bytes []byte) {
+	for _, data := range sseConnections {
+		go func() {
+			_, err := data.response.Write(bytes)
+			if err != nil {
+				log.Println(err)
+			} else {
+				data.flusher.Flush()
+			}
+		}()
+	}
+}
+
 func getMojangApiUuidRequest(username string) (*http.Response, error) {
 	return http.Get(minecraftUsernameLookupUrl + username)
 }

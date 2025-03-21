@@ -9,12 +9,21 @@ import (
 	"os"
 	"strings"
 )
+
 var postgresPool = func() *pgxpool.Pool {
 	pool, err := pgxpool.New(context.Background(), os.Getenv("POSTGRES_CONNECTION_STRING"))
 	handleFatalErr(err)
 	return pool
 	// defer'd => main
 }()
+
+type sseConnection struct {
+	response http.ResponseWriter
+	flusher  http.Flusher
+}
+var homeConnections []sseConnection
+var mzConnections []sseConnection
+var hcfConnections []sseConnection
 
 func main() {
 	defer postgresPool.Close()
@@ -43,19 +52,31 @@ func main() {
 	mz = getMz()
 
 	for _, data := range []struct {
-		endpoint string
-		bytes    []byte
+		endpoint       string
+		bytes          []byte
+		sseConnections *[]sseConnection
 	}{
-		{endpoint: "/", bytes: home},
-		{endpoint: "/hub", bytes: home},
-		{endpoint: "/mz", bytes: mz},
-//		{endpoint: "/kollusion", bytes: kollusion}, // TODO
-		{endpoint: "/hcf", bytes: hcf},
-//		{endpoint: "/cubecore", bytes: cubecore},
+		{endpoint: "/", bytes: home, sseConnections: &homeConnections},
+		{endpoint: "/hub", bytes: home, sseConnections: &homeConnections},
+		{endpoint: "/mz", bytes: mz, sseConnections: &mzConnections},
+		//		{endpoint: "/kollusion", bytes: kollusion}, // TODO
+		{endpoint: "/hcf", bytes: hcf, sseConnections: &hcfConnections},
+		//		{endpoint: "/cubecore", bytes: cubecore},
 	} {
 		http.HandleFunc(data.endpoint, func(w http.ResponseWriter, r *http.Request) {
 			_, err := w.Write(data.bytes)
 			handleFatalErr(err)
+		})
+		http.HandleFunc("/api/sse"+data.endpoint, func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Content-Type", "text/event-stream")
+			w.Header().Set("Cache-Control", "no-cache")
+			w.Header().Set("Connection", "keep-alive")
+
+			flusher, ok := w.(http.Flusher)
+			if ok {
+				flusher.Flush()
+				*data.sseConnections = append(*data.sseConnections, sseConnection{w, flusher})
+			}
 		})
 	}
 
