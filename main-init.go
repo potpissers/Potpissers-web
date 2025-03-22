@@ -8,26 +8,22 @@ import (
 	"github.com/jackc/pgx/v5"
 	"html/template"
 	"log"
-	"math"
 	"math/rand"
 	"net/http"
 	"net/url"
 	"os"
 	"regexp"
-	"strconv"
 	"strings"
 	"sync"
 	"time"
 )
-
-const minecraftUsernameLookupUrl = "https://api.minecraftservices.com/minecraft/profile/lookup/name/"
 
 var potpissersTips []string
 var cubecoreTips []string
 var cubecoreClassTips []string
 var mzTips []string
 
-func init() {
+func init() { // TODO -> move this to getting tips by name
 	getRowsBlocking("SELECT * FROM get_tips()", func(rows pgx.Rows) {
 		var tipMessage struct {
 			gameModeName string
@@ -85,20 +81,6 @@ var newPlayers = func() []newPlayer {
 	return newPlayers
 }()
 
-func init() {
-	http.HandleFunc("/api/players/new", func(w http.ResponseWriter, r *http.Request) {
-		handleLocalhostJsonPatch[newPlayer](r, func(newT *newPlayer, r *http.Request) error { return json.NewDecoder(r.Body).Decode(&newT) }, &newPlayersMu, &newPlayers)
-		home = getHome()
-		mz = getMz()
-		hcf = getHcf()
-		handleSseData(homeConnections, )
-		handleSseData(mzConnections, )
-		handleSseData(hcfConnections, )
-	})
-}
-
-var newPlayersMu sync.RWMutex
-
 type death struct {
 	ServerName        string    `json:"serverName"`
 	VictimUserFightId *int      `json:"victimUserFightId"`
@@ -115,7 +97,6 @@ type death struct {
 	// TODO killer inventory
 }
 
-var deathsMu sync.RWMutex
 var deaths = func() []death {
 	var deaths []death
 	getRowsBlocking("SELECT * FROM get_12_latest_network_deaths()", func(rows pgx.Rows) {
@@ -127,17 +108,6 @@ var deaths = func() []death {
 	})
 	return deaths
 }()
-
-func init() {
-	http.HandleFunc("/api/deaths/hcf", func(w http.ResponseWriter, r *http.Request) {
-		handleLocalhostJsonPatch[death](r, func(newDeath *death, r *http.Request) error { return json.NewDecoder(r.Body).Decode(&newDeath) }, &deathsMu, &deaths)
-		// TODO -> get and re-render server
-	})
-	http.HandleFunc("/api/death/mz", func(w http.ResponseWriter, r *http.Request) {
-		handleLocalhostJsonPatch[death](r, func(newDeath *death, r *http.Request) error { return json.NewDecoder(r.Body).Decode(&newDeath) }, &deathsMu, &deaths)
-		// TODO -> get and re-render server
-	})
-}
 
 type event struct {
 	RowNumber int
@@ -170,19 +140,6 @@ var events = func() []event {
 	})
 	return events
 }()
-
-func init() {
-	http.HandleFunc("/api/events/hcf", func(w http.ResponseWriter, r *http.Request) {
-		handleLocalhostJsonPatch[event](r, func(newDeath *event, r *http.Request) error { return json.NewDecoder(r.Body).Decode(&newDeath) }, &eventsMu, &events)
-		// TODO ->
-	})
-	http.HandleFunc("/api/events/mz", func(w http.ResponseWriter, r *http.Request) {
-		handleLocalhostJsonPatch[event](r, func(newDeath *event, r *http.Request) error { return json.NewDecoder(r.Body).Decode(&newDeath) }, &eventsMu, &events)
-		// TODO ->
-	})
-}
-
-var eventsMu sync.RWMutex
 
 type faction struct {
 	name                    string
@@ -221,13 +178,14 @@ type serverData struct {
 	rogueRadius                   int
 	timestamp                     time.Time
 	serverName                    string
+	gamemodeName                  string
 	attackSpeedName               string
 
-	currentPlayers []string
+	currentPlayers []onlinePlayer
 	deaths         []death
 	events         []event
 	donations      []order // TODO impl
-	messages       []string
+	messages       []ingameMessage
 	videos         []string
 
 	factions []faction
@@ -256,35 +214,27 @@ var serverDatas = func() map[string]*serverData {
 	return serverDatas
 }()
 
-func init() {
-	http.HandleFunc("/api/servers/", func(w http.ResponseWriter, r *http.Request) {
-		// TODO
-	})
+type onlinePlayer struct {
+	Name          string
+	ServerName    string
+	ActiveFaction string
 }
 
-var currentPlayers = func() []string {
-	var currentPlayers []string
+var currentPlayers = func() []onlinePlayer {
+	var currentPlayers []onlinePlayer
 	getRowsBlocking("SELECT * FROM get_online_players()", func(rows pgx.Rows) {
-		var playerName string
-		var serverName string
-		handleFatalPgx(pgx.ForEachRow(rows, []any{&playerName, &serverName}, func() error {
-			currentPlayers = append(currentPlayers, playerName)
-			serverDatas[serverName].currentPlayers = append(serverDatas[serverName].currentPlayers, playerName)
+		var t onlinePlayer
+		handleFatalPgx(pgx.ForEachRow(rows, []any{&t.Name, &t.ServerName, &t.ActiveFaction}, func() error {
+			currentPlayers = append(currentPlayers, t) // TODO sort names
+			serverData := serverDatas[t.ServerName]
+			serverData.currentPlayers = append(serverData.currentPlayers, t)
 			return nil
 		}))
-		// TODO sort names
 	})
 	return currentPlayers
 }()
 
 func init() {
-	http.HandleFunc("/api/online/hcf", func(w http.ResponseWriter, r *http.Request) {
-		// TODO
-	})
-	http.HandleFunc("/api/online/mz", func(w http.ResponseWriter, r *http.Request) {
-		// TODO
-	})
-
 	for serverName, serverData := range serverDatas {
 		getRowsBlocking("SELECT * FROM get_12_latest_server_deaths($1)", func(rows pgx.Rows) {
 			var death death
@@ -380,6 +330,7 @@ type payment struct {
 	//		VersionToken   string         `json:"version_token"`
 }
 
+var donationsMu sync.RWMutex
 var donations = func() []order {
 	req := getFatalRequest("GET", "https://connect.squareup.com/v2/payments?location_id="+os.Getenv("SQUARE_LOCATION_ID"), nil)
 	addSquareHeaders(req)
@@ -421,223 +372,6 @@ var donations = func() []order {
 }()
 
 func init() {
-	http.HandleFunc("/api/donations/payments", func(w http.ResponseWriter, r *http.Request) {
-		type donateRequest struct {
-			Username       string `json:"username"`
-			LineItemName   string `json:"line_item_name"`
-			LineItemAmount int    `json:"line_item_amount"`
-
-			lineItemCostInCents int
-		}
-		var attemptedDonationRequests []donateRequest
-		err := json.NewDecoder(r.Body).Decode(&attemptedDonationRequests)
-		if err != nil {
-			log.Println(err)
-			return
-		}
-		var successfulDonationRequests []donateRequest
-		var mutex sync.Mutex
-		var waitGroup sync.WaitGroup
-		for _, request := range attemptedDonationRequests {
-			waitGroup.Add(1)
-			go func() {
-				defer waitGroup.Done()
-				var potentialFinalRequest donateRequest
-				for _, data := range lineItemDatas {
-					if data.GamemodeName+"-"+data.ItemName == request.LineItemName {
-						potentialFinalRequest.LineItemName = request.LineItemName
-						if data.IsPlural {
-							potentialFinalRequest.LineItemAmount = int(math.Max(float64(request.LineItemAmount), 1))
-						} else {
-							potentialFinalRequest.LineItemAmount = 1 // TODO -> allow 0 amount
-						}
-						potentialFinalRequest.lineItemCostInCents = data.ItemPriceInCents
-
-						for {
-							resp, err := getMojangApiUuidRequest(request.Username)
-							if err != nil {
-								log.Println(err)
-							} else {
-								statusCode := resp.StatusCode
-								err = resp.Body.Close()
-								if err != nil {
-									log.Println(err)
-								}
-
-								if statusCode == 200 {
-									potentialFinalRequest.LineItemName = request.Username
-									mutex.Lock()
-									successfulDonationRequests = append(successfulDonationRequests, potentialFinalRequest)
-									mutex.Unlock() // TODO -> this loses the correct order
-									break
-								} else if statusCode == 404 {
-									break
-								}
-							}
-							time.Sleep(time.Second * 2)
-						}
-					}
-				}
-			}()
-		}
-		waitGroup.Wait()
-		if len(successfulDonationRequests) == 0 {
-			log.Println("err: invalid donationRequest line item")
-			return // door nigga from game of thrones
-		} else {
-			type LineItem struct {
-				Quantity       string `json:"quantity"`
-				ItemType       string `json:"item_type"`
-				Name           string `json:"name"`
-				BasePriceMoney money  `json:"base_price_money"`
-			}
-			var lineItems []LineItem
-			for _, lineItem := range successfulDonationRequests {
-				lineItems = append(lineItems, LineItem{
-					Quantity: strconv.Itoa(lineItem.LineItemAmount),
-					ItemType: "ITEM",
-					Name:     lineItem.LineItemName + "," + lineItem.Username,
-					BasePriceMoney: money{
-						Amount:   lineItem.lineItemCostInCents,
-						Currency: "USD",
-					},
-				})
-			}
-			type Order struct {
-				LocationID string     `json:"location_id"`
-				LineItems  []LineItem `json:"line_items"`
-			}
-			type AcceptedPaymentMethods struct {
-				AfterpayClearpay bool `json:"afterpay_clearpay"`
-				ApplePay         bool `json:"apple_pay"`
-				CashAppPay       bool `json:"cash_app_pay"`
-				GooglePay        bool `json:"google_pay"`
-			}
-			type CheckoutOptions struct {
-				AllowTipping           bool                   `json:"allow_tipping"`
-				AcceptedPaymentMethods AcceptedPaymentMethods `json:"accepted_payment_methods"`
-				AskForShippingAddress  bool                   `json:"ask_for_shipping_address"`
-				EnableCoupon           bool                   `json:"enable_coupon"`
-				EnableLoyalty          bool                   `json:"enable_loyalty"`
-				MerchantSupportEmail   string                 `json:"merchant_support_email"`
-				RedirectURL            string                 `json:"redirect_url"`
-			}
-			reqData := struct {
-				CheckoutOptions CheckoutOptions `json:"checkout_options"`
-				Description     string          `json:"description"`
-				Order           Order           `json:"order"`
-			}{
-				CheckoutOptions: CheckoutOptions{
-					AllowTipping: true,
-					AcceptedPaymentMethods: AcceptedPaymentMethods{
-						AfterpayClearpay: false,
-						ApplePay:         true,
-						CashAppPay:       true,
-						GooglePay:        true,
-					},
-					AskForShippingAddress: false,
-					EnableCoupon:          false,
-					EnableLoyalty:         false,
-					MerchantSupportEmail:  "potpissers@gmail.com",
-					RedirectURL:           "potpissers.com/donations",
-				},
-				Description: "hey",
-				Order: Order{
-					LocationID: os.Getenv("SQUARE_LOCATION_ID"),
-					LineItems:  lineItems,
-				},
-			}
-			reqBody, err := json.Marshal(reqData)
-			if err != nil {
-				log.Println(err)
-				return
-			}
-			req, err := http.NewRequest("POST", "https://connect.squareup.com/v2/online-checkout/payment-links", bytes.NewBuffer(reqBody))
-			if err != nil {
-				log.Println(err)
-				return
-			}
-
-			req.Header.Set("Square-Version", "2025-02-20")
-			req.Header.Set("Authorization", "Bearer "+os.Getenv("SQUARE_ACCESS_TOKEN"))
-			req.Header.Set("Content-Type", "application/json")
-
-			resp, err := (&http.Client{}).Do(req)
-			if err != nil {
-				log.Println(err)
-				return
-			}
-			defer resp.Body.Close()
-
-			var paymentLinkResp struct {
-				PaymentLink struct {
-					ID              string          `json:"id"`
-					Version         int             `json:"version"`
-					Description     string          `json:"description"`
-					OrderID         string          `json:"order_id"`
-					CheckoutOptions CheckoutOptions `json:"checkout_options"`
-					URL             string          `json:"url"`
-					LongURL         string          `json:"long_url"`
-					CreatedAt       time.Time       `json:"created_at"`
-				} `json:"payment_link"`
-				RelatedResources struct {
-					Orders []struct {
-						LocationID string `json:"location_id"`
-						LineItems  []struct {
-							Quantity       string `json:"quantity"`
-							ItemType       string `json:"item_type"`
-							Name           string `json:"name"`
-							BasePriceMoney money  `json:"base_price_money"`
-
-							UID                      string `json:"uid"`
-							VariationTotalPriceMoney money  `json:"variation_total_price_money"`
-							GrossSalesMoney          money  `json:"gross_sales_money"`
-							TotalTaxMoney            money  `json:"total_tax_money"`
-							TotalDiscountMoney       money  `json:"total_discount_money"`
-							TotalMoney               money  `json:"total_money"`
-							TotalServiceChargeMoney  money  `json:"total_service_charge_money"`
-						} `json:"line_items"`
-						ID     string `json:"id"`
-						Source struct {
-							Name string `json:"name"`
-						} `json:"source"`
-						Fulfillments []struct {
-							UID   string `json:"uid"`
-							Type  string `json:"type"`
-							State string `json:"state"`
-						} `json:"fulfillments"`
-						NetAmounts struct {
-							TotalMoney         money `json:"total_money"`
-							TaxMoney           money `json:"tax_money"`
-							DiscountMoney      money `json:"discount_money"`
-							TipMoney           money `json:"tip_money"`
-							ServiceChargeMoney money `json:"service_charge_money"`
-						} `json:"net_amounts"`
-						CreatedAt               time.Time `json:"created_at"`
-						UpdatedAt               time.Time `json:"updated_at"`
-						State                   string    `json:"state"`
-						Version                 int       `json:"version"`
-						TotalMoney              money     `json:"total_money"`
-						TotalTaxMoney           money     `json:"total_tax_money"`
-						TotalDiscountMoney      money     `json:"total_discount_money"`
-						TotalTipMoney           money     `json:"total_tip_money"`
-						TotalServiceChargeMoney money     `json:"total_service_charge_money"`
-						NetAmountDueMoney       money     `json:"net_amount_due_money"`
-					} `json:"orders"`
-				} `json:"related_resources"`
-			}
-			err = json.NewDecoder(resp.Body).Decode(&paymentLinkResp)
-			if err != nil {
-				log.Println(err)
-				return
-			}
-			_, err = w.Write([]byte(paymentLinkResp.PaymentLink.URL))
-			if err != nil {
-				log.Println(err)
-				return
-			}
-		}
-	})
 	http.HandleFunc("/api/donations/webhook", func(w http.ResponseWriter, r *http.Request) { // square's payment.create webhook
 		if !strings.Contains(r.Header.Get("Authorization"), os.Getenv("SQUARE_ACCESS_TOKEN")) {
 			log.Println("err: square webhook auth")
@@ -664,9 +398,9 @@ func init() {
 
 			req := getFatalRequest("GET", "https://connect.squareup.com/v2/orders/"+payment.OrderID, nil)
 			defer req.Body.Close()
-			order := handleGetFatalJsonT[order](r)
+			newOrder := handleGetFatalJsonT[order](r)
 
-			for _, lineItem := range order.LineItems {
+			for _, lineItem := range newOrder.LineItems {
 				go func() {
 					parts := strings.Split(lineItem.ItemType, ",")
 					var bodyJson struct {
@@ -693,6 +427,9 @@ func init() {
 					}
 				}()
 			}
+			donationsMu.Lock()
+			donations = append([]order{newOrder}, donations...)
+			donationsMu.Unlock()
 		}
 	})
 }
@@ -757,16 +494,16 @@ var announcements = func() []discordMessage {
 		}
 	}
 	return importantAnnouncementsMessages
-}()                   // TODO -> store last checked time and then check for every join or something + refresh button + reddit too
-var messages []string // TODO -> make player name clickable, maybe velocity/paper will let me query message history
-func init() {
-	http.HandleFunc("/api/chat/hcf", func(w http.ResponseWriter, r *http.Request) {
-		// TODO messages + ServerData.Messages
-	})
-	http.HandleFunc("/api/chat/mz", func(w http.ResponseWriter, r *http.Request) {
-		// TODO messages + ServerData.Messages
-	})
+}()
+
+type ingameMessage struct {
+	Name       string
+	Uuid       string
+	Message    string
+	ServerName string
 }
+
+var messages []ingameMessage
 
 type lineItemData struct {
 	GamemodeName     string
@@ -791,70 +528,134 @@ var lineItemDatas = func() []lineItemData {
 	return slice
 }()
 
-var redditImageBackground string
+type redditVideoPost struct {
+	ThumbnailUrl string
+	PostUrl      string
+	Title        string
+}
+
+var redditVideoPosts []redditVideoPost
+
+type redditImagePost struct {
+	ImageUrl string
+	PostUrl  string
+}
+
+var redditImagePosts []redditImagePost
+var imageRegex = regexp.MustCompile(`(?i)^(https?://)?(i\.redd\.it|i\.imgur\.com)/.*\.(png|jpg|jpeg)$`)
+var youtubeVideoIdRegex = regexp.MustCompile(`/[?&]v=([a-zA-Z0-9_-]{11})/`)
+var redditPostIdRegex = regexp.MustCompile(`/comments/([^/]+)/`)
+var lastCheckedRedditPostId string
+var redditPostsChannel = make(chan struct{}, 1)
 
 func init() {
-	data := url.Values{}
-	data.Set("grant_type", "client_credentials")
-	req, err := http.NewRequest("POST", "https://www.reddit.com/api/v1/access_token", strings.NewReader(data.Encode()))
-	if err != nil {
-		log.Fatal(err)
-	}
-	req.Header.Set("Authorization", "Basic " + base64.StdEncoding.EncodeToString([]byte(os.Getenv("REDDIT_CLIENT_ID") + ":" + os.Getenv("REDDIT_CLIENT_SECRET"))))
-	client := &http.Client{}
-	authResp, err := client.Do(req)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer authResp.Body.Close()
-	var result map[string]any
-	if err := json.NewDecoder(authResp.Body).Decode(&result); err != nil {
-		log.Fatal(err)
-	}
-	redditAccessToken := result["access_token"].(string)
-
-	req, err = http.NewRequest("GET", "https://oauth.reddit.com/r/potpissers/new.json?limit=100", nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-	req.Header.Set("Authorization", "Bearer " + redditAccessToken)
-	resp, err := (&http.Client{}).Do(req)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer resp.Body.Close()
-	responseJson := getFatalJsonT[struct {
-		Kind string `json:"kind"`
-		Data struct {
-			After     *string `json:"after"`
-			Dist      int     `json:"dist"`
-			Modhash   string  `json:"modhash"`
-			GeoFilter string  `json:"geo_filter"`
-			Children  []struct {
-				Kind string `json:"kind"`
-				Data struct {
-					Subreddit   string  `json:"subreddit"`
-					Title       string  `json:"title"`
-					Selftext    string  `json:"selftext"`
-					Author      string  `json:"author"`
-					UpvoteRatio float64 `json:"upvote_ratio"`
-					Thumbnail   string  `json:"thumbnail"`
-					URL         string  `json:"url"`
-					NumComments int     `json:"num_comments"`
-					Permalink   string  `json:"permalink"`
-					CreatedUTC  float64 `json:"created_utc"`
-					IsVideo     bool    `json:"is_video"`
-				} `json:"data"`
-			} `json:"children"`
-		} `json:"data"`
-	}](resp)
-	var redditImageUrls []string
-	for _, child := range responseJson.Data.Children {
-		if regexp.MustCompile(`(?i)^(https?://)?(i\.redd\.it|i\.imgur\.com)/.*\.(png|jpg|jpeg)$`).MatchString(child.Data.URL) {
-			redditImageUrls = append(redditImageUrls, child.Data.URL)
+	getRedditPostData := func(redditApiUrl string) ([]redditVideoPost, []redditImagePost, string) {
+		data := url.Values{}
+		data.Set("grant_type", "client_credentials")
+		req, err := http.NewRequest("POST", "https://www.reddit.com/api/v1/access_token", strings.NewReader(data.Encode()))
+		if err != nil {
+			log.Fatal(err)
 		}
+		req.Header.Set("Authorization", "Basic "+base64.StdEncoding.EncodeToString([]byte(os.Getenv("REDDIT_CLIENT_ID")+":"+os.Getenv("REDDIT_CLIENT_SECRET"))))
+		client := &http.Client{}
+		authResp, err := client.Do(req)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer authResp.Body.Close()
+		var result map[string]any
+		if err := json.NewDecoder(authResp.Body).Decode(&result); err != nil {
+			log.Fatal(err)
+		}
+		redditAccessToken := result["access_token"].(string)
+
+		req, err = http.NewRequest("GET", redditApiUrl, nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+		req.Header.Set("Authorization", "Bearer "+redditAccessToken)
+		resp, err := (&http.Client{}).Do(req)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer resp.Body.Close()
+		responseJson := getFatalJsonT[struct {
+			Kind string `json:"kind"`
+			Data struct {
+				After     *string `json:"after"`
+				Dist      int     `json:"dist"`
+				Modhash   string  `json:"modhash"`
+				GeoFilter string  `json:"geo_filter"`
+				Children  []struct {
+					Kind string `json:"kind"`
+					Data struct {
+						Subreddit   string  `json:"subreddit"`
+						Title       string  `json:"title"`
+						Selftext    string  `json:"selftext"`
+						Author      string  `json:"author"`
+						UpvoteRatio float64 `json:"upvote_ratio"`
+						Thumbnail   string  `json:"thumbnail"`
+						URL         string  `json:"url"`
+						NumComments int     `json:"num_comments"`
+						Permalink   string  `json:"permalink"`
+						CreatedUTC  float64 `json:"created_utc"`
+						IsVideo     bool    `json:"is_video"`
+						Media       *struct {
+							RedditVideo *struct {
+								FallbackURL  string `json:"fallback_url"`
+								Height       int    `json:"height"`
+								Width        int    `json:"width"`
+								Duration     int    `json:"duration"`
+								ThumbnailURL string `json:"thumbnail_url"`
+							} `json:"reddit_video"`
+						} `json:"media,omitempty"`
+					} `json:"data"`
+				} `json:"children"`
+			} `json:"data"`
+		}](resp)
+
+		var videoPosts []redditVideoPost
+		var imagePosts []redditImagePost
+		children := responseJson.Data.Children
+		for _, child := range children {
+			getRedditPostUrl := func(permalink string) string {
+				return "https://www.reddit.com" + permalink
+			}
+
+			data := child.Data
+			linkPostUrl := data.URL
+
+			if imageRegex.MatchString(linkPostUrl) {
+				imagePosts = append(imagePosts, redditImagePost{linkPostUrl, getRedditPostUrl(data.Permalink)})
+			} else if strings.HasPrefix(linkPostUrl, "https://youtube.com") || strings.HasPrefix(linkPostUrl, "https://youtu.be") {
+				videoPosts = append(videoPosts, redditVideoPost{
+					ThumbnailUrl: "https://img.youtube.com/vi/" + youtubeVideoIdRegex.FindStringSubmatch(linkPostUrl)[1] + "/hqdefault.jpg",
+					PostUrl:      getRedditPostUrl(data.Permalink),
+					Title:        data.Title,
+				})
+			} else if data.Media != nil {
+				videoPosts = append(videoPosts, redditVideoPost{
+					ThumbnailUrl: data.Media.RedditVideo.ThumbnailURL,
+					PostUrl:      getRedditPostUrl(data.Permalink),
+					Title:        data.Title,
+				})
+			}
+		}
+		return videoPosts, imagePosts, redditPostIdRegex.FindStringSubmatch(children[0].Data.Permalink)[1]
 	}
-	redditImageBackground = redditImageUrls[rand.New(rand.NewSource(time.Now().UnixNano())).Intn(len(redditImageUrls))]
+	const potpissersRedditApiUrl = "https://oauth.reddit.com/r/potpissers/new.json?limit=100"
+	redditVideoPosts, redditImagePosts, lastCheckedRedditPostId = getRedditPostData(potpissersRedditApiUrl)
+	http.HandleFunc("/api/reddit", func(w http.ResponseWriter, r *http.Request) {
+		select {
+		case redditPostsChannel <- struct{}{}: {
+			var newVideoPosts []redditVideoPost
+			var newImagePosts []redditImagePost
+			newVideoPosts, newImagePosts, lastCheckedRedditPostId = getRedditPostData(potpissersRedditApiUrl + "&after=" + lastCheckedRedditPostId)
+			<-redditPostsChannel
+		}
+		default: return
+		}
+	})
 }
 
 func getMainTemplate(fileName string) *template.Template {
@@ -868,13 +669,13 @@ var mzTemplate = getMainTemplate("main-mz.html")
 var hcfTemplate = getMainTemplate("main-hcf.html")
 
 type mainTemplateData struct {
-	BackgroundImageUrl string
-	NetworkPlayers     []string
-	ServerPlayers      []string
+	BackgroundImageUrl redditImagePost
+	NetworkPlayers     []onlinePlayer
+	ServerPlayers      []onlinePlayer
 	NewPlayers         []newPlayer
 	PotpissersTips     []string
 	Deaths             []death
-	Messages           []string
+	Messages           []ingameMessage
 	Events             []event
 	Announcements      []discordMessage
 	Changelog          []discordMessage
@@ -885,6 +686,10 @@ type mainTemplateData struct {
 	LineItemData       []lineItemData
 }
 
+func getRandomImagePost() redditImagePost {
+	return redditImagePosts[rand.New(rand.NewSource(time.Now().UnixNano())).Intn(len(redditImagePosts))]
+}
+
 func getHome() []byte {
 	var buffer bytes.Buffer
 	offPeakLivesNeeded := float32(serverDatas[currentHcfServerName].offPeakLivesNeededAsCents / 100.0)
@@ -892,7 +697,7 @@ func getHome() []byte {
 		MainTemplateData mainTemplateData
 	}{
 		MainTemplateData: mainTemplateData{
-			BackgroundImageUrl: redditImageBackground,
+			BackgroundImageUrl: getRandomImagePost(),
 			NetworkPlayers:     currentPlayers,
 			ServerPlayers:      serverDatas["hub"].currentPlayers,
 			NewPlayers:         newPlayers,
@@ -924,7 +729,7 @@ func getMz() []byte {
 		Bandits []bandit
 	}{
 		MainTemplateData: mainTemplateData{
-			BackgroundImageUrl: redditImageBackground,
+			BackgroundImageUrl: getRandomImagePost(),
 			NetworkPlayers:     currentPlayers,
 			ServerPlayers:      mzData.currentPlayers,
 			NewPlayers:         newPlayers,
@@ -975,7 +780,7 @@ func getHcf() []byte {
 		Factions     []faction
 	}{
 		MainTemplateData: mainTemplateData{
-			BackgroundImageUrl: redditImageBackground,
+			BackgroundImageUrl: getRandomImagePost(),
 			NetworkPlayers:     currentPlayers,
 			ServerPlayers:      serverData.currentPlayers,
 			NewPlayers:         newPlayers,
