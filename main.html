@@ -221,27 +221,27 @@
             <!--            <button>shoutout</button>-->
             {{range .MainTemplateData.LineItemData}}
             <li class="fc85">
-                <button onclick="handleClassHiddenToggle('{{.MainTemplateData.GamemodeName}}-{{.ItemName}}')" class="fsb">
+                <button onclick="handleClassHiddenToggle('{{.GamemodeName}}-{{.ItemName}}')" class="fsb">
                     {{.MainTemplateData.GamemodeName}}<br>{{.ItemName}}<span>${{.ItemPriceInDollars}}</span>
                 </button>
 
-                <p class={{.MainTemplateData.GamemodeName}}-{{.ItemName}} hidden>
+                <p class={{.GamemodeName}}-{{.ItemName}} hidden>
                     {{.ItemDescription}}
                 </p>
 
                 {{if .IsPlural}}
-                <input id="{{.MainTemplateData.GamemodeName}}-{{.ItemName}}-amount" style="align-self: end; width: 20%; font-size: 75%" placeholder=amount type=number min=1
-                       value=1 step=1 class="{{.MainTemplateData.GamemodeName}}-{{.ItemName}}" hidden>
+                <input id="{{.GamemodeName}}-{{.ItemName}}-amount" style="align-self: end; width: 20%; font-size: 75%" placeholder=amount type=number min=1
+                       value=1 step=1 class="{{.GamemodeName}}-{{.ItemName}}" hidden>
                 {{end}}
                 <div style="display: flex">
-                    <input id="donate-username" class="fi {{.MainTemplateData.GamemodeName}}-{{.ItemName}}" hidden style="width: 60%; font-size: 75%" placeholder="username"
+                    <input id="donate-username" class="fi {{.GamemodeName}}-{{.ItemName}}" hidden style="width: 60%; font-size: 75%" placeholder="username"
                            onblur="handleMcNameBlur(this)">
                     <script async>
                         document.getElementById("donate-username").addEventListener("keydown", (e) => handleMcNameKeyDown(e))
                     </script>
 
-                    <button style="font-size: 75%" class="{{.MainTemplateData.GamemodeName}}-{{.ItemName}}" hidden
-                            onclick="handleAddLineItemJson('{{.MainTemplateData.GamemodeName}}-{{.ItemName}}', {{if .IsPlural}}document.getElementById('{{.MainTemplateData.GamemodeName}}-{{.ItemName}}-amount').value{{else}}1{{end}})">
+                    <button style="font-size: 75%" class="{{.GamemodeName}}-{{.ItemName}}" hidden
+                            onclick="handleAddLineItemJson('{{.GamemodeName}}-{{.ItemName}}', {{if .IsPlural}}document.getElementById('{{.GamemodeName}}-{{.ItemName}}-amount').value{{else}}1{{end}})">
                         add
                     </button>
                 </div>
