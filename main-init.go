@@ -498,7 +498,7 @@ var discordGeneralChan = make(chan struct{}, 1)
 const discordChangelogChannelId = "1346008874830008375"
 
 var changelog = getDiscordMessages(discordChangelogChannelId, "")
-var mostRecentDiscordChangelogMessageId = changelog[0].ID
+var mostRecentDiscordChangelogMessageId = ""//changelog[0].ID
 var discordChangelogChan = make(chan struct{}, 1)
 
 const discordAnnouncementsChannelId = "1265836245678948464"
