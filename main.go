@@ -56,7 +56,7 @@ func init() {
 					mz = getMz()
 					hcf = getHcf()
 
-					handleSseData(homeConnections, jsonBytes, mzConnections, hcfConnections)
+					handleSseData(&homeConnections, jsonBytes, &mzConnections, &hcfConnections)
 				}
 				case "deaths": {
 					var t death
@@ -103,7 +103,7 @@ func init() {
 						}
 					}
 					home = getHome()
-					handleSseData(homeConnections, jsonBytes)
+					handleSseData(&homeConnections, jsonBytes)
 
 					serverData := serverDatas[t.ServerName]
 					for i, data := range serverData.currentPlayers {
@@ -115,11 +115,11 @@ func init() {
 					switch serverData.gamemodeName {
 					case "hcf": {
 						hcf = getHcf()
-						handleSseData(hcfConnections, jsonBytes)
+						handleSseData(&hcfConnections, jsonBytes)
 					}
 					case "mz": {
 						mz = getMz()
-						handleSseData(mzConnections, jsonBytes)
+						handleSseData(&mzConnections, jsonBytes)
 					}
 					}
 				}
@@ -437,17 +437,17 @@ func main() {
 func handleServerDataJsonPrepend[T any](homeSlice *[]T, t T, bytes []byte, serverSlice *[]T, gamemodeName string) {
 	*homeSlice = append([]T{t}, *homeSlice...) // TODO -> this is necessary because html/css and go's templating can't handle reversing it for some reason. go's templater could maybe do it but it seems like more processing than this takes
 	home = getHome()
-	handleSseData(homeConnections, bytes)
+	handleSseData(&homeConnections, bytes)
 
 	*serverSlice = append([]T{t}, *serverSlice...)
 	switch gamemodeName {
 	case "hcf": {
 		hcf = getHcf()
-		handleSseData(hcfConnections, bytes)
+		handleSseData(&hcfConnections, bytes)
 	}
 	case "mz": {
 		mz = getMz()
-		handleSseData(mzConnections, bytes)
+		handleSseData(&mzConnections, bytes)
 	}
 	}
 }

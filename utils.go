@@ -12,6 +12,7 @@ import (
 	"net/url"
 	"os"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -43,20 +44,33 @@ type sseMessage struct {
 	Data any    `json:"data"`
 }
 
-func handleSseData(sseConnections []sseConnection, bytes []byte, additionalConnections ...[]sseConnection) {
-	for _, c := range sseConnections {
+func handleSseData(sseConnections *[]sseConnection, bytes []byte, additionalConnections ...*[]sseConnection) {
+	for i := range additionalConnections {
+		go handleSseData(additionalConnections[i], bytes)
+	}
+
+	validConnChan := make(chan sseConnection, len(*sseConnections))
+	var waitGroup sync.WaitGroup
+	for _, c := range *sseConnections {
+		waitGroup.Add(1)
 		go func(conn sseConnection) {
-			_, err := conn.response.Write(bytes)
-			if err != nil {
-				log.Println(err)
-			} else {
+			defer waitGroup.Done()
+
+			if _, err := conn.response.Write(bytes); err == nil {
 				conn.flusher.Flush()
+				validConnChan <- conn
 			}
 		}(c)
 	}
-	for i := range additionalConnections {
-		handleSseData(additionalConnections[i], bytes)
+	waitGroup.Wait()
+
+	close(validConnChan)
+
+	var validConnections []sseConnection
+	for conn := range validConnChan {
+		validConnections = append(validConnections, conn)
 	}
+	*sseConnections = validConnections // TODO -> atomic pointer could be used here pog
 }
 
 func getMojangApiUuidRequest(username string) (*http.Response, error) {
@@ -205,7 +219,7 @@ func handleRedditPostDataUpdate() {
 				if err != nil {
 					log.Fatal(err)
 				}
-				handleSseData(homeConnections, jsonData, hcfConnections, mzConnections)
+				handleSseData(&homeConnections, jsonData, &hcfConnections, &mzConnections)
 			}
 			for _, post := range newVideoPosts {
 				handle(sseMessage{"videos", post})
@@ -232,7 +246,7 @@ func handleDiscordMessagesUpdate(channel chan struct{}, discordChannelId string,
 					if err != nil {
 						log.Fatal(err)
 					}
-					handleSseData(homeConnections, jsonData, mzConnections, hcfConnections)
+					handleSseData(&homeConnections, jsonData, &mzConnections, &hcfConnections)
 				}
 			}
 			<-channel
