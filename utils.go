@@ -56,10 +56,12 @@ func handleSseData(sseConnections *[]sseConnection, bytes []byte, additionalConn
 		go func(conn sseConnection) {
 			defer waitGroup.Done()
 
+			conn.mutex.Lock()
 			if _, err := conn.response.Write(bytes); err == nil {
 				conn.flusher.Flush()
 				validConnChan <- conn
 			}
+			conn.mutex.Unlock()
 		}(c)
 	}
 	waitGroup.Wait()

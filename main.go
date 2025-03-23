@@ -132,6 +132,7 @@ func init() {
 type sseConnection struct {
 	response http.ResponseWriter
 	flusher  http.Flusher
+	mutex *sync.Mutex
 }
 var homeConnections []sseConnection
 var mzConnections []sseConnection
@@ -411,7 +412,7 @@ func main() {
 			flusher, ok := w.(http.Flusher)
 			if ok {
 				flusher.Flush()
-				*data.sseConnections = append(*data.sseConnections, sseConnection{w, flusher})
+				*data.sseConnections = append(*data.sseConnections, sseConnection{w, flusher, &sync.Mutex{}})
 			}
 		})
 	}
