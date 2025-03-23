@@ -12,6 +12,7 @@ import (
 	"net/url"
 	"os"
 	"strings"
+	"time"
 )
 
 func handleFatalErr(err error) {
@@ -79,27 +80,37 @@ func addSquareHeaders(request *http.Request) {
 	request.Header.Add("Content-Type", "application/json")
 }
 
+var redditAccessToken string
+var redditAccessTokenExpiration time.Time
 func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePost, string) {
-	data := url.Values{}
-	data.Set("grant_type", "client_credentials")
-	req, err := http.NewRequest("POST", "https://www.reddit.com/api/v1/access_token", strings.NewReader(data.Encode()))
-	if err != nil {
-		log.Fatal(err)
+	for redditAccessToken == "" || redditAccessTokenExpiration.Before(time.Now()) {
+		data := url.Values{}
+		data.Set("grant_type", "client_credentials")
+		req, err := http.NewRequest("POST", "https://www.reddit.com/api/v1/access_token", strings.NewReader(data.Encode()))
+		if err != nil {
+			log.Fatal(err)
+		}
+		req.Header.Set("Authorization", "Basic "+base64.StdEncoding.EncodeToString([]byte(os.Getenv("REDDIT_CLIENT_ID")+":"+os.Getenv("REDDIT_CLIENT_SECRET"))))
+		client := &http.Client{}
+		authResp, err := client.Do(req)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer authResp.Body.Close()
+		var result struct {
+			AccessToken string `json:"access_token"`
+			TokenType   string `json:"token_type"`
+			ExpiresIn   int    `json:"expires_in"`
+			Scope       string `json:"scope"`
+		}
+		if err := json.NewDecoder(authResp.Body).Decode(&result); err != nil {
+			log.Fatal(err)
+		}
+		redditAccessToken = result.AccessToken
+		redditAccessTokenExpiration = time.Now().Add(time.Duration(result.ExpiresIn - 45) * time.Second)
 	}
-	req.Header.Set("Authorization", "Basic "+base64.StdEncoding.EncodeToString([]byte(os.Getenv("REDDIT_CLIENT_ID")+":"+os.Getenv("REDDIT_CLIENT_SECRET"))))
-	client := &http.Client{}
-	authResp, err := client.Do(req)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer authResp.Body.Close()
-	var result map[string]any
-	if err := json.NewDecoder(authResp.Body).Decode(&result); err != nil {
-		log.Fatal(err)
-	}
-	redditAccessToken := result["access_token"].(string)
 
-	req, err = http.NewRequest("GET", redditApiUrl, nil)
+	req, err := http.NewRequest("GET", redditApiUrl, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
