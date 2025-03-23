@@ -19,8 +19,10 @@ var postgresPool = func() *pgxpool.Pool {
 	pool, err := pgxpool.New(context.Background(), os.Getenv("POSTGRES_CONNECTION_STRING"))
 	handleFatalErr(err)
 	// defer'd => main
-
-	connection, err := pool.Acquire(context.Background())
+	return pool
+}()
+func init() {
+	connection, err := postgresPool.Acquire(context.Background())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -43,7 +45,7 @@ var postgresPool = func() *pgxpool.Pool {
 				case "referrals": { // TODO -> NVM just block the response if csr is happening
 					var t newPlayer
 					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
-					bytes, err := json.Marshal(sseMessage{"referrals", t})
+					jsonBytes, err := json.Marshal(sseMessage{"referrals", t})
 					if err != nil {
 						log.Fatal(err)
 					}
@@ -54,44 +56,44 @@ var postgresPool = func() *pgxpool.Pool {
 					mz = getMz()
 					hcf = getHcf()
 
-					handleSseData(homeConnections, bytes, mzConnections, hcfConnections)
+					handleSseData(homeConnections, jsonBytes, mzConnections, hcfConnections)
 				}
 				case "deaths": {
 					var t death
 					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
-					bytes, err := json.Marshal(sseMessage{"deaths", t})
+					jsonBytes, err := json.Marshal(sseMessage{"deaths", t})
 					handleFatalErr(err)
 					serverData := serverDatas[t.ServerName]
-					handleServerDataJsonPrepend[death](&deaths, t, bytes, &serverData.deaths, serverData.gamemodeName)
+					handleServerDataJsonPrepend[death](&deaths, t, jsonBytes, &serverData.deaths, serverData.gamemodeName)
 				}
 				case "events": {
 					var t event
 					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
-					bytes, err := json.Marshal(sseMessage{"events", t})
+					jsonBytes, err := json.Marshal(sseMessage{"events", t})
 					handleFatalErr(err)
 					serverData := serverDatas[t.ServerName]
-					handleServerDataJsonPrepend[event](&events, t, bytes, &serverData.events, serverData.gamemodeName)
+					handleServerDataJsonPrepend[event](&events, t, jsonBytes, &serverData.events, serverData.gamemodeName)
 				}
 				case "chat": {
 					var t ingameMessage
 					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
-					bytes, err := json.Marshal(sseMessage{"chat", t})
+					jsonBytes, err := json.Marshal(sseMessage{"chat", t})
 					handleFatalErr(err)
 					serverData := serverDatas[t.ServerName]
-					handleServerDataJsonPrepend[ingameMessage](&messages, t, bytes, &serverData.messages, serverData.gamemodeName)
+					handleServerDataJsonPrepend[ingameMessage](&messages, t, jsonBytes, &serverData.messages, serverData.gamemodeName)
 				}
 				case "online": {
 					var t onlinePlayer
 					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
-					bytes, err := json.Marshal(sseMessage{"online", t})
+					jsonBytes, err := json.Marshal(sseMessage{"online", t})
 					handleFatalErr(err)
 					serverData := serverDatas[t.ServerName]
-					handleServerDataJsonPrepend[onlinePlayer](&currentPlayers, t, bytes, &serverData.currentPlayers, serverData.gamemodeName)
+					handleServerDataJsonPrepend[onlinePlayer](&currentPlayers, t, jsonBytes, &serverData.currentPlayers, serverData.gamemodeName)
 				}
 				case "offline": {
 					var t onlinePlayer
 					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
-					bytes, err := json.Marshal(sseMessage{"offline", t})
+					jsonBytes, err := json.Marshal(sseMessage{"offline", t})
 					handleFatalErr(err)
 
 					for i, data := range currentPlayers {
@@ -101,7 +103,7 @@ var postgresPool = func() *pgxpool.Pool {
 						}
 					}
 					home = getHome()
-					handleSseData(homeConnections, bytes)
+					handleSseData(homeConnections, jsonBytes)
 
 					serverData := serverDatas[t.ServerName]
 					for i, data := range serverData.currentPlayers {
@@ -113,11 +115,11 @@ var postgresPool = func() *pgxpool.Pool {
 					switch serverData.gamemodeName {
 					case "hcf": {
 						hcf = getHcf()
-						handleSseData(hcfConnections, bytes)
+						handleSseData(hcfConnections, jsonBytes)
 					}
 					case "mz": {
 						mz = getMz()
-						handleSseData(mzConnections, bytes)
+						handleSseData(mzConnections, jsonBytes)
 					}
 					}
 				}
@@ -126,9 +128,7 @@ var postgresPool = func() *pgxpool.Pool {
 			}
 		}
 	}()
-
-	return pool
-}()
+}
 type sseConnection struct {
 	response http.ResponseWriter
 	flusher  http.Flusher
@@ -399,6 +399,9 @@ func main() {
 			handleFatalErr(err)
 
 			handleRedditPostDataUpdate()
+			handleDiscordMessagesUpdate(discordGeneralChan, discordGeneralChannelId, &mostRecentDiscordGeneralMessageId, &discordMessages, "general")
+			handleDiscordMessagesUpdate(discordChangelogChan, discordChangelogChannelId, &mostRecentDiscordChangelogMessageId, &changelog, "changelog")
+			handleDiscordMessagesUpdate(discordAnnouncementsChan, discordAnnouncementsChannelId, &mostRecentDiscordAnnouncementsMessageId, &announcements, "announcements")
 		})
 		http.HandleFunc("/api/sse"+data.endpoint, func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Type", "text/event-stream")
