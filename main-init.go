@@ -590,6 +590,7 @@ var mzTemplate = getMainTemplate("main-mz.html")
 var hcfTemplate = getMainTemplate("main-hcf.html")
 
 type mainTemplateData struct {
+	GamemodeName string
 	BackgroundImageUrl redditImagePost
 	NetworkPlayers     []onlinePlayer
 	ServerPlayers      []onlinePlayer
@@ -619,6 +620,7 @@ func getHome() []byte {
 		MainTemplateData mainTemplateData
 	}{
 		MainTemplateData: mainTemplateData{
+			GamemodeName: "hub",
 			BackgroundImageUrl: getRandomImagePost(),
 			NetworkPlayers:     currentPlayers,
 			ServerPlayers:      serverDatas["hub"].currentPlayers,
@@ -652,6 +654,7 @@ func getMz() []byte {
 		Bandits []bandit
 	}{
 		MainTemplateData: mainTemplateData{
+			GamemodeName: "mz",
 			BackgroundImageUrl: getRandomImagePost(),
 			NetworkPlayers:     currentPlayers,
 			ServerPlayers:      mzData.currentPlayers,
@@ -704,6 +707,7 @@ func getHcf() []byte {
 		Factions     []faction
 	}{
 		MainTemplateData: mainTemplateData{
+			GamemodeName: "hcf",
 			BackgroundImageUrl: getRandomImagePost(),
 			NetworkPlayers:     currentPlayers,
 			ServerPlayers:      serverData.currentPlayers,
