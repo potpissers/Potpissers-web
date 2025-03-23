@@ -296,7 +296,7 @@
 <script async>
     const currentPrices = {
     {{range .MainTemplateData.LineItemData}}
-    "{{.MainTemplateData.GamemodeName}}-{{.ItemName}}": {{.ItemPriceInCents}},
+    "{{.GamemodeName}}-{{.ItemName}}": {{.ItemPriceInCents}},
     {{end}}
     }
     const eventSource = new EventSource("https://potpissers.com/api/sse/{{.MainTemplateData.GamemodeName}}")
