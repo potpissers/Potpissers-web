@@ -18,7 +18,7 @@ function fetchPaymentLink() {
     const json = JSON.stringify(privateJsonLineItems)
     doLineItemReset()
 
-    fetch("https://potpissers.com/api/donations/payments", {
+    fetch("/api/donations/payments", {
         method: "POST", body: json,
     })
         .then(response => response.text())

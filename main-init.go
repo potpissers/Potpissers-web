@@ -3,14 +3,12 @@ package main
 import (
 	"bytes"
 	"context"
-	"encoding/base64"
 	"encoding/json"
 	"github.com/jackc/pgx/v5"
 	"html/template"
 	"log"
 	"math/rand"
 	"net/http"
-	"net/url"
 	"os"
 	"regexp"
 	"strings"
@@ -47,12 +45,12 @@ func init() { // TODO -> move this to getting tips by name
 }
 
 type newPlayer struct {
-	PlayerUuid string    `json:"playerUuid"`
+	PlayerUuid string    `json:"player_uuid"`
 	Referrer   *string   `json:"referrer"`
 	Timestamp  time.Time `json:"timestamp"`
-	RowNumber  int       `json:"rowNumber"`
+	RowNumber  int       `json:"row_number"`
 
-	PlayerName string `json:"playerName"`
+	PlayerName string `json:"player_name"`
 }
 
 var newPlayers = func() []newPlayer {
@@ -82,17 +80,17 @@ var newPlayers = func() []newPlayer {
 }()
 
 type death struct {
-	ServerName        string    `json:"serverName"`
-	VictimUserFightId *int      `json:"victimUserFightId"`
+	ServerName        string    `json:"server_name"`
+	VictimUserFightId *int      `json:"victim_user_fight_id"`
 	Timestamp         time.Time `json:"timestamp"`
-	VictimUuid        string    `json:"victimUuid"`
+	VictimUuid        string    `json:"victim_uuid"`
 	// TODO victim inventory
-	DeathWorldName string  `json:"deathWorldName"`
-	DeathX         int     `json:"deathX"`
-	DeathY         int     `json:"deathY"`
-	DeathZ         int     `json:"deathZ"`
-	DeathMessage   string  `json:"deathMessage"`
-	KillerUuid     *string `json:"killerUuid"`
+	DeathWorldName string  `json:"death_world_name"`
+	DeathX         int     `json:"death_x"`
+	DeathY         int     `json:"death_y"`
+	DeathZ         int     `json:"death_z"`
+	DeathMessage   string  `json:"death_message"`
+	KillerUuid     *string `json:"killer_uuid"`
 	// TODO killer weapon
 	// TODO killer inventory
 }
@@ -112,20 +110,20 @@ var deaths = func() []death {
 type event struct {
 	RowNumber int
 
-	StartTimestamp       time.Time `json:"startTimestamp"`
-	LootFactor           int       `json:"lootFactor"`
-	MaxTimer             int       `json:"maxTimer"`
-	IsMovementRestricted bool      `json:"isMovementRestricted"`
-	CappingUserUUID      *string   `json:"cappingUserUUID"`
-	EndTimestamp         time.Time `json:"endTimestamp"`
-	CappingPartyUUID     *string   `json:"cappingPartyUUID"`
-	CapMessage           *string   `json:"capMessage"`
+	StartTimestamp       time.Time `json:"start_timestamp"`
+	LootFactor           int       `json:"loot_factor"`
+	MaxTimer             int       `json:"max_timer"`
+	IsMovementRestricted bool      `json:"is_movement_restricted"`
+	CappingUserUUID      *string   `json:"capping_user_uuid"`
+	EndTimestamp         time.Time `json:"end_timestamp"`
+	CappingPartyUUID     *string   `json:"capping_party_uuid"`
+	CapMessage           *string   `json:"cap_message"`
 	World                string    `json:"world"`
 	X                    int       `json:"x"`
 	Y                    int       `json:"y"`
 	Z                    int       `json:"z"`
-	ServerName           string    `json:"serverName"`
-	ArenaName            string    `json:"arenaName"`
+	ServerName           string    `json:"server_name"`
+	ArenaName            string    `json:"arena_name"`
 	Creator              string    `json:"creator"`
 }
 
@@ -430,6 +428,14 @@ func init() {
 			donationsMu.Lock()
 			donations = append([]order{newOrder}, donations...)
 			donationsMu.Unlock()
+			jsonBytes, err := json.Marshal(sseMessage{"donations", newOrder})
+			if err != nil {
+				log.Fatal(err)
+			}
+			home = getHome()
+			mz = getMz()
+			hcf = getHcf()
+			handleSseData(homeConnections, jsonBytes, mzConnections, hcfConnections)
 		}
 	})
 }
@@ -474,8 +480,8 @@ type discordMessage struct {
 	} `json:"reactions"`
 }
 
-func getDiscordMessages(channelId string) []discordMessage {
-	req, err := http.NewRequest("GET", "https://discord.com/api/v10/channels/"+channelId+"/messages?limit=50", nil)
+func getDiscordMessages(channelId string, apiUrlModifier string) []discordMessage {
+	req, err := http.NewRequest("GET", "https://discord.com/api/v10/channels/"+channelId+"/messages?"+apiUrlModifier+"limit=100", nil)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -483,24 +489,41 @@ func getDiscordMessages(channelId string) []discordMessage {
 	return handleGetFatalJsonT[[]discordMessage](req)
 }
 
-var discordMessages = getDiscordMessages("1245300045188956255")
-var changelog = getDiscordMessages("1346008874830008375")
-var announcements = func() []discordMessage {
-	allAnnouncementsMessages := getDiscordMessages("1265836245678948464")
-	var importantAnnouncementsMessages []discordMessage
-	for _, discordMessage := range allAnnouncementsMessages {
-		if discordMessage.MentionEveryone {
-			importantAnnouncementsMessages = append(importantAnnouncementsMessages, discordMessage)
-		}
-	}
-	return importantAnnouncementsMessages
-}()
+const discordGeneralChannelId = "1245300045188956255"
+
+var discordMessages = getDiscordMessages(discordGeneralChannelId, "")
+var mostRecentDiscordGeneralMessageId = discordMessages[0].ID
+var discordGeneralChan = make(chan struct{}, 1)
+
+const discordChangelogChannelId = "1346008874830008375"
+
+var changelog = getDiscordMessages(discordChangelogChannelId, "")
+var mostRecentDiscordChangelogMessageId = changelog[0].ID
+var discordChangelogChan = make(chan struct{}, 1)
+
+const discordAnnouncementsChannelId = "1265836245678948464"
+
+var announcements = getDiscordMessages(discordAnnouncementsChannelId, "")
+var mostRecentDiscordAnnouncementsMessageId = announcements[0].ID
+var discordAnnouncementsChan = make(chan struct{}, 1)
+
+func init() {
+	http.HandleFunc("/api/discord/general", func(w http.ResponseWriter, r *http.Request) {
+		handleDiscordMessagesUpdate(discordGeneralChan, discordGeneralChannelId, &mostRecentDiscordGeneralMessageId, &discordMessages, "general")
+	})
+	http.HandleFunc("/api/discord/changelog", func(w http.ResponseWriter, r *http.Request) {
+		handleDiscordMessagesUpdate(discordChangelogChan, discordChangelogChannelId, &mostRecentDiscordChangelogMessageId, &changelog, "changelog")
+	})
+	http.HandleFunc("/api/discord/announcements", func(w http.ResponseWriter, r *http.Request) {
+		handleDiscordMessagesUpdate(discordAnnouncementsChan, discordAnnouncementsChannelId, &mostRecentDiscordAnnouncementsMessageId, &announcements, "announcements")
+	})
+}
 
 type ingameMessage struct {
-	Name       string
-	Uuid       string
-	Message    string
-	ServerName string
+	Name       string `json:"name"`
+	Uuid       string `json:"uuid"`
+	Message    string `json:"message"`
+	ServerName string `json:"server_name"`
 }
 
 var messages []ingameMessage
@@ -529,16 +552,17 @@ var lineItemDatas = func() []lineItemData {
 }()
 
 type redditVideoPost struct {
-	ThumbnailUrl string
-	PostUrl      string
-	Title        string
+	YoutubeEmbedUrl string `json:"youtube_embed_url"`
+	VideoUrl        string `json:"video_url"`
+	PostUrl         string `json:"post_url"`
+	Title           string `json:"title_url"`
 }
 
 var redditVideoPosts []redditVideoPost
 
 type redditImagePost struct {
-	ImageUrl string
-	PostUrl  string
+	ImageUrl string `json:"image_url"`
+	PostUrl  string `json:"post_url"`
 }
 
 var redditImagePosts []redditImagePost
@@ -549,112 +573,9 @@ var lastCheckedRedditPostId string
 var redditPostsChannel = make(chan struct{}, 1)
 
 func init() {
-	getRedditPostData := func(redditApiUrl string) ([]redditVideoPost, []redditImagePost, string) {
-		data := url.Values{}
-		data.Set("grant_type", "client_credentials")
-		req, err := http.NewRequest("POST", "https://www.reddit.com/api/v1/access_token", strings.NewReader(data.Encode()))
-		if err != nil {
-			log.Fatal(err)
-		}
-		req.Header.Set("Authorization", "Basic "+base64.StdEncoding.EncodeToString([]byte(os.Getenv("REDDIT_CLIENT_ID")+":"+os.Getenv("REDDIT_CLIENT_SECRET"))))
-		client := &http.Client{}
-		authResp, err := client.Do(req)
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer authResp.Body.Close()
-		var result map[string]any
-		if err := json.NewDecoder(authResp.Body).Decode(&result); err != nil {
-			log.Fatal(err)
-		}
-		redditAccessToken := result["access_token"].(string)
-
-		req, err = http.NewRequest("GET", redditApiUrl, nil)
-		if err != nil {
-			log.Fatal(err)
-		}
-		req.Header.Set("Authorization", "Bearer "+redditAccessToken)
-		resp, err := (&http.Client{}).Do(req)
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer resp.Body.Close()
-		responseJson := getFatalJsonT[struct {
-			Kind string `json:"kind"`
-			Data struct {
-				After     *string `json:"after"`
-				Dist      int     `json:"dist"`
-				Modhash   string  `json:"modhash"`
-				GeoFilter string  `json:"geo_filter"`
-				Children  []struct {
-					Kind string `json:"kind"`
-					Data struct {
-						Subreddit   string  `json:"subreddit"`
-						Title       string  `json:"title"`
-						Selftext    string  `json:"selftext"`
-						Author      string  `json:"author"`
-						UpvoteRatio float64 `json:"upvote_ratio"`
-						Thumbnail   string  `json:"thumbnail"`
-						URL         string  `json:"url"`
-						NumComments int     `json:"num_comments"`
-						Permalink   string  `json:"permalink"`
-						CreatedUTC  float64 `json:"created_utc"`
-						IsVideo     bool    `json:"is_video"`
-						Media       *struct {
-							RedditVideo *struct {
-								FallbackURL  string `json:"fallback_url"`
-								Height       int    `json:"height"`
-								Width        int    `json:"width"`
-								Duration     int    `json:"duration"`
-								ThumbnailURL string `json:"thumbnail_url"`
-							} `json:"reddit_video"`
-						} `json:"media,omitempty"`
-					} `json:"data"`
-				} `json:"children"`
-			} `json:"data"`
-		}](resp)
-
-		var videoPosts []redditVideoPost
-		var imagePosts []redditImagePost
-		children := responseJson.Data.Children
-		for _, child := range children {
-			getRedditPostUrl := func(permalink string) string {
-				return "https://www.reddit.com" + permalink
-			}
-
-			data := child.Data
-			linkPostUrl := data.URL
-
-			if imageRegex.MatchString(linkPostUrl) {
-				imagePosts = append(imagePosts, redditImagePost{linkPostUrl, getRedditPostUrl(data.Permalink)})
-			} else if strings.HasPrefix(linkPostUrl, "https://youtube.com") || strings.HasPrefix(linkPostUrl, "https://youtu.be") {
-				videoPosts = append(videoPosts, redditVideoPost{
-					ThumbnailUrl: "https://img.youtube.com/vi/" + youtubeVideoIdRegex.FindStringSubmatch(linkPostUrl)[1] + "/hqdefault.jpg",
-					PostUrl:      getRedditPostUrl(data.Permalink),
-					Title:        data.Title,
-				})
-			} else if data.Media != nil {
-				videoPosts = append(videoPosts, redditVideoPost{
-					ThumbnailUrl: data.Media.RedditVideo.ThumbnailURL,
-					PostUrl:      getRedditPostUrl(data.Permalink),
-					Title:        data.Title,
-				})
-			}
-		}
-		return videoPosts, imagePosts, redditPostIdRegex.FindStringSubmatch(children[0].Data.Permalink)[1]
-	}
-	const potpissersRedditApiUrl = "https://oauth.reddit.com/r/potpissers/new.json?limit=100"
 	redditVideoPosts, redditImagePosts, lastCheckedRedditPostId = getRedditPostData(potpissersRedditApiUrl)
 	http.HandleFunc("/api/reddit", func(w http.ResponseWriter, r *http.Request) {
-		select {
-		case redditPostsChannel <- struct{}{}: {
-			var newVideoPosts []redditVideoPost
-			var newImagePosts []redditImagePost
-			newVideoPosts, newImagePosts, lastCheckedRedditPostId = getRedditPostData(potpissersRedditApiUrl + "&after=" + lastCheckedRedditPostId)
-			<-redditPostsChannel
-		}
-		default: return
-		}
+		handleRedditPostDataUpdate()
 	})
 }
 
@@ -684,6 +605,7 @@ type mainTemplateData struct {
 	OffPeakLivesNeeded float32
 	PeakLivesNeeded    float32
 	LineItemData       []lineItemData
+	RedditVideos       []redditVideoPost
 }
 
 func getRandomImagePost() redditImagePost {
@@ -712,6 +634,7 @@ func getHome() []byte {
 			OffPeakLivesNeeded: offPeakLivesNeeded,
 			PeakLivesNeeded:    offPeakLivesNeeded / 2,
 			LineItemData:       lineItemDatas,
+			RedditVideos:       redditVideoPosts,
 		},
 	}))
 	return buffer.Bytes()
@@ -744,6 +667,7 @@ func getMz() []byte {
 			OffPeakLivesNeeded: offPeakLivesNeeded,
 			PeakLivesNeeded:    offPeakLivesNeeded / 2,
 			LineItemData:       lineItemDatas,
+			RedditVideos:       redditVideoPosts,
 		},
 
 		AttackSpeed: mzData.attackSpeedName,
@@ -795,6 +719,7 @@ func getHcf() []byte {
 			OffPeakLivesNeeded: offPeakLivesNeeded,
 			PeakLivesNeeded:    offPeakLivesNeeded / 2,
 			LineItemData:       lineItemDatas,
+			RedditVideos:       redditVideoPosts,
 		},
 
 		AttackSpeed: serverData.attackSpeedName,

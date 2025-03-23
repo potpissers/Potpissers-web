@@ -22,9 +22,13 @@
             <input name="deaths-ticker" type="radio">
         </span>
     </div>
-    <ul style="overflow-x: hidden; overflow-y: scroll">
+    <ul id=deaths style="overflow-x: hidden; overflow-y: scroll">
         {{range .MainTemplateData.Deaths}}
-        <li>({{.ServerName}}) {{.DeathMessage}}</li>
+        <li>
+            <p>
+                ({{.ServerName}}) {{.DeathMessage}}
+            </p>
+        </li>
         {{end}}
     </ul>
     {{block "fights" .}}{{end}}
@@ -38,7 +42,7 @@
                 leaderboards
             </button>
             <select style="font-size: 75%; align-self: end">
-                <option>{{block "slash" .}}{{end}}: 000</option>
+                <option>{{block "slash" .}}{{end}}: <span id=online-server></span></option>
             </select>
         </div>
         <div
@@ -71,18 +75,25 @@
     <div style="display: flex; height: 100%;">
         <div style="display: flex; flex-direction: column; flex: 1">
             <input type="radio" style="align-self: end">
-            <ul style="overflow-y: scroll; flex: 0;">
+            <ul id=online style="overflow-y: scroll; flex: 0;">
                 {{range .MainTemplateData.ServerPlayers}}
                 <li>
-                    {{.Name}}
+                    <p>
+                        {{.Name}}
+                    </p>
                 </li>
                 {{end}}
             </ul>
-            <ul style="flex: 0;">
+            <ul id=general style="flex: 0;">
                 {{range .MainTemplateData.DiscordMessages}}
+                <li>
+                    <p>
+                        {{.Content}}
+                    </p>
+                </li>
                 {{end}}
             </ul>
-            <ul style="flex: 1; direction: rtl">
+            <ul id=chat style="flex: 1; direction: rtl">
                 {{range .MainTemplateData.Messages}}
                 <li>
                     <p>
@@ -92,7 +103,7 @@
                 {{end}}
             </ul>
             <div style="display: flex">
-                <button hidden style="font-size: 75%">refresh</button>
+                <button hidden style="font-size: 75%" onclick=fetch("/api/discord-general") onmouseover=fetch("/api/discord-general")>refresh</button>
                 <input style="font-size: 75%">
             </div>
         </div>
@@ -107,7 +118,7 @@
 
         <div style="display: flex; flex-direction: column; flex: 1">
             <div style="flex: 1; display: flex; flex-direction: column-reverse">
-                <ul style="display: flex; flex-direction: column; align-items: flex-end; align-self: end">
+                <ul id=referrals style="display: flex; flex-direction: column; align-items: flex-end; align-self: end">
                     {{range .MainTemplateData.NewPlayers}}
                     <li title="{{.Timestamp}}">
                         <small>
@@ -127,9 +138,7 @@
 
 <div class="bd" style="display: flex; flex-direction: column; align-items: center">
     <div style="display: grid; grid-template-columns: 1fr auto 1fr; align-items: start">
-        <button style="font-size: 75%">
-            refresh
-        </button>
+        <button style="font-size: 75%" onclick=fetch("/api/reddit") onmouseover=fetch("/api/reddit")>refresh</button>
         <select>
             <option selected>videos</option>
             <option>posts</option>
@@ -139,18 +148,33 @@
         </select>
     </div>
     <ul id="videos">
-        <script defer>
-            document.addEventListener('DOMContentLoaded', () => handleRedditVideos());
-        </script>
-        <!--        {{block "videos" .}}TODO {{end}}-->
+        {{range .MainTemplateData.RedditVideos}}
+        <li class=fsb>
+            {{if .YoutubeEmbedUrl}}
+            <iframe src={{.YoutubeEmbedUrl}} style="width: 50%"></iframe>
+            {{else}}
+            <video src={{.VideoUrl}} style="width: 50%"></video>
+            {{end}}
+            <a href={{.PostUrl}}>
+                <small>
+                    {{.Title}}
+                </small>
+            </a>
+        </li>
+        {{.Message}}
+        {{end}}
     </ul>
 </div>
 
 <div class="bd" style="text-align: center">
     <button>events</button>
-    <ul>
+    <ul id=events>
         {{range .MainTemplateData.Events}}
-        <li>{{.CapMessage}}</li>
+        <li>
+            <p>
+                {{.CapMessage}}
+            </p>
+        </li>
         {{end}}
     </ul>
 </div>
@@ -165,7 +189,7 @@
             </div>
             <button onclick="handleContentMaximizeButtonClick(true)" style="margin-left: auto"></button>
         </div>
-        <ul style="overflow-y: scroll">
+        <ul id=announcements style="overflow-y: scroll">
             {{range .MainTemplateData.Announcements}}
             <li>
                 <p>
@@ -174,7 +198,7 @@
             </li>
             {{end}}
         </ul>
-        <ul style="overflow-y: scroll" hidden>
+        <ul id=changelog style="overflow-y: scroll" hidden>
             {{range .MainTemplateData.Changelog}}
             <li>
                 <p>
@@ -244,9 +268,13 @@
 
 <div class="bd" style="text-align: center">
     <button>donations</button>
-    <ul>
+    <ul id="donations">
         {{range .MainTemplateData.Donations}}
-        <li>{{.TotalMoney.Amount}} + {{.TotalTipMoney.Amount}}</li>
+        <li>
+            <p>
+                {{.TotalMoney.Amount}} + {{.TotalTipMoney.Amount}}
+            </p>
+        </li>
         {{end}}
     </ul>
 </div>

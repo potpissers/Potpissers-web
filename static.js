@@ -1,3 +1,4 @@
+"use strict"
 function handleTipsButtonClick(otherButtonsIds, clickedId) {
     for (let buttonId of otherButtonsIds) {
         document.getElementById(buttonId).hidden = true
@@ -19,7 +20,7 @@ function handleMcNameBlur(inputElement) {
         nameCheckController.abort()
 
     nameCheckController = new AbortController()
-    fetch("https://potpissers.com/api/proxy/mojang/username/" + inputElement.value, {signal: nameCheckController.signal})
+    fetch("/api/proxy/mojang/username/" + inputElement.value, {signal: nameCheckController.signal})
         .then(res => {
             inputElement.classList.add(res.status !== 404 ? "v" : "iv")
         })
@@ -55,29 +56,118 @@ function handleContentMaximizeButtonClick(isAnnouncements) {
     }
 }
 
-// function handleRedditVideos() { // TODO -> server handle this
-//     fetch("https://www.reddit.com/r/potpissers/new.json?limit=100")
-//         .then(response => response.json()
-//             .then(data => {
-//                 const ul = document.getElementById("videos")
-//                 data.data.children
-//                     .forEach(post => {
-//                         const url = post.data.url
-//                         if (url && (url.includes("youtube.com") || url.includes("youtu.be"))) {
-//                             const img = document.createElement("img")
-//                             img.src = "https://img.youtube.com/vi/" + url.match(/[?&]v=([a-zA-Z0-9_-]{11})/)[1] + "/hqdefault.jpg"
-//                             img.style.width = "50%"
-//
-//                             const a = document.createElement("a")
-//                             a.href = "https://www.reddit.com" + post.data.permalink
-//                             a.textContent = post.data.title
-//
-//                             const li = document.createElement("li")
-//                             li.classList.add("fsb")
-//                             li.appendChild(img)
-//                             li.appendChild(a)
-//                             ul.appendChild(li)
-//                         }
-//                     })
-//             }));
-// }
+function handleSseLi(jsonData, getLiChild) {
+    const data = jsonData.data
+
+    const li = document.createElement("li")
+    li.appendChild(getLiChild(li, data))
+
+    document.getElementById(jsonData.type).appendChild(li)
+}
+eventSource.onerror = () => location.reload()
+eventSource.onmessage = function(e) {
+    const jsonData = JSON.parse(e.data)
+    switch (jsonData.type) {
+        case "referrals": {
+            handleSseLi(jsonData, (li, data) => {
+                li.setAttribute('title', data.timestamp)
+
+                const small = document.createElement("small")
+                small.textContent = data.player_name + " (" + data.referrer + ") [" + data.row_number + "]"
+                return small
+            })
+            break
+        }
+        case "deaths": {
+            handleSseLi(jsonData, (li, data) => {
+                const p = document.createElement("p")
+                p.textContent = "(" + data.server_name + ") " + data.death_message
+                return p
+            })
+            break
+        }
+        case "events": {
+            handleSseLi(jsonData, (li, data) => {
+                const p = document.createElement("p")
+                p.textContent = data.cap_message
+                return p
+            })
+            break
+        }
+        case "chat": {
+            handleSseLi(jsonData, (li, data) => {
+                const p = document.createElement("p")
+                p.textContent = data.message
+                return p
+            })
+            break
+        }
+        case "online": {
+            handleSseLi(jsonData, (li, data) => {
+                const p = document.createElement("p")
+                p.textContent = data.name
+                return p
+            })
+            const onlineNumber = document.getElementById("online-server")
+            onlineNumber.textContent = (parseInt(onlineNumber.textContent) + 1).toString()
+            break
+        }
+        case "offline": {
+            document.getElementById("online")
+                .querySelectorAll("li")
+                .forEach(li => {
+                    if (li.textContent === jsonData.data.name) {
+                        li.remove()
+
+                        const onlineNumber = document.getElementById("online-server")
+                        onlineNumber.textContent = (parseInt(onlineNumber.textContent) - 1).toString()
+                        break
+                    }
+                })
+            throw new Error("offline player not found")
+        }
+        case "donations": {
+            handleSseLi(jsonData, (li, data) => {
+                const p = document.createElement("p")
+                p.textContent = data.total_money.amount + "+" + data.total_tip_money.amount
+                return p
+            })
+            break
+        }
+        case "videos": {
+            handleSseLi(jsonData, (li, data) => {
+                if (data.youtube_embed_url !== null) {
+                    const iframe = document.createElement("iframe")
+                    iframe.src = data.youtube_embed_url
+                    iframe.style.width = "50%"
+                    li.appendChild(iframe)
+                }
+                else {
+                    const video = document.createElement("video")
+                    video.src = data.video_url
+                    video.style.width = "50%"
+                    li.appendChild(video)
+                }
+                const a = document.createElement("a")
+                a.href = data.post_url
+                const small = document.createElement("small")
+                small.textContent = data.title
+                a.appendChild(small)
+                return a
+            })
+        }
+        case "texts": {
+            // TODO impl
+        }
+        case "general":
+        case "changelog":
+        case "announcements": {
+            handleSseLi(jsonData, (li, data) => {
+                const p = document.createElement("p")
+                p.textContent = data.content
+                return p
+            })
+            break
+        }
+    }
+}

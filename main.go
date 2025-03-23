@@ -25,7 +25,6 @@ var postgresPool = func() *pgxpool.Pool {
 		log.Fatal(err)
 	}
 	// defer'd -> below goroutine
-
 	for _, channelName := range []string{"referrals", "deaths", "events", "online", "chat", "server_data"} {
 		_, err = connection.Exec(context.Background(), "LISTEN " + channelName)
 		if err != nil {
@@ -41,46 +40,86 @@ var postgresPool = func() *pgxpool.Pool {
 				log.Fatal(err)
 			}
 			switch notification.Channel { // TODO -> transitioning from ssr to csr like this absolutely can desync, oh well
-				case "referrals": {
-					bytes := []byte(notification.Payload)
+				case "referrals": { // TODO -> NVM just block the response if csr is happening
 					var t newPlayer
-					handleFatalErr(json.Unmarshal(bytes, &t))
+					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
+					bytes, err := json.Marshal(sseMessage{"referrals", t})
+					if err != nil {
+						log.Fatal(err)
+					}
+
 					newPlayers = append([]newPlayer{t}, newPlayers...)
 
 					home = getHome()
-					handleSseData(homeConnections, bytes)
 					mz = getMz()
-					handleSseData(mzConnections, bytes)
 					hcf = getHcf()
-					handleSseData(hcfConnections, bytes)
+
+					handleSseData(homeConnections, bytes, mzConnections, hcfConnections)
 				}
 				case "deaths": {
-					bytes := []byte(notification.Payload)
 					var t death
-					handleFatalErr(json.Unmarshal(bytes, &t))
+					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
+					bytes, err := json.Marshal(sseMessage{"deaths", t})
+					handleFatalErr(err)
 					serverData := serverDatas[t.ServerName]
 					handleServerDataJsonPrepend[death](&deaths, t, bytes, &serverData.deaths, serverData.gamemodeName)
 				}
 				case "events": {
-					bytes := []byte(notification.Payload)
 					var t event
-					handleFatalErr(json.Unmarshal(bytes, &t))
+					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
+					bytes, err := json.Marshal(sseMessage{"events", t})
+					handleFatalErr(err)
 					serverData := serverDatas[t.ServerName]
 					handleServerDataJsonPrepend[event](&events, t, bytes, &serverData.events, serverData.gamemodeName)
 				}
 				case "chat": {
-					bytes := []byte(notification.Payload)
 					var t ingameMessage
-					handleFatalErr(json.Unmarshal(bytes, &t))
+					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
+					bytes, err := json.Marshal(sseMessage{"chat", t})
+					handleFatalErr(err)
 					serverData := serverDatas[t.ServerName]
 					handleServerDataJsonPrepend[ingameMessage](&messages, t, bytes, &serverData.messages, serverData.gamemodeName)
 				}
 				case "online": {
-					bytes := []byte(notification.Payload)
 					var t onlinePlayer
-					handleFatalErr(json.Unmarshal(bytes, &t))
+					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
+					bytes, err := json.Marshal(sseMessage{"online", t})
+					handleFatalErr(err)
 					serverData := serverDatas[t.ServerName]
 					handleServerDataJsonPrepend[onlinePlayer](&currentPlayers, t, bytes, &serverData.currentPlayers, serverData.gamemodeName)
+				}
+				case "offline": {
+					var t onlinePlayer
+					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
+					bytes, err := json.Marshal(sseMessage{"offline", t})
+					handleFatalErr(err)
+
+					for i, data := range currentPlayers {
+						if data == t {
+							currentPlayers = append(currentPlayers[:i], currentPlayers[i+1:]...)
+							break
+						}
+					}
+					home = getHome()
+					handleSseData(homeConnections, bytes)
+
+					serverData := serverDatas[t.ServerName]
+					for i, data := range serverData.currentPlayers {
+						if data == t {
+							serverData.currentPlayers = append(serverData.currentPlayers[:i], serverData.currentPlayers[i+1:]...)
+							break
+						}
+					}
+					switch serverData.gamemodeName {
+					case "hcf": {
+						hcf = getHcf()
+						handleSseData(hcfConnections, bytes)
+					}
+					case "mz": {
+						mz = getMz()
+						handleSseData(mzConnections, bytes)
+					}
+					}
 				}
 				case "server_data": {} // TODO
 				default: log.Fatal("postgres listen err")
@@ -98,6 +137,7 @@ var homeConnections []sseConnection
 var mzConnections []sseConnection
 var hcfConnections []sseConnection
 const minecraftUsernameLookupUrl = "https://api.minecraftservices.com/minecraft/profile/lookup/name/"
+const potpissersRedditApiUrl = "https://oauth.reddit.com/r/potpissers/new.json?limit=100"
 
 func main() {
 	defer postgresPool.Close()
@@ -357,6 +397,8 @@ func main() {
 		http.HandleFunc(data.endpoint, func(w http.ResponseWriter, r *http.Request) {
 			_, err := w.Write(data.bytes)
 			handleFatalErr(err)
+
+			handleRedditPostDataUpdate()
 		})
 		http.HandleFunc("/api/sse"+data.endpoint, func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Type", "text/event-stream")
