@@ -41,10 +41,7 @@
             <button style="align-self: start; font-size: 75%">
                 leaderboards
             </button>
-            <button style="font-size: 75%">/discord: 000</button>
-            <select style="font-size: 75%; align-self: end">
-                {{block "slash" .}}{{end}}
-            </select>
+            <button style="font-size: 75%; align-self: end">/discord: 000</button>
         </div>
         <div
              style="align-items: center; justify-self: center; display: inline-flex; background-color: #CEE3F8; padding-left: 0; padding-right: .5rem">
@@ -76,6 +73,9 @@
     <div style="display: flex; height: 100%;">
         <div style="display: flex; flex-direction: column; flex: 1">
 <!--            TODO -> networkPlayers-->
+            <select style="font-size: 75%">
+                {{block "slash" .}}{{end}}
+            </select>
             <ul id=online style="overflow-y: scroll; flex: 1" hidden>
                 {{range .MainTemplateData.ServerPlayers}}
                 <li>
