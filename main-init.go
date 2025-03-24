@@ -483,7 +483,7 @@ type discordMessage struct {
 
 func getDiscordMessages(channelId string, apiUrlModifier string) []discordMessage {
 	for {
-		req, err := http.NewRequest("GET", "https://discord.com/api/v10/channels/"+channelId+"/messages?"+apiUrlModifier+"limit=100", nil)
+		req, err := http.NewRequest("GET", "https://discord.com/api/v10/channels/"+channelId+"/messages?"+apiUrlModifier+"limit=6", nil)
 		if err != nil {
 			log.Fatal(err)
 		}
