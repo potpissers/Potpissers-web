@@ -187,13 +187,12 @@ func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePos
 
 			if imageRegex.MatchString(linkPostUrl) {
 				imagePosts = append(imagePosts, redditImagePost{linkPostUrl, getRedditPostUrl(data.Permalink)})
-			} else if strings.HasPrefix(linkPostUrl, "https://youtube.com") || strings.HasPrefix(linkPostUrl, "https://youtu.be") {
+			} else if strings.Contains(linkPostUrl, "youtube.com") || strings.Contains(linkPostUrl, "youtu.be") {
 				videoPosts = append(videoPosts, redditVideoPost{
 					YoutubeEmbedUrl: "https://www.youtube.com/embed/" + youtubeVideoIdRegex.FindStringSubmatch(data.URL)[1],
 					PostUrl:         getRedditPostUrl(data.Permalink),
 					Title:           data.Title,
 				})
-				print("https://www.youtube.com/embed/" + youtubeVideoIdRegex.FindStringSubmatch(data.URL)[1])
 			} else if data.Media != nil {
 				videoPosts = append(videoPosts, redditVideoPost{
 					VideoUrl: data.URL,
