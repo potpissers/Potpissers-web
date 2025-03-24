@@ -79,8 +79,21 @@ func addSquareHeaders(request *http.Request) {
 	request.Header.Add("Content-Type", "application/json")
 }
 
+const redditAccessTokenDataFileName = "reddit_token_data.txt"
 var redditAccessToken string
-var redditAccessTokenExpiration time.Time
+var redditAccessTokenExpiration = func() time.Time {
+	csv, err := os.ReadFile(redditAccessTokenDataFileName)
+	if err != nil {
+		return time.Time{}
+	}
+	parts := strings.Split(string(csv), ",")
+	redditAccessToken = parts[0]
+	time, err := time.Parse(time.RFC3339, parts[1])
+	if err != nil {
+		log.Fatal(err)
+	}
+	return time
+}()
 func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePost) {
 	for redditAccessToken == "" || redditAccessTokenExpiration.Before(time.Now()) {
 		data := url.Values{}
@@ -108,6 +121,10 @@ func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePos
 		}
 		redditAccessToken = result.AccessToken
 		redditAccessTokenExpiration = time.Now().Add(time.Duration(result.ExpiresIn - 45) * time.Second)
+		err = os.WriteFile(redditAccessTokenDataFileName, []byte(redditAccessToken + "," + redditAccessTokenExpiration.Format(time.RFC3339)), 0644)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	req, err := http.NewRequest("GET", redditApiUrl, nil)
