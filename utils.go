@@ -193,6 +193,7 @@ func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePos
 					PostUrl:         getRedditPostUrl(data.Permalink),
 					Title:           data.Title,
 				})
+				print("https://www.youtube.com/embed/" + youtubeVideoIdRegex.FindStringSubmatch(data.URL)[1])
 			} else if data.Media != nil {
 				videoPosts = append(videoPosts, redditVideoPost{
 					VideoUrl: data.URL,
