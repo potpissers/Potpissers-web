@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"github.com/jackc/pgx/v5"
 	"html/template"
+	"io"
 	"log"
 	"math/rand"
 	"net/http"
@@ -493,7 +494,19 @@ func getDiscordMessages(channelId string, apiUrlModifier string) []discordMessag
 	}
 	defer resp.Body.Close()
 	println(resp.StatusCode)
-	return getFatalJsonT[[]discordMessage](resp)
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var messages []discordMessage
+	err = json.Unmarshal(body, &messages)
+	if err != nil {
+		println(body)
+		log.Fatal(err)
+	}
+	return messages
 }
 
 const discordGeneralChannelId = "1245300045188956255"
