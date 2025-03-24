@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" style="background-image: url('{{.MainTemplateData.BackgroundImageUrl}}')">
+<html lang="en" style="background-image: url('{{.MainTemplateData.BackgroundImageUrl.ImageUrl}}')">
 <head>
     <meta charset="UTF-8">
     <title>WIP {{block "potpissers" .}}{{end}}</title>
@@ -282,7 +282,7 @@
     <a href="https://github.com/potpissers">
         <small>github.com/potpissers</small>
     </a>
-    <a href="{{.MainTemplateData.BackgroundImageUrl}}">
+    <a href="{{.MainTemplateData.BackgroundImageUrl.PostUrl}}">
         <small>background</small>
     </a>
 </footer>

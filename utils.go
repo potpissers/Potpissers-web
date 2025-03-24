@@ -36,7 +36,7 @@ func handleGetFatalJsonT[T any](request *http.Request) T {
 
 func getFatalJsonT[T any](resp *http.Response) T {
 	var messages T
-	println(resp.StatusCode)
+//	println(resp.StatusCode)
 	handleFatalErr(json.NewDecoder(resp.Body).Decode(&messages))
 	return messages
 }
