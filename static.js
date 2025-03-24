@@ -113,6 +113,7 @@ eventSource.onmessage = function(e) {
             break
         }
         case "offline": {
+            let flag = false
             document.getElementById("online")
                 .querySelectorAll("li")
                 .forEach(li => {
@@ -121,10 +122,11 @@ eventSource.onmessage = function(e) {
 
                         const onlineNumber = document.getElementById("online-server")
                         onlineNumber.textContent = (parseInt(onlineNumber.textContent) - 1).toString()
-                        break
+                        flag = true // TODO -> don't use forEach
                     }
                 })
-            throw new Error("offline player not found")
+            if (!flag)
+                throw new Error("offline player not found")
         }
         case "donations": {
             handleSseLi(jsonData, (li, data) => {
