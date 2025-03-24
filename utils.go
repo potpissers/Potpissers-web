@@ -231,9 +231,10 @@ func handleDiscordMessagesUpdate(channel chan struct{}, discordChannelId string,
 
 					jsonData, err := json.Marshal(sseMessage{sseMessageType, msg})
 					if err != nil {
-						log.Fatal(err)
+						println(err)
+					} else {
+						handleSseData(jsonData, homeConnections, mzConnections, hcfConnections)
 					}
-					handleSseData(jsonData, homeConnections, mzConnections, hcfConnections)
 				}
 			}
 			println("wow1")
