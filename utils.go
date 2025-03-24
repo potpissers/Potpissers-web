@@ -209,6 +209,7 @@ func handleRedditPostDataUpdate() {
 			for _, post := range newVideoPosts {
 				handle(sseMessage{"videos", post})
 			}
+			println("wow")
 			// TODO -> text posts
 		}
 	default:
@@ -234,6 +235,7 @@ func handleDiscordMessagesUpdate(channel chan struct{}, discordChannelId string,
 					handleSseData(jsonData, homeConnections, mzConnections, hcfConnections)
 				}
 			}
+			println("wow1")
 			<-channel
 		}
 	default:
