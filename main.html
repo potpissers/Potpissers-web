@@ -43,9 +43,9 @@
             </button>
             <div style="align-self: end">
                 <input name="" type="radio">
-                <button style="font-size: 75%">
-                    /discord
-                </button>
+                <select style="font-size: 75%">
+                    {{block "slash" .}}{{end}}
+                </select>
             </div>
         </div>
         <div
@@ -78,10 +78,10 @@
     <div style="display: flex; height: 100%;">
         <div style="display: flex; flex-direction: column; flex: 1">
             <div style="display: flex; align-self: end">
+                <button style="font-size: 75%">
+                    /discord
+                </button>
                 <input name="" type="radio">
-                <select style="font-size: 75%">
-                    {{block "slash" .}}{{end}}
-                </select>
             </div>
             <!--            TODO -> networkPlayers-->
             <ul id=online style="overflow-y: scroll; flex: 1" hidden>
