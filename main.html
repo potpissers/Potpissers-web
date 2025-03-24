@@ -103,11 +103,13 @@
                 </li>
                 {{end}}
             </ul>
-            <button style="font-size: 75%">
-                discord
-            </button>
-            <button hidden style="font-size: 75%" onclick="fetch('/api/discord-general')" onmouseover="fetch('/api/discord-general')">refresh</button>
-            <input style="font-size: 75%">
+            <div style="display: flex">
+                <button style="font-size: 75%">
+                    discord
+                </button>
+                <button hidden style="font-size: 75%" onclick="fetch('/api/discord-general')" onmouseover="fetch('/api/discord-general')">refresh</button>
+                <input style="font-size: 75%">
+            </div>
         </div>
 
         <div style="flex: 1; display: flex; flex-direction: column">
