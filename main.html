@@ -151,8 +151,8 @@
         {{range .MainTemplateData.RedditVideos}}
         <li class=fsb>
             {{if .YoutubeEmbedUrl}}
-            <div>
-                <iframe src={{.YoutubeEmbedUrl}} style="width: 50%"></iframe>
+            <div style="">
+                <iframe src={{.YoutubeEmbedUrl}} style="width: 50%; height: 0"></iframe>
             </div>
             {{else}}
             <video src={{.VideoUrl}} style="width: 50%"></video>
