@@ -138,6 +138,13 @@ td {
     font-size: 75%
 }
 
+footer {
+    grid-column: span 3;
+    text-align: center;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr
+}
+
 .ifc {
     display: inline-flex;
     flex-direction: column
