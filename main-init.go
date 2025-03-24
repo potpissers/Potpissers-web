@@ -573,7 +573,7 @@ var lastCheckedRedditPostId string
 var redditPostsChannel = make(chan struct{}, 1)
 
 func init() {
-	redditVideoPosts, redditImagePosts, lastCheckedRedditPostId = getRedditPostData(potpissersRedditApiUrl)
+	redditVideoPosts, redditImagePosts = getRedditPostData(potpissersRedditApiUrl)
 	http.HandleFunc("/api/reddit", func(w http.ResponseWriter, r *http.Request) {
 		handleRedditPostDataUpdate()
 	})

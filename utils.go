@@ -81,7 +81,7 @@ func addSquareHeaders(request *http.Request) {
 
 var redditAccessToken string
 var redditAccessTokenExpiration time.Time
-func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePost, string) {
+func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePost) {
 	for redditAccessToken == "" || redditAccessTokenExpiration.Before(time.Now()) {
 		data := url.Values{}
 		data.Set("grant_type", "client_credentials")
@@ -157,40 +157,41 @@ func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePos
 	var videoPosts []redditVideoPost
 	var imagePosts []redditImagePost
 	children := responseJson.Data.Children
-	for _, child := range children {
-		getRedditPostUrl := func(permalink string) string {
-			return "https://www.reddit.com" + permalink
-		}
+	if len(children) > 0 {
+		lastCheckedRedditPostId = redditPostIdRegex.FindStringSubmatch(children[0].Data.Permalink)[1]
+		for _, child := range children {
+			getRedditPostUrl := func(permalink string) string {
+				return "https://www.reddit.com" + permalink
+			}
 
-		data := child.Data
-		linkPostUrl := data.URL
+			data := child.Data
+			linkPostUrl := data.URL
 
-		if imageRegex.MatchString(linkPostUrl) {
-			imagePosts = append(imagePosts, redditImagePost{linkPostUrl, getRedditPostUrl(data.Permalink)})
-		} else if strings.HasPrefix(linkPostUrl, "https://youtube.com") || strings.HasPrefix(linkPostUrl, "https://youtu.be") {
-			videoPosts = append(videoPosts, redditVideoPost{
-				YoutubeEmbedUrl: "https://www.youtube.com/embed/" + youtubeVideoIdRegex.FindStringSubmatch(data.URL)[1],
-				PostUrl:         getRedditPostUrl(data.Permalink),
-				Title:           data.Title,
-			})
-		} else if data.Media != nil {
-			videoPosts = append(videoPosts, redditVideoPost{
-				VideoUrl: data.URL,
-				PostUrl:  getRedditPostUrl(data.Permalink),
-				Title:    data.Title,
-			})
+			if imageRegex.MatchString(linkPostUrl) {
+				imagePosts = append(imagePosts, redditImagePost{linkPostUrl, getRedditPostUrl(data.Permalink)})
+			} else if strings.HasPrefix(linkPostUrl, "https://youtube.com") || strings.HasPrefix(linkPostUrl, "https://youtu.be") {
+				videoPosts = append(videoPosts, redditVideoPost{
+					YoutubeEmbedUrl: "https://www.youtube.com/embed/" + youtubeVideoIdRegex.FindStringSubmatch(data.URL)[1],
+					PostUrl:         getRedditPostUrl(data.Permalink),
+					Title:           data.Title,
+				})
+			} else if data.Media != nil {
+				videoPosts = append(videoPosts, redditVideoPost{
+					VideoUrl: data.URL,
+					PostUrl:  getRedditPostUrl(data.Permalink),
+					Title:    data.Title,
+				})
+			}
 		}
 	}
-	return videoPosts, imagePosts, redditPostIdRegex.FindStringSubmatch(children[0].Data.Permalink)[1]
+	return videoPosts, imagePosts
 }
 
 func handleRedditPostDataUpdate() {
 	select {
 	case redditPostsChannel <- struct{}{}:
 		{
-			var newVideoPosts []redditVideoPost
-			var newImagePosts []redditImagePost
-			newVideoPosts, newImagePosts, lastCheckedRedditPostId = getRedditPostData(potpissersRedditApiUrl + "&after=" + lastCheckedRedditPostId)
+			newVideoPosts, newImagePosts := getRedditPostData(potpissersRedditApiUrl + "&after=" + lastCheckedRedditPostId)
 			for _, post := range newVideoPosts {
 				redditVideoPosts = append([]redditVideoPost{post}, redditVideoPosts...)
 			}
