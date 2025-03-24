@@ -173,3 +173,17 @@ eventSource.onmessage = function(e) {
         }
     }
 }
+function handleChatToggle(button) {
+    switch (button.textContent) {
+        case "game":
+            button.textContent = "discord"
+            document.getElementById("chat-discord").hidden = false
+            document.getElementById("chat-game").hidden = true
+            break
+        case "discord":
+            button.textContent = "game"
+            document.getElementById("chat-discord").hidden = true
+            document.getElementById("chat-game").hidden = false
+            break
+    }
+}
