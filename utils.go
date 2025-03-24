@@ -30,7 +30,6 @@ func handleGetFatalJsonT[T any](request *http.Request) T {
 	if err != nil {
 		log.Fatal(err)
 	}
-	println(resp.StatusCode)
 	defer resp.Body.Close()
 	return getFatalJsonT[T](resp)
 }
@@ -231,10 +230,9 @@ func handleDiscordMessagesUpdate(channel chan struct{}, discordChannelId string,
 
 					jsonData, err := json.Marshal(sseMessage{sseMessageType, msg})
 					if err != nil {
-						println(err)
-					} else {
-						handleSseData(jsonData, homeConnections, mzConnections, hcfConnections)
+						log.Fatal(err)
 					}
+					handleSseData(jsonData, homeConnections, mzConnections, hcfConnections)
 				}
 			}
 			println("wow1")

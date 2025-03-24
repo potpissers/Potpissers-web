@@ -486,7 +486,14 @@ func getDiscordMessages(channelId string, apiUrlModifier string) []discordMessag
 		log.Fatal(err)
 	}
 	req.Header.Set("Authorization", "Bot "+os.Getenv("DISCORD_BOT_TOKEN"))
-	return handleGetFatalJsonT[[]discordMessage](req)
+
+	resp, err := (&http.Client{}).Do(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer resp.Body.Close()
+	println(resp.StatusCode)
+	return getFatalJsonT[[]discordMessage](resp)
 }
 
 const discordGeneralChannelId = "1245300045188956255"
