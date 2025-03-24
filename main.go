@@ -134,8 +134,7 @@ func init() {
 					}
 				}
 			case "server_data":
-				{
-				} // TODO
+				{} // TODO
 			default:
 				log.Fatal("postgres listen err")
 			}
