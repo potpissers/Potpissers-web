@@ -228,7 +228,6 @@ func handleRedditPostDataUpdate() {
 			for _, post := range newVideoPosts {
 				handle(sseMessage{"videos", post})
 			}
-			println("wow")
 			// TODO -> text posts
 		}
 	default:

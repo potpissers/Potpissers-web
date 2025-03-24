@@ -494,7 +494,6 @@ func getDiscordMessages(channelId string, apiUrlModifier string) []discordMessag
 			log.Fatal(err)
 		}
 		defer resp.Body.Close()
-		println(resp.StatusCode)
 
 		body, err := io.ReadAll(resp.Body)
 		if err != nil {
