@@ -27,7 +27,10 @@ func handleFatalPgx(_ pgconn.CommandTag, err error) {
 }
 func handleGetFatalJsonT[T any](request *http.Request) T {
 	resp, err := (&http.Client{}).Do(request)
-	handleFatalErr(err)
+	if err != nil {
+		log.Fatal(err)
+	}
+	println(resp.StatusCode)
 	defer resp.Body.Close()
 	return getFatalJsonT[T](resp)
 }
