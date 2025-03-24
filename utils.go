@@ -253,6 +253,7 @@ func handleDiscordMessagesUpdate(channel chan struct{}, discordChannelId string,
 					handleSseData(jsonData, homeConnections, mzConnections, hcfConnections)
 				}
 			}
+			time.Sleep(time.Second)
 			<-channel
 		}
 	default:
