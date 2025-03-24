@@ -235,7 +235,7 @@ func handleDiscordMessagesUpdate(channel chan struct{}, discordChannelId string,
 					handleSseData(jsonData, homeConnections, mzConnections, hcfConnections)
 				}
 			}
-			println("wow1")
+			println(mostRecentMessageId)
 			<-channel
 		}
 	default:
