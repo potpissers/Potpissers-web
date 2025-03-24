@@ -108,7 +108,7 @@ func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePos
 		if err != nil {
 			log.Fatal(err)
 		}
-		println(authResp.StatusCode)
+//		println(authResp.StatusCode) // -> reddit access token rate limits hahd
 		defer authResp.Body.Close()
 		var result struct {
 			AccessToken string `json:"access_token"`

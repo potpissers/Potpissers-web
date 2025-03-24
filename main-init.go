@@ -531,9 +531,9 @@ func init() {
 	http.HandleFunc("/api/discord/general", func(w http.ResponseWriter, r *http.Request) {
 		handleDiscordMessagesUpdate(discordGeneralChan, discordGeneralChannelId, &mostRecentDiscordGeneralMessageId, &discordMessages, "general")
 	})
-	http.HandleFunc("/api/discord/changelog", func(w http.ResponseWriter, r *http.Request) {
-		handleDiscordMessagesUpdate(discordChangelogChan, discordChangelogChannelId, &mostRecentDiscordChangelogMessageId, &changelog, "changelog")
-	})
+//	http.HandleFunc("/api/discord/changelog", func(w http.ResponseWriter, r *http.Request) {
+//		handleDiscordMessagesUpdate(discordChangelogChan, discordChangelogChannelId, &mostRecentDiscordChangelogMessageId, &changelog, "changelog")
+//	})
 	http.HandleFunc("/api/discord/announcements", func(w http.ResponseWriter, r *http.Request) {
 		handleDiscordMessagesUpdate(discordAnnouncementsChan, discordAnnouncementsChannelId, &mostRecentDiscordAnnouncementsMessageId, &announcements, "announcements")
 	})
