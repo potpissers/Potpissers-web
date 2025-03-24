@@ -503,7 +503,7 @@ func getDiscordMessages(channelId string, apiUrlModifier string) []discordMessag
 	var messages []discordMessage
 	err = json.Unmarshal(body, &messages)
 	if err != nil {
-		println(body)
+		println(string(body))
 		log.Fatal(err)
 	}
 	return messages
