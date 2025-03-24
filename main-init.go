@@ -482,31 +482,42 @@ type discordMessage struct {
 }
 
 func getDiscordMessages(channelId string, apiUrlModifier string) []discordMessage {
-	req, err := http.NewRequest("GET", "https://discord.com/api/v10/channels/"+channelId+"/messages?"+apiUrlModifier+"limit=100", nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-	req.Header.Set("Authorization", "Bot "+os.Getenv("DISCORD_BOT_TOKEN"))
+	for {
+		req, err := http.NewRequest("GET", "https://discord.com/api/v10/channels/"+channelId+"/messages?"+apiUrlModifier+"limit=100", nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+		req.Header.Set("Authorization", "Bot "+os.Getenv("DISCORD_BOT_TOKEN"))
 
-	resp, err := (&http.Client{}).Do(req)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer resp.Body.Close()
-	println(resp.StatusCode)
+		resp, err := (&http.Client{}).Do(req)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer resp.Body.Close()
+		println(resp.StatusCode)
 
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatal(err)
-	}
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			log.Fatal(err)
+		}
 
-	var messages []discordMessage
-	err = json.Unmarshal(body, &messages)
-	if err != nil {
-		println(string(body))
-		log.Fatal(err)
+		var messages []discordMessage
+		err = json.Unmarshal(body, &messages)
+		if err != nil {
+			var response map[string]any
+			err = json.Unmarshal(body, &response)
+			if err != nil {
+				log.Fatal(err)
+			}
+			retryAfter, ok := response["retry_after"].(float64)
+			if !ok {
+				log.Fatal(err)
+			}
+			time.Sleep(time.Duration(retryAfter * float64(time.Second)))
+			continue
+		}
+		return messages
 	}
-	return messages
 }
 
 const discordGeneralChannelId = "1245300045188956255"
