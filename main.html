@@ -41,7 +41,10 @@
             <button style="align-self: start; font-size: 75%">
                 leaderboards
             </button>
-            <button style="font-size: 75%; align-self: end">/discord: 000</button>
+            <input name="" type="radio">
+            <button style="font-size: 75%; align-self: end">
+                /discord
+            </button>
         </div>
         <div
              style="align-items: center; justify-self: center; display: inline-flex; background-color: #CEE3F8; padding-left: 0; padding-right: .5rem">
@@ -72,10 +75,11 @@
 
     <div style="display: flex; height: 100%;">
         <div style="display: flex; flex-direction: column; flex: 1">
-<!--            TODO -> networkPlayers-->
-            <select style="font-size: 75%">
+            <input name="" type="radio">
+            <select style="font-size: 75%; align-self: end">
                 {{block "slash" .}}{{end}}
             </select>
+            <!--            TODO -> networkPlayers-->
             <ul id=online style="overflow-y: scroll; flex: 1" hidden>
                 {{range .MainTemplateData.ServerPlayers}}
                 <li>
