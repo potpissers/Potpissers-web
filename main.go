@@ -15,12 +15,14 @@ import (
 	"sync"
 	"time"
 )
+
 var postgresPool = func() *pgxpool.Pool {
 	pool, err := pgxpool.New(context.Background(), os.Getenv("POSTGRES_CONNECTION_STRING"))
 	handleFatalErr(err)
 	// defer'd => main
 	return pool
 }()
+
 func init() {
 	connection, err := postgresPool.Acquire(context.Background())
 	if err != nil {
@@ -28,7 +30,7 @@ func init() {
 	}
 	// defer'd -> below goroutine
 	for _, channelName := range []string{"referrals", "deaths", "events", "online", "chat", "server_data"} {
-		_, err = connection.Exec(context.Background(), "LISTEN " + channelName)
+		_, err = connection.Exec(context.Background(), "LISTEN "+channelName)
 		if err != nil {
 			connection.Release()
 			log.Fatal(err)
@@ -42,7 +44,8 @@ func init() {
 				log.Fatal(err)
 			}
 			switch notification.Channel { // TODO -> transitioning from ssr to csr like this absolutely can desync, oh well
-				case "referrals": { // TODO -> NVM just block the response if csr is happening
+			case "referrals":
+				{ // TODO -> NVM just block the response if csr is happening
 					var t newPlayer
 					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
 					jsonBytes, err := json.Marshal(sseMessage{"referrals", t})
@@ -56,9 +59,10 @@ func init() {
 					mz = getMz()
 					hcf = getHcf()
 
-					handleSseData(&homeConnections, jsonBytes, &mzConnections, &hcfConnections)
+					handleSseData(jsonBytes, homeConnections, mzConnections, hcfConnections)
 				}
-				case "deaths": {
+			case "deaths":
+				{
 					var t death
 					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
 					jsonBytes, err := json.Marshal(sseMessage{"deaths", t})
@@ -66,7 +70,8 @@ func init() {
 					serverData := serverDatas[t.ServerName]
 					handleServerDataJsonPrepend[death](&deaths, t, jsonBytes, &serverData.deaths, serverData.gamemodeName)
 				}
-				case "events": {
+			case "events":
+				{
 					var t event
 					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
 					jsonBytes, err := json.Marshal(sseMessage{"events", t})
@@ -74,7 +79,8 @@ func init() {
 					serverData := serverDatas[t.ServerName]
 					handleServerDataJsonPrepend[event](&events, t, jsonBytes, &serverData.events, serverData.gamemodeName)
 				}
-				case "chat": {
+			case "chat":
+				{
 					var t ingameMessage
 					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
 					jsonBytes, err := json.Marshal(sseMessage{"chat", t})
@@ -82,7 +88,8 @@ func init() {
 					serverData := serverDatas[t.ServerName]
 					handleServerDataJsonPrepend[ingameMessage](&messages, t, jsonBytes, &serverData.messages, serverData.gamemodeName)
 				}
-				case "online": {
+			case "online":
+				{
 					var t onlinePlayer
 					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
 					jsonBytes, err := json.Marshal(sseMessage{"online", t})
@@ -90,7 +97,8 @@ func init() {
 					serverData := serverDatas[t.ServerName]
 					handleServerDataJsonPrepend[onlinePlayer](&currentPlayers, t, jsonBytes, &serverData.currentPlayers, serverData.gamemodeName)
 				}
-				case "offline": {
+			case "offline":
+				{
 					var t onlinePlayer
 					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
 					jsonBytes, err := json.Marshal(sseMessage{"offline", t})
@@ -103,7 +111,7 @@ func init() {
 						}
 					}
 					home = getHome()
-					handleSseData(&homeConnections, jsonBytes)
+					handleSseData(jsonBytes, homeConnections)
 
 					serverData := serverDatas[t.ServerName]
 					for i, data := range serverData.currentPlayers {
@@ -113,30 +121,37 @@ func init() {
 						}
 					}
 					switch serverData.gamemodeName {
-					case "hcf": {
-						hcf = getHcf()
-						handleSseData(&hcfConnections, jsonBytes)
-					}
-					case "mz": {
-						mz = getMz()
-						handleSseData(&mzConnections, jsonBytes)
-					}
+					case "hcf":
+						{
+							hcf = getHcf()
+							handleSseData(jsonBytes, hcfConnections)
+						}
+					case "mz":
+						{
+							mz = getMz()
+							handleSseData(jsonBytes, mzConnections)
+						}
 					}
 				}
-				case "server_data": {} // TODO
-				default: log.Fatal("postgres listen err")
+			case "server_data":
+				{
+				} // TODO
+			default:
+				log.Fatal("postgres listen err")
 			}
 		}
 	}()
 }
-type sseConnection struct {
-	response http.ResponseWriter
-	flusher  http.Flusher
-	mutex *sync.Mutex
+
+type sseConnectionsData struct {
+	mop   map[*struct{}]chan []byte
+	mutex *sync.RWMutex
 }
-var homeConnections []sseConnection
-var mzConnections []sseConnection
-var hcfConnections []sseConnection
+
+var homeConnections = sseConnectionsData{make(map[*struct{}]chan []byte), &sync.RWMutex{}}
+var mzConnections = sseConnectionsData{make(map[*struct{}]chan []byte), &sync.RWMutex{}}
+var hcfConnections = sseConnectionsData{make(map[*struct{}]chan []byte), &sync.RWMutex{}}
+
 const minecraftUsernameLookupUrl = "https://api.minecraftservices.com/minecraft/profile/lookup/name/"
 const potpissersRedditApiUrl = "https://oauth.reddit.com/r/potpissers/new.json?limit=100"
 
@@ -384,15 +399,15 @@ func main() {
 	mz = getMz()
 
 	for _, data := range []struct {
-		endpoint       string
-		bytes          []byte
-		sseConnections *[]sseConnection
+		endpoint           string
+		bytes              []byte
+		sseConnectionsData sseConnectionsData
 	}{
-		{endpoint: "/", bytes: home, sseConnections: &homeConnections},
-		{endpoint: "/hub", bytes: home, sseConnections: &homeConnections},
-		{endpoint: "/mz", bytes: mz, sseConnections: &mzConnections},
+		{endpoint: "/", bytes: home, sseConnectionsData: homeConnections},
+		{endpoint: "/hub", bytes: home, sseConnectionsData: homeConnections},
+		{endpoint: "/mz", bytes: mz, sseConnectionsData: mzConnections},
 		//		{endpoint: "/kollusion", bytes: kollusion}, // TODO
-		{endpoint: "/hcf", bytes: hcf, sseConnections: &hcfConnections},
+		{endpoint: "/hcf", bytes: hcf, sseConnectionsData: hcfConnections},
 		//		{endpoint: "/cubecore", bytes: cubecore},
 	} {
 		http.HandleFunc(data.endpoint, func(w http.ResponseWriter, r *http.Request) {
@@ -412,7 +427,36 @@ func main() {
 			flusher, ok := w.(http.Flusher)
 			if ok {
 				flusher.Flush()
-				*data.sseConnections = append(*data.sseConnections, sseConnection{w, flusher, &sync.Mutex{}})
+
+				ch := make(chan []byte, 2)
+				pointer := &struct{}{}
+				mutex := data.sseConnectionsData.mutex
+
+				mutex.Lock()
+				data.sseConnectionsData.mop[pointer] = ch
+				mutex.Unlock()
+
+			whileTrue:
+				for {
+					select {
+					case msg := <-ch:
+						{
+							_, err := w.Write(msg)
+							if err != nil {
+								break whileTrue
+							}
+							flusher.Flush()
+						}
+					case <-r.Context().Done():
+						{
+							break whileTrue
+						}
+					}
+				}
+
+				mutex.Lock()
+				data.sseConnectionsData.mop[pointer] = nil
+				mutex.Unlock()
 			}
 		})
 	}
@@ -438,17 +482,19 @@ func main() {
 func handleServerDataJsonPrepend[T any](homeSlice *[]T, t T, bytes []byte, serverSlice *[]T, gamemodeName string) {
 	*homeSlice = append([]T{t}, *homeSlice...) // TODO -> this is necessary because html/css and go's templating can't handle reversing it for some reason. go's templater could maybe do it but it seems like more processing than this takes
 	home = getHome()
-	handleSseData(&homeConnections, bytes)
+	handleSseData(bytes, homeConnections)
 
 	*serverSlice = append([]T{t}, *serverSlice...)
 	switch gamemodeName {
-	case "hcf": {
-		hcf = getHcf()
-		handleSseData(&hcfConnections, bytes)
-	}
-	case "mz": {
-		mz = getMz()
-		handleSseData(&mzConnections, bytes)
-	}
+	case "hcf":
+		{
+			hcf = getHcf()
+			handleSseData(bytes, hcfConnections)
+		}
+	case "mz":
+		{
+			mz = getMz()
+			handleSseData(bytes, mzConnections)
+		}
 	}
 }

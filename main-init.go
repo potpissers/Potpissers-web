@@ -435,7 +435,7 @@ func init() {
 			home = getHome()
 			mz = getMz()
 			hcf = getHcf()
-			handleSseData(&homeConnections, jsonBytes, &mzConnections, &hcfConnections)
+			handleSseData(jsonBytes, homeConnections, mzConnections, hcfConnections)
 		}
 	})
 }

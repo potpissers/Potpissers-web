@@ -12,7 +12,6 @@ import (
 	"net/url"
 	"os"
 	"strings"
-	"sync"
 	"time"
 )
 
@@ -44,35 +43,16 @@ type sseMessage struct {
 	Data any    `json:"data"`
 }
 
-func handleSseData(sseConnections *[]sseConnection, bytes []byte, additionalConnections ...*[]sseConnection) {
-	for i := range additionalConnections {
-		go handleSseData(additionalConnections[i], bytes)
-	}
-
-	validConnChan := make(chan sseConnection, len(*sseConnections))
-	var waitGroup sync.WaitGroup
-	for _, c := range *sseConnections {
-		waitGroup.Add(1)
-		go func(conn sseConnection) {
-			defer waitGroup.Done()
-
-			conn.mutex.Lock()
-			if _, err := conn.response.Write(bytes); err == nil {
-				conn.flusher.Flush()
-				validConnChan <- conn
+func handleSseData(bytes []byte, sseConnectionMaps ...sseConnectionsData) {
+	for _, mop := range sseConnectionMaps {
+		go func(data sseConnectionsData) {
+			data.mutex.RLock()
+			for _, ch := range data.mop {
+				ch<-bytes
 			}
-			conn.mutex.Unlock()
-		}(c)
+			data.mutex.RUnlock()
+		}(mop)
 	}
-	waitGroup.Wait()
-
-	close(validConnChan)
-
-	var validConnections []sseConnection
-	for conn := range validConnChan {
-		validConnections = append(validConnections, conn)
-	}
-	*sseConnections = validConnections // TODO -> atomic pointer could be used here pog
 }
 
 func getMojangApiUuidRequest(username string) (*http.Response, error) {
@@ -221,7 +201,7 @@ func handleRedditPostDataUpdate() {
 				if err != nil {
 					log.Fatal(err)
 				}
-				handleSseData(&homeConnections, jsonData, &hcfConnections, &mzConnections)
+				handleSseData(jsonData, homeConnections, hcfConnections, mzConnections)
 			}
 			for _, post := range newVideoPosts {
 				handle(sseMessage{"videos", post})
@@ -248,7 +228,7 @@ func handleDiscordMessagesUpdate(channel chan struct{}, discordChannelId string,
 					if err != nil {
 						log.Fatal(err)
 					}
-					handleSseData(&homeConnections, jsonData, &mzConnections, &hcfConnections)
+					handleSseData(jsonData, homeConnections, mzConnections, hcfConnections)
 				}
 			}
 			<-channel
