@@ -42,7 +42,7 @@
                 leaderboards
             </button>
             <select style="font-size: 75%; align-self: end">
-                <option>{{block "slash" .}}{{end}}: <span id=online-server></span></option>
+                {{block "slash" .}}{{end}}
             </select>
         </div>
         <div
@@ -74,8 +74,11 @@
 
     <div style="display: flex; height: 100%;">
         <div style="display: flex; flex-direction: column; flex: 1">
-            <input type="radio" style="align-self: end">
-            <ul id=online style="overflow-y: scroll; flex: 0;">
+            <select>
+                <option>chat: /hub</option>
+                <option>chat: /discord</option>
+            </select>
+            <ul id=online style="overflow-y: scroll; flex: 1" hidden>
                 {{range .MainTemplateData.ServerPlayers}}
                 <li>
                     <p>
