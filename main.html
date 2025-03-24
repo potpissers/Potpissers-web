@@ -103,8 +103,9 @@
             </ul>
             <div style="display: flex">
                 <select style="font-size: 75%">
-                    <option>chat: /hub</option>
-                    <option>chat: /discord</option>
+                    <option selected hidden>/hub chat</option>
+                    <option>/hub</option>
+                    <option>/discord</option>
                 </select>
                 <button hidden style="font-size: 75%" onclick="fetch('/api/discord-general')" onmouseover="fetch('/api/discord-general')">refresh</button>
                 <input style="font-size: 75%">
