@@ -436,7 +436,6 @@ func main() {
 
 			whileTrue:
 				for {
-					println("hey")
 					select {
 					case msg := <-ch:
 						{

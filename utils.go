@@ -51,7 +51,7 @@ func handleSseData(bytes []byte, sseConnectionMaps ...sseConnectionsData) {
 		go func(data sseConnectionsData) {
 			data.mutex.RLock()
 			for _, ch := range data.mop {
-				ch<-bytes
+				ch<- []byte("data: " + string(bytes) + "\n\n")
 			}
 			data.mutex.RUnlock()
 		}(mop)
