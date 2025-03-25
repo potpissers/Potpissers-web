@@ -125,6 +125,7 @@ func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePos
 		if err != nil {
 			log.Fatal(err)
 		}
+		println("retrieved reddit api key")
 	}
 
 	req, err := http.NewRequest("GET", redditApiUrl, nil)
