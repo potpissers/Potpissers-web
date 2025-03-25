@@ -48,7 +48,6 @@ type sseMessage struct {
 
 func handleSseData(bytes []byte, sseConnectionMaps ...sseConnectionsData) {
 	for _, mop := range sseConnectionMaps {
-		println(len(mop.mop))
 		go func(data sseConnectionsData) {
 			data.mutex.RLock()
 			for _, ch := range data.mop {
@@ -218,19 +217,24 @@ func handleRedditPostDataUpdate() {
 			for _, post := range newImagePosts {
 				redditImagePosts = append([]redditImagePost{post}, redditImagePosts...)
 			}
-			<-redditPostsChannel
+			if len(newVideoPosts) > 0 || len(newImagePosts) > 0 {
+				home = getHome()
+				mz = getMz()
+				hcf = getHcf()
 
-			handle := func(t any) {
-				jsonData, err := json.Marshal(t)
-				if err != nil {
-					log.Fatal(err)
+				handle := func(t any) {
+					jsonData, err := json.Marshal(t)
+					if err != nil {
+						log.Fatal(err)
+					}
+					handleSseData(jsonData, homeConnections, hcfConnections, mzConnections)
 				}
-				handleSseData(jsonData, homeConnections, hcfConnections, mzConnections)
+				for _, post := range newVideoPosts {
+					handle(sseMessage{"videos", post})
+				}
+				// TODO -> text posts
 			}
-			for _, post := range newVideoPosts {
-				handle(sseMessage{"videos", post})
-			}
-			// TODO -> text posts
+			<-redditPostsChannel
 		}
 	default:
 		return
@@ -244,6 +248,10 @@ func handleDiscordMessagesUpdate(channel chan struct{}, discordChannelId string,
 			newMessages := getDiscordMessages(discordChannelId, "after="+*mostRecentMessageId+"&")
 			if len(newMessages) > 0 {
 				*mostRecentMessageId = newMessages[0].ID
+
+				home = getHome()
+				hcf = getHcf()
+				mz = getMz()
 
 				for _, msg := range newMessages {
 					*slice = append([]discordMessage{msg}, *slice...)
