@@ -82,6 +82,7 @@ function handleSseLi(jsonData, getLiChild) {
 }
 eventSource.onerror = () => location.reload()
 eventSource.onmessage = function(e) {
+    console.log("wuh")
     const jsonData = JSON.parse(e.data)
     switch (jsonData.type) {
         case "referrals": {
