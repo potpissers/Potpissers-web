@@ -434,12 +434,13 @@ func main() {
 				data.sseConnectionsData.mop[pointer] = ch
 				mutex.Unlock()
 
+				println("1")
+
 			whileTrue:
 				for {
 					select {
 					case msg := <-ch:
 						{
-						println("hey")
 							_, err := w.Write(msg)
 							if err != nil {
 								break whileTrue
@@ -452,6 +453,8 @@ func main() {
 						}
 					}
 				}
+				
+				println("2")
 
 				mutex.Lock()
 				data.sseConnectionsData.mop[pointer] = nil
