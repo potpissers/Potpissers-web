@@ -302,6 +302,9 @@
 
 </html>
 
+<script defer>
+    const eventSource = new EventSource("https://potpissers.com/api/sse/{{.MainTemplateData.GamemodeName}}")
+</script>
 <script defer id="staticjs" src="static.js"></script>
 <script async id="staticdonatejs" src="static-donate.js"></script>
 <script async>
@@ -310,5 +313,4 @@
     "{{.GamemodeName}}-{{.ItemName}}": {{.ItemPriceInCents}},
     {{end}}
     }
-    const eventSource = new EventSource("https://potpissers.com/api/sse/{{.MainTemplateData.GamemodeName}}")
 </script>
