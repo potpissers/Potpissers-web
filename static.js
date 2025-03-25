@@ -177,13 +177,13 @@ function handleChatToggle(button) {
     switch (button.textContent) {
         case "game":
             button.textContent = "discord"
-            document.getElementById("chat-discord").hidden = false
-            document.getElementById("chat-game").hidden = true
+            document.getElementsByTagName("id-chat-discord")[0].forEach(each => each.hidden = false)
+            document.getElementsByTagName("id-chat-game")[0].forEach(each => each.hidden = true)
             break
         case "discord":
             button.textContent = "game"
-            document.getElementById("chat-discord").hidden = true
-            document.getElementById("chat-game").hidden = false
+            document.getElementsByTagName("id-chat-discord")[0].forEach(each => each.hidden = true)
+            document.getElementsByTagName("id-chat-game")[0].forEach(each => each.hidden = false)
             break
     }
 }
