@@ -476,6 +476,7 @@ func main() {
 	http.Handle("/potpisser.jpg", http.StripPrefix("/", http.FileServer(http.Dir("."))))
 	http.Handle("/static-donate.js", http.StripPrefix("/", http.FileServer(http.Dir("."))))
 
+	println("starting server")
 	log.Println(http.ListenAndServeTLS(":443", "/etc/letsencrypt/live/potpissers.com/fullchain.pem", "/etc/letsencrypt/live/potpissers.com/privkey.pem", nil))
 }
 

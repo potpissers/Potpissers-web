@@ -547,6 +547,7 @@ func init() {
 	http.HandleFunc("/api/discord/announcements", func(w http.ResponseWriter, r *http.Request) {
 		handleDiscordMessagesUpdate(discordAnnouncementsChan, discordAnnouncementsChannelId, &mostRecentDiscordAnnouncementsMessageId, &announcements, "announcements")
 	})
+	println("discord done")
 }
 
 type ingameMessage struct {
@@ -606,6 +607,7 @@ func init() {
 	http.HandleFunc("/api/reddit", func(w http.ResponseWriter, r *http.Request) {
 		handleRedditPostDataUpdate()
 	})
+	println("reddit done")
 }
 
 func getMainTemplate(fileName string) *template.Template {
