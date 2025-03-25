@@ -11,7 +11,9 @@ function handleAddLineItemJson(itemName, itemAmountString) {
     })
     document.getElementById("checkout").classList.remove("h")
     document.getElementById("donatebutton").hidden = true
-    document.getElementById("donatesidebutton").classList.add("r")
+
+    document.getElementById("donatesidebutton").hidden = true
+    document.getElementById("donatesidebuttonred").hidden = false
 }
 
 function fetchPaymentLink() {
@@ -31,5 +33,4 @@ function doLineItemReset() {
     document.getElementById("checkoutbalance").innerText = ""
     document.getElementById("checkout").classList.add("h")
     document.getElementById("donatebutton").hidden = false
-    document.getElementById("donatesidebutton").classList.remove("r")
 }
