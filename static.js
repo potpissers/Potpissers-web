@@ -174,20 +174,19 @@ eventSource.onmessage = function(e) {
     }
 }
 function handleChatToggle(button) {
-    console.log(document.querySelectorAll(".id-chat-discord").length)
     switch (button.textContent) {
         case "game":
             button.textContent = "discord"
-            document.querySelectorAll(".id-chat-discord")
+            Array.from(document.getElementsByClassName("id-chat-discord"))
                 .forEach(each => each.hidden = false)
-            document.querySelectorAll(".id-chat-game")
+            Array.from(document.getElementsByClassName("id-chat-game"))
                 .forEach(each => each.hidden = true)
             break
         case "discord":
             button.textContent = "game"
-            document.querySelectorAll(".id-chat-discord")
+            Array.from(document.getElementsByClassName("id-chat-discord"))
                 .forEach(each => each.hidden = true)
-            document.querySelectorAll(".id-chat-game")
+            Array.from(document.getElementsByClassName("id-chat-game"))
                 .forEach(each => each.hidden = false)
             break
     }
