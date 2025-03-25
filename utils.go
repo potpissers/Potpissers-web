@@ -49,6 +49,7 @@ type sseMessage struct {
 func handleSseData(bytes []byte, sseConnectionMaps ...sseConnectionsData) {
 	for _, mop := range sseConnectionMaps {
 		go func(data sseConnectionsData) {
+			println("wtf")
 			data.mutex.RLock()
 			for _, ch := range data.mop {
 				ch<-bytes
