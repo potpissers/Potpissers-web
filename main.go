@@ -439,12 +439,12 @@ func main() {
 					select {
 					case msg := <-ch:
 						{
-						println(string(msg))
 							_, err := w.Write(msg)
 							if err != nil {
 								break whileTrue
 							}
 							flusher.Flush()
+							println(string(msg))
 						}
 					case <-r.Context().Done():
 						{
