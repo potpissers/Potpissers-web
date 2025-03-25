@@ -400,6 +400,8 @@ func main() {
 	hcf = getHcf()
 	mz = getMz()
 
+	println("templates done")
+
 	for _, data := range []struct {
 		endpoint           string
 		bytes              []byte
