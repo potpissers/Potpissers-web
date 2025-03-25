@@ -210,6 +210,7 @@ func handleRedditPostDataUpdate() {
 	select {
 	case redditPostsChannel <- struct{}{}:
 		{
+		println(potpissersRedditApiUrl + "&after=" + lastCheckedRedditPostId)
 			newVideoPosts, newImagePosts := getRedditPostData(potpissersRedditApiUrl + "&after=" + lastCheckedRedditPostId)
 			for _, post := range newVideoPosts {
 				redditVideoPosts = append([]redditVideoPost{post}, redditVideoPosts...)
