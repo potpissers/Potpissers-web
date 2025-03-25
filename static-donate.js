@@ -33,4 +33,7 @@ function doLineItemReset() {
     document.getElementById("checkoutbalance").innerText = ""
     document.getElementById("checkout").classList.add("h")
     document.getElementById("donatebutton").hidden = false
+
+    document.getElementById("donatesidebutton").hidden = false
+    document.getElementById("donatesidebuttonred").hidden = true
 }
