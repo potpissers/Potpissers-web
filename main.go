@@ -436,12 +436,12 @@ func main() {
 
 			whileTrue:
 				for {
+					println("hey")
 					select {
 					case msg := <-ch:
 						{
 							_, err := w.Write(msg)
 							if err != nil {
-								println(err)
 								break whileTrue
 							}
 							flusher.Flush()
