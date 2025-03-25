@@ -178,7 +178,7 @@ func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePos
 	var imagePosts []redditImagePost
 	children := responseJson.Data.Children
 	if len(children) > 0 {
-		if lastCheckedRedditPostCreatedUtc > children[0].Data.CreatedUTC {
+		if lastCheckedRedditPostCreatedUtc < children[0].Data.CreatedUTC {
 			lastCheckedRedditPostId = children[0].Data.Name
 			lastCheckedRedditPostCreatedUtc = children[0].Data.CreatedUTC
 		}
