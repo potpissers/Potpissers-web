@@ -35,6 +35,12 @@ function handleMcNameKeyDown(event) {
         event.target.classList.remove("v", "iv");
 }
 
+function handleLineItemButtonClick(contentButton) {
+    if (contentButton.style.gridTemplateRows !== "auto 22vh") {
+        contentButton.style.gridTemplateRows = "auto 22vh"
+        document.body.style.gridTemplateRows = "44vh auto auto"
+    }
+}
 function handleContentMaximizeButtonClick(isAnnouncements) {
     let contentElement = document.getElementById("content")
     if (isAnnouncements) {
