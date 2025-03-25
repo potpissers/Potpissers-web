@@ -82,7 +82,6 @@ function handleSseLi(jsonData, getLiChild) {
 }
 eventSource.onerror = () => location.reload()
 eventSource.onmessage = function(e) {
-    console.log("FUCK")
     const jsonData = JSON.parse(e.data)
     switch (jsonData.type) {
         case "referrals": {
@@ -112,7 +111,6 @@ eventSource.onmessage = function(e) {
             break
         }
         case "chat": {
-            console.log("N  WORD!")
             handleSseLi(jsonData, (li, data) => {
                 const p = document.createElement("p")
                 p.textContent = data.message
