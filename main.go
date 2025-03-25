@@ -158,6 +158,8 @@ const potpissersRedditApiUrl = "https://oauth.reddit.com/r/potpissers/new.json?l
 func main() {
 	defer postgresPool.Close()
 
+	println("init done")
+
 	const mojangUsernameProxyEndpoint = "/api/proxy/mojang/username/"
 	http.HandleFunc(mojangUsernameProxyEndpoint, func(w http.ResponseWriter, r *http.Request) {
 		resp, err := http.Get(minecraftUsernameLookupUrl + strings.TrimPrefix(r.URL.Path, mojangUsernameProxyEndpoint))
