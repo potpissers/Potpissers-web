@@ -174,7 +174,7 @@ eventSource.onmessage = function(e) {
     }
 }
 function handleChatToggle(button) {
-    console.log(document.querySelectorAll(".id-chat-discord"))
+    console.log(document.querySelectorAll(".id-chat-discord").length)
     switch (button.textContent) {
         case "game":
             button.textContent = "discord"
