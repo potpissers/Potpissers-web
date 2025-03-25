@@ -396,12 +396,6 @@ func main() {
 		}
 	})
 
-	home = getHome()
-	hcf = getHcf()
-	mz = getMz()
-
-	println("templates done")
-
 	for _, data := range []struct {
 		endpoint           string
 		bytes              []byte
@@ -464,6 +458,14 @@ func main() {
 			}
 		})
 	}
+
+	println("main api done")
+
+	home = getHome()
+	hcf = getHcf()
+	mz = getMz()
+
+	println("templates done")
 
 	http.HandleFunc("/github", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "https://github.com/potpissers", http.StatusMovedPermanently)
