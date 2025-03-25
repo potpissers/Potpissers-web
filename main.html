@@ -216,13 +216,13 @@
 
             <button id="donatesidebutton" onclick="doLineItemReset()"></button>
         </div>
-        <ul style="overflow-y: scroll; width: 100%" >
+        <ul style="overflow-y: scroll; width: 90%" >
             <!--                <li>-->
             <!--                    <button style="width: fit-content">unmute</button>-->
             <!--                </li>-->
             <!--            <button>shoutout</button>-->
             {{range .MainTemplateData.LineItemData}}
-            <li class="fc85" style="overflow-x: hidden">
+            <li class="fc85">
                 <button onclick="handleClassHiddenToggle('{{.GamemodeName}}-{{.ItemName}}')" class="fsb" style="width: 100%">
                     {{.GamemodeName}}<br>{{.ItemName}}<span>${{.ItemPriceInDollars}}</span>
                 </button>
