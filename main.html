@@ -150,7 +150,7 @@
         </select>
     </div>
     <ul id="videos">
-        {{range $i, $data .MainTemplateData.RedditVideos}}
+        {{range $i, $data := .MainTemplateData.RedditVideos}}
         <li class=fsb>
             {{if $data.YoutubeEmbedUrl}}
             <iframe id="rv-{{$i}}" style="width: 50%; pointer-events: none" allow="autoplay"></iframe>
