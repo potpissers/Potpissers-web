@@ -148,6 +148,7 @@ func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePos
 			Children  []struct {
 				Kind string `json:"kind"`
 				Data struct {
+					Name        string  `json:"name"`
 					Subreddit   string  `json:"subreddit"`
 					Title       string  `json:"title"`
 					Selftext    string  `json:"selftext"`
@@ -177,7 +178,7 @@ func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePos
 	var imagePosts []redditImagePost
 	children := responseJson.Data.Children
 	if len(children) > 0 {
-		lastCheckedRedditPostId = redditPostIdRegex.FindStringSubmatch(children[0].Data.Permalink)[1]
+		lastCheckedRedditPostId = children[0].Data.Name
 		for _, child := range children {
 			getRedditPostUrl := func(permalink string) string {
 				return "https://www.reddit.com" + permalink
