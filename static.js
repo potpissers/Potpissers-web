@@ -38,19 +38,19 @@ function handleMcNameKeyDown(event) {
 function handleContentMaximizeButtonClick(isAnnouncements) {
     let contentElement = document.getElementById("content")
     if (isAnnouncements) {
-        if (contentElement.style.gridTemplateRows === "auto 22vh") {
+        if (contentElement.style.gridTemplateRows === "88vh 22vh") {
             contentElement.style.gridTemplateRows = "1fr 1fr"
             document.body.style.gridTemplateRows = "44vh 44vh auto"
         } else {
-            contentElement.style.gridTemplateRows = "auto 22vh"
+            contentElement.style.gridTemplateRows = "88vh 22vh"
             document.body.style.gridTemplateRows = "44vh auto auto"
         }
     } else {
-        if (contentElement.style.gridTemplateRows === "22vh auto") {
+        if (contentElement.style.gridTemplateRows === "22vh 88vh") {
             contentElement.style.gridTemplateRows = "1fr 1fr"
             document.body.style.gridTemplateRows = "44vh 44vh auto"
         } else {
-            contentElement.style.gridTemplateRows = "22vh auto"
+            contentElement.style.gridTemplateRows = "22vh 88vh"
             document.body.style.gridTemplateRows = "44vh auto auto"
         }
     }
