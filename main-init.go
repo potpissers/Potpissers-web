@@ -643,7 +643,7 @@ func getRandomImagePost() redditImagePost {
 }
 
 func getHome() []byte {
-	println("Bar")
+	println(len(messages))
 	var buffer bytes.Buffer
 	offPeakLivesNeeded := float32(serverDatas[currentHcfServerName].offPeakLivesNeededAsCents / 100.0)
 	handleFatalErr(homeTemplate.Execute(&buffer, struct {
