@@ -223,7 +223,7 @@
             <!--            <button>shoutout</button>-->
             {{range .MainTemplateData.LineItemData}}
             <li class="fc85" style="width: 100%">
-                <button onclick="handleClassHiddenToggle('{{.GamemodeName}}-{{.ItemName}}')" class="fsb" style="width: 100%">
+                <button onclick="handleClassHiddenToggle('{{.GamemodeName}}-{{.ItemName}}')" class="fsb">
                     {{.GamemodeName}}<br>{{.ItemName}}<span>${{.ItemPriceInDollars}}</span>
                 </button>
 
