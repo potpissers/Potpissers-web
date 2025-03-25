@@ -111,6 +111,7 @@ eventSource.onmessage = function(e) {
             break
         }
         case "chat": {
+            console.log("hey")
             handleSseLi(jsonData, (li, data) => {
                 const p = document.createElement("p")
                 p.textContent = data.message

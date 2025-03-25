@@ -439,7 +439,6 @@ func main() {
 					select {
 					case msg := <-ch:
 						{
-						println("wow")
 							_, err := w.Write(msg)
 							if err != nil {
 								break whileTrue
