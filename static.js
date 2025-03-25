@@ -80,6 +80,7 @@ function handleSseLi(jsonData, getLiChild) {
 
     document.getElementById(jsonData.type).appendChild(li)
 }
+console.log("test")
 eventSource.onerror = () => location.reload()
 eventSource.onmessage = function(e) {
     console.log("wuh")
