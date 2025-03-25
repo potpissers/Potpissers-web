@@ -305,6 +305,10 @@
 <script defer>
     const eventSource = new EventSource("/api/sse/{{.MainTemplateData.GamemodeName}}")
 
+    eventSource.onopen = function () {
+        console.log("open")
+    }
+
     eventSource.onmessage = function(e) {
         console.log("wuh")
         const jsonData = JSON.parse(e.data)
