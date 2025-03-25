@@ -23,7 +23,7 @@
 {{end}}
 
 {{define "server tips data"}}
-<ul id="tips" style="overflow-y: scroll; flex: 1" hidden>
+<ul id="tips" style="overflow-y: auto; flex: 1" hidden>
     {{range .MainTemplateData.PotpissersTips}}
     <li>
         <p>
@@ -33,7 +33,7 @@
     {{end}}
 </ul>
 
-<ul id="mztips" style="overflow-y: scroll; flex: 1">
+<ul id="mztips" style="overflow-y: auto; flex: 1">
     {{range .MzTips}}
     <li>
         <p>
