@@ -240,7 +240,7 @@ func handleDiscordMessagesUpdate(channel chan struct{}, discordChannelId string,
 	case channel <- struct{}{}:
 		{
 			newMessages := getDiscordMessages(discordChannelId, "after="+*mostRecentMessageId+"&")
-			if len(messages) > 0 {
+			if len(newMessages) > 0 {
 				*mostRecentMessageId = newMessages[0].ID
 
 				for _, msg := range newMessages {

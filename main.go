@@ -81,7 +81,6 @@ func init() {
 				}
 			case "chat":
 				{
-				println("foo")
 					var t ingameMessage
 					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
 					jsonBytes, err := json.Marshal(sseMessage{"chat", t})
@@ -135,7 +134,8 @@ func init() {
 					}
 				}
 			case "server_data":
-				{} // TODO
+				{
+				} // TODO
 			default:
 				log.Fatal("postgres listen err")
 			}
@@ -416,7 +416,7 @@ func main() {
 
 			handleRedditPostDataUpdate()
 			handleDiscordMessagesUpdate(discordGeneralChan, discordGeneralChannelId, &mostRecentDiscordGeneralMessageId, &discordMessages, "general")
-//			handleDiscordMessagesUpdate(discordChangelogChan, discordChangelogChannelId, &mostRecentDiscordChangelogMessageId, &changelog, "changelog")
+			//			handleDiscordMessagesUpdate(discordChangelogChan, discordChangelogChannelId, &mostRecentDiscordChangelogMessageId, &changelog, "changelog")
 			handleDiscordMessagesUpdate(discordAnnouncementsChan, discordAnnouncementsChannelId, &mostRecentDiscordAnnouncementsMessageId, &announcements, "announcements")
 		})
 		http.HandleFunc("/api/sse"+data.endpoint, func(w http.ResponseWriter, r *http.Request) {
