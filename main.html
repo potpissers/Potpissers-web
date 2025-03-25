@@ -303,7 +303,7 @@
 </html>
 
 <script defer>
-    const eventSource = new EventSource("https://potpissers.com/api/sse/{{.MainTemplateData.GamemodeName}}")
+    const eventSource = new EventSource("/api/sse/{{.MainTemplateData.GamemodeName}}")
 </script>
 <script defer id="staticjs" src="static.js"></script>
 <script async id="staticdonatejs" src="static-donate.js"></script>
