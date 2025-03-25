@@ -75,7 +75,7 @@
     <div style="display: flex; height: 100%;">
         <div style="display: flex; flex-direction: column; flex: 1">
             <!--            TODO -> networkPlayers-->
-            <ul id=online style="overflow-y: scroll; flex: 1; display: none" hidden>
+            <ul id=online style="overflow-y: scroll; flex: 1" hidden>
                 {{range .MainTemplateData.ServerPlayers}}
                 <li>
                     <p>
@@ -85,7 +85,7 @@
                 {{end}}
             </ul>
 
-            <ul id=chat-discord style="flex: 1; overflow-y: auto; direction: rtl; flex-direction: column-reverse; font-size: 75%; height: 100%">
+            <ul id=chat-discord style="flex: 1; overflow-y: auto; direction: rtl; flex-direction: column-reverse; font-size: 75%; height: 50%" hidden>
                 {{range .MainTemplateData.DiscordMessages}}
                 <li>
                     <p>
@@ -94,7 +94,7 @@
                 </li>
                 {{end}}
             </ul>
-            <ul id=chat-game style="flex: 1; direction: rtl; overflow-y: auto; height: 100%; display: none">
+            <ul id=chat-game style="flex: 1; direction: rtl; overflow-y: auto; height: 100%">
                 {{range .MainTemplateData.Messages}}
                 <li>
                     <p>
