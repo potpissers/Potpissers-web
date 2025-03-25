@@ -35,7 +35,7 @@ function handleMcNameKeyDown(event) {
         event.target.classList.remove("v", "iv");
 }
 
-function handleLineItemButtonClick() {
+function handleLineItemButtonContentMaximize() {
     if (document.getElementById("content").style.gridTemplateRows !== "auto 22vh") {
         document.getElementById("content").style.gridTemplateRows = "auto 22vh"
         document.body.style.gridTemplateRows = "44vh auto auto"
@@ -47,6 +47,7 @@ function handleContentMaximizeButtonClick(isAnnouncements) {
         if (contentElement.style.gridTemplateRows === "auto 22vh") {
             contentElement.style.gridTemplateRows = "1fr 1fr"
             document.body.style.gridTemplateRows = "44vh 44vh auto"
+            // TODO -> reset line item classes
         } else {
             contentElement.style.gridTemplateRows = "auto 22vh"
             document.body.style.gridTemplateRows = "44vh auto auto"
