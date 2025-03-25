@@ -398,18 +398,18 @@ func main() {
 
 	for _, data := range []struct {
 		endpoint           string
-		bytes              []byte
+		bytes              *[]byte
 		sseConnectionsData sseConnectionsData
 	}{
-		{endpoint: "/", bytes: home, sseConnectionsData: homeConnections},
-		{endpoint: "/hub", bytes: home, sseConnectionsData: homeConnections},
-		{endpoint: "/mz", bytes: mz, sseConnectionsData: mzConnections},
+		{endpoint: "/", bytes: &home, sseConnectionsData: homeConnections},
+		{endpoint: "/hub", bytes: &home, sseConnectionsData: homeConnections},
+		{endpoint: "/mz", bytes: &mz, sseConnectionsData: mzConnections},
 		//		{endpoint: "/kollusion", bytes: kollusion}, // TODO
-		{endpoint: "/hcf", bytes: hcf, sseConnectionsData: hcfConnections},
+		{endpoint: "/hcf", bytes: &hcf, sseConnectionsData: hcfConnections},
 		//		{endpoint: "/cubecore", bytes: cubecore},
 	} {
 		http.HandleFunc(data.endpoint, func(w http.ResponseWriter, r *http.Request) {
-			_, err := w.Write(data.bytes)
+			_, err := w.Write(*data.bytes)
 			handleFatalErr(err)
 
 			handleRedditPostDataUpdate()
