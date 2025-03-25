@@ -178,7 +178,10 @@ func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePos
 	var imagePosts []redditImagePost
 	children := responseJson.Data.Children
 	if len(children) > 0 {
-		lastCheckedRedditPostId = children[0].Data.Name
+		if lastCheckedRedditPostCreatedUtc > children[0].Data.CreatedUTC {
+			lastCheckedRedditPostId = children[0].Data.Name
+			lastCheckedRedditPostCreatedUtc = children[0].Data.CreatedUTC
+		}
 		for _, child := range children {
 			getRedditPostUrl := func(permalink string) string {
 				return "https://www.reddit.com" + permalink

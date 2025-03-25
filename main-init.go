@@ -598,8 +598,8 @@ type redditImagePost struct {
 var redditImagePosts []redditImagePost
 var imageRegex = regexp.MustCompile(`(?i)^(https?://)?(i\.redd\.it|i\.imgur\.com)/.*\.(png|jpg|jpeg)$`)
 var youtubeVideoIdRegex = regexp.MustCompile(`[?&]v=([a-zA-Z0-9_-]{11})`)
-var redditPostIdRegex = regexp.MustCompile(`/comments/([^/]+)/`)
 var lastCheckedRedditPostId string
+var lastCheckedRedditPostCreatedUtc float64
 var redditPostsChannel = make(chan struct{}, 1)
 
 func init() {
