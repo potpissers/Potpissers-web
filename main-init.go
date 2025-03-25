@@ -550,7 +550,6 @@ func init() {
 }
 
 type ingameMessage struct {
-	Name       string `json:"name"`
 	Uuid       string `json:"uuid"`
 	Message    string `json:"message"`
 	ServerName string `json:"server_name"`

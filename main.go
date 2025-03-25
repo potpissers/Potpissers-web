@@ -81,6 +81,7 @@ func init() {
 				}
 			case "chat":
 				{
+				println("foo")
 					var t ingameMessage
 					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
 					jsonBytes, err := json.Marshal(sseMessage{"chat", t})
