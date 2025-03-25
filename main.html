@@ -103,10 +103,10 @@
                 </li>
                 {{end}}
             </ul>
-            <div style="display: flex">
+            <div style="display: flex; justify-content: space-between">
                 <button style="font-size: 75%" onclick="handleChatToggle(this)">game</button>
                 <button class="id-chat-discord" hidden style="font-size: 75%" onclick="fetch('/api/discord-general')" onmouseover="fetch('/api/discord-general')">refresh</button>
-                <input class="id-chat-game" style="font-size: 75%; width: 50%">
+                <input class="id-chat-game" style="font-size: 75%">
             </div>
         </div>
 
