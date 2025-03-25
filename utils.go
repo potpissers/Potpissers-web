@@ -203,6 +203,7 @@ func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePos
 			}
 		}
 	}
+	println("reddit posts done")
 	return videoPosts, imagePosts
 }
 
