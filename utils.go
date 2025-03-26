@@ -214,10 +214,7 @@ func handleRedditPostDataUpdate() {
 	select {
 	case redditPostsChannel <- struct{}{}:
 		{
-		println(potpissersRedditApiUrl + "&after=" + lastCheckedRedditPostId)
-			newVideoPosts, newImagePosts := getRedditPostData(potpissersRedditApiUrl + "&after=" + lastCheckedRedditPostId)
-			println(len(newVideoPosts))
-			println(len(newImagePosts))
+			newVideoPosts, newImagePosts := getRedditPostData(potpissersRedditApiUrl + "&before=" + lastCheckedRedditPostId) // holy fuck sorted by new -> before is newer, after is older
 			for _, post := range newVideoPosts {
 				redditVideoPosts = append([]redditVideoPost{post}, redditVideoPosts...)
 			}
