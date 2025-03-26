@@ -82,7 +82,7 @@ var newPlayers = func() []newPlayer {
 
 type death struct {
 	ServerName        string    `json:"server_name"`
-	VictimUserFightId *int      `json:"victim_user_fight_id"`
+	VictimUserFightId int      `json:"victim_user_fight_id"`
 	Timestamp         time.Time `json:"timestamp"`
 	VictimUuid        string    `json:"victim_uuid"`
 	// TODO victim inventory
