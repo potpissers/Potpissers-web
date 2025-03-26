@@ -82,7 +82,7 @@ var newPlayers = func() []newPlayer {
 
 type death struct {
 	ServerName        string    `json:"server_name"`
-	VictimUserFightId int      `json:"victim_user_fight_id"`
+	VictimUserFightId *int      `json:"victim_user_fight_id"`
 	Timestamp         time.Time `json:"timestamp"`
 	VictimUuid        string    `json:"victim_uuid"`
 	// TODO victim inventory
@@ -100,7 +100,7 @@ var deaths = func() []death {
 	var deaths []death
 	getRowsBlocking("SELECT * FROM get_12_latest_network_deaths()", func(rows pgx.Rows) {
 		var death death
-		handleFatalPgx(pgx.ForEachRow(rows, []any{&death.ServerName, &death.VictimUserFightId, &death.Timestamp, &death.VictimUuid, nil, &death.DeathWorldName, &death.DeathX, &death.DeathY, &death.DeathZ, &death.DeathMessage, death.KillerUuid, nil, nil}, func() error {
+		handleFatalPgx(pgx.ForEachRow(rows, []any{&death.ServerName, &death.VictimUserFightId, &death.Timestamp, death.VictimUuid, nil, &death.DeathWorldName, &death.DeathX, &death.DeathY, &death.DeathZ, &death.DeathMessage, death.KillerUuid, nil, nil}, func() error {
 			deaths = append(deaths, death)
 			return nil
 		}))
