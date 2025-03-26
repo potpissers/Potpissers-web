@@ -49,7 +49,7 @@ func init() { // TODO -> move this to getting tips by name
 
 type newPlayer struct {
 	PlayerUuid string    `json:"player_uuid"`
-	Referrer   *string   `json:"referrer"`
+	Referrer   sql.NullString   `json:"referrer"`
 	Timestamp  time.Time `json:"timestamp"`
 	RowNumber  int       `json:"row_number"`
 
