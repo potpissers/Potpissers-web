@@ -100,7 +100,7 @@ var deaths = func() []death {
 	var deaths []death
 	getRowsBlocking("SELECT * FROM get_12_latest_network_deaths()", func(rows pgx.Rows) {
 		var death death
-		handleFatalPgx(pgx.ForEachRow(rows, []any{&death.ServerName, &death.VictimUserFightId, &death.Timestamp, death.VictimUuid, nil, &death.DeathWorldName, &death.DeathX, &death.DeathY, &death.DeathZ, &death.DeathMessage, death.KillerUuid, nil, nil}, func() error {
+		handleFatalPgx(pgx.ForEachRow(rows, []any{&death.ServerName, death.VictimUserFightId, &death.Timestamp, &death.VictimUuid, nil, &death.DeathWorldName, &death.DeathX, &death.DeathY, &death.DeathZ, &death.DeathMessage, death.KillerUuid, nil, nil}, func() error {
 			deaths = append(deaths, death)
 			return nil
 		}))
