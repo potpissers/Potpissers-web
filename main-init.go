@@ -133,14 +133,14 @@ type event struct {
 
 var events = func() []event {
 	var events []event
-	getRowsBlocking("SELECT * FROM get_14_newest_network_koths()", func(rows pgx.Rows) {
-		println("bruh")
-		var event event
-		handleFatalPgx(pgx.ForEachRow(rows, []any{&event.RowNumber, &event.StartTimestamp, &event.LootFactor, &event.MaxTimer, &event.IsMovementRestricted, &event.CappingUserUUID, &event.EndTimestamp, &event.CappingPartyUUID, &event.CapMessage, &event.World, &event.X, &event.Y, &event.Z, &event.ServerName, &event.ArenaName, &event.Creator}, func() error {
-			events = append(events, event)
-			return nil
-		}))
-	})
+//	getRowsBlocking("SELECT * FROM get_14_newest_network_koths()", func(rows pgx.Rows) {
+//		println("bruh")
+//		var event event
+//		handleFatalPgx(pgx.ForEachRow(rows, []any{&event.RowNumber, &event.StartTimestamp, &event.LootFactor, &event.MaxTimer, &event.IsMovementRestricted, &event.CappingUserUUID, &event.EndTimestamp, &event.CappingPartyUUID, &event.CapMessage, &event.World, &event.X, &event.Y, &event.Z, &event.ServerName, &event.ArenaName, &event.Creator}, func() error {
+//			events = append(events, event)
+//			return nil
+//		}))
+//	})
 	return events
 }()
 
