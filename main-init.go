@@ -79,6 +79,7 @@ var newPlayers = func() []newPlayer {
 		newPlayers[i].PlayerName = result["name"].(string)
 	}
 
+	println("new players done")
 	return newPlayers
 }()
 
@@ -103,11 +104,11 @@ var deaths = func() []death {
 	getRowsBlocking("SELECT * FROM get_12_latest_network_deaths()", func(rows pgx.Rows) {
 		var death death
 		handleFatalPgx(pgx.ForEachRow(rows, []any{&death.ServerName, &death.VictimUserFightId, &death.Timestamp, &death.VictimUuid, nil, &death.DeathWorldName, &death.DeathX, &death.DeathY, &death.DeathZ, &death.DeathMessage, &death.KillerUuid, nil, nil}, func() error {
-			println("dogshit")
 			deaths = append(deaths, death)
 			return nil
 		}))
 	})
+	println("deaths done")
 	return deaths
 }()
 
@@ -133,14 +134,13 @@ type event struct {
 
 var events = func() []event {
 	var events []event
-//	getRowsBlocking("SELECT * FROM get_14_newest_network_koths()", func(rows pgx.Rows) {
-//		println("bruh")
-//		var event event
-//		handleFatalPgx(pgx.ForEachRow(rows, []any{&event.RowNumber, &event.StartTimestamp, &event.LootFactor, &event.MaxTimer, &event.IsMovementRestricted, &event.CappingUserUUID, &event.EndTimestamp, &event.CappingPartyUUID, &event.CapMessage, &event.World, &event.X, &event.Y, &event.Z, &event.ServerName, &event.ArenaName, &event.Creator}, func() error {
-//			events = append(events, event)
-//			return nil
-//		}))
-//	})
+	getRowsBlocking("SELECT * FROM get_14_newest_network_koths()", func(rows pgx.Rows) {
+		var event event
+		handleFatalPgx(pgx.ForEachRow(rows, []any{&event.RowNumber, &event.StartTimestamp, &event.LootFactor, &event.MaxTimer, &event.IsMovementRestricted, &event.CappingUserUUID, &event.EndTimestamp, &event.CappingPartyUUID, &event.CapMessage, &event.World, &event.X, &event.Y, &event.Z, &event.ServerName, &event.ArenaName, &event.Creator}, func() error {
+			events = append(events, event)
+			return nil
+		}))
+	})
 	return events
 }()
 
