@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"context"
+	"database/sql"
 	"encoding/json"
 	"github.com/jackc/pgx/v5"
 	"html/template"
@@ -91,7 +92,7 @@ type death struct {
 	DeathY         int     `json:"death_y"`
 	DeathZ         int     `json:"death_z"`
 	DeathMessage   string  `json:"death_message"`
-	KillerUuid     *string `json:"killer_uuid"`
+	KillerUuid     sql.NullString `json:"killer_uuid"`
 	// TODO killer weapon
 	// TODO killer inventory
 }
