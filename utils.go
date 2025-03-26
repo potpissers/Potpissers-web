@@ -216,6 +216,8 @@ func handleRedditPostDataUpdate() {
 		{
 		println(potpissersRedditApiUrl + "&after=" + lastCheckedRedditPostId)
 			newVideoPosts, newImagePosts := getRedditPostData(potpissersRedditApiUrl + "&after=" + lastCheckedRedditPostId)
+			println(len(newVideoPosts))
+			println(len(newImagePosts))
 			for _, post := range newVideoPosts {
 				redditVideoPosts = append([]redditVideoPost{post}, redditVideoPosts...)
 			}
