@@ -141,6 +141,7 @@ var events = func() []event {
 			return nil
 		}))
 	})
+	println("events done")
 	return events
 }()
 
@@ -214,6 +215,7 @@ var serverDatas = func() map[string]*serverData {
 		}
 	}
 
+	println("serverdatas done")
 	return serverDatas
 }()
 
@@ -221,7 +223,7 @@ type onlinePlayer struct {
 	Uuid          string    `json:"uuid"`
 	Name          string    `json:"name"`
 	ServerName    string    `json:"server_name"`
-	ActiveFaction string    `json:"active_faction"`
+	ActiveFaction *string    `json:"active_faction"`
 	NetworkJoin   time.Time `json:"network_join"`
 	ServerJoin    time.Time `json:"server_join"`
 }
