@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"context"
-	"database/sql"
 	"encoding/json"
 	"github.com/jackc/pgx/v5"
 	"html/template"
@@ -92,7 +91,7 @@ type death struct {
 	DeathY         int     `json:"death_y"`
 	DeathZ         int     `json:"death_z"`
 	DeathMessage   string  `json:"death_message"`
-	KillerUuid     sql.NullString `json:"killer_uuid"`
+	KillerUuid     *string `json:"killer_uuid"`
 	// TODO killer weapon
 	// TODO killer inventory
 }
@@ -101,7 +100,7 @@ var deaths = func() []death {
 	var deaths []death
 	getRowsBlocking("SELECT * FROM get_12_latest_network_deaths()", func(rows pgx.Rows) {
 		var death death
-		handleFatalPgx(pgx.ForEachRow(rows, []any{&death.ServerName, &death.VictimUserFightId, &death.Timestamp, &death.VictimUuid, nil, &death.DeathWorldName, &death.DeathX, &death.DeathY, &death.DeathZ, &death.DeathMessage, &death.KillerUuid, nil, nil}, func() error {
+		handleFatalPgx(pgx.ForEachRow(rows, []any{&death.ServerName, &death.VictimUserFightId, &death.Timestamp, death.VictimUuid, nil, &death.DeathWorldName, &death.DeathX, &death.DeathY, &death.DeathZ, &death.DeathMessage, death.KillerUuid, nil, nil}, func() error {
 			deaths = append(deaths, death)
 			return nil
 		}))
