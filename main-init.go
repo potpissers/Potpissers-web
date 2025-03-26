@@ -214,16 +214,19 @@ var serverDatas = func() map[string]*serverData {
 }()
 
 type onlinePlayer struct {
-	Name          string
-	ServerName    string
-	ActiveFaction string
+	Uuid          string    `json:"uuid"`
+	Name          string    `json:"name"`
+	ServerName    string    `json:"server_name"`
+	ActiveFaction string    `json:"active_faction"`
+	NetworkJoin   time.Time `json:"network_join"`
+	ServerJoin    time.Time `json:"server_join"`
 }
 
 var currentPlayers = func() []onlinePlayer {
 	var currentPlayers []onlinePlayer
 	getRowsBlocking("SELECT * FROM get_online_players()", func(rows pgx.Rows) {
 		var t onlinePlayer
-		handleFatalPgx(pgx.ForEachRow(rows, []any{&t.Name, &t.ServerName, &t.ActiveFaction}, func() error {
+		handleFatalPgx(pgx.ForEachRow(rows, []any{&t.Uuid, &t.Name, &t.ServerName, &t.ActiveFaction, &t.NetworkJoin, &t.ServerJoin}, func() error {
 			currentPlayers = append(currentPlayers, t) // TODO sort names
 			serverData := serverDatas[t.ServerName]
 			serverData.currentPlayers = append(serverData.currentPlayers, t)
@@ -528,7 +531,7 @@ var discordGeneralChan = make(chan struct{}, 1)
 const discordChangelogChannelId = "1346008874830008375"
 
 var changelog = getDiscordMessages(discordChangelogChannelId, "")
-var mostRecentDiscordChangelogMessageId = ""//changelog[0].ID
+var mostRecentDiscordChangelogMessageId = "" //changelog[0].ID
 var discordChangelogChan = make(chan struct{}, 1)
 
 const discordAnnouncementsChannelId = "1265836245678948464"
@@ -541,9 +544,9 @@ func init() {
 	http.HandleFunc("/api/discord/general", func(w http.ResponseWriter, r *http.Request) {
 		handleDiscordMessagesUpdate(discordGeneralChan, discordGeneralChannelId, &mostRecentDiscordGeneralMessageId, &discordMessages, "general")
 	})
-//	http.HandleFunc("/api/discord/changelog", func(w http.ResponseWriter, r *http.Request) {
-//		handleDiscordMessagesUpdate(discordChangelogChan, discordChangelogChannelId, &mostRecentDiscordChangelogMessageId, &changelog, "changelog")
-//	})
+	//	http.HandleFunc("/api/discord/changelog", func(w http.ResponseWriter, r *http.Request) {
+	//		handleDiscordMessagesUpdate(discordChangelogChan, discordChangelogChannelId, &mostRecentDiscordChangelogMessageId, &changelog, "changelog")
+	//	})
 	http.HandleFunc("/api/discord/announcements", func(w http.ResponseWriter, r *http.Request) {
 		handleDiscordMessagesUpdate(discordAnnouncementsChan, discordAnnouncementsChannelId, &mostRecentDiscordAnnouncementsMessageId, &announcements, "announcements")
 	})
@@ -621,7 +624,7 @@ var mzTemplate = getMainTemplate("main-mz.html")
 var hcfTemplate = getMainTemplate("main-hcf.html")
 
 type mainTemplateData struct {
-	GamemodeName string
+	GamemodeName       string
 	BackgroundImageUrl redditImagePost
 	NetworkPlayers     []onlinePlayer
 	ServerPlayers      []onlinePlayer
@@ -651,7 +654,7 @@ func getHome() []byte {
 		MainTemplateData mainTemplateData
 	}{
 		MainTemplateData: mainTemplateData{
-			GamemodeName: "hub",
+			GamemodeName:       "hub",
 			BackgroundImageUrl: getRandomImagePost(),
 			NetworkPlayers:     currentPlayers,
 			ServerPlayers:      serverDatas["hub"].currentPlayers,
@@ -685,7 +688,7 @@ func getMz() []byte {
 		Bandits []bandit
 	}{
 		MainTemplateData: mainTemplateData{
-			GamemodeName: "mz",
+			GamemodeName:       "mz",
 			BackgroundImageUrl: getRandomImagePost(),
 			NetworkPlayers:     currentPlayers,
 			ServerPlayers:      mzData.currentPlayers,
@@ -738,7 +741,7 @@ func getHcf() []byte {
 		Factions     []faction
 	}{
 		MainTemplateData: mainTemplateData{
-			GamemodeName: "hcf",
+			GamemodeName:       "hcf",
 			BackgroundImageUrl: getRandomImagePost(),
 			NetworkPlayers:     currentPlayers,
 			ServerPlayers:      serverData.currentPlayers,
