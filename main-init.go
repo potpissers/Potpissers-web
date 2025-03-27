@@ -153,15 +153,11 @@ type faction struct {
 	currentRegenAdjustedDtr float32
 }
 type bandit struct {
-	userUuid            string
-	deathId             int
-	timestamp           time.Time
-	expirationTimestamp time.Time
-	deathMessage        string
-	deathWorld          string
-	deathX              int
-	deathY              int
-	deathZ              int
+	UserUuid            string    `json:"user_uuid"`
+	DeathId             int       `json:"death_id"`
+	DeathTimestamp      time.Time `json:"death_timestamp"`
+	ExpirationTimestamp time.Time `json:"expiration_timestamp"`
+	BanditMessage        string    `json:"bandit_message"`
 }
 type serverData struct {
 	deathBanMinutes               int
@@ -223,7 +219,7 @@ type onlinePlayer struct {
 	Uuid          string    `json:"uuid"`
 	Name          string    `json:"name"`
 	ServerName    string    `json:"server_name"`
-	ActiveFaction *string    `json:"active_faction"`
+	ActiveFaction *string   `json:"active_faction"`
 	NetworkJoin   time.Time `json:"network_join"`
 	ServerJoin    time.Time `json:"server_join"`
 }
@@ -267,7 +263,7 @@ func init() {
 		}, serverName)
 		getRowsBlocking("SELECT * FROM get_7_newest_bandits($1)", func(rows pgx.Rows) {
 			var bandit bandit
-			handleFatalPgx(pgx.ForEachRow(rows, []any{&bandit.userUuid, &bandit.deathId, &bandit.timestamp, &bandit.expirationTimestamp, &bandit.deathMessage, &bandit.deathWorld, &bandit.deathX, &bandit.deathY, &bandit.deathZ}, func() error {
+			handleFatalPgx(pgx.ForEachRow(rows, []any{&bandit.UserUuid, &bandit.DeathId, &bandit.DeathTimestamp, &bandit.ExpirationTimestamp, &bandit.BanditMessage}, func() error {
 				serverData.bandits = append(serverData.bandits, bandit)
 				return nil
 			}))

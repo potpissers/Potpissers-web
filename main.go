@@ -133,6 +133,7 @@ func init() {
 						}
 					}
 				}
+			case "bandits": {} //TODO
 			case "server_data":
 				{
 				} // TODO
