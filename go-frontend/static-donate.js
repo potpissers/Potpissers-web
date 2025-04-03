@@ -5,8 +5,9 @@ function handleAddLineItemJson(itemName, itemAmountString) {
     currentLineItemsCost += currentPrices[itemName] * parseInt(itemAmountString)
     document.getElementById("checkoutbalance").innerText = "$" + currentLineItemsCost / 100
 
+    const username = document.getElementById("donate-username").value
     privateJsonLineItems.push({
-        username: document.getElementById("donate-username").value,
+        username: username,
         line_item_name: itemName,
         line_item_amount: parseInt(itemAmountString, 10),
     })
@@ -15,6 +16,14 @@ function handleAddLineItemJson(itemName, itemAmountString) {
 
     document.getElementById("donatesidebutton").hidden = true
     document.getElementById("donatesidebuttonred").hidden = false
+
+    fetch("/api/proxy/mojang/username/" + username)
+        .then(res => {
+            if (res.status === 404)
+                doLineItemReset()
+        })
+        .catch(err => {
+        });
 }
 
 function fetchPaymentLink() {
