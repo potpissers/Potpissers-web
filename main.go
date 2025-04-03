@@ -477,8 +477,7 @@ func main() {
 	http.HandleFunc("/discord", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "https://discord.gg/Cqnvktf7EF", http.StatusFound)
 	})
-
-	const frontendDirName = "./go-frontend"
+	
 	http.Handle("/static.css", http.StripPrefix("/", http.FileServer(http.Dir(frontendDirName))))
 
 	http.Handle("/static.js", http.StripPrefix("/", http.FileServer(http.Dir(frontendDirName))))
