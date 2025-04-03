@@ -478,10 +478,15 @@ func main() {
 		http.Redirect(w, r, "https://discord.gg/Cqnvktf7EF", http.StatusFound)
 	})
 
-	http.Handle("/static.css", http.StripPrefix("/", http.FileServer(http.Dir("."))))
-	http.Handle("/static.js", http.StripPrefix("/", http.FileServer(http.Dir("."))))
-	http.Handle("/potpisser.jpg", http.StripPrefix("/", http.FileServer(http.Dir("."))))
-	http.Handle("/static-donate.js", http.StripPrefix("/", http.FileServer(http.Dir("."))))
+	const frontendDirName = "./go-frontend"
+	http.Handle("/static.css", http.StripPrefix("/", http.FileServer(http.Dir(frontendDirName))))
+
+	http.Handle("/static.js", http.StripPrefix("/", http.FileServer(http.Dir(frontendDirName))))
+	http.Handle("/static-donate.js", http.StripPrefix("/", http.FileServer(http.Dir(frontendDirName))))
+	http.Handle("/static-init.js", http.StripPrefix("/", http.FileServer(http.Dir(frontendDirName))))
+
+	http.Handle("/potpisser.jpg", http.StripPrefix("/", http.FileServer(http.Dir(frontendDirName))))
+	http.Handle("/favicon.png", http.StripPrefix("/", http.FileServer(http.Dir(frontendDirName))))
 
 	println("starting server")
 	log.Println(http.ListenAndServeTLS(":443", "/etc/letsencrypt/live/potpissers.com/fullchain.pem", "/etc/letsencrypt/live/potpissers.com/privkey.pem", nil))
