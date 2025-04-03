@@ -1,3 +1,4 @@
+"use strict"
 const privateJsonLineItems = []
 let currentLineItemsCost = 0
 function handleAddLineItemJson(itemName, itemAmountString) {

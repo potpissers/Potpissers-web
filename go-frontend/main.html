@@ -4,6 +4,22 @@
     <meta charset="UTF-8">
     <title>WIP {{block "potpissers" .}}{{end}}</title>
     <link rel="stylesheet" href="static.css">
+    <link rel="icon" href="favicon.png" type="image/png">
+    <script src="static-init.js"></script>
+
+    <script defer>
+        const currentPrices = {
+        {{range .MainTemplateData.LineItemData}}
+        "{{.GamemodeName}}-{{.ItemName}}": {{.ItemPriceInCents}},
+        {{end}}
+        }
+    </script>
+    <script defer src="static-donate.js"></script>
+
+    <script defer>
+        const eventSource = new EventSource("/api/sse/{{.MainTemplateData.GamemodeName}}")
+    </script>
+    <script defer src="static.js"></script>
 </head>
 <body>
 
@@ -154,13 +170,13 @@
         <li class=fsb>
             {{if $data.YoutubeEmbedUrl}}
             <iframe id="rv-{{$i}}" style="width: 50%; pointer-events: none" allow="autoplay"></iframe>
-            <script defer>
+            <script async>
                 document.addEventListener('DOMContentLoaded', () =>
                     document.getElementById("rv-{{$i}}").src="{{$data.YoutubeEmbedUrl}}?autoplay=1&controls=0&mute=1&loop=1")
             </script>
             {{else}}
             <video id="rv-{{$i}}" style="width: 50%"></video>
-            <script defer>
+            <script async>
                 document.addEventListener('DOMContentLoaded', () =>
                     document.getElementById("rv-{{$i}}").src="{{$data.VideoUrl}}")
             </script>
@@ -301,16 +317,3 @@
 </body>
 
 </html>
-
-<script defer>
-    const eventSource = new EventSource("/api/sse/{{.MainTemplateData.GamemodeName}}")
-</script>
-<script defer id="staticjs" src="static.js"></script>
-<script async id="staticdonatejs" src="static-donate.js"></script>
-<script async>
-    const currentPrices = {
-    {{range .MainTemplateData.LineItemData}}
-    "{{.GamemodeName}}-{{.ItemName}}": {{.ItemPriceInCents}},
-    {{end}}
-    }
-</script>
