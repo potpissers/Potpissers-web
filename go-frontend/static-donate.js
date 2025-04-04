@@ -67,7 +67,6 @@ function handlePaymentLink() {
                     a.innerText = url
                     a.href = url
                     a.onclick = () => handleLineItemReset()
-                    console.log("hey")
                 })
         })
 }
