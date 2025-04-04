@@ -167,24 +167,16 @@
         </select>
     </div>
     <ul id="videos">
-        {{range $i, $data := .MainTemplateData.RedditVideos}}
+        {{range .MainTemplateData.RedditVideos}}
         <li class=fsb>
-            {{if $data.YoutubeEmbedUrl}}
-            <iframe id="rv-{{$i}}" style="width: 50%; pointer-events: none" allow="autoplay"></iframe>
-            <script async>
-                document.addEventListener('DOMContentLoaded', () =>
-                    document.getElementById("rv-{{$i}}").src="{{$data.YoutubeEmbedUrl}}?autoplay=1&controls=0&mute=1&loop=1")
-            </script>
+            {{if .YoutubeEmbedUrl}}
+            <iframe src="{{.YoutubeEmbedUrl}}?autoplay=1&controls=0&mute=1&loop=1" style="width: 50%; pointer-events: none" allow="autoplay"></iframe>
             {{else}}
-            <video id="rv-{{$i}}" style="width: 50%"></video>
-            <script async>
-                document.addEventListener('DOMContentLoaded', () =>
-                    document.getElementById("rv-{{$i}}").src="{{$data.VideoUrl}}")
-            </script>
+            <video src="{{.VideoUrl}}" style="width: 50%"></video>
             {{end}}
-            <a href={{$data.PostUrl}}>
+            <a href={{.PostUrl}}>
                 <small>
-                    {{$data.Title}}
+                    {{.Title}}
                 </small>
             </a>
         </li>
