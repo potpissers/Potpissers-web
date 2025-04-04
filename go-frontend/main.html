@@ -210,9 +210,11 @@
         <ul id=announcements style="overflow-y: scroll">
             {{range .MainTemplateData.Announcements}}
             <li>
-                <p>
-                    {{.Content}}
-                </p>
+                <a href="https://discord.com/channels/{{.MainTemplateData.DiscordId}}/{{.ChannelID}}/{{.ID}}">
+                    <p>
+                        {{.Author}}: {{.Content}}
+                    </p>
+                </a>
             </li>
             {{end}}
         </ul>
@@ -229,7 +231,7 @@
     <div style="display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden">
         <div style="display: flex; justify-content: space-between">
             <button id="donatebutton">donate</button>
-            <button style="width: 100%" onclick="handlePaymentLink()" id="checkout" class="fsb h"><span style="font-size: 75%">square.com</span><span id="checkoutbalance"></span></button>
+            <button style="width: 100%" onclick="handlePaymentLink()" id="checkout" class="fsb h"><span style="font-size: 75%">checkout</span><span id="checkoutbalance"></span></button>
             <div id="squarebutton" class="h" style="overflow-x: hidden">
                 <a hidden id="squarelink" onclick="handleLineItemReset()"></a>
                 <a id="squarelinkspinner">...</a>
