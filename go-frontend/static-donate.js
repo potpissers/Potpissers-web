@@ -56,7 +56,7 @@ function handlePaymentLink() {
     Promise.all(currentLineItemsUsernameCheckPromises)
         .then(_ => {
             const json = JSON.stringify(privateJsonLineItems)
-            handleLineItemReset()
+            doLineItemDataReset()
 
             fetch("/api/donations/payments", {
                 method: "POST", body: json,
@@ -76,7 +76,9 @@ function doLineItemDataReset() {
     currentLineItemsUsernameCheckPromises.length = 0
     currentLineItemsCost = 0
 }
-function doLineItemDomReset() {
+function handleLineItemReset() {
+    doLineItemDataReset()
+
     document.getElementById("checkoutbalance").innerText = ""
     document.getElementById("checkout").classList.add("h")
     document.getElementById("squarelink").classList.add("h")
@@ -84,8 +86,4 @@ function doLineItemDomReset() {
 
     document.getElementById("donatesidebutton").hidden = false
     document.getElementById("donatesidebuttonred").hidden = true
-}
-function handleLineItemReset() {
-    doLineItemDataReset()
-    doLineItemDomReset()
 }
