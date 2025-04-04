@@ -64,14 +64,10 @@ function handlePaymentLink() {
                 .then(response => response.text())
                 .then(url => {
                     const a = document.getElementById("squarelink")
+                    a.hidden = false
+                    document.getElementById("squarelinkspinner").hidden = true
                     a.innerText = url
                     a.href = url
-                    a.onclick = () => {
-                        a.innerText = "..."
-                        a.href = null
-                        a.onclick = null
-                        handleLineItemReset()
-                    }
                 })
         })
 }
@@ -87,7 +83,13 @@ function handleLineItemReset() {
     document.getElementById("checkoutbalance").innerText = ""
     document.getElementById("checkout").classList.add("h")
     document.getElementById("squarebutton").classList.add("h")
+    document.getElementById("squarelinkspinner").hidden = false
     document.getElementById("donatebutton").hidden = false
+
+    const squareLink = document.getElementById("squarelink")
+    squareLink.hidden = true
+    squareLink.innerText = ""
+    squareLink.href = ""
 
     document.getElementById("donatesidebutton").hidden = false
     document.getElementById("donatesidebuttonred").hidden = true
