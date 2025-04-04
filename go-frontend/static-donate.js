@@ -81,7 +81,7 @@ function handleLineItemReset() {
 
     document.getElementById("checkoutbalance").innerText = ""
     document.getElementById("checkout").classList.add("h")
-    document.getElementById("squarelink").classList.add("h")
+    document.getElementById("squarebutton").classList.add("h")
     document.getElementById("donatebutton").hidden = false
 
     document.getElementById("donatesidebutton").hidden = false
