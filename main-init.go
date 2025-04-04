@@ -614,8 +614,9 @@ func init() {
 }
 
 const frontendDirName = "./go-frontend"
+
 func getMainTemplate(fileName string) *template.Template {
-	mainTemplate, err := template.ParseFiles(frontendDirName + "/main.html", fileName)
+	mainTemplate, err := template.ParseFiles(frontendDirName+"/main.html", fileName)
 	handleFatalErr(err)
 	return mainTemplate
 }
@@ -642,11 +643,14 @@ type mainTemplateData struct {
 	PeakLivesNeeded    float32
 	LineItemData       []lineItemData
 	RedditVideos       []redditVideoPost
+	DiscordId          string
 }
 
 func getRandomImagePost() redditImagePost {
 	return redditImagePosts[rand.New(rand.NewSource(time.Now().UnixNano())).Intn(len(redditImagePosts))]
 }
+
+const discordServerId = "1245300045188956252"
 
 func getHome() []byte {
 	var buffer bytes.Buffer
@@ -672,6 +676,7 @@ func getHome() []byte {
 			PeakLivesNeeded:    offPeakLivesNeeded / 2,
 			LineItemData:       lineItemDatas,
 			RedditVideos:       redditVideoPosts,
+			DiscordId:          discordServerId,
 		},
 	}))
 	return buffer.Bytes()
@@ -706,6 +711,7 @@ func getMz() []byte {
 			PeakLivesNeeded:    offPeakLivesNeeded / 2,
 			LineItemData:       lineItemDatas,
 			RedditVideos:       redditVideoPosts,
+			DiscordId:          discordServerId,
 		},
 
 		AttackSpeed: mzData.attackSpeedName,
@@ -759,6 +765,7 @@ func getHcf() []byte {
 			PeakLivesNeeded:    offPeakLivesNeeded / 2,
 			LineItemData:       lineItemDatas,
 			RedditVideos:       redditVideoPosts,
+			DiscordId:          discordServerId,
 		},
 
 		AttackSpeed: serverData.attackSpeedName,
