@@ -53,6 +53,10 @@ function handlePaymentLink() {
     document.getElementById("donatesidebutton").hidden = false
     document.getElementById("donatesidebuttonred").hidden = true
 
+    const squareLink = document.getElementById("squarelink")
+    squareLink.innerText = ""
+    squareLink.href = ""
+
     Promise.all(currentLineItemsUsernameCheckPromises)
         .then(_ => {
             const json = JSON.stringify(privateJsonLineItems)
@@ -63,11 +67,10 @@ function handlePaymentLink() {
             })
                 .then(response => response.text())
                 .then(url => {
-                    const a = document.getElementById("squarelink")
-                    a.hidden = false
+                    squareLink.hidden = false
                     document.getElementById("squarelinkspinner").hidden = true
-                    a.innerText = url
-                    a.href = url
+                    squareLink.innerText = url
+                    squareLink.href = url
                 })
         })
 }
@@ -83,13 +86,9 @@ function handleLineItemReset() {
     document.getElementById("checkoutbalance").innerText = ""
     document.getElementById("checkout").classList.add("h")
     document.getElementById("squarebutton").classList.add("h")
+    document.getElementById("squarelink").hidden = true
     document.getElementById("squarelinkspinner").hidden = false
     document.getElementById("donatebutton").hidden = false
-
-    const squareLink = document.getElementById("squarelink")
-    squareLink.hidden = true
-    squareLink.innerText = ""
-    squareLink.href = ""
 
     document.getElementById("donatesidebutton").hidden = false
     document.getElementById("donatesidebuttonred").hidden = true
