@@ -66,7 +66,7 @@ function handlePaymentLink() {
                     const a = document.getElementById("squarelink")
                     a.innerText = url
                     a.href = url
-                    a.onclick = handleLineItemReset
+                    a.onclick = () => handleLineItemReset()
                     console.log("hey")
                 })
         })
