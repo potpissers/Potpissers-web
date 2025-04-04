@@ -1,23 +1,12 @@
 "use strict"
 
-let nameCheckController = null;
 function handleMcNameBlur(inputElement) {
-    if (nameCheckController)
-        nameCheckController.abort()
-
-    nameCheckController = new AbortController()
-    fetch("/api/proxy/mojang/username/" + inputElement.value, {signal: nameCheckController.signal})
-        .then(res => {
-            inputElement.classList.add(res.status !== 404 ? "v" : "iv")
-        })
-        .catch(err => {
-        }); // TODO -> warning when hasn't played before
+    if (inputElement.value.length === 0) {}
+    // TODO -> autocomplete online players
 }
 function handleMcNameKeyDown(event) {
     if (event.key === "Enter")
         event.target.blur()
-    else
-        event.target.classList.remove("v", "iv");
 }
 
 function handleSseLi(jsonData, getLiChild) {

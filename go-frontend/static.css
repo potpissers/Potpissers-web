@@ -87,14 +87,6 @@ input {
     width: fit-content;
 }
 
-input.v {
-    border: .1rem solid green;
-}
-
-input.iv {
-    border: .1rem solid red;
-}
-
 div {
     gap: .5rem;
     border-radius: .5rem;
