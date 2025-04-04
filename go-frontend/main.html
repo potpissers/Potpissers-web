@@ -210,7 +210,7 @@
         <ul id=announcements style="overflow-y: scroll">
             {{range .MainTemplateData.Announcements}}
             <li>
-                <a href="https://discord.com/channels/{{.MainTemplateData.DiscordId}}/{{.ChannelID}}/{{.ID}}">
+                <a href="https://discord.com/channels/{{$.MainTemplateData.DiscordId}}/{{.ChannelID}}/{{.ID}}">
                     <p>
                         {{.Author}}: {{.Content}}
                     </p>
