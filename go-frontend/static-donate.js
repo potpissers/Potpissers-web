@@ -24,7 +24,7 @@ function handleAddLineItemJson(itemName, itemAmountString) {
         document.getElementById("donatesidebuttonred").hidden = false
 
         if (!currentLineItemsLowercaseUsernames.has(username.toLowerCase())) {
-            currentLineItemsLowercaseUsernames.push(username.toLowerCase())
+            currentLineItemsLowercaseUsernames.add(username.toLowerCase())
             handleUsernameApiCheck(username)
         }
     }
