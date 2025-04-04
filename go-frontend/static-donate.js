@@ -36,7 +36,7 @@ function handleUsernameApiCheck(username) {
                 case 200:
                     break
                 case 404:
-                    doLineItemReset()
+                    handleLineItemReset()
                     return alert("invalid username: " + username)
                 default:
                     handleUsernameApiCheck(username)
@@ -47,30 +47,45 @@ function handleUsernameApiCheck(username) {
         }));
 }
 function handlePaymentLink() {
+    document.getElementById("squarebutton").classList.remove("h")
 
+    document.getElementById("checkout").classList.add("h")
+    document.getElementById("donatesidebutton").hidden = false
+    document.getElementById("donatesidebuttonred").hidden = true
 
     Promise.all(currentLineItemsUsernameCheckPromises)
         .then(_ => {
             const json = JSON.stringify(privateJsonLineItems)
-            doLineItemReset()
+            handleLineItemReset()
 
             fetch("/api/donations/payments", {
                 method: "POST", body: json,
             })
                 .then(response => response.text())
-                .then(url => window.open(url, "_blank"))
+                .then(url => {
+                    const a = document.getElementById("squarelink")
+                    a.innerText = url
+                    a.href = url
+                    a.onclick = handleLineItemReset
+                })
         })
 }
-function doLineItemReset() {
+function doLineItemDataReset() {
     privateJsonLineItems.length = 0
     currentLineItemsLowercaseUsernames.clear()
     currentLineItemsUsernameCheckPromises.length = 0
     currentLineItemsCost = 0
-
+}
+function doLineItemDomReset() {
     document.getElementById("checkoutbalance").innerText = ""
     document.getElementById("checkout").classList.add("h")
+    document.getElementById("squarelink").classList.add("h")
     document.getElementById("donatebutton").hidden = false
 
     document.getElementById("donatesidebutton").hidden = false
     document.getElementById("donatesidebuttonred").hidden = true
+}
+function handleLineItemReset() {
+    doLineItemDataReset()
+    doLineItemDomReset()
 }

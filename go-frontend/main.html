@@ -238,9 +238,10 @@
         <div style="display: flex; justify-content: space-between">
             <button id="donatebutton">donate</button>
             <button style="width: 100%" onclick="handlePaymentLink()" id="checkout" class="fsb h"><span style="font-size: 75%">square.com</span><span id="checkoutbalance"></span></button>
+            <button id="squarebutton" hidden class="h" style="font-size: 75%; width: 100%"><a id="squarelink">...</a></button>
 
             <button id="donatesidebutton" onclick="handleContentMaximizeButtonClick(true)"></button>
-            <button hidden id="donatesidebuttonred" onclick="doLineItemReset()" style="background-color: indianred"></button>
+            <button hidden id="donatesidebuttonred" onclick="handleLineItemReset()" style="background-color: indianred"></button>
         </div>
         <ul style="overflow-y: scroll; width: 100%" >
             <!--                <li>-->
