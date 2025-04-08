@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"github.com/jackc/pgx/v5/pgxpool"
 	"io"
 	"log"
 	"math"
@@ -14,6 +13,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 var postgresPool = func() *pgxpool.Pool {
@@ -67,7 +68,7 @@ func init() {
 					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
 					jsonBytes, err := json.Marshal(sseMessage{"deaths", t})
 					handleFatalErr(err)
-					serverData := serverDatas[t.ServerName]
+					serverData := serverDatas[t.GameModeName+t.ServerName]
 					handleServerDataJsonPrepend[death](&deaths, t, jsonBytes, &serverData.deaths, serverData.gameModeName)
 				}
 			case "events":
@@ -85,7 +86,7 @@ func init() {
 					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
 					jsonBytes, err := json.Marshal(sseMessage{"chat", t})
 					handleFatalErr(err)
-					serverData := serverDatas[t.ServerName]
+					serverData := serverDatas[t.GameModeName+t.ServerName]
 					handleServerDataJsonPrepend[ingameMessage](&messages, t, jsonBytes, &serverData.messages, serverData.gameModeName)
 				}
 			case "online":
@@ -133,7 +134,9 @@ func init() {
 						}
 					}
 				}
-			case "bandits": {} //TODO
+			case "bandits":
+				{
+				} //TODO
 			case "server_data":
 				{
 				} // TODO
@@ -478,7 +481,7 @@ func main() {
 	http.HandleFunc("/discord", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "https://discord.gg/Cqnvktf7EF", http.StatusFound)
 	})
-	
+
 	http.Handle("/static.css", http.StripPrefix("/", http.FileServer(http.Dir(frontendDirName))))
 
 	http.Handle("/static.js", http.StripPrefix("/", http.FileServer(http.Dir(frontendDirName))))

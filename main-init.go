@@ -4,8 +4,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgtype"
 	"html/template"
 	"io"
 	"log"
@@ -16,6 +14,9 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 var potpissersTips []string
@@ -83,6 +84,7 @@ var newPlayers = func() []newPlayer {
 }()
 
 type death struct {
+	GameModeName      string      `json:"game_mode_name"`
 	ServerName        string      `json:"server_name"`
 	VictimUserFightId pgtype.Int4 `json:"victim_user_fight_id"`
 	Timestamp         time.Time   `json:"timestamp"`
@@ -102,7 +104,7 @@ var deaths = func() []death {
 	var deaths []death
 	getRowsBlocking("SELECT * FROM get_12_latest_network_deaths()", func(rows pgx.Rows) {
 		var death death
-		handleFatalPgx(pgx.ForEachRow(rows, []any{&death.ServerName, &death.VictimUserFightId, &death.Timestamp, &death.VictimUuid, nil, &death.DeathWorldName, &death.DeathX, &death.DeathY, &death.DeathZ, &death.DeathMessage, &death.KillerUuid, nil, nil}, func() error {
+		handleFatalPgx(pgx.ForEachRow(rows, []any{&death.GameModeName, &death.ServerName, &death.VictimUserFightId, &death.Timestamp, &death.VictimUuid, nil, &death.DeathWorldName, &death.DeathX, &death.DeathY, &death.DeathZ, &death.DeathMessage, &death.KillerUuid, nil, nil}, func() error {
 			deaths = append(deaths, death)
 			return nil
 		}))
@@ -125,6 +127,7 @@ type event struct {
 	X                    int       `json:"x"`
 	Y                    int       `json:"y"`
 	Z                    int       `json:"z"`
+	GameModeName         string    `json:"game_mode_name"`
 	ServerName           string    `json:"server_name"`
 	ArenaName            string    `json:"arena_name"`
 	Creator              string    `json:"creator"`
@@ -134,7 +137,7 @@ var events = func() []event {
 	var events []event
 	getRowsBlocking("SELECT * FROM get_14_newest_network_koths()", func(rows pgx.Rows) {
 		var event event
-		handleFatalPgx(pgx.ForEachRow(rows, []any{&event.ServerKothsId, &event.StartTimestamp, &event.LootFactor, &event.MaxTimer, &event.IsMovementRestricted, &event.CappingUserUUID, &event.EndTimestamp, &event.CappingPartyUUID, &event.CapMessage, &event.World, &event.X, &event.Y, &event.Z, &event.ServerName, &event.ArenaName, &event.Creator}, func() error {
+		handleFatalPgx(pgx.ForEachRow(rows, []any{&event.ServerKothsId, &event.StartTimestamp, &event.LootFactor, &event.MaxTimer, &event.IsMovementRestricted, &event.CappingUserUUID, &event.EndTimestamp, &event.CappingPartyUUID, &event.CapMessage, &event.World, &event.X, &event.Y, &event.Z, &event.GameModeName, &event.ServerName, &event.ArenaName, &event.Creator}, func() error {
 			events = append(events, event)
 			return nil
 		}))
@@ -174,6 +177,7 @@ type serverData struct {
 	serverName                    string
 	gameModeName                  string
 	attackSpeedName               string
+	isInitiallyWhitelisted        bool
 
 	currentPlayers []onlinePlayer
 	deaths         []death
@@ -191,15 +195,15 @@ var serverDatas = func() map[string]*serverData {
 	serverDatas := make(map[string]*serverData)
 	getRowsBlocking("SELECT * FROM get_server_datas()", func(rows pgx.Rows) {
 		var serverDataBuffer serverData
-		handleFatalPgx(pgx.ForEachRow(rows, []any{&serverDataBuffer.deathBanMinutes, &serverDataBuffer.worldBorderRadius, &serverDataBuffer.sharpnessLimit, &serverDataBuffer.powerLimit, &serverDataBuffer.protectionLimit, &serverDataBuffer.regenLimit, &serverDataBuffer.strengthLimit, &serverDataBuffer.isWeaknessEnabled, &serverDataBuffer.isBardPassiveDebuffingEnabled, &serverDataBuffer.dtrFreezeTimer, &serverDataBuffer.dtrMax, &serverDataBuffer.offPeakLivesNeededAsCents, &serverDataBuffer.timestamp, &serverDataBuffer.serverName, &serverDataBuffer.gameModeName, &serverDataBuffer.attackSpeedName}, func() error {
+		handleFatalPgx(pgx.ForEachRow(rows, []any{&serverDataBuffer.deathBanMinutes, &serverDataBuffer.worldBorderRadius, &serverDataBuffer.sharpnessLimit, &serverDataBuffer.powerLimit, &serverDataBuffer.protectionLimit, &serverDataBuffer.regenLimit, &serverDataBuffer.strengthLimit, &serverDataBuffer.isWeaknessEnabled, &serverDataBuffer.isBardPassiveDebuffingEnabled, &serverDataBuffer.dtrFreezeTimer, &serverDataBuffer.dtrMax, &serverDataBuffer.offPeakLivesNeededAsCents, &serverDataBuffer.timestamp, &serverDataBuffer.serverName, &serverDataBuffer.gameModeName, &serverDataBuffer.attackSpeedName, &serverDataBuffer.isInitiallyWhitelisted}, func() error {
 			serverData := serverDataBuffer
-			serverDatas[serverDataBuffer.serverName] = &serverData
+			serverDatas[serverDataBuffer.gameModeName+serverDataBuffer.serverName] = &serverData
 			return nil
 		}))
 	})
 	var currentPotentialHcfServerTimestamp time.Time
 	for _, data := range serverDatas {
-		if strings.Contains(data.serverName, "hcf") && data.timestamp.After(currentPotentialHcfServerTimestamp) {
+		if strings.Contains(data.gameModeName, "hcf") && data.timestamp.After(currentPotentialHcfServerTimestamp) && (currentPotentialHcfServerTimestamp.IsZero() || !data.isInitiallyWhitelisted) {
 			currentHcfServerName = data.serverName
 			currentPotentialHcfServerTimestamp = data.timestamp
 		}
@@ -212,6 +216,7 @@ var serverDatas = func() map[string]*serverData {
 type onlinePlayer struct {
 	Uuid          string    `json:"uuid"`
 	Name          string    `json:"name"`
+	GameModeName  string    `json:"game_mode_name"`
 	ServerName    string    `json:"server_name"`
 	ActiveFaction *string   `json:"active_faction"`
 	NetworkJoin   time.Time `json:"network_join"`
@@ -222,9 +227,9 @@ var currentPlayers = func() []onlinePlayer {
 	var currentPlayers []onlinePlayer
 	getRowsBlocking("SELECT * FROM get_online_players()", func(rows pgx.Rows) {
 		var t onlinePlayer
-		handleFatalPgx(pgx.ForEachRow(rows, []any{&t.Uuid, &t.Name, &t.ServerName, &t.ActiveFaction, &t.NetworkJoin, &t.ServerJoin}, func() error {
+		handleFatalPgx(pgx.ForEachRow(rows, []any{&t.Uuid, &t.Name, &t.GameModeName, &t.ServerName, &t.ActiveFaction, &t.NetworkJoin, &t.ServerJoin}, func() error {
 			currentPlayers = append(currentPlayers, t) // TODO sort names
-			serverData := serverDatas[t.ServerName]
+			serverData := serverDatas[t.GameModeName+t.ServerName]
 			serverData.currentPlayers = append(serverData.currentPlayers, t)
 			return nil
 		}))
@@ -233,35 +238,35 @@ var currentPlayers = func() []onlinePlayer {
 }()
 
 func init() {
-	for serverName, serverData := range serverDatas {
+	for _, serverData := range serverDatas {
 		getRowsBlocking("SELECT * FROM get_12_latest_server_deaths($1)", func(rows pgx.Rows) {
 			var death death
-			handleFatalPgx(pgx.ForEachRow(rows, []any{&death.ServerName, &death.VictimUserFightId, &death.Timestamp, &death.VictimUuid, nil, &death.DeathWorldName, &death.DeathX, &death.DeathY, &death.DeathZ, &death.DeathMessage, &death.KillerUuid, nil, nil}, func() error {
+			handleFatalPgx(pgx.ForEachRow(rows, []any{&death.GameModeName, &death.ServerName, &death.VictimUserFightId, &death.Timestamp, &death.VictimUuid, nil, &death.DeathWorldName, &death.DeathX, &death.DeathY, &death.DeathZ, &death.DeathMessage, &death.KillerUuid, nil, nil}, func() error {
 				serverData.deaths = append(serverData.deaths, death)
 				return nil
 			}))
-		}, serverName)
+		}, serverData.gameModeName, serverData.serverName)
 		getRowsBlocking("SELECT * FROM get_14_newest_server_koths($1)", func(rows pgx.Rows) {
 			var event event
-			handleFatalPgx(pgx.ForEachRow(rows, []any{&event.ServerKothsId, &event.StartTimestamp, &event.LootFactor, &event.MaxTimer, &event.IsMovementRestricted, &event.CappingUserUUID, &event.EndTimestamp, &event.CappingPartyUUID, &event.CapMessage, &event.World, &event.X, &event.Y, &event.Z, &event.ServerName, &event.ArenaName, &event.Creator}, func() error {
+			handleFatalPgx(pgx.ForEachRow(rows, []any{&event.ServerKothsId, &event.StartTimestamp, &event.LootFactor, &event.MaxTimer, &event.IsMovementRestricted, &event.CappingUserUUID, &event.EndTimestamp, &event.CappingPartyUUID, &event.CapMessage, &event.World, &event.X, &event.Y, &event.Z, &event.GameModeName, &event.ServerName, &event.ArenaName, &event.Creator}, func() error {
 				serverData.events = append(serverData.events, event)
 				return nil
 			}))
-		}, serverName)
+		}, serverData.gameModeName, serverData.serverName)
 		getRowsBlocking("SELECT * FROM get_7_factions($1)", func(rows pgx.Rows) {
 			var faction faction
 			handleFatalPgx(pgx.ForEachRow(rows, []any{&faction.name, &faction.partyUuid, &faction.frozenUntil, &faction.currentMaxDtr, &faction.currentRegenAdjustedDtr}, func() error {
 				serverData.factions = append(serverData.factions, faction)
 				return nil
 			}))
-		}, serverName)
+		}, serverData.gameModeName, serverData.serverName)
 		getRowsBlocking("SELECT * FROM get_7_newest_bandits($1)", func(rows pgx.Rows) {
 			var bandit bandit
 			handleFatalPgx(pgx.ForEachRow(rows, []any{&bandit.UserUuid, &bandit.DeathId, &bandit.DeathTimestamp, &bandit.ExpirationTimestamp, &bandit.BanditMessage}, func() error {
 				serverData.bandits = append(serverData.bandits, bandit)
 				return nil
 			}))
-		}, serverName)
+		}, serverData.gameModeName, serverData.serverName)
 	}
 }
 
@@ -550,9 +555,10 @@ func init() {
 }
 
 type ingameMessage struct {
-	Uuid       string `json:"uuid"`
-	Message    string `json:"message"`
-	ServerName string `json:"server_name"`
+	Uuid         string `json:"uuid"`
+	Message      string `json:"message"`
+	GameModeName string `json:"game_mode_name`
+	ServerName   string `json:"server_name"`
 }
 
 var messages []ingameMessage
@@ -650,7 +656,7 @@ const discordServerId = "1245300045188956252"
 
 func getHome() []byte {
 	var buffer bytes.Buffer
-	offPeakLivesNeeded := float32(serverDatas[currentHcfServerName].offPeakLivesNeededAsCents / 100.0)
+	offPeakLivesNeeded := float32(serverDatas["hcf"+currentHcfServerName].offPeakLivesNeededAsCents / 100.0)
 	handleFatalErr(homeTemplate.Execute(&buffer, struct {
 		MainTemplateData mainTemplateData
 	}{
@@ -680,7 +686,7 @@ func getHome() []byte {
 func getMz() []byte {
 	var buffer bytes.Buffer
 	mzData := serverDatas["mz"]
-	offPeakLivesNeeded := float32(serverDatas[currentHcfServerName].offPeakLivesNeededAsCents / 100.0)
+	offPeakLivesNeeded := float32(serverDatas["hcf"+currentHcfServerName].offPeakLivesNeededAsCents / 100.0)
 	handleFatalErr(mzTemplate.Execute(&buffer, struct {
 		MainTemplateData mainTemplateData
 
@@ -719,7 +725,7 @@ func getMz() []byte {
 }
 func getHcf() []byte {
 	var buffer bytes.Buffer
-	serverData := serverDatas[currentHcfServerName]
+	serverData := serverDatas["hcf"+currentHcfServerName]
 	offPeakLivesNeeded := float32(serverData.offPeakLivesNeededAsCents / 100.0)
 	handleFatalErr(hcfTemplate.Execute(&buffer, struct {
 		MainTemplateData mainTemplateData
