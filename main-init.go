@@ -169,14 +169,10 @@ type serverData struct {
 	isBardPassiveDebuffingEnabled bool
 	dtrFreezeTimer                int
 	dtrMax                        float32
-	dtrMaxTime                    int
-	dtrOffPeakFreezeTime          int
 	offPeakLivesNeededAsCents     int
-	bardRadius                    int
-	rogueRadius                   int
 	timestamp                     time.Time
 	serverName                    string
-	gamemodeName                  string
+	gameModeName                  string
 	attackSpeedName               string
 
 	currentPlayers []onlinePlayer
@@ -195,7 +191,7 @@ var serverDatas = func() map[string]*serverData {
 	serverDatas := make(map[string]*serverData)
 	getRowsBlocking("SELECT * FROM get_server_datas()", func(rows pgx.Rows) {
 		var serverDataBuffer serverData
-		handleFatalPgx(pgx.ForEachRow(rows, []any{&serverDataBuffer.deathBanMinutes, &serverDataBuffer.worldBorderRadius, &serverDataBuffer.sharpnessLimit, &serverDataBuffer.powerLimit, &serverDataBuffer.protectionLimit, &serverDataBuffer.regenLimit, &serverDataBuffer.strengthLimit, &serverDataBuffer.isWeaknessEnabled, &serverDataBuffer.isBardPassiveDebuffingEnabled, &serverDataBuffer.dtrFreezeTimer, &serverDataBuffer.dtrMax, &serverDataBuffer.dtrMaxTime, &serverDataBuffer.dtrOffPeakFreezeTime, &serverDataBuffer.offPeakLivesNeededAsCents, &serverDataBuffer.bardRadius, &serverDataBuffer.rogueRadius, &serverDataBuffer.timestamp, &serverDataBuffer.serverName, &serverDataBuffer.attackSpeedName}, func() error {
+		handleFatalPgx(pgx.ForEachRow(rows, []any{&serverDataBuffer.deathBanMinutes, &serverDataBuffer.worldBorderRadius, &serverDataBuffer.sharpnessLimit, &serverDataBuffer.powerLimit, &serverDataBuffer.protectionLimit, &serverDataBuffer.regenLimit, &serverDataBuffer.strengthLimit, &serverDataBuffer.isWeaknessEnabled, &serverDataBuffer.isBardPassiveDebuffingEnabled, &serverDataBuffer.dtrFreezeTimer, &serverDataBuffer.dtrMax, &serverDataBuffer.offPeakLivesNeededAsCents, &serverDataBuffer.timestamp, &serverDataBuffer.serverName, &serverDataBuffer.gameModeName, &serverDataBuffer.attackSpeedName}, func() error {
 			serverData := serverDataBuffer
 			serverDatas[serverDataBuffer.serverName] = &serverData
 			return nil
@@ -562,7 +558,7 @@ type ingameMessage struct {
 var messages []ingameMessage
 
 type lineItemData struct {
-	GamemodeName     string
+	GameModeName     string
 	ItemName         string
 	ItemPriceInCents int
 	ItemDescription  string
@@ -575,7 +571,7 @@ var lineItemDatas = func() []lineItemData {
 	var slice []lineItemData
 	getRowsBlocking("SELECT * FROM get_line_items()", func(rows pgx.Rows) {
 		var death lineItemData
-		handleFatalPgx(pgx.ForEachRow(rows, []any{&death.GamemodeName, &death.ItemName, &death.ItemPriceInCents, &death.ItemDescription, &death.IsPlural}, func() error {
+		handleFatalPgx(pgx.ForEachRow(rows, []any{&death.GameModeName, &death.ItemName, &death.ItemPriceInCents, &death.ItemDescription, &death.IsPlural}, func() error {
 			death.ItemPriceInDollars = death.ItemPriceInCents / 100.0
 			slice = append(slice, death)
 			return nil
@@ -626,7 +622,7 @@ var mzTemplate = getMainTemplate(frontendDirName + "/main-mz.html")
 var hcfTemplate = getMainTemplate(frontendDirName + "/main-hcf.html")
 
 type mainTemplateData struct {
-	GamemodeName       string
+	GameModeName       string
 	BackgroundImageUrl redditImagePost
 	NetworkPlayers     []onlinePlayer
 	ServerPlayers      []onlinePlayer
@@ -659,7 +655,7 @@ func getHome() []byte {
 		MainTemplateData mainTemplateData
 	}{
 		MainTemplateData: mainTemplateData{
-			GamemodeName:       "hub",
+			GameModeName:       "hub",
 			BackgroundImageUrl: getRandomImagePost(),
 			NetworkPlayers:     currentPlayers,
 			ServerPlayers:      serverDatas["hub"].currentPlayers,
@@ -694,7 +690,7 @@ func getMz() []byte {
 		Bandits []bandit
 	}{
 		MainTemplateData: mainTemplateData{
-			GamemodeName:       "mz",
+			GameModeName:       "mz",
 			BackgroundImageUrl: getRandomImagePost(),
 			NetworkPlayers:     currentPlayers,
 			ServerPlayers:      mzData.currentPlayers,
@@ -748,7 +744,7 @@ func getHcf() []byte {
 		Factions     []faction
 	}{
 		MainTemplateData: mainTemplateData{
-			GamemodeName:       "hcf",
+			GameModeName:       "hcf",
 			BackgroundImageUrl: getRandomImagePost(),
 			NetworkPlayers:     currentPlayers,
 			ServerPlayers:      serverData.currentPlayers,

@@ -68,7 +68,7 @@ func init() {
 					jsonBytes, err := json.Marshal(sseMessage{"deaths", t})
 					handleFatalErr(err)
 					serverData := serverDatas[t.ServerName]
-					handleServerDataJsonPrepend[death](&deaths, t, jsonBytes, &serverData.deaths, serverData.gamemodeName)
+					handleServerDataJsonPrepend[death](&deaths, t, jsonBytes, &serverData.deaths, serverData.gameModeName)
 				}
 			case "events":
 				{
@@ -77,7 +77,7 @@ func init() {
 					jsonBytes, err := json.Marshal(sseMessage{"events", t})
 					handleFatalErr(err)
 					serverData := serverDatas[t.ServerName]
-					handleServerDataJsonPrepend[event](&events, t, jsonBytes, &serverData.events, serverData.gamemodeName)
+					handleServerDataJsonPrepend[event](&events, t, jsonBytes, &serverData.events, serverData.gameModeName)
 				}
 			case "chat":
 				{
@@ -86,7 +86,7 @@ func init() {
 					jsonBytes, err := json.Marshal(sseMessage{"chat", t})
 					handleFatalErr(err)
 					serverData := serverDatas[t.ServerName]
-					handleServerDataJsonPrepend[ingameMessage](&messages, t, jsonBytes, &serverData.messages, serverData.gamemodeName)
+					handleServerDataJsonPrepend[ingameMessage](&messages, t, jsonBytes, &serverData.messages, serverData.gameModeName)
 				}
 			case "online":
 				{
@@ -95,7 +95,7 @@ func init() {
 					jsonBytes, err := json.Marshal(sseMessage{"online", t})
 					handleFatalErr(err)
 					serverData := serverDatas[t.ServerName]
-					handleServerDataJsonPrepend[onlinePlayer](&currentPlayers, t, jsonBytes, &serverData.currentPlayers, serverData.gamemodeName)
+					handleServerDataJsonPrepend[onlinePlayer](&currentPlayers, t, jsonBytes, &serverData.currentPlayers, serverData.gameModeName)
 				}
 			case "offline":
 				{
@@ -120,7 +120,7 @@ func init() {
 							break
 						}
 					}
-					switch serverData.gamemodeName {
+					switch serverData.gameModeName {
 					case "hcf":
 						{
 							hcf = getHcf()
@@ -202,7 +202,7 @@ func main() {
 				defer waitGroup.Done()
 				var potentialFinalRequest donateRequest
 				for _, data := range lineItemDatas {
-					if data.GamemodeName+"-"+data.ItemName == request.LineItemName {
+					if data.GameModeName+"-"+data.ItemName == request.LineItemName {
 						potentialFinalRequest.LineItemName = request.LineItemName
 						if data.IsPlural {
 							potentialFinalRequest.LineItemAmount = int(math.Max(float64(request.LineItemAmount), 1))
@@ -491,13 +491,13 @@ func main() {
 	log.Println(http.ListenAndServeTLS(":443", "/etc/letsencrypt/live/potpissers.com/fullchain.pem", "/etc/letsencrypt/live/potpissers.com/privkey.pem", nil))
 }
 
-func handleServerDataJsonPrepend[T any](homeSlice *[]T, t T, bytes []byte, serverSlice *[]T, gamemodeName string) {
+func handleServerDataJsonPrepend[T any](homeSlice *[]T, t T, bytes []byte, serverSlice *[]T, gameModeName string) {
 	*homeSlice = append([]T{t}, *homeSlice...) // TODO -> this is necessary because html/css and go's templating can't handle reversing it for some reason. go's templater could maybe do it but it seems like more processing than this takes
 	home = getHome()
 	handleSseData(bytes, homeConnections)
 
 	*serverSlice = append([]T{t}, *serverSlice...)
-	switch gamemodeName {
+	switch gameModeName {
 	case "hcf":
 		{
 			hcf = getHcf()
