@@ -11,14 +11,14 @@
     <script defer>
         const currentPrices = {
         {{range .MainTemplateData.LineItemData}}
-        "{{.GamemodeName}}-{{.ItemName}}": {{.ItemPriceInCents}},
+        "{{.GameModeName}}-{{.ItemName}}": {{.ItemPriceInCents}},
         {{end}}
         }
     </script>
     <script defer src="static-donate.js"></script>
 
     <script defer>
-        const eventSource = new EventSource("/api/sse/{{.MainTemplateData.GamemodeName}}")
+        const eventSource = new EventSource("/api/sse/{{.MainTemplateData.GameModeName}}")
     </script>
     <script defer src="static.js"></script>
 </head>
@@ -247,27 +247,27 @@
             <!--            <button>shoutout</button>-->
             {{range .MainTemplateData.LineItemData}}
             <li class="fc85">
-                <button onclick="handleClassHiddenToggle('{{.GamemodeName}}-{{.ItemName}}'); handleLineItemButtonContentMaximize()" class="fsb" style="width: 100%">
-                    {{.GamemodeName}}<br>{{.ItemName}}<span>${{.ItemPriceInDollars}}</span>
+                <button onclick="handleClassHiddenToggle('{{.GameModeName}}-{{.ItemName}}'); handleLineItemButtonContentMaximize()" class="fsb" style="width: 100%">
+                    {{.GameModeName}}<br>{{.ItemName}}<span>${{.ItemPriceInDollars}}</span>
                 </button>
 
-                <p class={{.GamemodeName}}-{{.ItemName}} hidden>
+                <p class={{.GameModeName}}-{{.ItemName}} hidden>
                     {{.ItemDescription}}
                 </p>
 
                 {{if .IsPlural}}
-                <input id="{{.GamemodeName}}-{{.ItemName}}-amount" style="align-self: end; width: 20%; font-size: 75%" placeholder=amount type=number min=1
-                       value=1 step=1 class="{{.GamemodeName}}-{{.ItemName}}" hidden>
+                <input id="{{.GameModeName}}-{{.ItemName}}-amount" style="align-self: end; width: 20%; font-size: 75%" placeholder=amount type=number min=1
+                       value=1 step=1 class="{{.GameModeName}}-{{.ItemName}}" hidden>
                 {{end}}
                 <div style="display: flex">
-                    <input id="donate-username" class="fi {{.GamemodeName}}-{{.ItemName}}" hidden style="width: 60%; font-size: 75%" placeholder="username"
+                    <input id="donate-username" class="fi {{.GameModeName}}-{{.ItemName}}" hidden style="width: 60%; font-size: 75%" placeholder="username"
                            onblur="handleMcNameBlur(this)fpp">
                     <script async>
                         document.getElementById("donate-username").addEventListener("keydown", (e) => handleMcNameKeyDown(e))
                     </script>
 
-                    <button style="font-size: 75%" class="{{.GamemodeName}}-{{.ItemName}}" hidden
-                            onclick="handleAddLineItemJson('{{.GamemodeName}}-{{.ItemName}}', {{if .IsPlural}}document.getElementById('{{.GamemodeName}}-{{.ItemName}}-amount').value{{else}}1{{end}})">
+                    <button style="font-size: 75%" class="{{.GameModeName}}-{{.ItemName}}" hidden
+                            onclick="handleAddLineItemJson('{{.GameModeName}}-{{.ItemName}}', {{if .IsPlural}}document.getElementById('{{.GameModeName}}-{{.ItemName}}-amount').value{{else}}1{{end}})">
                         add
                     </button>
                 </div>
