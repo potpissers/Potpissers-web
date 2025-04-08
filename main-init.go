@@ -39,7 +39,7 @@ func init() { // TODO -> move this to getting tips by name
 				cubecoreTips = append(cubecoreTips, tipMessage.tipTitle+": "+tipMessage.tipMessage)
 			case "cubecore_classes":
 				cubecoreClassTips = append(cubecoreClassTips, tipMessage.tipTitle+": "+tipMessage.tipMessage)
-			case "mz":
+			case "kollusion":
 				mzTips = append(mzTips, tipMessage.tipTitle+": "+tipMessage.tipMessage)
 			}
 			return nil
