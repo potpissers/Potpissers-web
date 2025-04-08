@@ -295,11 +295,13 @@
     <button>donations</button>
     <ul id="donations">
         {{range .MainTemplateData.Donations}}
+        {{range .LineItems}}
         <li>
             <p>
-                ${{divide .TotalMoney.Amount 100}}.{{.TotalMoney.Amount 100 | modulo 100}} + {{.TotalTipMoney.Amount}}
+                {{.Quantity}} {{.Name}} ({{.TotalMoney.Amount}}c) + {{.TotalTipMoney.Amount}}c
             </p>
         </li>
+        {{end}}
         {{end}}
     </ul>
 </div>
