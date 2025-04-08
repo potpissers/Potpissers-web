@@ -43,7 +43,7 @@
         {{range .MainTemplateData.Deaths}}
         <li>
             <p>
-                ({{.ServerName}}) {{.DeathMessage}}
+                ({{.GameModeName}}) {{.DeathMessage}}
             </p>
         </li>
         {{end}}
@@ -230,7 +230,7 @@
     </div>
     <div style="display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden">
         <div style="display: flex; justify-content: space-between">
-            <button id="donatebutton">donate</button>
+            <button id="donatebutton">/donate</button>
             <button style="width: 100%" onclick="handlePaymentLink()" id="checkout" class="fsb h"><span style="font-size: 75%">checkout</span><span id="checkoutbalance"></span></button>
             <div id="squarebutton" class="h" style="overflow-x: hidden">
                 <a hidden id="squarelink" onclick="handleLineItemReset()"></a>
@@ -294,7 +294,7 @@
 <div class="bd" style="text-align: center">
     <button>donations</button>
     <ul id="donations">
-        {{range .MainTemplateData.Donations}}
+        {{range .MainTemplateData.Donations}}<!--     TODO test   -->
         {{if .TotalTipMoney.Amount}}
         tip: {{.TotalTipMoney.Amount}}c
         {{end}}
