@@ -234,33 +234,35 @@ var currentPlayers = func() []onlinePlayer {
 			return nil
 		}))
 	})
+
+	println("online players done")
 	return currentPlayers
 }()
 
 func init() {
 	for _, serverData := range serverDatas {
-		getRowsBlocking("SELECT * FROM get_12_latest_server_deaths($1)", func(rows pgx.Rows) {
+		getRowsBlocking("SELECT * FROM get_12_latest_server_deaths($1, $2)", func(rows pgx.Rows) {
 			var death death
 			handleFatalPgx(pgx.ForEachRow(rows, []any{&death.GameModeName, &death.ServerName, &death.VictimUserFightId, &death.Timestamp, &death.VictimUuid, nil, &death.DeathWorldName, &death.DeathX, &death.DeathY, &death.DeathZ, &death.DeathMessage, &death.KillerUuid, nil, nil}, func() error {
 				serverData.deaths = append(serverData.deaths, death)
 				return nil
 			}))
 		}, serverData.gameModeName, serverData.serverName)
-		getRowsBlocking("SELECT * FROM get_14_newest_server_koths($1)", func(rows pgx.Rows) {
+		getRowsBlocking("SELECT * FROM get_14_newest_server_koths($1, $2)", func(rows pgx.Rows) {
 			var event event
 			handleFatalPgx(pgx.ForEachRow(rows, []any{&event.ServerKothsId, &event.StartTimestamp, &event.LootFactor, &event.MaxTimer, &event.IsMovementRestricted, &event.CappingUserUUID, &event.EndTimestamp, &event.CappingPartyUUID, &event.CapMessage, &event.World, &event.X, &event.Y, &event.Z, &event.GameModeName, &event.ServerName, &event.ArenaName, &event.Creator}, func() error {
 				serverData.events = append(serverData.events, event)
 				return nil
 			}))
 		}, serverData.gameModeName, serverData.serverName)
-		getRowsBlocking("SELECT * FROM get_7_factions($1)", func(rows pgx.Rows) {
+		getRowsBlocking("SELECT * FROM get_7_factions($1, $2)", func(rows pgx.Rows) {
 			var faction faction
 			handleFatalPgx(pgx.ForEachRow(rows, []any{&faction.name, &faction.partyUuid, &faction.frozenUntil, &faction.currentMaxDtr, &faction.currentRegenAdjustedDtr}, func() error {
 				serverData.factions = append(serverData.factions, faction)
 				return nil
 			}))
 		}, serverData.gameModeName, serverData.serverName)
-		getRowsBlocking("SELECT * FROM get_7_newest_bandits($1)", func(rows pgx.Rows) {
+		getRowsBlocking("SELECT * FROM get_7_newest_bandits($1, $2)", func(rows pgx.Rows) {
 			var bandit bandit
 			handleFatalPgx(pgx.ForEachRow(rows, []any{&bandit.UserUuid, &bandit.DeathId, &bandit.DeathTimestamp, &bandit.ExpirationTimestamp, &bandit.BanditMessage}, func() error {
 				serverData.bandits = append(serverData.bandits, bandit)
@@ -268,6 +270,8 @@ func init() {
 			}))
 		}, serverData.gameModeName, serverData.serverName)
 	}
+
+	println("serverdatas data done")
 }
 
 type money struct {
