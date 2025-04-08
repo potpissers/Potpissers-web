@@ -1,0 +1,39 @@
+worlds["World"] = "/home/cameron/potpissers/minezMap"
+
+outputdir = "/home/cameron/potpissers/hey"
+
+rendermode: "smooth_lighting"
+dimension="overworld"
+
+def playerIcons(poi):
+    if poi['id'] == 'Player':
+        poi['icon'] = "http://overviewer.org/avatar/%s" % poi['EntityId']
+        return "Last known location for %s" % poi['EntityId']
+
+renders['north'] = {
+    'world': 'World',
+    'title': 'North',
+    'markers': [dict(name="Players", filterFunction=playerIcons)]
+}
+
+renders['west'] = {
+    'world': 'World',
+    'northdirection': 'upper-right',
+    'title': 'West',
+    'markers': [dict(name="Players", filterFunction=playerIcons)]
+}
+
+renders['south'] = {
+    'world': 'World',
+    'northdirection': 'lower-right',
+    'title': 'South',
+    'markers': [dict(name="Players", filterFunction=playerIcons)]
+}
+
+renders['east'] = {
+    'world': 'World',
+    'northdirection': 'lower-left',
+    'title': 'East',
+    'markers': [dict(name="Players", filterFunction=playerIcons)]
+}
+
