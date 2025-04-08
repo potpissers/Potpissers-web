@@ -463,10 +463,11 @@ func main() {
 	println("main api done")
 
 	home = getHome()
+	println("home template done")
 	hcf = getHcf()
+	println("hcf template done")
 	mz = getMz()
-
-	println("templates done")
+	println("mz template done")
 
 	http.HandleFunc("/github", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "https://github.com/potpissers", http.StatusMovedPermanently)
