@@ -106,7 +106,7 @@
                 {{range .MainTemplateData.DiscordMessages}}
                 <li>
                     <p>
-                        {{.Content}}
+                        {{.Author.Username}}: {{.Content}}
                     </p>
                 </li>
                 {{end}}
@@ -185,7 +185,8 @@
 </div>
 
 <div class="bd" style="text-align: center">
-    <button>events</button>
+    <button>koths</button>
+    <button>supply drops</button>
     <ul id=events>
         {{range .MainTemplateData.Events}}
         <li>
