@@ -295,10 +295,13 @@
     <button>donations</button>
     <ul id="donations">
         {{range .MainTemplateData.Donations}}
+        {{if .TotalTipMoney.Amount}}
+        tip: {{.TotalTipMoney.Amount}}c
+        {{end}}
         {{range $i, $item := .LineItems}}
         <li>
             <p>
-                {{$item.Quantity}} {{$item.Name}} ({{$item.TotalMoney.Amount}}c) {{if eq $i (sub (len .LineItems) 1)}} + {{end}}
+                {{$item.Quantity}} {{$item.Name}} ({{$item.TotalMoney.Amount}}c)
             </p>
         </li>
         {{end}}
