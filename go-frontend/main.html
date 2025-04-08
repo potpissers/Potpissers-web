@@ -297,7 +297,7 @@
         {{range .MainTemplateData.Donations}}
         <li>
             <p>
-                ${{div .TotalMoney.Amount 100}}.{{mod .TotalMoney.Amount 100}} + {{.TotalTipMoney.Amount}}
+                ${{divide .TotalMoney.Amount 100}}.{{.TotalMoney.Amount 100 | modulo 100}} + {{.TotalTipMoney.Amount}}
             </p>
         </li>
         {{end}}
