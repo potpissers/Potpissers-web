@@ -134,7 +134,7 @@ footer {
     grid-column: span 3;
     text-align: center;
     display: grid;
-    grid-template-columns: 1fr auto .5fr .5fr
+    grid-template-columns: 1fr auto .25fr .75fr
 }
 
 .ifc {
