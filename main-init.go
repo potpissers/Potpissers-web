@@ -163,6 +163,7 @@ type bandit struct {
 type serverData struct {
 	deathBanMinutes               int
 	worldBorderRadius             int
+	defaultKothLootFactor         int
 	sharpnessLimit                int
 	powerLimit                    int
 	protectionLimit               int
@@ -195,7 +196,7 @@ var serverDatas = func() map[string]*serverData {
 	serverDatas := make(map[string]*serverData)
 	getRowsBlocking("SELECT * FROM get_server_datas()", func(rows pgx.Rows) {
 		var serverDataBuffer serverData
-		handleFatalPgx(pgx.ForEachRow(rows, []any{&serverDataBuffer.deathBanMinutes, &serverDataBuffer.worldBorderRadius, &serverDataBuffer.sharpnessLimit, &serverDataBuffer.powerLimit, &serverDataBuffer.protectionLimit, &serverDataBuffer.regenLimit, &serverDataBuffer.strengthLimit, &serverDataBuffer.isWeaknessEnabled, &serverDataBuffer.isBardPassiveDebuffingEnabled, &serverDataBuffer.dtrFreezeTimer, &serverDataBuffer.dtrMax, &serverDataBuffer.offPeakLivesNeededAsCents, &serverDataBuffer.timestamp, &serverDataBuffer.serverName, &serverDataBuffer.gameModeName, &serverDataBuffer.attackSpeedName, &serverDataBuffer.isInitiallyWhitelisted}, func() error {
+		handleFatalPgx(pgx.ForEachRow(rows, []any{&serverDataBuffer.deathBanMinutes, &serverDataBuffer.worldBorderRadius, &serverDataBuffer.defaultKothLootFactor, &serverDataBuffer.sharpnessLimit, &serverDataBuffer.powerLimit, &serverDataBuffer.protectionLimit, &serverDataBuffer.regenLimit, &serverDataBuffer.strengthLimit, &serverDataBuffer.isWeaknessEnabled, &serverDataBuffer.isBardPassiveDebuffingEnabled, &serverDataBuffer.dtrFreezeTimer, &serverDataBuffer.dtrMax, &serverDataBuffer.offPeakLivesNeededAsCents, &serverDataBuffer.timestamp, &serverDataBuffer.serverName, &serverDataBuffer.gameModeName, &serverDataBuffer.attackSpeedName, &serverDataBuffer.isInitiallyWhitelisted}, func() error {
 			serverData := serverDataBuffer
 			serverDatas[serverDataBuffer.gameModeName+serverDataBuffer.serverName] = &serverData
 			return nil
@@ -638,6 +639,9 @@ type mainTemplateData struct {
 	ServerPlayers      []onlinePlayer
 	NewPlayers         []newPlayer
 	PotpissersTips     []string
+	HcfTips            []string
+	HcfClassTips       []string
+	MzTips             []string
 	Deaths             []death
 	Messages           []ingameMessage
 	Events             []event
@@ -650,6 +654,7 @@ type mainTemplateData struct {
 	LineItemData       []lineItemData
 	RedditVideos       []redditVideoPost
 	DiscordId          string
+	AttackSpeed        string
 }
 
 func getRandomImagePost() redditImagePost {
@@ -671,6 +676,9 @@ func getHome() []byte {
 			ServerPlayers:      serverDatas["hub"].currentPlayers,
 			NewPlayers:         newPlayers,
 			PotpissersTips:     potpissersTips,
+			HcfTips:            cubecoreTips,
+			HcfClassTips:       cubecoreClassTips,
+			MzTips:             mzTips,
 			Deaths:             deaths,
 			Messages:           messages,
 			Events:             events,
@@ -683,6 +691,7 @@ func getHome() []byte {
 			LineItemData:       lineItemDatas,
 			RedditVideos:       redditVideoPosts,
 			DiscordId:          discordServerId,
+			AttackSpeed:        "click here",
 		},
 	}))
 	return buffer.Bytes()
@@ -694,9 +703,6 @@ func getMz() []byte {
 	handleFatalErr(mzTemplate.Execute(&buffer, struct {
 		MainTemplateData mainTemplateData
 
-		AttackSpeed string
-
-		MzTips  []string
 		Bandits []bandit
 	}{
 		MainTemplateData: mainTemplateData{
@@ -706,6 +712,9 @@ func getMz() []byte {
 			ServerPlayers:      mzData.currentPlayers,
 			NewPlayers:         newPlayers,
 			PotpissersTips:     potpissersTips,
+			HcfTips:            cubecoreTips,
+			HcfClassTips:       cubecoreClassTips,
+			MzTips:             mzTips,
 			Deaths:             mzData.deaths,
 			Messages:           mzData.messages,
 			Events:             mzData.events,
@@ -718,11 +727,8 @@ func getMz() []byte {
 			LineItemData:       lineItemDatas,
 			RedditVideos:       redditVideoPosts,
 			DiscordId:          discordServerId,
+			AttackSpeed:        mzData.attackSpeedName,
 		},
-
-		AttackSpeed: mzData.attackSpeedName,
-
-		MzTips:  mzTips,
 		Bandits: mzData.bandits,
 	}))
 	return buffer.Bytes()
@@ -733,8 +739,6 @@ func getHcf() []byte {
 	offPeakLivesNeeded := float32(serverData.offPeakLivesNeededAsCents / 100.0)
 	handleFatalErr(hcfTemplate.Execute(&buffer, struct {
 		MainTemplateData mainTemplateData
-
-		AttackSpeed string
 
 		DeathBanMinutes int
 		LootFactor      int
@@ -749,9 +753,7 @@ func getHcf() []byte {
 		IsBardPassiveDebuffingEnabled bool
 		DtrMax                        float32
 
-		CubecoreTips []string
-		ClassTips    []string
-		Factions     []faction
+		Factions []faction
 	}{
 		MainTemplateData: mainTemplateData{
 			GameModeName:       "hcf",
@@ -760,6 +762,9 @@ func getHcf() []byte {
 			ServerPlayers:      serverData.currentPlayers,
 			NewPlayers:         newPlayers,
 			PotpissersTips:     potpissersTips,
+			HcfTips:            cubecoreTips,
+			HcfClassTips:       cubecoreClassTips,
+			MzTips:             mzTips,
 			Deaths:             serverData.deaths,
 			Messages:           serverData.messages,
 			Events:             serverData.events,
@@ -772,13 +777,11 @@ func getHcf() []byte {
 			LineItemData:       lineItemDatas,
 			RedditVideos:       redditVideoPosts,
 			DiscordId:          discordServerId,
+			AttackSpeed:        serverData.attackSpeedName,
 		},
-
-		AttackSpeed: serverData.attackSpeedName,
-
 		DeathBanMinutes: serverData.deathBanMinutes,
-		//			LootFactor: serverDatas["hcf"]., // TODO -> defaultLootFactor
-		BorderSize: serverData.worldBorderRadius,
+		LootFactor:      serverData.defaultKothLootFactor,
+		BorderSize:      serverData.worldBorderRadius,
 
 		SharpnessLimit:                serverData.sharpnessLimit,
 		ProtectionLimit:               serverData.protectionLimit,
@@ -789,9 +792,7 @@ func getHcf() []byte {
 		IsBardPassiveDebuffingEnabled: serverData.isBardPassiveDebuffingEnabled,
 		DtrMax:                        serverData.dtrMax,
 
-		CubecoreTips: cubecoreTips,
-		ClassTips:    cubecoreClassTips,
-		Factions:     serverData.factions,
+		Factions: serverData.factions,
 	}))
 	return buffer.Bytes()
 }
