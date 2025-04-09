@@ -102,7 +102,7 @@
                 {{end}}
             </ul>
 
-            <ul id="general" class="id-chat-discord" style="text-align: left; justify-items: end; flex: 1; overflow-y: auto; direction: rtl; flex-direction: column-reverse; font-size: 75%" hidden>
+            <ul id="general" class="id-chat-discord" style="text-align: left; justify-items: end; flex: 1; overflow-y: auto; direction: rtl; flex-direction: column; font-size: 75%" hidden>
                 {{range .MainTemplateData.DiscordMessages}}
                 <li>
                     <a href="https://discord.com/channels/{{$.MainTemplateData.DiscordId}}/{{.ChannelID}}/{{.ID}}">
