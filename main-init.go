@@ -633,33 +633,33 @@ var mzTemplate = getMainTemplate(frontendDirName + "/main-mz.html")
 var hcfTemplate = getMainTemplate(frontendDirName + "/main-hcf.html")
 
 type mainTemplateData struct {
-	GameModeName       string
-	BackgroundImageUrl redditImagePost
-	NetworkPlayers     []onlinePlayer
-	ServerPlayers      []onlinePlayer
-	NewPlayers         []newPlayer
-	PotpissersTips     []string
-	HcfTips            []string
-	HcfClassTips       []string
-	MzTips             []string
-	Deaths             []death
-	Messages           []ingameMessage
-	Events             []event
-	Announcements      []discordMessage
-	Changelog          []discordMessage
-	DiscordMessages    []discordMessage
-	Donations          []order
-	OffPeakLivesNeeded float32
-	PeakLivesNeeded    float32
-	LineItemData       []lineItemData
-	RedditVideos       []redditVideoPost
-	DiscordId          string
-	AttackSpeed        string
-	HubAttackSpeed string
-	CubecoreAttackSpeed string
-	HcfAttackSpeed string
+	GameModeName         string
+	BackgroundImageUrl   redditImagePost
+	NetworkPlayers       []onlinePlayer
+	ServerPlayers        []onlinePlayer
+	NewPlayers           []newPlayer
+	PotpissersTips       []string
+	HcfTips              []string
+	HcfClassTips         []string
+	MzTips               []string
+	Deaths               []death
+	Messages             []ingameMessage
+	Events               []event
+	Announcements        []discordMessage
+	Changelog            []discordMessage
+	DiscordMessages      []discordMessage
+	Donations            []order
+	OffPeakLivesNeeded   float32
+	PeakLivesNeeded      float32
+	LineItemData         []lineItemData
+	RedditVideos         []redditVideoPost
+	DiscordId            string
+	AttackSpeed          string
+	HubAttackSpeed       string
+	CubecoreAttackSpeed  string
+	HcfAttackSpeed       string
 	KollusionAttackSpeed string
-	MzAttackSpeed string
+	MzAttackSpeed        string
 }
 
 func getRandomImagePost() redditImagePost {
@@ -675,33 +675,33 @@ func getHome() []byte {
 		MainTemplateData mainTemplateData
 	}{
 		MainTemplateData: mainTemplateData{
-			GameModeName:       "hub",
-			BackgroundImageUrl: getRandomImagePost(),
-			NetworkPlayers:     currentPlayers,
-			ServerPlayers:      serverDatas["hub"].currentPlayers,
-			NewPlayers:         newPlayers,
-			PotpissersTips:     potpissersTips,
-			HcfTips:            cubecoreTips,
-			HcfClassTips:       cubecoreClassTips,
-			MzTips:             mzTips,
-			Deaths:             deaths,
-			Messages:           messages,
-			Events:             events,
-			Announcements:      announcements,
-			Changelog:          changelog,
-			DiscordMessages:    discordMessages,
-			Donations:          donations,
-			OffPeakLivesNeeded: offPeakLivesNeeded,
-			PeakLivesNeeded:    offPeakLivesNeeded / 2,
-			LineItemData:       lineItemDatas,
-			RedditVideos:       redditVideoPosts,
-			DiscordId:          discordServerId,
-			AttackSpeed:        "click here",
-			HubAttackSpeed: serverDatas["hub"].attackSpeedName,
-			CubecoreAttackSpeed: serverDatas["cubecore"].attackSpeedName,
-			HcfAttackSpeed: serverDatas["hcf" + currentHcfServerName].attackSpeedName,
+			GameModeName:         "hub",
+			BackgroundImageUrl:   getRandomImagePost(),
+			NetworkPlayers:       currentPlayers,
+			ServerPlayers:        serverDatas["hub"].currentPlayers,
+			NewPlayers:           newPlayers,
+			PotpissersTips:       potpissersTips,
+			HcfTips:              cubecoreTips,
+			HcfClassTips:         cubecoreClassTips,
+			MzTips:               mzTips,
+			Deaths:               deaths,
+			Messages:             messages,
+			Events:               events,
+			Announcements:        announcements,
+			Changelog:            changelog,
+			DiscordMessages:      discordMessages,
+			Donations:            donations,
+			OffPeakLivesNeeded:   offPeakLivesNeeded,
+			PeakLivesNeeded:      offPeakLivesNeeded / 2,
+			LineItemData:         lineItemDatas,
+			RedditVideos:         redditVideoPosts,
+			DiscordId:            discordServerId,
+			AttackSpeed:          "click here",
+			HubAttackSpeed:       serverDatas["hub"].attackSpeedName,
+			CubecoreAttackSpeed:  serverDatas["cubecore"].attackSpeedName,
+			HcfAttackSpeed:       serverDatas["hcf"+currentHcfServerName].attackSpeedName,
 			KollusionAttackSpeed: serverDatas["kollusion"].attackSpeedName,
-			MzAttackSpeed: serverDatas["mz"].attackSpeedName,
+			MzAttackSpeed:        serverDatas["mz"].attackSpeedName,
 		},
 	}))
 	return buffer.Bytes()
@@ -716,33 +716,33 @@ func getMz() []byte {
 		Bandits []bandit
 	}{
 		MainTemplateData: mainTemplateData{
-			GameModeName:       "mz",
-			BackgroundImageUrl: getRandomImagePost(),
-			NetworkPlayers:     currentPlayers,
-			ServerPlayers:      mzData.currentPlayers,
-			NewPlayers:         newPlayers,
-			PotpissersTips:     potpissersTips,
-			HcfTips:            cubecoreTips,
-			HcfClassTips:       cubecoreClassTips,
-			MzTips:             mzTips,
-			Deaths:             mzData.deaths,
-			Messages:           mzData.messages,
-			Events:             mzData.events,
-			Announcements:      announcements,
-			Changelog:          changelog,
-			DiscordMessages:    discordMessages,
-			Donations:          donations,
-			OffPeakLivesNeeded: offPeakLivesNeeded,
-			PeakLivesNeeded:    offPeakLivesNeeded / 2,
-			LineItemData:       lineItemDatas,
-			RedditVideos:       redditVideoPosts,
-			DiscordId:          discordServerId,
-			AttackSpeed:        mzData.attackSpeedName,
-			HubAttackSpeed: serverDatas["hub"].attackSpeedName,
-			CubecoreAttackSpeed: serverDatas["cubecore"].attackSpeedName,
-			HcfAttackSpeed: serverDatas["hcf" + currentHcfServerName].attackSpeedName,
+			GameModeName:         "mz",
+			BackgroundImageUrl:   getRandomImagePost(),
+			NetworkPlayers:       currentPlayers,
+			ServerPlayers:        mzData.currentPlayers,
+			NewPlayers:           newPlayers,
+			PotpissersTips:       potpissersTips,
+			HcfTips:              cubecoreTips,
+			HcfClassTips:         cubecoreClassTips,
+			MzTips:               mzTips,
+			Deaths:               mzData.deaths,
+			Messages:             mzData.messages,
+			Events:               mzData.events,
+			Announcements:        announcements,
+			Changelog:            changelog,
+			DiscordMessages:      discordMessages,
+			Donations:            donations,
+			OffPeakLivesNeeded:   offPeakLivesNeeded,
+			PeakLivesNeeded:      offPeakLivesNeeded / 2,
+			LineItemData:         lineItemDatas,
+			RedditVideos:         redditVideoPosts,
+			DiscordId:            discordServerId,
+			AttackSpeed:          mzData.attackSpeedName,
+			HubAttackSpeed:       serverDatas["hub"].attackSpeedName,
+			CubecoreAttackSpeed:  serverDatas["cubecore"].attackSpeedName,
+			HcfAttackSpeed:       serverDatas["hcf"+currentHcfServerName].attackSpeedName,
 			KollusionAttackSpeed: serverDatas["kollusion"].attackSpeedName,
-			MzAttackSpeed: serverDatas["mz"].attackSpeedName,
+			MzAttackSpeed:        serverDatas["mz"].attackSpeedName,
 		},
 		Bandits: mzData.bandits,
 	}))
@@ -771,33 +771,33 @@ func getHcf() []byte {
 		Factions []faction
 	}{
 		MainTemplateData: mainTemplateData{
-			GameModeName:       "hcf",
-			BackgroundImageUrl: getRandomImagePost(),
-			NetworkPlayers:     currentPlayers,
-			ServerPlayers:      serverData.currentPlayers,
-			NewPlayers:         newPlayers,
-			PotpissersTips:     potpissersTips,
-			HcfTips:            cubecoreTips,
-			HcfClassTips:       cubecoreClassTips,
-			MzTips:             mzTips,
-			Deaths:             serverData.deaths,
-			Messages:           serverData.messages,
-			Events:             serverData.events,
-			Announcements:      announcements,
-			Changelog:          changelog,
-			DiscordMessages:    discordMessages,
-			Donations:          donations,
-			OffPeakLivesNeeded: offPeakLivesNeeded,
-			PeakLivesNeeded:    offPeakLivesNeeded / 2,
-			LineItemData:       lineItemDatas,
-			RedditVideos:       redditVideoPosts,
-			DiscordId:          discordServerId,
-			AttackSpeed:        serverData.attackSpeedName,
-			HubAttackSpeed: serverDatas["hub"].attackSpeedName,
-			CubecoreAttackSpeed: serverDatas["cubecore"].attackSpeedName,
-			HcfAttackSpeed: serverDatas["hcf" + currentHcfServerName].attackSpeedName,
+			GameModeName:         "hcf",
+			BackgroundImageUrl:   getRandomImagePost(),
+			NetworkPlayers:       currentPlayers,
+			ServerPlayers:        serverData.currentPlayers,
+			NewPlayers:           newPlayers,
+			PotpissersTips:       potpissersTips,
+			HcfTips:              cubecoreTips,
+			HcfClassTips:         cubecoreClassTips,
+			MzTips:               mzTips,
+			Deaths:               serverData.deaths,
+			Messages:             serverData.messages,
+			Events:               serverData.events,
+			Announcements:        announcements,
+			Changelog:            changelog,
+			DiscordMessages:      discordMessages,
+			Donations:            donations,
+			OffPeakLivesNeeded:   offPeakLivesNeeded,
+			PeakLivesNeeded:      offPeakLivesNeeded / 2,
+			LineItemData:         lineItemDatas,
+			RedditVideos:         redditVideoPosts,
+			DiscordId:            discordServerId,
+			AttackSpeed:          serverData.attackSpeedName,
+			HubAttackSpeed:       serverDatas["hub"].attackSpeedName,
+			CubecoreAttackSpeed:  serverDatas["cubecore"].attackSpeedName,
+			HcfAttackSpeed:       serverDatas["hcf"+currentHcfServerName].attackSpeedName,
 			KollusionAttackSpeed: serverDatas["kollusion"].attackSpeedName,
-			MzAttackSpeed: serverDatas["mz"].attackSpeedName,
+			MzAttackSpeed:        serverDatas["mz"].attackSpeedName,
 		},
 		DeathBanMinutes: serverData.deathBanMinutes,
 		LootFactor:      serverData.defaultKothLootFactor,
