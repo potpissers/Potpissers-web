@@ -3,16 +3,10 @@
 {{end}}
 
 {{define "server ticker buttons"}}
-<div>
-    <span class=ifc>
-    <button>bandits</button>
-    <input name="mz-ticker" type="radio" checked>
-</span>
-    <span class=ifc>
-    <button>heroes</button>
-    <input name="mz-ticker" type="radio">
-</span>
-</div>
+<select>
+    <option selected disabled>bandits</option>
+    <option disabled>heroes</option>
+</select>
 {{end}}
 
 {{define "server ticker data"}}
