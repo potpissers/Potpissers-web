@@ -68,3 +68,25 @@ function handleChatToggle(button) {
             break
     }
 }
+function handlePlayersListToggle(button) {
+    switch (button.textContent) {
+        case "/list":
+            button.textContent = "/glist"
+            document.getElementById("chat").hidden = true
+            document.getElementById("onlineplayers-server").hidden = true
+            document.getElementById("onlineplayers-network").hidden = false
+            break
+        case "/glist":
+            button.textContent = "chat"
+            document.getElementById("chat").hidden = false
+            document.getElementById("onlineplayers-server").hidden = true
+            document.getElementById("onlineplayers-network").hidden = true
+            break
+        case "chat":
+            button.textContent = "/list"
+            document.getElementById("chat").hidden = true
+            document.getElementById("onlineplayers-server").hidden = false
+            document.getElementById("onlineplayers-network").hidden = true
+            break
+    }
+}

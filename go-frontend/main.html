@@ -101,9 +101,19 @@
     <div style="display: flex; height: 100%; overflow-y: auto">
         <div style="display: flex; flex-direction: column; flex: 1">
             <button class="id-chat-discord" hidden style="align-self: end; font-size: 75%" onclick="fetch('/api/discord-general')" onmouseover="fetch('/api/discord-general')">refresh</button>
-            <button class="id-chat-game" style="align-self: end; font-size: 75%" onclick="" onmouseover="">/list</button>
-            <!--            TODO -> networkPlayers-->
-            <ul id=online style="overflow-y: scroll; flex: 1" hidden>
+            <button class="id-chat-game" style="align-self: end; font-size: 75%" onclick="handlePlayersListToggle(this)">/list</button>
+            <button class="id-chat-game" style="align-self: end; font-size: 75%" onclick="handlePlayersListToggle(this)">/glist</button>
+            <button class="id-chat-game" style="align-self: end; font-size: 75%" onclick="handlePlayersListToggle(this)">/chat</button>
+            <ul id=onlineplayers-server style="overflow-y: scroll; flex: 1" hidden>
+                {{range .MainTemplateData.ServerPlayers}}
+                <li>
+                    <p>
+                        {{.Name}}
+                    </p>
+                </li>
+                {{end}}
+            </ul>
+            <ul id=onlineplayers-network style="overflow-y: scroll; flex: 1" hidden>
                 {{range .MainTemplateData.ServerPlayers}}
                 <li>
                     <p>
