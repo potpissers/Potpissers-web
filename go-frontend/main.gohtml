@@ -48,18 +48,18 @@
         </li>
         {{end}}
     </ul>
-<!--    TODO fights-->
-<!--    TODO duels-->
+{{/*TODO fights*/}}
+{{/*TODO duels*/}}
 </div>
 
 <div style="display: flex; flex-direction: column">
-    <div style="display: grid; grid-template-columns: 1fr auto 1fr;"> <!-- TODO  MAKE THIS FLEX!-->
+    <div style="display: grid; grid-template-columns: 1fr auto 1fr;">{{/*        TODO  MAKE THIS FLEX!*/}}
         <div style="display: flex; justify-content: space-between">
             <button style="align-self: start; font-size: 75%">
                 leaderboards
             </button>
             <select style="font-size: 75%; align-self: end">
-                <option selected hidden disabled>/{{.MainTemplateData.GameModeName}}: <span id=online-server></span></option>
+                <option selected hidden disabled>/{{.MainTemplateData.GameModeName}}: <span id=online-server>0</span></option>
                 <option disabled>/hub: </option>
                 <option disabled>/cubecore: </option>
                 <option disabled>/hcf: </option>
@@ -281,10 +281,10 @@
             <button hidden id="donatesidebuttonred" onclick="handleLineItemReset()" style="background-color: indianred"></button>
         </div>
         <ul style="overflow-y: scroll; width: 100%" >
-            <!--                <li>-->
-            <!--                    <button style="width: fit-content">unmute</button>-->
-            <!--                </li>-->
-            <!--            <button>shoutout</button>-->
+{{/*            <!--                <li>-->*/}}
+{{/*            <!--                    <button style="width: fit-content">unmute</button>-->*/}}
+{{/*            <!--                </li>-->*/}}
+{{/*            <!--            <button>shoutout</button>-->*/}}
             {{range .MainTemplateData.LineItemData}}
             <li class="fc85">
                 <button onclick="handleClassHiddenToggle('{{.GameModeName}}-{{.ItemName}}'); handleLineItemButtonContentMaximize()" class="fsb" style="width: 100%">
@@ -313,7 +313,7 @@
                 </div>
             </li>
             {{end}}
-            <!--            <button style="width: fit-content">hcf big dog</button>-->
+{{/*            button style="width: fit-content">hcf big dog*/}}
         </ul>
     </div>
 
