@@ -212,9 +212,18 @@
 </div>
 
 <div class="bd" style="text-align: center">
-    <button style="font-size: 75%">koths</button>
-    <button>events</button>
-    <button style="font-size: 75%">drops</button>
+    <span class=ifc>
+        <button style="font-size: 75%">koths</button>
+        <input name="" type="radio" disabled>
+    </span>
+    <span class=ifc>
+        <button>events</button>
+        <input name="" type="radio" checked>
+    </span>
+    <span class=ifc>
+        <button style="font-size: 75%">drops</button>
+        <input name="" type="radio" disabled>
+    </span>
     <ul id=events>
         {{range .MainTemplateData.Events}}
         <li>
