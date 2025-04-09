@@ -67,6 +67,7 @@ eventSource.onmessage = function(e) {
             const ul = document.getElementById("onlineplayers-" + gameModeName)
             ul.appendChild(li)
 
+            console.log(gameModeName)
             document.getElementById("online-" + gameModeName).innerText = ul.children.length.toString()
             break
         }
