@@ -338,7 +338,7 @@
         </ul>
 
         <ul id="hcftips" style="overflow-y: scroll; flex: 1">
-            {{range .CubecoreTips}}
+            {{range .MainTemplateData.CubecoreTips}}
             <li>
                 <p>
                     {{.}}
@@ -347,7 +347,7 @@
             {{end}}
         </ul>
         <ul id="classtips" style="overflow-y: scroll; flex: 1" hidden>
-            {{range .ClassTips}}
+            {{range .MainTemplateData.ClassTips}}
             <li>
                 <p>
                     {{.}}
@@ -356,7 +356,7 @@
             {{end}}
         </ul>
         <ul id="mztips" style="overflow-y: scroll; flex: 1" hidden>
-            {{range .MzTips}}
+            {{range .MainTemplateData.MzTips}}
             <li>
                 <p>
                     {{.}}
