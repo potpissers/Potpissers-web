@@ -655,6 +655,11 @@ type mainTemplateData struct {
 	RedditVideos       []redditVideoPost
 	DiscordId          string
 	AttackSpeed        string
+	HubAttackSpeed string
+	CubecoreAttackSpeed string
+	HcfAttackSpeed string
+	KollusionAttackSpeed string
+	MzAttackSpeed string
 }
 
 func getRandomImagePost() redditImagePost {
@@ -692,6 +697,11 @@ func getHome() []byte {
 			RedditVideos:       redditVideoPosts,
 			DiscordId:          discordServerId,
 			AttackSpeed:        "click here",
+			HubAttackSpeed: serverDatas["hub"].attackSpeedName,
+			CubecoreAttackSpeed: serverDatas["cubecore"].attackSpeedName,
+			HcfAttackSpeed: serverDatas["hcf" + currentHcfServerName].attackSpeedName,
+			KollusionAttackSpeed: serverDatas["kollusion"].attackSpeedName,
+			MzAttackSpeed: serverDatas["mz"].attackSpeedName,
 		},
 	}))
 	return buffer.Bytes()
@@ -728,6 +738,11 @@ func getMz() []byte {
 			RedditVideos:       redditVideoPosts,
 			DiscordId:          discordServerId,
 			AttackSpeed:        mzData.attackSpeedName,
+			HubAttackSpeed: serverDatas["hub"].attackSpeedName,
+			CubecoreAttackSpeed: serverDatas["cubecore"].attackSpeedName,
+			HcfAttackSpeed: serverDatas["hcf" + currentHcfServerName].attackSpeedName,
+			KollusionAttackSpeed: serverDatas["kollusion"].attackSpeedName,
+			MzAttackSpeed: serverDatas["mz"].attackSpeedName,
 		},
 		Bandits: mzData.bandits,
 	}))
@@ -778,6 +793,11 @@ func getHcf() []byte {
 			RedditVideos:       redditVideoPosts,
 			DiscordId:          discordServerId,
 			AttackSpeed:        serverData.attackSpeedName,
+			HubAttackSpeed: serverDatas["hub"].attackSpeedName,
+			CubecoreAttackSpeed: serverDatas["cubecore"].attackSpeedName,
+			HcfAttackSpeed: serverDatas["hcf" + currentHcfServerName].attackSpeedName,
+			KollusionAttackSpeed: serverDatas["kollusion"].attackSpeedName,
+			MzAttackSpeed: serverDatas["mz"].attackSpeedName,
 		},
 		DeathBanMinutes: serverData.deathBanMinutes,
 		LootFactor:      serverData.defaultKothLootFactor,

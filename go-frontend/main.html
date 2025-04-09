@@ -2,7 +2,7 @@
 <html lang="en" style="background-image: url('{{.MainTemplateData.BackgroundImageUrl.ImageUrl}}')">
 <head>
     <meta charset="UTF-8">
-    <title>WIP potpissers - /{{.GameModeName}}</title>
+    <title>WIP potpissers - /{{.MainTemplateData.GameModeName}}</title>
     <link rel="stylesheet" href="static.css">
     <link rel="icon" href="favicon.png" type="image/png">
 
@@ -48,8 +48,8 @@
         </li>
         {{end}}
     </ul>
-    {{block "fights" .}}{{end}}
-    {{block "duels" .}}{{end}}
+<!--    TODO fights-->
+<!--    TODO duels-->
 </div>
 
 <div style="display: flex; flex-direction: column">
@@ -59,7 +59,7 @@
                 leaderboards
             </button>
             <select style="font-size: 75%; align-self: end">
-                <option selected hidden disabled>/{{.GameModeName}}: <span id=online-server></span></option>
+                <option selected hidden disabled>/{{.MainTemplateData.GameModeName}}: <span id=online-server></span></option>
                 <option disabled>/hub: </option>
                 <option disabled>/cubecore: </option>
                 <option disabled>/hcf: </option>
@@ -73,7 +73,7 @@
                  src="potpisser.jpg" alt="image of calvin pissing"
                  onclick="window.location.href='/';">
             <select style="width: 11.75rem; text-align: right" onchange="window.location.href=this.value">
-                <option disabled selected hidden>{{.GameModeName}}.potpissers.com</option>
+                <option disabled selected hidden>{{.MainTemplateData.GameModeName}}.potpissers.com</option>
 
                 <option value="/">home</option>
                 <option value="mz">mz.potpissers.com</option>
@@ -141,12 +141,12 @@
         <div style="flex: 1; display: flex; flex-direction: column">
             <div style="display: flex; justify-content: space-between">
                 <select style="font-size: 75%">
-                    <option disabled selected hidden>/attackspeed: {{ .AttackSpeed }}</option>
-                    <option disabled>hub: {{ .HubAttackSpeed }}</option>
-                    <option disabled>cubecore: {{ .CubecoreAttackSpeed }}</option>
-                    <option disabled>hcf: {{ .HcfAttackSpeed }}</option>
-                    <option disabled>kollusion: {{ .KollusionAttackSpeed }}</option>
-                    <option disabled>mz: {{ .MzAttackSpeed }}</option>
+                    <option disabled selected hidden>/attackspeed: {{ .MainTemplateData.AttackSpeed }}</option>
+                    <option disabled>hub: {{ .MainTemplateData.HubAttackSpeed }}</option>
+                    <option disabled>cubecore: {{ .MainTemplateData.CubecoreAttackSpeed }}</option>
+                    <option disabled>hcf: {{ .MainTemplateData.HcfAttackSpeed }}</option>
+                    <option disabled>kollusion: {{ .MainTemplateData.KollusionAttackSpeed }}</option>
+                    <option disabled>mz: {{ .MainTemplateData.MzAttackSpeed }}</option>
                 </select>
                 {{block "map" .}}{{end}}
             </div>
