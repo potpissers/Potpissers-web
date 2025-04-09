@@ -56,13 +56,18 @@ eventSource.onmessage = function(e) {
             break
         }
         case "online": {
-            handleSseLi(jsonData, (li, data) => {
-                const p = document.createElement("p")
-                p.textContent = data.name
-                return p
-            })
-            const onlineNumber = document.getElementById("online-server")
-            onlineNumber.textContent = (parseInt(onlineNumber.textContent) + 1).toString()
+            const data = jsonData.data
+
+            const li = document.createElement("li")
+            const p = document.createElement("p")
+            p.textContent = data.name
+            li.appendChild(p)
+
+            const gameModeName = data.game_mode_name
+            const ul = document.getElementById("onlineplayers-" + gameModeName)
+            ul.appendChild(li)
+
+            document.getElementById("online-" + gameModeName).innerText = ul.children.length.toString()
             break
         }
         case "offline": {
