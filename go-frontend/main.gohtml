@@ -103,7 +103,7 @@
             <button class="id-chat-game" style="align-self: end; font-size: 75%" onclick="handlePlayersListToggle(this)">/list</button>
 
             {{range .MainTemplateData.HubPlayers}}
-                <ul id=onlineplayers-hub style="overflow-y: scroll; flex: 1" hidden>
+                <ul id="onlineplayers-hub" style="overflow-y: scroll; flex: 1" hidden>
                     <li>
                         <p>
                             {{.Name}}
@@ -112,7 +112,7 @@
                 </ul>
             {{end}}
             {{range .MainTemplateData.CubecorePlayers}}
-                <ul id=onlineplayers-cubecore style="overflow-y: scroll; flex: 1" hidden>
+                <ul id="onlineplayers-cubecore" style="overflow-y: scroll; flex: 1" hidden>
                     <li>
                         <p>
                             {{.Name}}

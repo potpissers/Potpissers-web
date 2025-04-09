@@ -57,7 +57,6 @@ eventSource.onmessage = function(e) {
         }
         case "online": {
             const data = jsonData.data
-            console.log(data)
 
             const li = document.createElement("li")
             const p = document.createElement("p")
