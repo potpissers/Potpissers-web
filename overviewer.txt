@@ -1,6 +1,6 @@
-worlds["World"] = "/home/cameron/potpissers/Potpissers-web/minezMap"
+worlds["World"] = "/home/fedora/Potpissers-web/world"
 
-outputdir = "/home/cameron/potpissers/Potpissers-web/go-frontend/overviewer-maps"
+outputdir = "/home/fedora/Potpissers-web/go-frontend/overviewer-maps"
 
 rendermode: "smooth_lighting"
 dimension="overworld"
