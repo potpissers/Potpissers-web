@@ -186,7 +186,7 @@
     </ul>
 </div>
 
-<div class="bd" style="text-align: center">
+<div class="bd">
     <select style="text-align: center">
         <option selected hidden disabled>events</option>
         <option>koths</option>
@@ -288,14 +288,14 @@
     <div style="display: flex; flex-direction: column; overflow-y: auto">
         <div style="display: flex">
             {{block "server tips buttons" .}}{{end}}
-            <select>
-                <option>potpissers tips</option>
-            </select>
-            <input type="radio">
-            <input type="radio">
-            <select>
-                <option>potpissers commands</option>
-            </select>
+            <span class=ifc>
+                <button>potpissers tips</button>
+                <input type="radio">
+            </span>
+            <span class=ifc>
+                <button>potpissers commands</button>
+                <input type="radio">
+            </span>
 
             <button onclick="handleContentMaximizeButtonClick(false)" style="margin-left: auto"></button>
         </div>
