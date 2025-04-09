@@ -1,26 +1,6 @@
-{{define "potpissers"}}potpissers - /hcf{{end}}
-
-{{define "slash"}}
-<option>/hcf: <span id=online-server></span></option>
-{{end}}
-
-{{define "gamemodes"}}
-<option disabled selected hidden>hcf.potpissers.com</option>
-
-<option value="/">home</option>
-<option value="mz">mz.potpissers.com</option>
-<option disabled>hcf.potpissers.com</option>
-{{end}}
-
-{{define "attackspeed"}}
-<select style="font-size: 75%">
-    <option disabled selected hidden>/attackspeed: {{ .AttackSpeed }}</option>
-</select>
-{{end}}
-
 {{define "map"}}
 <select style="font-size: 75%">
-    <option disabled selected>map 1</option>
+    <option disabled selected>{{}}</option>
 </select>
 {{end}}
 
@@ -55,42 +35,6 @@
 
 {{define "events button"}}
 <button style="font-size: 75%">/events</button>
-{{end}}
-
-{{define "server tips buttons"}}
-<button onclick="handleTipsButtonClick(['classtips', 'hcftips'], 'tips')">potpissers tips</button>
-<button onclick="handleTipsButtonClick(['tips', 'classtips'], 'hcftips')">hcf tips</button>
-<button onclick="handleTipsButtonClick(['tips', 'hcftips'], 'classtips')">class tips</button>
-{{end}}
-{{define "server tips data"}}
-<ul id="tips" style="overflow-y: scroll; flex: 1" hidden>
-    {{range .MainTemplateData.PotpissersTips}}
-    <li>
-        <p>
-            {{.}}
-        </p>
-    </li>
-    {{end}}
-</ul>
-
-<ul id="hcftips" style="overflow-y: scroll; flex: 1">
-    {{range .CubecoreTips}}
-    <li>
-        <p>
-            {{.}}
-        </p>
-    </li>
-    {{end}}
-</ul>
-<ul id="classtips" style="overflow-y: scroll; flex: 1" hidden>
-    {{range .ClassTips}}
-    <li>
-        <p>
-            {{.}}
-        </p>
-    </li>
-    {{end}}
-</ul>
 {{end}}
 
 {{define "server ticker buttons"}}
