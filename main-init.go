@@ -635,8 +635,11 @@ var hcfTemplate = getMainTemplate(frontendDirName + "/main-hcf.gohtml")
 type mainTemplateData struct {
 	GameModeName         string
 	BackgroundImageUrl   redditImagePost
-	NetworkPlayers       []onlinePlayer
-	ServerPlayers        []onlinePlayer
+	HubPlayers           []onlinePlayer
+	CubecorePlayers      []onlinePlayer
+	HcfPlayers           []onlinePlayer
+	KollusionPlayers     []onlinePlayer
+	MzPlayers            []onlinePlayer
 	NewPlayers           []newPlayer
 	PotpissersTips       []string
 	HcfTips              []string
@@ -677,8 +680,11 @@ func getHome() []byte {
 		MainTemplateData: mainTemplateData{
 			GameModeName:         "hub",
 			BackgroundImageUrl:   getRandomImagePost(),
-			NetworkPlayers:       currentPlayers,
-			ServerPlayers:        serverDatas["hub"].currentPlayers,
+			HubPlayers:           serverDatas["hub"].currentPlayers,
+			CubecorePlayers:      serverDatas["cubecore"].currentPlayers,
+			HcfPlayers:           serverDatas["hcf"+currentHcfServerName].currentPlayers,
+			KollusionPlayers:     serverDatas["kollusion"].currentPlayers,
+			MzPlayers:            serverDatas["mz"].currentPlayers,
 			NewPlayers:           newPlayers,
 			PotpissersTips:       potpissersTips,
 			HcfTips:              cubecoreTips,
@@ -718,8 +724,11 @@ func getMz() []byte {
 		MainTemplateData: mainTemplateData{
 			GameModeName:         "mz",
 			BackgroundImageUrl:   getRandomImagePost(),
-			NetworkPlayers:       currentPlayers,
-			ServerPlayers:        mzData.currentPlayers,
+			HubPlayers:           serverDatas["hub"].currentPlayers,
+			CubecorePlayers:      serverDatas["cubecore"].currentPlayers,
+			HcfPlayers:           serverDatas["hcf"+currentHcfServerName].currentPlayers,
+			KollusionPlayers:     serverDatas["kollusion"].currentPlayers,
+			MzPlayers:            serverDatas["mz"].currentPlayers,
 			NewPlayers:           newPlayers,
 			PotpissersTips:       potpissersTips,
 			HcfTips:              cubecoreTips,
@@ -773,8 +782,11 @@ func getHcf() []byte {
 		MainTemplateData: mainTemplateData{
 			GameModeName:         "hcf",
 			BackgroundImageUrl:   getRandomImagePost(),
-			NetworkPlayers:       currentPlayers,
-			ServerPlayers:        serverData.currentPlayers,
+			HubPlayers:           serverDatas["hub"].currentPlayers,
+			CubecorePlayers:      serverDatas["cubecore"].currentPlayers,
+			HcfPlayers:           serverDatas["hcf"+currentHcfServerName].currentPlayers,
+			KollusionPlayers:     serverDatas["kollusion"].currentPlayers,
+			MzPlayers:            serverDatas["mz"].currentPlayers,
 			NewPlayers:           newPlayers,
 			PotpissersTips:       potpissersTips,
 			HcfTips:              cubecoreTips,
