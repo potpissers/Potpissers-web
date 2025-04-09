@@ -491,7 +491,7 @@ func main() {
 	http.Handle("/potpisser.jpg", http.StripPrefix("/", http.FileServer(http.Dir(frontendDirName))))
 	http.Handle("/favicon.png", http.StripPrefix("/", http.FileServer(http.Dir(frontendDirName))))
 
-	http.Handle("/mz-map/", http.StripPrefix("/mz-map", http.FileServer(http.Dir("mz-map"))))
+	http.Handle("/mz-map/", http.StripPrefix("/mz-map", http.FileServer(http.Dir(frontendDirName + "/mz-map"))))
 
 	println("starting server")
 	log.Println(http.ListenAndServeTLS(":443", "/etc/letsencrypt/live/potpissers.com/fullchain.pem", "/etc/letsencrypt/live/potpissers.com/privkey.pem", nil))
