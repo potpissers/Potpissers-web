@@ -187,16 +187,11 @@
 </div>
 
 <div class="bd" style="text-align: center">
-    <div style="text-align: center">
-        <span class=ifc>
-            <button>koths</button>
-            <input name="koths-ticker" type="radio">
-        </span>
-        <span class=ifc>
-            <button>drops</button>
-            <input name="drops-ticker" type="radio" checked>
-        </span>
-    </div>
+    <select>
+        <option>events</option>
+        <option>koths</option>
+        <option>supply drops</option>
+    </select>
     <ul id=events>
         {{range .MainTemplateData.Events}}
         <li>
