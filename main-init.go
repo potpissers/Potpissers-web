@@ -623,14 +623,14 @@ func init() {
 const frontendDirName = "./go-frontend"
 
 func getMainTemplate(fileName string) *template.Template {
-	mainTemplate, err := template.ParseFiles(frontendDirName+"/main.html", fileName)
+	mainTemplate, err := template.ParseFiles(frontendDirName+"/main.gohtml", fileName)
 	handleFatalErr(err)
 	return mainTemplate
 }
 
-var homeTemplate = getMainTemplate(frontendDirName + "/main-home.html")
-var mzTemplate = getMainTemplate(frontendDirName + "/main-mz.html")
-var hcfTemplate = getMainTemplate(frontendDirName + "/main-hcf.html")
+var homeTemplate = getMainTemplate(frontendDirName + "/main-home.gohtml")
+var mzTemplate = getMainTemplate(frontendDirName + "/main-mz.gohtml")
+var hcfTemplate = getMainTemplate(frontendDirName + "/main-hcf.gohtml")
 
 type mainTemplateData struct {
 	GameModeName         string
