@@ -188,8 +188,8 @@
         {{range .MainTemplateData.RedditVideos}}
         <li class=fsb>
             {{if .YoutubeEmbedUrl}}
-            <div style="width: 50%; height: 20%">
-                <iframe src="{{.YoutubeEmbedUrl}}?autoplay=1&controls=0&mute=1&loop=1" style="width: 100%; height: 50%; pointer-events: none" allow="autoplay"></iframe>
+            <div style="position: relative; width: 50%; padding-bottom: 28.125%;">
+                <iframe src="{{.YoutubeEmbedUrl}}?autoplay=1&controls=0&mute=1&loop=1" style="width: 100%; height: 100%; pointer-events: none" allow="autoplay"></iframe>
             </div>
             {{else}}
             <video src="{{.VideoUrl}}" style="width: 50%"></video>
