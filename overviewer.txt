@@ -4,7 +4,7 @@ outputdir = "/home/fedora/Potpissers-web/go-frontend/overviewer-maps"
 
 rendermode: "smooth_lighting"
 dimension="overworld"
-texturepath="/home/cameron/potpissers/Potpissers-web/1.21.4.jar"
+texturepath="/home/fedora/Potpissers-web/1.21.4.jar"
 
 def playerIcons(poi):
     if poi['id'] == 'Player':
