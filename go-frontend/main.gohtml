@@ -39,7 +39,7 @@
             <input name="deaths-ticker" type="radio" disabled>
         </span>
     </div>
-    <ul id=deaths style="overflow-x: hidden; overflow-y: scroll">
+    <ul id="deaths" style="overflow-x: hidden; overflow-y: scroll">
         {{range .MainTemplateData.Deaths}}
         <li>
             <p>
@@ -59,11 +59,11 @@
                 leaderboards
             </button>
             <select style="font-size: 75%; align-self: end">
-                <option disabled>/hub: <span id=online-hub>{{len .MainTemplateData.HubPlayers}}</span></option>
-                <option disabled>/cubecore: <span id=online-cubecore>{{len .MainTemplateData.CubecorePlayers}}</span></option>
-                <option disabled>/hcf: <span id=online-hcf>{{len .MainTemplateData.HcfPlayers}}</span></option>
-                <option disabled>/kollusion: <span id=online-kollusion>{{len .MainTemplateData.KollusionPlayers}}</span></option>
-                <option disabled>/mz: <span id=online-mz>{{len .MainTemplateData.MzPlayers}}</span></option>
+                <option disabled>/hub: <span id="online-hub">{{len .MainTemplateData.HubPlayers}}</span></option>
+                <option disabled>/cubecore: <span id="online-cubecore">{{len .MainTemplateData.CubecorePlayers}}</span></option>
+                <option disabled>/hcf: <span id="online-hcf">{{len .MainTemplateData.HcfPlayers}}</span></option>
+                <option disabled>/kollusion: <span id="online-kollusion">{{len .MainTemplateData.KollusionPlayers}}</span></option>
+                <option disabled>/mz: <span id="online-mz">{{len .MainTemplateData.MzPlayers}}</span></option>
             </select>
         </div>
         <div
@@ -121,7 +121,7 @@
                 </ul>
             {{end}}
             {{range .MainTemplateData.HcfPlayers}}
-                <ul id=onlineplayers-hcf style="overflow-y: scroll; flex: 1" hidden>
+                <ul id="onlineplayers-hcf" style="overflow-y: scroll; flex: 1" hidden>
                     <li>
                         <p>
                             {{.Name}}
@@ -130,7 +130,7 @@
                 </ul>
             {{end}}
             {{range .MainTemplateData.KollusionPlayers}}
-                <ul id=onlineplayers-kollusion style="overflow-y: scroll; flex: 1" hidden>
+                <ul id="onlineplayers-kollusion" style="overflow-y: scroll; flex: 1" hidden>
                     <li>
                         <p>
                             {{.Name}}
@@ -139,7 +139,7 @@
                 </ul>
             {{end}}
             {{range .MainTemplateData.MzPlayers}}
-                <ul id=onlineplayers-mz style="overflow-y: scroll; flex: 1" hidden>
+                <ul id="onlineplayers-mz" style="overflow-y: scroll; flex: 1" hidden>
                     <li>
                         <p>
                             {{.Name}}
@@ -147,7 +147,7 @@
                     </li>
                 </ul>
             {{end}}
-            <ul id=onlineplayers style="overflow-y: scroll; flex: 1" hidden>
+            <ul id="onlineplayers" style="overflow-y: scroll; flex: 1" hidden>
                 {{range .MainTemplateData.HubPlayers}}
                     <li>
                         <p>
@@ -228,7 +228,7 @@
 
         <div style="display: flex; flex-direction: column; flex: 1">
             <div style="flex: 1; display: flex; flex-direction: column-reverse">
-                <ul id=referrals style="display: flex; flex-direction: column; align-items: flex-end; align-self: end">
+                <ul id="referrals" style="display: flex; flex-direction: column; align-items: flex-end; align-self: end">
                     {{range .MainTemplateData.NewPlayers}}
                     <li title="{{.Timestamp}}">
                         <small>
@@ -288,7 +288,7 @@
         <button style="font-size: 75%">drops</button>
         <input name="" type="radio" disabled>
     </span>
-    <ul id=events>
+    <ul id="events">
         {{range .MainTemplateData.Events}}
         <li>
             <p>
@@ -311,7 +311,7 @@
             </div>
             <button onclick="handleContentMaximizeButtonClick(true)" style="margin-left: auto"></button>
         </div>
-        <ul id=announcements style="overflow-y: scroll">
+        <ul id="announcements" style="overflow-y: scroll">
             {{range .MainTemplateData.Announcements}}
             <li>
                 <a href="https://discord.com/channels/{{$.MainTemplateData.DiscordId}}/{{.ChannelID}}/{{.ID}}">
@@ -322,7 +322,7 @@
             </li>
             {{end}}
         </ul>
-        <ul id=changelog style="overflow-y: scroll" hidden>
+        <ul id="changelog" style="overflow-y: scroll" hidden>
             {{range .MainTemplateData.Changelog}}
             <li>
                 <p>
