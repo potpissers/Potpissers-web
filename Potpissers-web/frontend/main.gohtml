@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" style="background-image: url('{{.MainTemplateData.BackgroundImageUrl.ImageUrl}}')">
+<html lang="en" style="background-image: url('{{.BackgroundImageUrl.ImageUrl}}')">
 <head>
     <meta charset="UTF-8">
-    <title>WIP potpissers.com - /{{.MainTemplateData.GameModeName}}</title>
+    <title>WIP potpissers.com - /{{.GameModeName}}</title>
     <link rel="stylesheet" href="static.css">
     <link rel="icon" href="favicon.png" type="image/png">
 
@@ -10,7 +10,7 @@
 
     <script defer>
         const currentPrices = {
-        {{range .MainTemplateData.LineItemData}}
+        {{range .LineItemData}}
         "{{.GameModeName}}-{{.ItemName}}": {{.ItemPriceInCents}},
         {{end}}
         }
@@ -18,7 +18,7 @@
     <script defer src="static-donate.js"></script>
 
     <script defer>
-        const eventSource = new EventSource("/api/sse/{{.MainTemplateData.GameModeName}}")
+        const eventSource = new EventSource("/api/sse/{{.GameModeName}}")
     </script>
     <script defer src="static.js"></script>
 </head>
@@ -40,7 +40,7 @@
         </span>
     </div>
     <ul id="deaths" style="overflow-x: hidden; overflow-y: scroll">
-        {{range .MainTemplateData.Deaths}}
+        {{range index .ServerDatas .GameModeName}}
         <li>
             <p>
                 ({{.GameModeName}}) {{.DeathMessage}}
@@ -59,12 +59,12 @@
                 leaderboards
             </button>
             <select style="font-size: 75%; align-self: end">
-                <option selected id="online-network">/glist: {{.MainTemplateData.NetworkPlayerCount}}</option>
-                <option disabled id="online-hub">/hub: {{len .MainTemplateData.HubPlayers}}</option>
-                <option disabled id="online-cubecore">/cubecore: {{len .MainTemplateData.CubecorePlayers}}</option>
-                <option disabled id="online-hcf">/hcf: {{len .MainTemplateData.HcfPlayers}}</option>
-                <option disabled id="online-kollusion">/kollusion: {{len .MainTemplateData.KollusionPlayers}}</option>
-                <option disabled id="online-mz">/mz: {{len .MainTemplateData.MzPlayers}}</option>
+                <option selected id="online-network">/glist: {{len .NetworkPlayers}}</option>
+                <option disabled id="online-hub">/hub: {{len (index .ServerDatas "hub").currentPlayers}}</option>
+                <option disabled id="online-cubecore">/cubecore: {{len (index .ServerDatas "cubecore").currentPlayers}}</option>
+                <option disabled id="online-hcf">/hcf: {{len (index .ServerDatas .CurrentHcfServerName).currentPlayers}}</option>
+                <option disabled id="online-kollusion">/kollusion: {{len (index .ServerDatas "kollusion").currentPlayers}}</option>
+                <option disabled id="online-mz">/mz: {{len (index .ServerDatas "mz").currentPlayers}}</option>
             </select>
         </div>
         <div
@@ -73,11 +73,9 @@
                  src="potpisser.jpg" alt="image of calvin pissing"
                  onclick="window.location.href='/';">
             <select style="width: 11.75rem; text-align: right" onchange="window.location.href=this.value">
-                <option disabled selected hidden>{{.MainTemplateData.GameModeName}}.potpissers.com</option>
-
-                <option value="/">home</option>
-                <option value="mz">mz.potpissers.com</option>
-                <option value="hcf">hcf.potpissers.com</option>
+                <option {{if eq .GameModeName "hub"}}selected{{end}}value="/">home</option>
+                <option {{if eq .GameModeName "mz"}}selected{{end}}value="mz">mz.potpissers.com</option>
+                <option {{if eq .GameModeName "hcf"}}selected{{end}}value="hcf">hcf.potpissers.com</option>
             </select>
         </div>
         <div style="display: flex; justify-content: space-between">
@@ -103,7 +101,7 @@
             <button class="id-chat-discord" hidden style="align-self: end; font-size: 75%" onclick="fetch('/api/discord-general')" onmouseover="fetch('/api/discord-general')">refresh</button>
             <button class="id-chat-game" style="align-self: end; font-size: 75%" onclick="handlePlayersListToggle(this)">/list</button>
 
-            {{range .MainTemplateData.HubPlayers}}
+            {{range .ServerDatas}}
                 <ul id="onlineplayers-hub" style="overflow-y: scroll; flex: 1" hidden>
                     <li>
                         <p>
@@ -112,7 +110,7 @@
                     </li>
                 </ul>
             {{end}}
-            {{range .MainTemplateData.CubecorePlayers}}
+            {{range .CubecorePlayers}}
                 <ul id="onlineplayers-cubecore" style="overflow-y: scroll; flex: 1" hidden>
                     <li>
                         <p>
@@ -121,7 +119,7 @@
                     </li>
                 </ul>
             {{end}}
-            {{range .MainTemplateData.HcfPlayers}}
+            {{range .HcfPlayers}}
                 <ul id="onlineplayers-hcf" style="overflow-y: scroll; flex: 1" hidden>
                     <li>
                         <p>
@@ -130,7 +128,7 @@
                     </li>
                 </ul>
             {{end}}
-            {{range .MainTemplateData.KollusionPlayers}}
+            {{range .KollusionPlayers}}
                 <ul id="onlineplayers-kollusion" style="overflow-y: scroll; flex: 1" hidden>
                     <li>
                         <p>
@@ -139,7 +137,7 @@
                     </li>
                 </ul>
             {{end}}
-            {{range .MainTemplateData.MzPlayers}}
+            {{range .MzPlayers}}
                 <ul id="onlineplayers-mz" style="overflow-y: scroll; flex: 1" hidden>
                     <li>
                         <p>
@@ -149,35 +147,35 @@
                 </ul>
             {{end}}
             <ul id="onlineplayers" style="overflow-y: scroll; flex: 1" hidden>
-                {{range .MainTemplateData.HubPlayers}}
+                {{range .HubPlayers}}
                     <li>
                         <p>
                             {{.Name}}
                         </p>
                     </li>
                 {{end}}
-                {{range .MainTemplateData.CubecorePlayers}}
+                {{range .CubecorePlayers}}
                     <li>
                         <p>
                             {{.Name}}
                         </p>
                     </li>
                 {{end}}
-                {{range .MainTemplateData.HcfPlayers}}
+                {{range .HcfPlayers}}
                     <li>
                         <p>
                             {{.Name}}
                         </p>
                     </li>
                 {{end}}
-                {{range .MainTemplateData.KollusionPlayers}}
+                {{range .KollusionPlayers}}
                     <li>
                         <p>
                             {{.Name}}
                         </p>
                     </li>
                 {{end}}
-                {{range .MainTemplateData.MzPlayers}}
+                {{range .MzPlayers}}
                     <li>
                         <p>
                             {{.Name}}
@@ -187,9 +185,9 @@
             </ul>
 
             <ul id="general" class="id-chat-discord" style="text-align: left; justify-items: end; flex: 1; overflow-y: auto; font-size: 75%" hidden>
-                {{range .MainTemplateData.DiscordMessages}}
+                {{range .DiscordMessages}}
                 <li>
-                    <a href="https://discord.com/channels/{{$.MainTemplateData.DiscordId}}/{{.ChannelID}}/{{.ID}}">
+                    <a href="https://discord.com/channels/{{$.DiscordId}}/{{.ChannelID}}/{{.ID}}">
                         <p>
                             {{.Author.Username}}: {{.Content}}
                         </p>
@@ -198,7 +196,7 @@
                 {{end}}
             </ul>
             <ul id="chat" class="id-chat-game" style="flex: 1; overflow-y: scroll; height: 100%; font-size: 75%">
-                {{range .MainTemplateData.Messages}}
+                {{range .Messages}}
                 <li>
                     <p>
                         {{.Message}}
@@ -215,12 +213,12 @@
         <div style="flex: 1; display: flex; flex-direction: column">
             <div style="display: flex; justify-content: space-between">
                 <select style="font-size: 75%">
-                    <option disabled selected hidden>/attackspeed: {{ .MainTemplateData.AttackSpeed }}</option>
-                    <option disabled>hub: {{ .MainTemplateData.HubAttackSpeed }}</option>
-                    <option disabled>cubecore: {{ .MainTemplateData.CubecoreAttackSpeed }}</option>
-                    <option disabled>hcf: {{ .MainTemplateData.HcfAttackSpeed }}</option>
-                    <option disabled>kollusion: {{ .MainTemplateData.KollusionAttackSpeed }}</option>
-                    <option disabled>mz: {{ .MainTemplateData.MzAttackSpeed }}</option>
+                    <option disabled selected hidden>/attackspeed: {{ .AttackSpeed }}</option>
+                    <option disabled>hub: {{ .HubAttackSpeed }}</option>
+                    <option disabled>cubecore: {{ .CubecoreAttackSpeed }}</option>
+                    <option disabled>hcf: {{ .HcfAttackSpeed }}</option>
+                    <option disabled>kollusion: {{ .KollusionAttackSpeed }}</option>
+                    <option disabled>mz: {{ .MzAttackSpeed }}</option>
                 </select>
                 {{block "map" .}}{{end}}
             </div>
@@ -230,7 +228,7 @@
         <div style="display: flex; flex-direction: column; flex: 1">
             <div style="flex: 1; display: flex; flex-direction: column-reverse">
                 <ul id="referrals" style="display: flex; flex-direction: column; align-items: flex-end; align-self: end">
-                    {{range .MainTemplateData.NewPlayers}}
+                    {{range .NewPlayers}}
                     <li title="{{.Timestamp}}">
                         <small>
                             {{.PlayerName}} ({{.Referrer}}) [{{.RowNumber}}]
@@ -259,7 +257,7 @@
         </select>
     </div>
     <ul id="videos">
-        {{range .MainTemplateData.RedditVideos}}
+        {{range .RedditVideos}}
         <li class=fsb>
             {{if .YoutubeEmbedUrl}}
             <iframe src="{{.YoutubeEmbedUrl}}?autoplay=1&controls=0&mute=1&loop=1" style="width: 50%; pointer-events: none" allow="autoplay"></iframe>
@@ -290,7 +288,7 @@
         <input name="" type="radio" disabled>
     </span>
     <ul id="events">
-        {{range .MainTemplateData.Events}}
+        {{range .Events}}
         <li>
             <p>
                 {{.CapMessage}}
@@ -313,9 +311,9 @@
             <button onclick="handleContentMaximizeButtonClick(true)" style="margin-left: auto"></button>
         </div>
         <ul id="announcements" style="overflow-y: scroll">
-            {{range .MainTemplateData.Announcements}}
+            {{range .Announcements}}
             <li>
-                <a href="https://discord.com/channels/{{$.MainTemplateData.DiscordId}}/{{.ChannelID}}/{{.ID}}">
+                <a href="https://discord.com/channels/{{$.DiscordId}}/{{.ChannelID}}/{{.ID}}">
                     <p>
                         {{.Author.Username}}: {{.Content}}
                     </p>
@@ -324,7 +322,7 @@
             {{end}}
         </ul>
         <ul id="changelog" style="overflow-y: scroll" hidden>
-            {{range .MainTemplateData.Changelog}}
+            {{range .Changelog}}
             <li>
                 <p>
                     {{.Content}}
@@ -350,7 +348,7 @@
 {{/*            <!--                    <button style="width: fit-content">unmute</button>-->*/}}
 {{/*            <!--                </li>-->*/}}
 {{/*            <!--            <button>shoutout</button>-->*/}}
-            {{range .MainTemplateData.LineItemData}}
+            {{range .LineItemData}}
             <li class="fc85">
                 <button onclick="handleClassHiddenToggle('{{.GameModeName}}-{{.ItemName}}'); handleLineItemButtonContentMaximize()" class="fsb" style="width: 100%">
                     {{.GameModeName}}<br>{{.ItemName}}<span>${{.ItemPriceInDollars}}</span>
@@ -397,7 +395,7 @@
             <button onclick="handleContentMaximizeButtonClick(false)" style="margin-left: auto"></button>
         </div>
         <ul id="tips" style="overflow-y: scroll; flex: 1" hidden>
-            {{range .MainTemplateData.PotpissersTips}}
+            {{range .PotpissersTips}}
             <li>
                 <p>
                     {{.}}
@@ -407,7 +405,7 @@
         </ul>
 
         <ul id="hcftips" style="overflow-y: scroll; flex: 1">
-            {{range .MainTemplateData.HcfTips}}
+            {{range .HcfTips}}
             <li>
                 <p>
                     {{.}}
@@ -416,7 +414,7 @@
             {{end}}
         </ul>
         <ul id="classtips" style="overflow-y: scroll; flex: 1" hidden>
-            {{range .MainTemplateData.HcfClassTips}}
+            {{range .HcfClassTips}}
             <li>
                 <p>
                     {{.}}
@@ -425,7 +423,7 @@
             {{end}}
         </ul>
         <ul id="mztips" style="overflow-y: scroll; flex: 1" hidden>
-            {{range .MainTemplateData.MzTips}}
+            {{range .MzTips}}
             <li>
                 <p>
                     {{.}}
@@ -443,7 +441,7 @@
 <div class="bd" style="text-align: center">
     <button>donations</button>
     <ul id="donations">
-        {{range .MainTemplateData.Donations}}<!--     TODO test   -->
+        {{range .Donations}}<!--     TODO test   -->
         {{if .TotalTipMoney.Amount}}
         tip: {{.TotalTipMoney.Amount}}c
         {{end}}
@@ -463,7 +461,7 @@
         <small>github.com/potpissers</small>
     </a>
     <input type="range" style="margin-left: auto">
-    <a href="{{.MainTemplateData.BackgroundImageUrl.PostUrl}}" style="justify-self: end">
+    <a href="{{.BackgroundImageUrl.PostUrl}}" style="justify-self: end">
         <small>background</small>
     </a>
 </footer>

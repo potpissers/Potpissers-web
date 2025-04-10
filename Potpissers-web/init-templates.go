@@ -23,54 +23,46 @@ func init() {
 	hcfTemplate = getMainTemplate(frontendDirName + "/main-hcf.gohtml")
 }
 
-type mainTemplateData struct {
-	GameModeName       string
-	BackgroundImageUrl redditImagePost
-	NetworkPlayers     []onlinePlayer
-	ServerDatas        map[string]*serverData
-	NewPlayers         []newPlayer
-	PotpissersTips     []string
-	HcfTips            []string
-	HcfClassTips       []string
-	MzTips             []string
-	Messages           []ingameMessage
-	Announcements      []discordMessage
-	Changelog          []discordMessage
-	DiscordMessages    []discordMessage
-	Donations          []order
-	LineItemData       []lineItemData
-	RedditVideos       []redditVideoPost
-	DiscordId          string
-}
-
-func getMainTemplateData(gameModeName string) mainTemplateData {
-	return mainTemplateData{
-		GameModeName:       gameModeName,
-		BackgroundImageUrl: redditImagePosts[rand.New(rand.NewSource(time.Now().UnixNano())).Intn(len(redditImagePosts))],
-		NetworkPlayers:     currentPlayers,
-		ServerDatas:        serverDatas,
-		NewPlayers:         newPlayers,
-		PotpissersTips:     potpissersTips,
-		HcfTips:            cubecoreTips,
-		HcfClassTips:       cubecoreClassTips,
-		MzTips:             mzTips,
-		Messages:           messages,
-		Announcements:      announcements,
-		Changelog:          changelog,
-		DiscordMessages:    discordMessages,
-		Donations:          donations,
-		LineItemData:       lineItemDatas,
-		RedditVideos:       redditVideoPosts,
-		DiscordId:          "1245300045188956252",
-	}
-}
-
 func getMainTemplateBytes(template *template.Template, gameModeName string) []byte {
 	var buffer bytes.Buffer
-	handleFatalErr(homeTemplate.Execute(&buffer, struct {
-		MainTemplateData mainTemplateData
+	handleFatalErr(template.Execute(&buffer, struct {
+		GameModeName         string
+		BackgroundImageUrl   redditImagePost
+		NetworkPlayers       []onlinePlayer
+		ServerDatas          map[string]*serverData
+		NewPlayers           []newPlayer
+		PotpissersTips       []string
+		HcfTips              []string
+		HcfClassTips         []string
+		MzTips               []string
+		Messages             []ingameMessage
+		Announcements        []discordMessage
+		Changelog            []discordMessage
+		DiscordMessages      []discordMessage
+		Donations            []order
+		LineItemData         []lineItemData
+		RedditVideos         []redditVideoPost
+		DiscordId            string
+		CurrentHcfServerName string
 	}{
-		MainTemplateData: getMainTemplateData(gameModeName),
+		GameModeName:         gameModeName,
+		BackgroundImageUrl:   redditImagePosts[rand.New(rand.NewSource(time.Now().UnixNano())).Intn(len(redditImagePosts))],
+		NetworkPlayers:       currentPlayers,
+		ServerDatas:          serverDatas,
+		NewPlayers:           newPlayers,
+		PotpissersTips:       potpissersTips,
+		HcfTips:              cubecoreTips,
+		HcfClassTips:         cubecoreClassTips,
+		MzTips:               mzTips,
+		Messages:             messages,
+		Announcements:        announcements,
+		Changelog:            changelog,
+		DiscordMessages:      discordMessages,
+		Donations:            donations,
+		LineItemData:         lineItemDatas,
+		RedditVideos:         redditVideoPosts,
+		DiscordId:            "1245300045188956252",
+		CurrentHcfServerName: currentHcfServerName,
 	}))
 	return buffer.Bytes()
 }
