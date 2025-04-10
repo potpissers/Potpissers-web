@@ -11,7 +11,7 @@ import (
 
 const minecraftUsernameLookupUrl = "https://api.minecraftservices.com/minecraft/profile/lookup/name/"
 const potpissersRedditApiUrl = "https://oauth.reddit.com/r/potpissers/new.json?limit=100"
-const frontendDirName = "./frontend"
+const frontendDirName = "/frontend"
 
 var postgresPool = func() *pgxpool.Pool {
 	pool, err := pgxpool.New(context.Background(), os.Getenv("POSTGRES_CONNECTION_STRING"))
