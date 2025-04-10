@@ -1,0 +1,33 @@
+{{define "server info"}}
+<iframe src="/mz-map/index.html" style="width: 100%; height: 80%"></iframe>
+{{end}}
+
+{{define "server ticker buttons"}}
+<select>
+    <option selected>bandit warnings</option>
+    <option disabled>current bandits</option>
+    <option disabled>current heroes</option>
+</select>
+{{end}}
+
+{{define "server ticker data"}}
+<ul>
+    {{range .Bandits}}
+    <li>
+        <p>
+            {{.BanditMessage}}
+        </p>
+    </li>
+    {{end}}
+</ul>
+{{end}}
+
+<!--{{define "content"}}-->
+<!--<div class="foo baz" style="flex: 3; display: flex; flex-direction: column">-->
+<!--    &lt;!&ndash;    <div class="foo baz" style="">&ndash;&gt;-->
+<!--    &lt;!&ndash;        <h3>&ndash;&gt;-->
+<!--    &lt;!&ndash;            &lt;!&ndash;        TODO -> map + loot tables&ndash;&gt;&ndash;&gt;-->
+<!--    &lt;!&ndash;        </h3>&ndash;&gt;-->
+<!--    &lt;!&ndash;    </div>&ndash;&gt;-->
+<!--</div>-->
+<!--{{end}}-->
