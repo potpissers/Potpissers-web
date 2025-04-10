@@ -68,7 +68,7 @@ eventSource.onmessage = function(e) {
             ul.appendChild(li)
 
             console.log(gameModeName)
-            document.getElementById("online-" + gameModeName).innerText = ul.children.length.toString()
+            document.getElementById("online-" + gameModeName).innerText = "/" + gameModeName + ": " + ul.children.length.toString()
             break
         }
         case "offline": {
@@ -120,7 +120,14 @@ eventSource.onmessage = function(e) {
         case "texts": {
             // TODO impl
         }
-        case "general":
+        case "general": {
+            handleSseLi(jsonData, (li, data) => {
+                const p = document.createElement("p")
+                p.textContent = data.content
+                return p
+            })
+            break
+        }
         case "changelog":
         case "announcements": {
             handleSseLi(jsonData, (li, data) => {
