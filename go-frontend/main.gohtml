@@ -59,6 +59,7 @@
                 leaderboards
             </button>
             <select style="font-size: 75%; align-self: end">
+                <option selected id="online-network">/glist: {{add (add (add (add (len .MainTemplateData.HubPlayers) (len .MainTemplateData.CubecorePlayers)) (len .MainTemplateData.HcfPlayers)) (len .MainTemplateData.KollusionPlayers)) (len .MainTemplateData.MzPlayers)}}</option>
                 <option disabled id="online-hub">/hub: {{len .MainTemplateData.HubPlayers}}</option>
                 <option disabled id="online-cubecore">/cubecore: {{len .MainTemplateData.CubecorePlayers}}</option>
                 <option disabled id="online-hcf">/hcf: {{len .MainTemplateData.HcfPlayers}}</option>
