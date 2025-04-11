@@ -145,6 +145,7 @@ func handleDiscordMessagesUpdate(channel chan struct{}, discordChannelId string,
 			<-channel
 		}
 	default:
+		println("hi1")
 		return
 	}
 }
