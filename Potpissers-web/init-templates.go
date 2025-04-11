@@ -22,7 +22,6 @@ var mainTemplate = func() *template.Template {
 		frontendDirName+"index-content-side-body.gohtml",
 		frontendDirName+"index-content-main-title.gohtml",
 		frontendDirName+"index-content-main-body.gohtml",
-		frontendDirName+"component-radiobutton.gohtml",
 		frontendDirName+"component-discord-messages-list.gohtml")
 	handleFatalErr(err)
 	return mainTemplate
