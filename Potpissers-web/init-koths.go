@@ -32,7 +32,7 @@ func init() {
 	for _, serverData := range serverDatas {
 		serverData.Koths = getArenaQuerySlice("SELECT * FROM get_14_newest_server_koths($1, $2)", serverData.GameModeName, serverData.ServerName)
 	}
-	println("events done")
+	println("koths done")
 }
 
 func getArenaQuerySlice(query string, params ...any) []koth {

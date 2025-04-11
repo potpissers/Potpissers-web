@@ -119,6 +119,8 @@ var donations = func() []order {
 		}))
 	}, orderIds)
 
+	println("orders done")
+
 	return orders
 }()
 
