@@ -1,0 +1,20 @@
+{{define "donation"}}
+    <div class="bd" style="text-align: center">
+        <button>donations</button>
+        <ul id="donations">
+            {{range .Donations}}<!--     TODO test   -->
+            {{if .TotalTipMoney.Amount}}
+                tip: {{.TotalTipMoney.Amount}}c
+            {{end}}
+            {{range $i, $item := .LineItems}}
+                <li>
+                    <p>
+                        {{$item.Quantity}} {{$item.Name}} ({{$item.TotalMoney.Amount}}c)
+                    </p>
+                </li>
+            {{end}}
+            {{end}}
+        </ul>
+        {{/*        TODO -> separate tips tab*/}}
+    </div>
+{{end}}

@@ -1,0 +1,6 @@
+{{define "radiobutton"}}
+    <span class=ifc>
+        <button style="font-size: 75%">{{.buttonName}}</button>
+        <input name="{{.inputName}}" type="radio" {{if .isChecked}}checked{{end}}>
+    </span>
+{{end}}

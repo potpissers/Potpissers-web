@@ -185,10 +185,10 @@ func init() {
 			if err != nil {
 				log.Fatal(err)
 			}
-			home = getMainTemplateBytes(homeTemplate, "hub")
-			mz = getMainTemplateBytes(mzTemplate, "mz")
-			hcf = getMainTemplateBytes(hcfTemplate, "hcf")
-			handleSseData(jsonBytes, homeConnections, mzConnections, hcfConnections)
+			home = getMainTemplateBytes("hub")
+			mz = getMainTemplateBytes("mz")
+			hcf = getMainTemplateBytes("hcf")
+			handleSseData(jsonBytes, mainConnections)
 		}
 	})
 }

@@ -2,28 +2,29 @@ package main
 
 import "github.com/jackc/pgx/v5"
 
-var potpissersTips []string
-var cubecoreTips []string
-var cubecoreClassTips []string
-var mzTips []string
+var contentData = make(map[string][]tip)
+
+type tip struct {
+	Title   string
+	Message string
+}
 
 func init() { // TODO -> move this to getting tips by name
 	getRowsBlocking("SELECT * FROM get_tips()", func(rows pgx.Rows) {
-		var tipMessage struct {
-			gameModeName string
-			tipTitle     string
-			tipMessage   string
-		}
-		handleFatalPgx(pgx.ForEachRow(rows, []any{&tipMessage.gameModeName, &tipMessage.tipTitle, &tipMessage.tipMessage}, func() error {
-			switch tipMessage.gameModeName {
+		var gameModeName string
+		var tipTitle string
+		var tipMessage string
+		handleFatalPgx(pgx.ForEachRow(rows, []any{&gameModeName, &tipTitle, &tipMessage}, func() error {
+			tip := tip{tipTitle, tipMessage}
+			switch gameModeName {
 			case "potpissers":
-				potpissersTips = append(potpissersTips, tipMessage.tipTitle+": "+tipMessage.tipMessage)
+				contentData["potpissers tips"] = append(contentData["potpissers tips"], tip)
 			case "cubecore":
-				cubecoreTips = append(cubecoreTips, tipMessage.tipTitle+": "+tipMessage.tipMessage)
+				contentData["hcf tips"] = append(contentData["hcf tips"], tip)
 			case "cubecore_classes":
-				cubecoreClassTips = append(cubecoreClassTips, tipMessage.tipTitle+": "+tipMessage.tipMessage)
+				contentData["hcf class tips"] = append(contentData["hcf class tips"], tip)
 			case "kollusion":
-				mzTips = append(mzTips, tipMessage.tipTitle+": "+tipMessage.tipMessage)
+				contentData["mz tips"] = append(contentData["mz tips"], tip)
 			}
 			return nil
 		}))

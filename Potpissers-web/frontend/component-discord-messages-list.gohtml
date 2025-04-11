@@ -1,0 +1,11 @@
+{{define "discordmessageslist"}}
+    {{range .discordMessages}}
+        <li>
+            <a href="https://discord.com/channels/{{$.DiscordId}}/{{.ChannelID}}/{{.ID}}">
+                <p>
+                    {{.Author.Username}}: {{.Content}}
+                </p>
+            </a>
+        </li>
+    {{end}}
+{{end}}

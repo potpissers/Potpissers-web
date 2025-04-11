@@ -1,0 +1,56 @@
+{{define "contentsidetitle"}}
+    <div style="display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden">
+        <div style="display: flex; justify-content: space-between">
+            <button id="donatebutton">/donate</button>
+            <button style="width: 100%" onclick="handlePaymentLink()" id="checkout" class="fsb h"><span
+                        style="font-size: 75%">checkout</span><span id="checkoutbalance"></span></button>
+            <div id="squarebutton" class="h" style="overflow-x: hidden">
+                <a hidden id="squarelink" onclick="handleLineItemReset()"></a>
+                <a id="squarelinkspinner">...</a>
+            </div>
+
+            <button id="donatesidebutton" onclick="handleContentMaximizeButtonClick(true)"></button>
+            <button hidden id="donatesidebuttonred" onclick="handleLineItemReset()"
+                    style="background-color: indianred"></button>
+        </div>
+        <ul style="overflow-y: scroll; width: 100%">
+            {{/*            <!--                <li>-->*/}}
+            {{/*            <!--                    <button style="width: fit-content">unmute</button>-->*/}}
+            {{/*            <!--                </li>-->*/}}
+            {{/*            <!--            <button>shoutout</button>-->*/}}
+            {{range .LineItemData}}
+                <li class="fc85">
+                    <button onclick="handleClassHiddenToggle('{{.GameModeName}}-{{.ItemName}}'); handleLineItemButtonContentMaximize()"
+                            class="fsb" style="width: 100%">
+                        {{.GameModeName}}<br>{{.ItemName}}<span>${{.ItemPriceInDollars}}</span>
+                    </button>
+
+                    <p class={{.GameModeName}}-{{.ItemName}} hidden>
+                        {{.ItemDescription}}
+                    </p>
+
+                    {{if .IsPlural}}
+                        <input id="{{.GameModeName}}-{{.ItemName}}-amount"
+                               style="align-self: end; width: 20%; font-size: 75%" placeholder=amount type=number
+                               min=1
+                               value=1 step=1 class="{{.GameModeName}}-{{.ItemName}}" hidden>
+                    {{end}}
+                    <div style="display: flex">
+                        <input id="donate-username" class="fi {{.GameModeName}}-{{.ItemName}}" hidden
+                               style="width: 60%; font-size: 75%" placeholder="username"
+                               onblur="handleMcNameBlur(this)">
+                        <script async>
+                            document.getElementById("donate-username").addEventListener("keydown", (e) => handleMcNameKeyDown(e))
+                        </script>
+
+                        <button style="font-size: 75%" class="{{.GameModeName}}-{{.ItemName}}" hidden
+                                onclick="handleAddLineItemJson('{{.GameModeName}}-{{.ItemName}}', {{if .IsPlural}}document.getElementById('{{.GameModeName}}-{{.ItemName}}-amount').value{{else}}1{{end}})">
+                            add
+                        </button>
+                    </div>
+                </li>
+            {{end}}
+            {{/*            button style="width: fit-content">hcf big dog*/}}
+        </ul>
+    </div>
+{{end}}

@@ -1,0 +1,24 @@
+{{define "contentmainbody"}}
+    <div style="display: flex; flex-direction: column; overflow-y: auto">
+        <div style="display: flex">
+            <select>
+                {{range $name, $data := .ContentData}}
+                    <option>{{$name}}</option>
+                {{end}}
+            </select>
+
+            <button onclick="handleContentMaximizeButtonClick(false)" style="margin-left: auto"></button>
+        </div>
+        {{range $name, $data := .ContentData}}
+            <ul id="{{$name}}" style="overflow-y: scroll; flex: 1" hidden>
+                {{range $data}}
+                    <li>
+                        <p>
+                            {{.Title}}: {{.Message}}
+                        </p>
+                    </li>
+                {{end}}
+            </ul>
+        {{end}}
+    </div>
+{{end}}

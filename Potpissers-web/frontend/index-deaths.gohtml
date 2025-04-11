@@ -1,0 +1,20 @@
+{{define "deaths"}}
+    <div class="bd" style="display: flex; flex-direction: column">
+        <div style="text-align: center">
+            {{template "radiobutton" (dict "buttonName" "fights" "inputName" "deaths-ticker" "isChecked" false)}}
+            {{template "radiobutton" (dict "buttonName" "deaths" "inputName" "deaths-ticker" "isChecked" true)}}
+            {{template "radiobutton" (dict "buttonName" "duels" "inputName" "deaths-ticker" "isChecked" false)}}
+        </div>
+        <ul id="deaths" style="overflow-x: hidden; overflow-y: scroll">
+            {{range index .ServerDatas .GameModeName}}
+                <li>
+                    <p>
+                        ({{.GameModeName}}) {{.DeathMessage}}
+                    </p>
+                </li>
+            {{end}}
+        </ul>
+        {{/*TODO fights*/}}
+        {{/*TODO duels*/}}
+    </div>
+{{end}}

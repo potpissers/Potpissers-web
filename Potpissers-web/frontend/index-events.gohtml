@@ -1,0 +1,34 @@
+{{define "events"}}
+    <div class="bd" style="text-align: center">
+        {{template "radiobutton" (dict "buttonName" "koths" "inputName" "" "isChecked" false)}}
+        {{template "radiobutton" (dict "buttonName" "events" "inputName" "" "isChecked" true)}}
+        {{template "radiobutton" (dict "buttonName" "drops" "inputName" "" "isChecked" false)}}
+        <ul id="koths">
+            {{range .Koths}}
+                <li>
+                    <p>
+                        {{.CapMessage}}
+                    </p>
+                </li>
+            {{end}}
+        </ul>
+        <ul id="events">
+            {{range .Events}}
+                <li>
+                    <p>
+                        {{.CapMessage}}
+                    </p>
+                </li>
+            {{end}}
+        </ul>
+        <ul id="drops">
+            {{range .SupplyDrops}}
+                <li>
+                    <p>
+                        {{.WinMessage}}
+                    </p>
+                </li>
+            {{end}}
+        </ul>
+    </div>
+{{end}}

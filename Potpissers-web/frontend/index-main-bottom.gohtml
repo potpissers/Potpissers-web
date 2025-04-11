@@ -1,0 +1,135 @@
+{{define "mainbottom"}}
+    <div style="display: flex; height: 100%; overflow-y: auto">
+        <div style="display: flex; flex-direction: column; flex: 1">
+            <button class="id-chat-discord" hidden style="align-self: end; font-size: 75%"
+                    onclick="fetch('/api/discord-general')" onmouseover="fetch('/api/discord-general')">refresh
+            </button>
+            <button class="id-chat-game" style="align-self: end; font-size: 75%"
+                    onclick="handlePlayersListToggle(this)">/list
+            </button>
+
+            {{range $name, $data := .ServerDatas}}
+                <ul id="onlineplayers-{{$name}}" style="overflow-y: scroll; flex: 1" hidden>
+                    {{range $data.currentPlayers}}
+                        <li>
+                            <p>
+                                {{.Name}}
+                            </p>
+                        </li>
+                    {{end}}
+                </ul>
+            {{end}}
+            <ul id="onlineplayers" style="overflow-y: scroll; flex: 1" hidden>
+                {{range .NetworkPlayers}}
+                    <li>
+                        <p>
+                            {{.Name}}
+                        </p>
+                    </li>
+                {{end}}
+            </ul>
+
+
+            <ul id="general" class="id-chat-discord"
+                style="text-align: left; justify-items: end; flex: 1; overflow-y: auto; font-size: 75%" hidden>
+                {{range .DiscordMessages}}
+                    <li>
+                        <a href="https://discord.com/channels/{{$.DiscordId}}/{{.ChannelID}}/{{.ID}}">
+                            <p>
+                                {{.Author.Username}}: {{.Content}}
+                            </p>
+                        </a>
+                    </li>
+                {{end}}
+            </ul>
+            <ul id="chat" class="id-chat-game" style="flex: 1; overflow-y: scroll; height: 100%; font-size: 75%">
+                {{range .Messages}}
+                    <li>
+                        <p>
+                            {{.Message}}
+                        </p>
+                    </li>
+                {{end}}
+            </ul>
+            <ul id="chat" class="id-chat-game" style="flex: 1; overflow-y: scroll; height: 100%; font-size: 75%">
+                {{range .Messages}}
+                    <li>
+                        <p>
+                            {{.Message}}
+                        </p>
+                    </li>
+                {{end}}
+            </ul>
+            <div style="display: flex; justify-content: space-between">
+                <button style="font-size: 75%" onclick="handleChatToggle(this)">game</button>
+                <input class="id-chat-game" style="font-size: 75%">
+            </div>
+        </div>
+
+        <div style="flex: 1; display: flex; flex-direction: column">
+            <div style="display: flex; justify-content: space-between">
+                <select style="font-size: 75%">
+                    <option disabled selected hidden>/attackspeed: {{ .AttackSpeed }}</option>
+                    <option disabled>hub: {{ .HubAttackSpeed }}</option>
+                    <option disabled>cubecore: {{ .CubecoreAttackSpeed }}</option>
+                    <option disabled>hcf: {{ .HcfAttackSpeed }}</option>
+                    <option disabled>kollusion: {{ .KollusionAttackSpeed }}</option>
+                    <option disabled>mz: {{ .MzAttackSpeed }}</option>
+                </select>
+                <select {{if not eq .GameModeName "hcf"}}hidden{{end}} style="font-size: 75%">
+                    <option disabled selected hidden></option>
+                    <!--    TODO maps-->
+                </select>
+            </div>
+            <table style="width: 100%">
+                <tr>
+                    <td>deathban</td>
+                    <td>revive cost</td>
+                    <td>event loot</td>
+                    <td>border</td>
+                </tr>
+                <tr>
+                    <td>{{ .DeathBanMinutes }}m</td>
+                    <td>{{ .MainTemplateData.OffPeakLivesNeeded }}x</td>
+                    <td>{{ .LootFactor }}x</td>
+                    <td>{{ .BorderSize }}</td>
+                </tr>
+            </table>
+            <div style="align-self: end; margin-top: auto; display: flex; justify-content: space-between; width: 100%">
+                <button style="font-size: 75%">/map</button>
+                <select style="font-size: 75%; width: fit-content; text-align: right">
+                    <option disabled selected hidden>/mapkit</option>
+
+                    <option disabled>sharpness {{ .SharpnessLimit }}</option>
+                    <option disabled>protection {{ .ProtectionLimit }}</option>
+                    <option disabled>power {{ .PowerLimit }}</option>
+                    <option disabled>regen {{ .RegenLimit }}</option>
+                    <option disabled>strength {{ .StrengthLimit }}</option>
+                    <option disabled>weakness {{ .IsWeaknessEnabled }}</option>
+                    <option disabled>extended debuffs {{ .IsBardPassiveDebuffingEnabled }}</option>
+                    <option disabled>dtr max {{ .DtrMax }}</option>
+                </select>
+            </div>
+        </div>
+        <iframe src="/mz-map/index.html" style="width: 100%; height: 80%"></iframe>
+
+        <div style="display: flex; flex-direction: column; flex: 1">
+            <div style="flex: 1; display: flex; flex-direction: column-reverse">
+                <ul id="referrals"
+                    style="display: flex; flex-direction: column; align-items: flex-end; align-self: end">
+                    {{range .NewPlayers}}
+                        <li title="{{.Timestamp}}">
+                            <small>
+                                {{.PlayerName}} ({{.Referrer}}) [{{.RowNumber}}]
+                            </small>
+                        </li>
+                    {{end}}
+                </ul>
+            </div>
+            <div style="display: flex">
+                <button style="font-size: 75%">/events</button>
+                <button style="font-size: 75%; margin-left: auto">"/referral"s</button>
+            </div>
+        </div>
+    </div>
+{{end}}

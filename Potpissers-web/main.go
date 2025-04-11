@@ -27,12 +27,23 @@ func main() {
 	doApi()
 	println("main api done")
 
-	home = getMainTemplateBytes(homeTemplate, "hub")
+	home = getMainTemplateBytes("hub")
 	println("home template done")
-	hcf = getMainTemplateBytes(hcfTemplate, "hcf")
+	hcf = getMainTemplateBytes("hcf")
 	println("hcf template done")
-	mz = getMainTemplateBytes(mzTemplate, "mz")
+	mz = getMainTemplateBytes("mz")
 	println("mz template done")
+
+	for endpoint, bytes := range map[string]*[]byte{
+		"/":    &home,
+		"/hub": &home,
+		"mz":   &mz,
+		"hcf":  &hcf,
+	} {
+		http.HandleFunc(endpoint, func(w http.ResponseWriter, r *http.Request) {
+			handleMainTemplateEndpoint(w, bytes)
+		})
+	}
 
 	http.HandleFunc("/github", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "https://github.com/potpissers", http.StatusMovedPermanently)
@@ -59,22 +70,12 @@ func main() {
 	log.Println(http.ListenAndServeTLS(":443", "/etc/letsencrypt/live/potpissers.com/fullchain.pem", "/etc/letsencrypt/live/potpissers.com/privkey.pem", nil))
 }
 
-func handleServerDataJsonPrepend[T any](homeSlice *[]T, t T, bytes []byte, serverSlice *[]T, gameModeName string) {
-	*homeSlice = append([]T{t}, *homeSlice...) // TODO -> this is necessary because html/css and go's templating can't handle reversing it for some reason. go's templater could maybe do it but it seems like more processing than this takes
-	home = getMainTemplateBytes(homeTemplate, "hub")
-	handleSseData(bytes, homeConnections)
+func handleMainTemplateEndpoint(w http.ResponseWriter, bytes *[]byte) {
+	_, err := w.Write(*bytes)
+	handleFatalErr(err)
 
-	*serverSlice = append([]T{t}, *serverSlice...)
-	switch gameModeName {
-	case "hcf":
-		{
-			hcf = getMainTemplateBytes(hcfTemplate, "hcf")
-			handleSseData(bytes, hcfConnections)
-		}
-	case "mz":
-		{
-			mz = getMainTemplateBytes(mzTemplate, "mz")
-			handleSseData(bytes, mzConnections)
-		}
-	}
+	handleRedditPostDataUpdate()
+	handleDiscordMessagesUpdate(discordGeneralChan, discordGeneralChannelId, &mostRecentDiscordGeneralMessageId, &discordMessages, "general")
+	//			handleDiscordMessagesUpdate(discordChangelogChan, discordChangelogChannelId, &mostRecentDiscordChangelogMessageId, &changelog, "changelog")
+	handleDiscordMessagesUpdate(discordAnnouncementsChan, discordAnnouncementsChannelId, &mostRecentDiscordAnnouncementsMessageId, &announcements, "announcements")
 }

@@ -24,15 +24,23 @@ type death struct {
 	// TODO killer inventory
 }
 
-var deaths = func() []death {
+var deaths = getDeathsQuerySlice("SELECT * FROM get_12_latest_network_deaths()")
+
+func init() {
+	for _, serverData := range serverDatas {
+		serverData.Deaths = getDeathsQuerySlice("SELECT * FROM get_12_latest_server_deaths($1, $2)", serverData.GameModeName, serverData.ServerName)
+	}
+	println("deaths done")
+}
+
+func getDeathsQuerySlice(query string, params ...any) []death {
 	var deaths []death
-	getRowsBlocking("SELECT * FROM get_12_latest_network_deaths()", func(rows pgx.Rows) {
+	getRowsBlocking(query, func(rows pgx.Rows) {
 		var death death
 		handleFatalPgx(pgx.ForEachRow(rows, []any{&death.GameModeName, &death.ServerName, &death.VictimUserFightId, &death.Timestamp, &death.VictimUuid, nil, &death.DeathWorldName, &death.DeathX, &death.DeathY, &death.DeathZ, &death.DeathMessage, &death.KillerUuid, nil, nil}, func() error {
 			deaths = append(deaths, death)
 			return nil
 		}))
 	})
-	println("deaths done")
 	return deaths
-}()
+}

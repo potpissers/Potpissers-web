@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" style="background-image: url('{{.BackgroundImageUrl.ImageUrl}}')">
+<head>
+    <meta charset="UTF-8">
+    <title>WIP potpissers.com - /{{.GameModeName}}</title>
+    <link rel="stylesheet" href="static.css">
+    <link rel="icon" href="favicon.png" type="image/png">
+
+    <script src="static-init.js"></script>
+
+    <script defer>
+        const currentPrices = {
+            {{range .LineItemData}}
+            "{{.GameModeName}}-{{.ItemName}}": {{.ItemPriceInCents}},
+            {{end}}
+        }
+    </script>
+    <script defer src="static-donate.js"></script>
+
+    <script defer>
+        const eventSource = new EventSource("/api/sse/{{.GameModeName}}")
+    </script>
+    <script defer src="static.js"></script>
+</head>
+<body>
+
+{{template "deaths"}}
+
+{{template "main"}}
+
+{{template "videos"}}
+
+{{template "events"}}
+
+{{template "content"}}
+
+{{template "donations"}}
+
+<footer>
+    <a href="https://github.com/potpissers" style="grid-column: 2; justify-self: center">
+        <small>github.com/potpissers</small>
+    </a>
+    <input type="range" style="margin-left: auto">
+    <a href="{{.BackgroundImageUrl.PostUrl}}" style="justify-self: end">
+        <small>background</small>
+    </a>
+</footer>
+
+</body>
+
+</html>

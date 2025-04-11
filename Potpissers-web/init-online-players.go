@@ -23,7 +23,7 @@ var currentPlayers = func() []onlinePlayer {
 		handleFatalPgx(pgx.ForEachRow(rows, []any{&t.Uuid, &t.Name, &t.GameModeName, &t.ServerName, &t.ActiveFaction, &t.NetworkJoin, &t.ServerJoin}, func() error {
 			currentPlayers = append(currentPlayers, t) // TODO sort names
 			serverData := serverDatas[t.GameModeName+t.ServerName]
-			serverData.currentPlayers = append(serverData.currentPlayers, t)
+			serverData.CurrentPlayers = append(serverData.CurrentPlayers, t)
 			return nil
 		}))
 	})

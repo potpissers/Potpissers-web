@@ -7,34 +7,37 @@ import (
 	"time"
 )
 
-var homeTemplate *template.Template
-var mzTemplate *template.Template
-var hcfTemplate *template.Template
+var mainTemplate = func() *template.Template {
+	mainTemplate, err := template.ParseFiles(
+		frontendDirName+"/index.gohtml",
+		frontendDirName+"index-videos.gohtml",
+		frontendDirName+"index-main.gohtml",
+		frontendDirName+"index-main-top.gohtml",
+		frontendDirName+"index-main-bottom.gohtml",
+		frontendDirName+"index-events.gohtml",
+		frontendDirName+"index-donations.gohtml",
+		frontendDirName+"index-deaths.gohtml",
+		frontendDirName+"index-content.gohtml",
+		frontendDirName+"index-content-side-title.gohtml",
+		frontendDirName+"index-content.side-body.gohtml",
+		frontendDirName+"index-content-main-title.gohtml",
+		frontendDirName+"index-content-main-body.gohtml",
+		frontendDirName+"component-radiobutton.gohtml",
+		frontendDirName+"component-discord-messages-list.gohtml")
+	handleFatalErr(err)
+	return mainTemplate
+}()
 
-func init() {
-	getMainTemplate := func(fileName string) *template.Template {
-		mainTemplate, err := template.ParseFiles(frontendDirName+"/main.gohtml", fileName)
-		handleFatalErr(err)
-		return mainTemplate
-	}
-
-	homeTemplate = getMainTemplate(frontendDirName + "/main-home.gohtml")
-	mzTemplate = getMainTemplate(frontendDirName + "/main-mz.gohtml")
-	hcfTemplate = getMainTemplate(frontendDirName + "/main-hcf.gohtml")
-}
-
-func getMainTemplateBytes(template *template.Template, gameModeName string) []byte {
+func getMainTemplateBytes(gameModeName string) []byte {
 	var buffer bytes.Buffer
-	handleFatalErr(template.Execute(&buffer, struct {
-		GameModeName         string
-		BackgroundImageUrl   redditImagePost
-		NetworkPlayers       []onlinePlayer
-		ServerDatas          map[string]*serverData
-		NewPlayers           []newPlayer
-		PotpissersTips       []string
-		HcfTips              []string
-		HcfClassTips         []string
-		MzTips               []string
+	handleFatalErr(mainTemplate.Execute(&buffer, struct {
+		GameModeName       string
+		BackgroundImageUrl redditImagePost
+		NetworkPlayers     []onlinePlayer
+		ServerDatas        map[string]*serverData
+		NewPlayers         []newPlayer
+		ContentData        map[string][]tip
+
 		Messages             []ingameMessage
 		Announcements        []discordMessage
 		Changelog            []discordMessage
@@ -44,16 +47,17 @@ func getMainTemplateBytes(template *template.Template, gameModeName string) []by
 		RedditVideos         []redditVideoPost
 		DiscordId            string
 		CurrentHcfServerName string
+		Events               []abstractEvent
+		Koths                []koth
+		SupplyDrops          []supplyDrop
 	}{
-		GameModeName:         gameModeName,
-		BackgroundImageUrl:   redditImagePosts[rand.New(rand.NewSource(time.Now().UnixNano())).Intn(len(redditImagePosts))],
-		NetworkPlayers:       currentPlayers,
-		ServerDatas:          serverDatas,
-		NewPlayers:           newPlayers,
-		PotpissersTips:       potpissersTips,
-		HcfTips:              cubecoreTips,
-		HcfClassTips:         cubecoreClassTips,
-		MzTips:               mzTips,
+		GameModeName:       gameModeName,
+		BackgroundImageUrl: redditImagePosts[rand.New(rand.NewSource(time.Now().UnixNano())).Intn(len(redditImagePosts))],
+		NetworkPlayers:     currentPlayers,
+		ServerDatas:        serverDatas,
+		NewPlayers:         newPlayers,
+		ContentData:        contentData,
+
 		Messages:             messages,
 		Announcements:        announcements,
 		Changelog:            changelog,
@@ -63,6 +67,9 @@ func getMainTemplateBytes(template *template.Template, gameModeName string) []by
 		RedditVideos:         redditVideoPosts,
 		DiscordId:            "1245300045188956252",
 		CurrentHcfServerName: currentHcfServerName,
+		Events:               events,
+		Koths:                koths,
+		SupplyDrops:          supplyDrops,
 	}))
 	return buffer.Bytes()
 }

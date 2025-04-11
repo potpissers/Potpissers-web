@@ -126,9 +126,9 @@ func handleDiscordMessagesUpdate(channel chan struct{}, discordChannelId string,
 			if len(newMessages) > 0 {
 				*mostRecentMessageId = newMessages[0].ID
 
-				home = getMainTemplateBytes(homeTemplate, "hub")
-				hcf = getMainTemplateBytes(hcfTemplate, "hcf")
-				mz = getMainTemplateBytes(mzTemplate, "mz")
+				home = getMainTemplateBytes("hub")
+				hcf = getMainTemplateBytes("hcf")
+				mz = getMainTemplateBytes("mz")
 
 				for _, msg := range newMessages {
 					*slice = append([]discordMessage{msg}, *slice...)
@@ -137,7 +137,7 @@ func handleDiscordMessagesUpdate(channel chan struct{}, discordChannelId string,
 					if err != nil {
 						log.Fatal(err)
 					}
-					handleSseData(jsonData, homeConnections, mzConnections, hcfConnections)
+					handleSseData(jsonData, mainConnections)
 				}
 			}
 			time.Sleep(time.Second)

@@ -27,6 +27,7 @@ type redditImagePost struct {
 }
 
 var redditImagePosts []redditImagePost
+
 var imageRegex = regexp.MustCompile(`(?i)^(https?://)?(i\.redd\.it|i\.imgur\.com)/.*\.(png|jpg|jpeg)$`)
 var youtubeVideoIdRegex = regexp.MustCompile(`[?&]v=([a-zA-Z0-9_-]{11})`)
 var lastCheckedRedditPostId string
@@ -70,16 +71,16 @@ func handleRedditPostDataUpdate() {
 				redditImagePosts = append([]redditImagePost{post}, redditImagePosts...)
 			}
 			if len(newVideoPosts) > 0 || len(newImagePosts) > 0 {
-				home = getMainTemplateBytes(homeTemplate, "hub")
-				mz = getMainTemplateBytes(mzTemplate, "mz")
-				hcf = getMainTemplateBytes(hcfTemplate, "hcf")
+				home = getMainTemplateBytes("hub")
+				mz = getMainTemplateBytes("mz")
+				hcf = getMainTemplateBytes("hcf")
 
 				handle := func(t any) {
 					jsonData, err := json.Marshal(t)
 					if err != nil {
 						log.Fatal(err)
 					}
-					handleSseData(jsonData, homeConnections, hcfConnections, mzConnections)
+					handleSseData(jsonData, mainConnections)
 				}
 				for _, post := range newVideoPosts {
 					handle(sseMessage{"videos", post})

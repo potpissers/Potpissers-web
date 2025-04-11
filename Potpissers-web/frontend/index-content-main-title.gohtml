@@ -1,0 +1,19 @@
+{{define "contentmaintitle"}}
+    <div style="display: flex; flex-direction: column; overflow-y: auto">
+        <div style="display: flex">
+            <div style="margin-left: auto">
+                <button>announcements</button>
+                <input type="radio" checked>
+                <input type="radio" disabled>
+                <button>changelog</button>
+            </div>
+            <button onclick="handleContentMaximizeButtonClick(true)" style="margin-left: auto"></button>
+        </div>
+        <ul id="announcements" style="overflow-y: scroll">
+            {{template "discordmessageslist" .Announcements}}
+        </ul>
+        <ul id="changelog" style="overflow-y: scroll" hidden>
+            {{template "discordmessageslist" .Changelog}}
+        </ul>
+    </div>
+{{end}}
