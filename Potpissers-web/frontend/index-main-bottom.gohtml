@@ -51,15 +51,6 @@
                     </li>
                 {{end}}
             </ul>
-            <ul id="chat" class="id-chat-game" style="flex: 1; overflow-y: scroll; height: 100%; font-size: 75%">
-                {{range .Messages}}
-                    <li>
-                        <p>
-                            {{.Message}}
-                        </p>
-                    </li>
-                {{end}}
-            </ul>
             <div style="display: flex; justify-content: space-between">
                 <button style="font-size: 75%" onclick="handleChatToggle(this)">game</button>
                 <input class="id-chat-game" style="font-size: 75%">
