@@ -79,8 +79,8 @@
                     <td>border</td>
                 </tr>
                 <tr>
-                    <td>{{ .DeathBanMinutes }}m</td>
-                    <td>{{ .MainTemplateData.OffPeakLivesNeeded }}x</td>
+                    <td>{{(index .ServerDatas (print "hcf" .CurrentHcfServerName)).AttackSpeedName.DeathBanMinutes}}m</td>
+                    <td>{{(index .ServerDatas (print "hcf" .CurrentHcfServerName)).AttackSpeedName.DeathBanMinutes.OffPeakLivesNeeded}}x</td>
                     <td>{{ .LootFactor }}x</td>
                     <td>{{ .BorderSize }}</td>
                 </tr>
