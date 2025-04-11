@@ -73,7 +73,7 @@ func handleRedditPostDataUpdate() {
 			if len(newVideoPosts) > 0 || len(newImagePosts) > 0 {
 				home = getMainTemplateBytes("hub")
 				mz = getMainTemplateBytes("mz")
-				hcf = getMainTemplateBytes("hcf")
+				hcf = getMainTemplateBytes("hcf" + currentHcfServerName)
 
 				handle := func(t any) {
 					jsonData, err := json.Marshal(t)

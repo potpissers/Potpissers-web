@@ -29,7 +29,7 @@ func main() {
 
 	home = getMainTemplateBytes("hub")
 	println("home template done")
-	hcf = getMainTemplateBytes("hcf")
+	hcf = getMainTemplateBytes("hcf" + currentHcfServerName)
 	println("hcf template done")
 	mz = getMainTemplateBytes("mz")
 	println("mz template done")

@@ -127,7 +127,7 @@ func handleDiscordMessagesUpdate(channel chan struct{}, discordChannelId string,
 				*mostRecentMessageId = newMessages[0].ID
 
 				home = getMainTemplateBytes("hub")
-				hcf = getMainTemplateBytes("hcf")
+				hcf = getMainTemplateBytes("hcf" + currentHcfServerName)
 				mz = getMainTemplateBytes("mz")
 
 				for _, msg := range newMessages {

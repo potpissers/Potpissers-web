@@ -189,7 +189,7 @@ func init() {
 			}
 			home = getMainTemplateBytes("hub")
 			mz = getMainTemplateBytes("mz")
-			hcf = getMainTemplateBytes("hcf")
+			hcf = getMainTemplateBytes("hcf" + currentHcfServerName)
 			handleSseData(jsonBytes, mainConnections)
 		}
 	})

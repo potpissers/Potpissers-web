@@ -67,7 +67,7 @@ func init() {
 
 					home = getMainTemplateBytes("hub")
 					mz = getMainTemplateBytes("mz")
-					hcf = getMainTemplateBytes("hcf")
+					hcf = getMainTemplateBytes("hcf" + currentHcfServerName)
 
 					handleSseData(jsonBytes, mainConnections)
 				}
@@ -101,7 +101,7 @@ func init() {
 					}
 
 					home = getMainTemplateBytes("hub")
-					hcf = getMainTemplateBytes("hcf")
+					hcf = getMainTemplateBytes("hcf" + currentHcfServerName)
 					mz = getMainTemplateBytes("mz")
 					handleSseData(jsonBytes, mainConnections)
 				}
@@ -190,7 +190,7 @@ func handleSseData(bytes []byte, sseConnectionMaps ...sseConnectionsData) {
 func handleServerDataJsonPrepend[T any](homeSlice *[]T, t T, bytes []byte, serverSlice *[]T) {
 	*homeSlice = append([]T{t}, *homeSlice...) // TODO -> this is necessary because html/css and go's templating can't handle reversing it for some reason. go's templater could maybe do it but it seems like more processing than this takes
 	home = getMainTemplateBytes("hub")
-	hcf = getMainTemplateBytes("hcf")
+	hcf = getMainTemplateBytes("hcf" + currentHcfServerName)
 	mz = getMainTemplateBytes("mz")
 	handleSseData(bytes, mainConnections)
 
