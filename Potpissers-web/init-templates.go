@@ -46,6 +46,7 @@ func getMainTemplateBytes(gameModeName string) []byte {
 		RedditVideos         []redditVideoPost
 		DiscordId            string
 		CurrentHcfServerName string
+		Deaths               []death
 		Events               []abstractEvent
 		Koths                []koth
 		SupplyDrops          []supplyDrop
@@ -66,6 +67,7 @@ func getMainTemplateBytes(gameModeName string) []byte {
 		RedditVideos:         redditVideoPosts,
 		DiscordId:            "1245300045188956252",
 		CurrentHcfServerName: currentHcfServerName,
+		Deaths:               deaths,
 		Events:               events,
 		Koths:                koths,
 		SupplyDrops:          supplyDrops,
