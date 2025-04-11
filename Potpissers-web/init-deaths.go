@@ -34,6 +34,7 @@ func init() {
 }
 
 func getDeathsQuerySlice(query string, params ...any) []death {
+	print("hey")
 	var deaths []death
 	getRowsBlocking(query, func(rows pgx.Rows) {
 		var death death
