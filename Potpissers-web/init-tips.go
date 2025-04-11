@@ -29,4 +29,5 @@ func init() { // TODO -> move this to getting tips by name
 			return nil
 		}))
 	})
+	println("tips done")
 }
