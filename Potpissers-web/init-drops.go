@@ -39,7 +39,7 @@ func init() {
 }
 
 func getSupplyDropsQuerySlice(query string, params ...any) []supplyDrop {
-	var events []supplyDrop
+	var events = []supplyDrop{}
 	getRowsBlocking(query, func(rows pgx.Rows) {
 		var drop supplyDrop
 		handleFatalPgx(pgx.ForEachRow(rows, []any{&drop.Id, &drop.ServerName, &drop.GameModeName, &drop.StartTimestamp, &drop.NullableServerKothId, &drop.IsKothMovementRestricted, &drop.WorldName, &drop.X, &drop.Y, &drop.Z, &drop.Radius, &drop.ChestOpenTimestamp, &drop.LootFactor, &drop.RestockTimer, &drop.RestockAmount, &drop.EndTimestamp, &drop.WinMessage}, func() error {

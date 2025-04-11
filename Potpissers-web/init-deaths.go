@@ -34,7 +34,7 @@ func init() {
 }
 
 func getDeathsQuerySlice(query string, params ...any) []death {
-	var deaths []death
+	var deaths = []death{}
 	getRowsBlocking(query, func(rows pgx.Rows) {
 		var death death
 		handleFatalPgx(pgx.ForEachRow(rows, []any{&death.GameModeName, &death.ServerName, &death.VictimUserFightId, &death.Timestamp, &death.VictimUuid, nil, &death.DeathWorldName, &death.DeathX, &death.DeathY, &death.DeathZ, &death.DeathMessage, &death.KillerUuid, nil, nil}, func() error {

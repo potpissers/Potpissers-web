@@ -4,4 +4,4 @@ type abstractEvent struct {
 	Message string
 }
 
-var events []abstractEvent
+var events = []abstractEvent{}

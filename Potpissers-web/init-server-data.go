@@ -60,6 +60,15 @@ var serverDatas = func() map[string]*serverData {
 	serverDatas := make(map[string]*serverData)
 	getRowsBlocking("SELECT * FROM get_server_datas()", func(rows pgx.Rows) {
 		var serverDataBuffer serverData
+		serverDataBuffer.CurrentPlayers = []onlinePlayer{}
+		serverDataBuffer.Deaths = []death{}
+		serverDataBuffer.Events = []abstractEvent{}
+		serverDataBuffer.Koths = []koth{}
+		serverDataBuffer.SupplyDrops = []supplyDrop{}
+		// donation
+		serverDataBuffer.Messages = []ingameMessage{}
+		// Videos         []string TODO
+		// TODO -> line items
 		handleFatalPgx(pgx.ForEachRow(rows, []any{&serverDataBuffer.DeathBanMinutes, &serverDataBuffer.WorldBorderRadius, &serverDataBuffer.DefaultKothLootFactor, &serverDataBuffer.SharpnessLimit, &serverDataBuffer.PowerLimit, &serverDataBuffer.ProtectionLimit, &serverDataBuffer.RegenLimit, &serverDataBuffer.StrengthLimit, &serverDataBuffer.IsWeaknessEnabled, &serverDataBuffer.IsBardPassiveDebuffingEnabled, &serverDataBuffer.DtrFreezeTimer, &serverDataBuffer.DtrMax, &serverDataBuffer.OffPeakLivesNeededAsCents, &serverDataBuffer.Timestamp, &serverDataBuffer.ServerName, &serverDataBuffer.GameModeName, &serverDataBuffer.AttackSpeedName, &serverDataBuffer.IsInitiallyWhitelisted}, func() error {
 			serverData := serverDataBuffer
 			serverDatas[serverDataBuffer.GameModeName+serverDataBuffer.ServerName] = &serverData
@@ -80,6 +89,7 @@ var serverDatas = func() map[string]*serverData {
 
 func init() {
 	for _, serverData := range serverDatas {
+		serverData.Factions = []faction{}
 		getRowsBlocking("SELECT * FROM get_7_factions($1, $2)", func(rows pgx.Rows) {
 			var faction faction
 			handleFatalPgx(pgx.ForEachRow(rows, []any{&faction.Name, &faction.PartyUuid, &faction.FrozenUntil, &faction.CurrentMaxDtr, &faction.CurrentRegenAdjustedDtr}, func() error {
@@ -87,6 +97,7 @@ func init() {
 				return nil
 			}))
 		}, serverData.GameModeName, serverData.ServerName)
+		serverData.Bandits = []bandit{}
 		getRowsBlocking("SELECT * FROM get_7_newest_bandits($1, $2)", func(rows pgx.Rows) {
 			var bandit bandit
 			handleFatalPgx(pgx.ForEachRow(rows, []any{&bandit.UserUuid, &bandit.DeathId, &bandit.DeathTimestamp, &bandit.ExpirationTimestamp, &bandit.BanditMessage}, func() error {

@@ -36,7 +36,7 @@ func init() {
 }
 
 func getArenaQuerySlice(query string, params ...any) []koth {
-	var events []koth
+	var events = []koth{}
 	getRowsBlocking(query, func(rows pgx.Rows) {
 		var koth koth
 		handleFatalPgx(pgx.ForEachRow(rows, []any{&koth.ServerKothsId, &koth.StartTimestamp, &koth.LootFactor, &koth.MaxTimer, &koth.IsMovementRestricted, &koth.CappingUserUUID, &koth.EndTimestamp, &koth.CappingPartyUUID, &koth.CapMessage, &koth.World, &koth.X, &koth.Y, &koth.Z, &koth.GameModeName, &koth.ServerName, &koth.ArenaName, &koth.Creator}, func() error {

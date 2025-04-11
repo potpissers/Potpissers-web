@@ -19,7 +19,7 @@ type newPlayer struct {
 }
 
 var newPlayers = func() []newPlayer {
-	var newPlayers []newPlayer
+	var newPlayers = []newPlayer{}
 	getRowsBlocking("SELECT * FROM get_10_newest_players()", func(rows pgx.Rows) {
 		var death newPlayer
 		handleFatalPgx(pgx.ForEachRow(rows, []any{&death.PlayerUuid, &death.Referrer, &death.Timestamp, &death.RowNumber}, func() error {

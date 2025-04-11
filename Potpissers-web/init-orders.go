@@ -102,7 +102,7 @@ var donations = func() []order {
 	})
 	handleFatalErr(err)
 	req = getFatalRequest("POST", "https://connect.squareup.com/v2/orders/batch-retrieve", bytes.NewBuffer(requestJson))
-	addSquareHeaders(req) // shirley this keeps their correct order
+	addSquareHeaders(req) // TODO shirley this keeps their correct order
 
 	orders := handleGetFatalJsonT[struct {
 		Orders []order `json:"orders"`

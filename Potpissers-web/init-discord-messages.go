@@ -68,7 +68,7 @@ func getDiscordMessages(channelId string, apiUrlModifier string) []discordMessag
 			log.Fatal(err)
 		}
 
-		var messages []discordMessage
+		var messages = []discordMessage{}
 		err = json.Unmarshal(body, &messages)
 		if err != nil {
 			var response map[string]any

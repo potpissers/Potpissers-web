@@ -19,14 +19,14 @@ type redditVideoPost struct {
 	Title           string `json:"title_url"`
 }
 
-var redditVideoPosts []redditVideoPost
+var redditVideoPosts = []redditVideoPost{}
 
 type redditImagePost struct {
 	ImageUrl string `json:"image_url"`
 	PostUrl  string `json:"post_url"`
 }
 
-var redditImagePosts []redditImagePost
+var redditImagePosts = []redditImagePost{}
 
 var imageRegex = regexp.MustCompile(`(?i)^(https?://)?(i\.redd\.it|i\.imgur\.com)/.*\.(png|jpg|jpeg)$`)
 var youtubeVideoIdRegex = regexp.MustCompile(`[?&]v=([a-zA-Z0-9_-]{11})`)

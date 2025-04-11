@@ -24,7 +24,7 @@ func init() {
 }
 
 func getIngameMessagesQuerySlice(query string, params ...any) []ingameMessage {
-	var events []ingameMessage
+	var events = []ingameMessage{}
 	getRowsBlocking(query, func(rows pgx.Rows) {
 		var drop ingameMessage
 		handleFatalPgx(pgx.ForEachRow(rows, []any{&drop.Uuid, &drop.Message, &drop.GameModeName, &drop.ServerName, &drop.Timestamp}, func() error {
