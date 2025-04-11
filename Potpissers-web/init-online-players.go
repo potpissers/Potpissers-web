@@ -17,7 +17,7 @@ type onlinePlayer struct {
 }
 
 var currentPlayers = func() []onlinePlayer {
-	var currentPlayers []onlinePlayer
+	var currentPlayers = []onlinePlayer{}
 	getRowsBlocking("SELECT * FROM get_online_players()", func(rows pgx.Rows) {
 		var t onlinePlayer
 		handleFatalPgx(pgx.ForEachRow(rows, []any{&t.Uuid, &t.Name, &t.GameModeName, &t.ServerName, &t.ActiveFaction, &t.NetworkJoin, &t.ServerJoin}, func() error {
