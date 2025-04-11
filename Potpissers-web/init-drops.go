@@ -46,6 +46,6 @@ func getSupplyDropsQuerySlice(query string, params ...any) []supplyDrop {
 			events = append(events, drop)
 			return nil
 		}))
-	}, params)
+	}, params...)
 	return events
 }

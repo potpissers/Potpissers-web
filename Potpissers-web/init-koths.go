@@ -42,7 +42,7 @@ func getArenaQuerySlice(query string, params ...any) []koth {
 			events = append(events, koth)
 			return nil
 		}))
-	}, params)
+	}, params...)
 	println("events done")
 	return events
 }

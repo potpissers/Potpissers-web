@@ -31,6 +31,6 @@ func getIngameMessagesQuerySlice(query string, params ...any) []ingameMessage {
 			events = append(events, drop)
 			return nil
 		}))
-	}, params)
+	}, params...)
 	return events
 }
