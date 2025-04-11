@@ -5,7 +5,7 @@
                 leaderboards
             </button>
             <select style="font-size: 75%; align-self: end">
-                <option {{if eq .GameModeName "hub"}}selected{{end}} hidden id="online-network">
+                <option {{if eq .GameModeName "hub"}}selected{{end}} id="online-network">
                     /glist: {{len .NetworkPlayers}}</option>
                 <option disabled id="online-hub">
                     /hub: {{len (index .ServerDatas "hub").CurrentPlayers}}</option>
