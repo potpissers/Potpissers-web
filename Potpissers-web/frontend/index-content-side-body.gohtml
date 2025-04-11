@@ -1,31 +1,31 @@
 {{define "contentsidebody"}}
-{{/*    <div style="display: flex; flex-direction: column; align-items: center; overflow-y: auto">*/}}
-{{/*        <button style="">/f list</button>*/}}
-{{/*        <button style="width: fit-content">votes</button>*/}}
-{{/*        <select>*/}}
-{{/*            <option selected>bandit warnings</option>*/}}
-{{/*            <option disabled>current bandits</option>*/}}
-{{/*            <option disabled>current heroes</option>*/}}
-{{/*        </select>*/}}
+    <div style="display: flex; flex-direction: column; align-items: center; overflow-y: auto">
+        <button style="">/f list</button>
+        <button style="width: fit-content">votes</button>
+        <select>
+            <option selected>bandit warnings</option>
+            <option disabled>current bandits</option>
+            <option disabled>current heroes</option>
+        </select>
 
-{{/*        <ul style="overflow-y: scroll">*/}}
-{{/*            {{range (index .ServerDatas (print "hcf" .CurrentHcfServerName)).Factions}}*/}}
-{{/*                <li>*/}}
-{{/*                    <p>*/}}
-{{/*                        {{.Name}}*/}}
-{{/*                    </p>*/}}
-{{/*                </li>*/}}
-{{/*            {{end}}*/}}
-{{/*        </ul>*/}}
-{{/*        */}}{{/*        TODO votes*/}}
-{{/*        <ul>*/}}
-{{/*            {{range (index .ServerDatas "mz").Bandits}}*/}}
-{{/*                <li>*/}}
-{{/*                    <p>*/}}
-{{/*                        {{.BanditMessage}}*/}}
-{{/*                    </p>*/}}
-{{/*                </li>*/}}
-{{/*            {{end}}*/}}
-{{/*        </ul>*/}}
-{{/*    </div>*/}}
+        <ul style="overflow-y: scroll">
+            {{range (index .ServerDatas (print "hcf" .CurrentHcfServerName)).Factions}}
+                <li>
+                    <p>
+                        {{.Name}}
+                    </p>
+                </li>
+            {{end}}
+        </ul>
+                TODO votes
+        <ul>
+            {{range (index .ServerDatas "mz").Bandits}}
+                <li>
+                    <p>
+                        {{.BanditMessage}}
+                    </p>
+                </li>
+            {{end}}
+        </ul>
+    </div>
 {{end}}
