@@ -69,7 +69,7 @@ var serverDatas = func() map[string]*serverData {
 		serverDataBuffer.Messages = []ingameMessage{}
 		// Videos         []string TODO
 		// TODO -> line items
-		handleFatalPgx(pgx.ForEachRow(rows, []any{&serverDataBuffer.DeathBanMinutes, &serverDataBuffer.WorldBorderRadius, &serverDataBuffer.DefaultKothLootFactor, &serverDataBuffer.SharpnessLimit, &serverDataBuffer.PowerLimit, &serverDataBuffer.ProtectionLimit, &serverDataBuffer.RegenLimit, &serverDataBuffer.StrengthLimit, &serverDataBuffer.IsWeaknessEnabled, &serverDataBuffer.IsBardPassiveDebuffingEnabled, &serverDataBuffer.DtrFreezeTimer, &serverDataBuffer.DtrMax, &serverDataBuffer.OffPeakLivesNeededAsCents, &serverDataBuffer.Timestamp, &serverDataBuffer.ServerName, &serverDataBuffer.GameModeName, &serverDataBuffer.AttackSpeedName, &serverDataBuffer.IsInitiallyWhitelisted}, func() error {
+		handleFatalPgx(pgx.ForEachRow(rows, []any{&serverDataBuffer.DeathBanMinutes, &serverDataBuffer.WorldBorderRadius, &serverDataBuffer.DefaultKothLootFactor, &serverDataBuffer.SharpnessLimit, &serverDataBuffer.PowerLimit, &serverDataBuffer.ProtectionLimit, &serverDataBuffer.RegenLimit, &serverDataBuffer.StrengthLimit, &serverDataBuffer.IsWeaknessEnabled, &serverDataBuffer.IsBardPassiveDebuffingEnabled, &serverDataBuffer.DtrFreezeTimer, &serverDataBuffer.DtrMax, &serverDataBuffer.OffPeakLivesNeeded, &serverDataBuffer.Timestamp, &serverDataBuffer.ServerName, &serverDataBuffer.GameModeName, &serverDataBuffer.AttackSpeedName, &serverDataBuffer.IsInitiallyWhitelisted}, func() error {
 			serverData := serverDataBuffer
 			serverDatas[serverDataBuffer.GameModeName+serverDataBuffer.ServerName] = &serverData
 			return nil
