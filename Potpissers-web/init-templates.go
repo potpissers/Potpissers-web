@@ -19,7 +19,7 @@ var mainTemplate = func() *template.Template {
 		frontendDirName+"index-deaths.gohtml",
 		frontendDirName+"index-content.gohtml",
 		frontendDirName+"index-content-side-title.gohtml",
-		frontendDirName+"index-content.side-body.gohtml",
+		frontendDirName+"index-content-side-body.gohtml",
 		frontendDirName+"index-content-main-title.gohtml",
 		frontendDirName+"index-content-main-body.gohtml",
 		frontendDirName+"component-radiobutton.gohtml",
