@@ -20,7 +20,7 @@ func init() {
 	for _, serverData := range serverDatas {
 		serverData.Messages = getIngameMessagesQuerySlice("SELECT * FROM get_14_newest_server_messages($1, $2)", serverData.GameModeName, serverData.ServerName)
 	}
-	print("ingame messages done")
+	println("ingame messages done")
 }
 
 func getIngameMessagesQuerySlice(query string, params ...any) []ingameMessage {

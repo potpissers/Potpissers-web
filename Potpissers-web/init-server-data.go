@@ -95,6 +95,5 @@ func init() {
 			}))
 		}, serverData.GameModeName, serverData.ServerName)
 	}
-
 	println("serverdatas init done")
 }

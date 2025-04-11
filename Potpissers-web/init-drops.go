@@ -35,7 +35,7 @@ func init() {
 	for _, serverData := range serverDatas {
 		serverData.SupplyDrops = getSupplyDropsQuerySlice("SELECT * FROM get_14_newest_network_supply_drops($1, $2)", serverData.ServerName, serverData.GameModeName)
 	}
-	print("supply drops done")
+	println("supply drops done")
 }
 
 func getSupplyDropsQuerySlice(query string, params ...any) []supplyDrop {
