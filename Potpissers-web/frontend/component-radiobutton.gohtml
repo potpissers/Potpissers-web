@@ -1,6 +1,6 @@
 {{define "radiobutton"}}
     <span class=ifc>
-        <button style="font-size: 75%">{{.buttonName}}</button>
-        <input name="{{.inputName}}" type="radio" {{if .isChecked}}checked{{end}}>
+        <button style="font-size: 75%">{{index . 0}}</button>
+        <input name="{{index . 1}}" type="radio" {{if index . 2}}checked{{end}}>
     </span>
 {{end}}
