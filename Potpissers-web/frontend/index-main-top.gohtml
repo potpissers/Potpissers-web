@@ -6,14 +6,14 @@
             </button>
             <select style="font-size: 75%; align-self: end">
                 <option selected id="online-network">/glist: {{len .NetworkPlayers}}</option>
-                <option disabled id="online-hub">/hub: {{len (index .ServerDatas "hub").currentPlayers}}</option>
+                <option disabled id="online-hub">/hub: {{len (index .ServerDatas "hub").CurrentPlayers}}</option>
                 <option disabled id="online-cubecore">
-                    /cubecore: {{len (index .ServerDatas "cubecore").currentPlayers}}</option>
+                    /cubecore: {{len (index .ServerDatas "cubecore").CurrentPlayers}}</option>
                 <option disabled id="online-hcf">
-                    /hcf: {{len ((index .ServerDatas (print "hcf" .CurrentHcfServerName)).currentPlayers)}}</option>
+                    /hcf: {{len ((index .ServerDatas (print "hcf" .CurrentHcfServerName)).CurrentPlayers)}}</option>
                 <option disabled id="online-kollusion">
-                    /kollusion: {{len (index .ServerDatas "kollusion").currentPlayers}}</option>
-                <option disabled id="online-mz">/mz: {{len (index .ServerDatas "mz").currentPlayers}}</option>
+                    /kollusion: {{len (index .ServerDatas "kollusion").CurrentPlayers}}</option>
+                <option disabled id="online-mz">/mz: {{len (index .ServerDatas "mz").CurrentPlayers}}</option>
             </select>
         </div>
         <div
