@@ -74,6 +74,7 @@ func getMainTemplateBytes(gameModeName string) []byte {
 		Koths:                koths,
 		SupplyDrops:          supplyDrops,
 	}))
+	println(len(deaths))
 	donationsMu.RUnlock()
 	return buffer.Bytes()
 }
