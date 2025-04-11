@@ -123,7 +123,7 @@
                 </ul>
             </div>
             <div style="display: flex">
-                <button style="font-size: 75%">/events</button>
+                <button {{if not (eq .GameModeName (print "hcf" .CurrentHcfServerName))}}hidden{{end}} style="font-size: 75%">/events</button>
                 <button style="font-size: 75%; margin-left: auto">"/referral"s</button>
             </div>
         </div>
