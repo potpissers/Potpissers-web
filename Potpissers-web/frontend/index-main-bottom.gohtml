@@ -60,7 +60,7 @@
         <div style="flex: 1; display: flex; flex-direction: column">
             <div style="display: flex; justify-content: space-between">
                 <select style="font-size: 75%">
-                    <option {{if eq .GameModeName "hub"}}selected{{end}}>/attackspeed: click here</option>
+                    <option {{if eq .GameModeName "hub"}}selected{{end}}>/attackspeed</option>
                     <option disabled>hub: {{(index .ServerDatas "hub").AttackSpeedName}}</option>
                     <option {{if eq .GameModeName "cubecore"}}selected{{end}} disabled>cubecore: {{(index .ServerDatas "cubecore").AttackSpeedName}}</option>
                     <option {{if eq .GameModeName (print "hcf" .CurrentHcfServerName)}}selected{{end}} disabled>hcf: {{(index .ServerDatas (print "hcf" .CurrentHcfServerName)).AttackSpeedName}}</option>
