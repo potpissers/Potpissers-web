@@ -30,6 +30,7 @@ var mainTemplate = func() *template.Template {
 
 func getMainTemplateBytes(gameModeName string) []byte {
 	var buffer bytes.Buffer
+	donationsMu.RLock()
 	handleFatalErr(mainTemplate.Execute(&buffer, struct {
 		GameModeName       string
 		BackgroundImageUrl redditImagePost
@@ -73,6 +74,7 @@ func getMainTemplateBytes(gameModeName string) []byte {
 		Koths:                koths,
 		SupplyDrops:          supplyDrops,
 	}))
+	donationsMu.RUnlock()
 	return buffer.Bytes()
 }
 
