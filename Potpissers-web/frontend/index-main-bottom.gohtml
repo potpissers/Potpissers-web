@@ -79,10 +79,12 @@
                     <td>border</td>
                 </tr>
                 <tr>
-                    <td>{{(index .ServerDatas (print "hcf" .CurrentHcfServerName)).AttackSpeedName.DeathBanMinutes}}m</td>
-                    <td>{{(index .ServerDatas (print "hcf" .CurrentHcfServerName)).AttackSpeedName.DeathBanMinutes.OffPeakLivesNeeded}}x</td>
-                    <td>{{ .LootFactor }}x</td>
-                    <td>{{ .BorderSize }}</td>
+                    {{with index .ServerDatas (print "hcf" .CurrentHcfServerName)}}
+                        <td>{{.DeathBanMinutes}}m</td>
+                        <td>{{.OffPeakLivesNeeded}}x</td>
+                        <td>{{.LootFactor}}x</td>
+                        <td>{{.BorderSize}}</td>
+                    {{end}}
                 </tr>
             </table>
             <div style="align-self: end; margin-top: auto; display: flex; justify-content: space-between; width: 100%">
@@ -90,14 +92,16 @@
                 <select style="font-size: 75%; width: fit-content; text-align: right">
                     <option disabled selected hidden>/mapkit</option>
 
-                    <option disabled>sharpness {{ .SharpnessLimit }}</option>
-                    <option disabled>protection {{ .ProtectionLimit }}</option>
-                    <option disabled>power {{ .PowerLimit }}</option>
-                    <option disabled>regen {{ .RegenLimit }}</option>
-                    <option disabled>strength {{ .StrengthLimit }}</option>
-                    <option disabled>weakness {{ .IsWeaknessEnabled }}</option>
-                    <option disabled>extended debuffs {{ .IsBardPassiveDebuffingEnabled }}</option>
-                    <option disabled>dtr max {{ .DtrMax }}</option>
+                    {{with index .ServerDatas (print "hcf" .CurrentHcfServerName)}}
+                        <option disabled>sharpness {{ .SharpnessLimit }}</option>
+                        <option disabled>protection {{ .ProtectionLimit }}</option>
+                        <option disabled>power {{ .PowerLimit }}</option>
+                        <option disabled>regen {{ .RegenLimit }}</option>
+                        <option disabled>strength {{ .StrengthLimit }}</option>
+                        <option disabled>weakness {{ .IsWeaknessEnabled }}</option>
+                        <option disabled>extended debuffs {{ .IsBardPassiveDebuffingEnabled }}</option>
+                        <option disabled>dtr max {{ .DtrMax }}</option>
+                    {{end}}
                 </select>
             </div>
         </div>
