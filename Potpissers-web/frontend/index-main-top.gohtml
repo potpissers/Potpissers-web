@@ -5,7 +5,7 @@
                 leaderboards
             </button>
             <select style="font-size: 75%; align-self: end">
-                <option selected id="online-network">/glist: {{len .NetworkPlayers}}</option>
+                <option selected id="online-network">/glist: {{(len .NetworkPlayers)}}</option>
                 <option disabled id="online-hub">/hub: {{len (index .ServerDatas "hub").currentPlayers}}</option>
                 <option disabled id="online-cubecore">
                     /cubecore: {{len (index .ServerDatas "cubecore").currentPlayers}}</option>
