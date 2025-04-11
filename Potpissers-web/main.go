@@ -41,7 +41,6 @@ func main() {
 		"hcf":  &hcf,
 	} {
 		http.HandleFunc(endpoint, func(w http.ResponseWriter, r *http.Request) {
-			println("holy fuck")
 			_, err := w.Write(*bytes)
 			handleFatalErr(err)
 
@@ -49,8 +48,8 @@ func main() {
 			handleDiscordMessagesUpdate(discordGeneralChan, discordGeneralChannelId, &mostRecentDiscordGeneralMessageId, &discordMessages, "general")
 			//			handleDiscordMessagesUpdate(discordChangelogChan, discordChangelogChannelId, &mostRecentDiscordChangelogMessageId, &changelog, "changelog")
 			handleDiscordMessagesUpdate(discordAnnouncementsChan, discordAnnouncementsChannelId, &mostRecentDiscordAnnouncementsMessageId, &announcements, "announcements")
-			println(endpoint + " done")
 		})
+		println(endpoint + " done")
 	}
 
 	http.HandleFunc("/github", func(w http.ResponseWriter, r *http.Request) {
