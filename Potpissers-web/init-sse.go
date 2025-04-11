@@ -14,7 +14,7 @@ func init() {
 		log.Fatal(err)
 	}
 	// defer'd -> below goroutine
-	for _, channelName := range []string{"deaths", "drops", "chat", "koths", "referrals", "online", "offline", "server-data", "bandits", "factions"} {
+	for _, channelName := range []string{"deaths", "drops", "chat", "koths", "referrals", "online", "offline", "server_data", "bandits", "factions"} {
 		_, err = connection.Exec(context.Background(), "LISTEN "+channelName)
 		if err != nil {
 			connection.Release()

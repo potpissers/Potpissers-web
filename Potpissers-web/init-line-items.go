@@ -22,5 +22,6 @@ var lineItemDatas = func() []lineItemData {
 			return nil
 		}))
 	})
+	println("line items done")
 	return slice
 }()
