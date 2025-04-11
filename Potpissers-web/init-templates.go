@@ -53,7 +53,7 @@ func getMainTemplateBytes(gameModeName string) []byte {
 	}{
 		GameModeName:       gameModeName,
 		BackgroundImageUrl: redditImagePosts[rand.New(rand.NewSource(time.Now().UnixNano())).Intn(len(redditImagePosts))],
-		NetworkPlayers:     currentPlayers,
+		NetworkPlayers:     networkPlayers,
 		ServerDatas:        serverDatas,
 		NewPlayers:         newPlayers,
 		ContentData:        contentData,

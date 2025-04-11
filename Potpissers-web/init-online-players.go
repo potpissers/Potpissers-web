@@ -16,7 +16,7 @@ type onlinePlayer struct {
 	ServerJoin    time.Time `json:"server_join"`
 }
 
-var currentPlayers = func() []onlinePlayer {
+var networkPlayers = func() []onlinePlayer {
 	var currentPlayers = []onlinePlayer{}
 	getRowsBlocking("SELECT * FROM get_online_players()", func(rows pgx.Rows) {
 		var t onlinePlayer

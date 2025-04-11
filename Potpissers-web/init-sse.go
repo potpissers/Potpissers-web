@@ -77,7 +77,7 @@ func init() {
 					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
 					jsonBytes, err := json.Marshal(sseMessage{"online", t})
 					handleFatalErr(err)
-					handleServerDataJsonPrepend[onlinePlayer](&currentPlayers, t, jsonBytes, &serverDatas[t.GameModeName+t.ServerName].CurrentPlayers)
+					handleServerDataJsonPrepend[onlinePlayer](&networkPlayers, t, jsonBytes, &serverDatas[t.GameModeName+t.ServerName].CurrentPlayers)
 				}
 			case "offline":
 				{
@@ -86,9 +86,9 @@ func init() {
 					jsonBytes, err := json.Marshal(sseMessage{"offline", t})
 					handleFatalErr(err)
 
-					for i, data := range currentPlayers {
+					for i, data := range networkPlayers {
 						if data == t {
-							currentPlayers = append(currentPlayers[:i], currentPlayers[i+1:]...)
+							networkPlayers = append(networkPlayers[:i], networkPlayers[i+1:]...)
 							break
 						}
 					}
