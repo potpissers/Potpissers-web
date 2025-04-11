@@ -119,6 +119,7 @@ func init() {
 }
 
 func handleDiscordMessagesUpdate(channel chan struct{}, discordChannelId string, mostRecentMessageId *string, slice *[]discordMessage, sseMessageType string) {
+	println("hi")
 	select {
 	case channel <- struct{}{}:
 		{
