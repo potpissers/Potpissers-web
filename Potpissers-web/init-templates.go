@@ -63,7 +63,7 @@ func getMainTemplateBytes(gameModeName string) []byte {
 		Announcements:        announcements,
 		Changelog:            changelog,
 		DiscordMessages:      discordMessages,
-		Donations:            donations,
+		// Donations:            donations,
 		LineItemData:         lineItemDatas,
 		RedditVideos:         redditVideoPosts,
 		DiscordId:            "1245300045188956252",
