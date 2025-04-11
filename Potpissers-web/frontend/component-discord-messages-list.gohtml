@@ -1,5 +1,5 @@
 {{define "discordmessageslist"}}
-    {{range .discordMessages}}
+    {{range .}}
         <li>
             <a href="https://discord.com/channels/{{$.DiscordId}}/{{.ChannelID}}/{{.ID}}">
                 <p>
