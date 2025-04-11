@@ -34,7 +34,7 @@ type serverData struct {
 	IsBardPassiveDebuffingEnabled bool      `json:"is_bard_passive_debuffing_enabled"`
 	DtrFreezeTimer                int       `json:"dtr_freeze_timer"`
 	DtrMax                        float32   `json:"dtr_max"`
-	OffPeakLivesNeededAsCents     int       `json:"off_peak_lives_needed_as_cents"`
+	OffPeakLivesNeeded            int       `json:"off_peak_lives_needed"`
 	Timestamp                     time.Time `json:"timestamp"`
 	ServerName                    string    `json:"server_name"`
 	GameModeName                  string    `json:"game_mode_name"`
