@@ -60,11 +60,12 @@
         <div style="flex: 1; display: flex; flex-direction: column">
             <div style="display: flex; justify-content: space-between">
                 <select style="font-size: 75%">
-                    <option {{if eq .GameModeName "hub"}}{{end}} disabled>hub: {{(index .ServerDatas "hub").AttackSpeedName}}</option>
-                    <option {{if eq .GameModeName "cubecore"}}{{end}} disabled>cubecore: {{(index .ServerDatas "cubecore").AttackSpeedName}}</option>
-                    <option {{if eq .GameModeName (print "hcf" .CurrentHcfServerName)}}{{end}} disabled>hcf: {{(index .ServerDatas (print "hcf" .CurrentHcfServerName)).AttackSpeedName}}</option>
-                    <option {{if eq .GameModeName "kollusion"}}{{end}} disabled>kollusion: {{(index .ServerDatas "kollusion").AttackSpeedName}}</option>
-                    <option {{if eq .GameModeName "mz"}}{{end}}1 disabled>mz: {{(index .ServerDatas "mz").AttackSpeedName}}</option>
+                    <option {{if eq .GameModeName "hub"}}selected{{end}}>/attackspeed: click here</option>
+                    <option disabled>hub: {{(index .ServerDatas "hub").AttackSpeedName}}</option>
+                    <option {{if eq .GameModeName "cubecore"}}selected{{end}} disabled>cubecore: {{(index .ServerDatas "cubecore").AttackSpeedName}}</option>
+                    <option {{if eq .GameModeName (print "hcf" .CurrentHcfServerName)}}selected{{end}} disabled>hcf: {{(index .ServerDatas (print "hcf" .CurrentHcfServerName)).AttackSpeedName}}</option>
+                    <option {{if eq .GameModeName "kollusion"}}selected{{end}} disabled>kollusion: {{(index .ServerDatas "kollusion").AttackSpeedName}}</option>
+                    <option {{if eq .GameModeName "mz"}}selected{{end}} disabled>mz: {{(index .ServerDatas "mz").AttackSpeedName}}</option>
                 </select>
                 <select {{if not (eq .GameModeName "hcf")}}hidden{{end}} style="font-size: 75%">
                     <option disabled selected hidden></option>
