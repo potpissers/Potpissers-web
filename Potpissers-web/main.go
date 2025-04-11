@@ -41,6 +41,7 @@ func main() {
 		"hcf":  &hcf,
 	} {
 		http.HandleFunc(endpoint, func(w http.ResponseWriter, r *http.Request) {
+			println("holy fuck")
 			_, err := w.Write(*bytes)
 			handleFatalErr(err)
 
