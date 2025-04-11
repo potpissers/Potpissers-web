@@ -1,8 +1,15 @@
+{{define "eventsradiobutton"}}
+    <span class=ifc>
+        <button style="font-size: 75%">{{.}}</button>
+        <input name="events-ticker" type="radio" {{if eq . "events"}}checked{{end}}>
+    </span>
+{{end}}
+
 {{define "events"}}
     <div class="bd" style="text-align: center">
-        {{template "radiobutton" (slice "koths" "" false)}}
-        {{template "radiobutton" (slice "events" "" true)}}
-        {{template "radiobutton" (slice "drops" "" false)}}
+        {{template "eventsradiobutton" "koths"}}
+        {{template "eventsradiobutton" "events"}}
+        {{template "eventsradiobutton" "drops"}}
         <ul id="koths">
             {{range .Koths}}
                 <li>

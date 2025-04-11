@@ -1,9 +1,16 @@
+{{define "deathsradiobutton"}}
+    <span class=ifc>
+        <button style="font-size: 75%">{{.}}</button>
+        <input name="deaths-ticker" type="radio" {{if eq . "deaths"}}checked{{end}}>
+    </span>
+{{end}}
+
 {{define "deaths"}}
     <div class="bd" style="display: flex; flex-direction: column">
         <div style="text-align: center">
-            {{template "radiobutton" (slice "fights" "deaths-ticker" false)}}
-            {{template "radiobutton" (slice "deaths" "deaths-ticker" true)}}
-            {{template "radiobutton" (slice "duels" "deaths-ticker" false)}}
+            {{template "deathsradiobutton" "fights"}}
+            {{template "deathsradiobutton" "deaths"}}
+            {{template "deathsradiobutton" "duels"}}
         </div>
         <ul id="deaths" style="overflow-x: hidden; overflow-y: scroll">
             {{range index .ServerDatas .GameModeName}}
