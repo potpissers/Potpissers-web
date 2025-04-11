@@ -10,7 +10,7 @@
 
             {{range $name, $data := .ServerDatas}}
                 <ul id="onlineplayers-{{$name}}" style="overflow-y: scroll; flex: 1" hidden>
-                    {{range $data.currentPlayers}}
+                    {{range $data.CurrentPlayers}}
                         <li>
                             <p>
                                 {{.Name}}
