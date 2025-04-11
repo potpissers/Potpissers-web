@@ -67,12 +67,12 @@
                     <option {{if eq .GameModeName "kollusion"}}selected{{end}} disabled>kollusion: {{(index .ServerDatas "kollusion").AttackSpeedName}}</option>
                     <option {{if eq .GameModeName "mz"}}selected{{end}} disabled>mz: {{(index .ServerDatas "mz").AttackSpeedName}}</option>
                 </select>
-                <select {{if not (eq .GameModeName "hcf")}}hidden{{end}} style="font-size: 75%">
+                <select {{if not (eq .GameModeName (print "hcf" .CurrentHcfServerName))}}hidden{{end}} style="font-size: 75%">
                     <option disabled selected hidden></option>
                     <!--    TODO maps-->
                 </select>
             </div>
-            <table {{if not (eq .GameModeName "hcf")}}hidden{{end}} style="width: 100%">
+            <table {{if not (eq .GameModeName (print "hcf" .CurrentHcfServerName))}}hidden{{end}} style="width: 100%">
                 <tr>
                     <td>deathban</td>
                     <td>revive cost</td>
@@ -88,10 +88,10 @@
                     {{end}}
                 </tr>
             </table>
-            <div style="align-self: end; margin-top: auto; display: flex; justify-content: space-between; width: 100%">
+            <div {{if not (eq .GameModeName (print "hcf" .CurrentHcfServerName))}}hidden{{end}} style="align-self: end; margin-top: auto; display: flex; justify-content: space-between; width: 100%">
                 <button style="font-size: 75%">/map</button>
                 <select style="font-size: 75%; width: fit-content; text-align: right">
-                    <option disabled selected hidden>/mapkit</option>
+                    <option selected hidden>/mapkit</option>
 
                     {{with index .ServerDatas (print "hcf" .CurrentHcfServerName)}}
                         <option disabled>sharpness {{ .SharpnessLimit }}</option>
