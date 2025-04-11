@@ -41,6 +41,6 @@ func getDeathsQuerySlice(query string, params ...any) []death {
 			deaths = append(deaths, death)
 			return nil
 		}))
-	})
+	}, params)
 	return deaths
 }
