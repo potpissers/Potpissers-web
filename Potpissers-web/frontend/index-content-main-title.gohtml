@@ -1,3 +1,7 @@
+{{define "discordmessageslist"}}
+
+{{end}}
+
 {{define "contentmaintitle"}}
     <div style="display: flex; flex-direction: column; overflow-y: auto">
         <div style="display: flex">
@@ -10,10 +14,26 @@
             <button onclick="handleContentMaximizeButtonClick(true)" style="margin-left: auto"></button>
         </div>
         <ul id="announcements" style="overflow-y: scroll">
-            {{template "discordmessageslist" .Announcements}}
+            {{range .Announcements}}
+                <li>
+                    <a href="https://discord.com/channels/{{$.DiscordId}}/{{.ChannelID}}/{{.ID}}">
+                        <p>
+                            {{.Author.Username}}: {{.Content}}
+                        </p>
+                    </a>
+                </li>
+            {{end}}
         </ul>
         <ul id="changelog" style="overflow-y: scroll" hidden>
-            {{template "discordmessageslist" .Changelog}}
+            {{range .Changelog}}
+                <li>
+                    <a href="https://discord.com/channels/{{$.DiscordId}}/{{.ChannelID}}/{{.ID}}">
+                        <p>
+                            {{.Author.Username}}: {{.Content}}
+                        </p>
+                    </a>
+                </li>
+            {{end}}
         </ul>
     </div>
 {{end}}
