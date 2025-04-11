@@ -76,7 +76,7 @@
                     <option disabled>kollusion: {{ .KollusionAttackSpeed }}</option>
                     <option disabled>mz: {{ .MzAttackSpeed }}</option>
                 </select>
-                <select {{if not eq .GameModeName "hcf"}}hidden{{end}} style="font-size: 75%">
+                <select {{if not (eq .GameModeName "hcf")}}hidden{{end}} style="font-size: 75%">
                     <option disabled selected hidden></option>
                     <!--    TODO maps-->
                 </select>
