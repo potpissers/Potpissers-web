@@ -88,9 +88,9 @@
                     {{end}}
                 </tr>
             </table>
-            <div hidden style="align-self: end; margin-top: auto; display: flex; justify-content: space-between; width: 100%">
-                <button style="font-size: 75%">/map</button>
-                <select style="font-size: 75%; width: fit-content; text-align: right">
+            <div style="align-self: end; margin-top: auto; display: flex; justify-content: space-between; width: 100%">
+                <button {{if not (eq .GameModeName (print "hcf" .CurrentHcfServerName))}}hidden{{end}} style="font-size: 75%">/map</button>
+                <select {{if not (eq .GameModeName (print "hcf" .CurrentHcfServerName))}}hidden{{end}} style="font-size: 75%; width: fit-content; text-align: right">
                     <option selected hidden>/mapkit</option>
 
                     {{with index .ServerDatas (print "hcf" .CurrentHcfServerName)}}
