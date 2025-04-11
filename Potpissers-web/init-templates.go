@@ -24,6 +24,7 @@ var mainTemplate = func() *template.Template {
 		frontendDirName+"index-content-main-body.gohtml",
 		frontendDirName+"component-discord-messages-list.gohtml")
 	handleFatalErr(err)
+	println("main template done")
 	return mainTemplate
 }()
 
