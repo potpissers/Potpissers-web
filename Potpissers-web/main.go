@@ -27,7 +27,7 @@ func main() {
 	doApi()
 	println("main api done")
 
-	println(len(serverDatas))
+	println(len(serverDatas["hub"].Deaths))
 	home = getMainTemplateBytes("hub")
 	println("home template done")
 	hcf = getMainTemplateBytes("hcf" + currentHcfServerName)
