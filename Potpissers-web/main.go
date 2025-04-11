@@ -41,7 +41,13 @@ func main() {
 		"hcf":  &hcf,
 	} {
 		http.HandleFunc(endpoint, func(w http.ResponseWriter, r *http.Request) {
-			handleMainTemplateEndpoint(w, bytes)
+			_, err := w.Write(*bytes)
+			handleFatalErr(err)
+
+			handleRedditPostDataUpdate()
+			handleDiscordMessagesUpdate(discordGeneralChan, discordGeneralChannelId, &mostRecentDiscordGeneralMessageId, &discordMessages, "general")
+			//			handleDiscordMessagesUpdate(discordChangelogChan, discordChangelogChannelId, &mostRecentDiscordChangelogMessageId, &changelog, "changelog")
+			handleDiscordMessagesUpdate(discordAnnouncementsChan, discordAnnouncementsChannelId, &mostRecentDiscordAnnouncementsMessageId, &announcements, "announcements")
 		})
 	}
 
@@ -68,14 +74,4 @@ func main() {
 
 	println("starting server")
 	log.Println(http.ListenAndServeTLS(":443", "/etc/letsencrypt/live/potpissers.com/fullchain.pem", "/etc/letsencrypt/live/potpissers.com/privkey.pem", nil))
-}
-
-func handleMainTemplateEndpoint(w http.ResponseWriter, bytes *[]byte) {
-	_, err := w.Write(*bytes)
-	handleFatalErr(err)
-
-	handleRedditPostDataUpdate()
-	handleDiscordMessagesUpdate(discordGeneralChan, discordGeneralChannelId, &mostRecentDiscordGeneralMessageId, &discordMessages, "general")
-	//			handleDiscordMessagesUpdate(discordChangelogChan, discordChangelogChannelId, &mostRecentDiscordChangelogMessageId, &changelog, "changelog")
-	handleDiscordMessagesUpdate(discordAnnouncementsChan, discordAnnouncementsChannelId, &mostRecentDiscordAnnouncementsMessageId, &announcements, "announcements")
 }
