@@ -25,7 +25,8 @@
                  src="potpisser.jpg" alt="image of calvin pissing"
                  onclick="window.location.href='/';">
             <select style="width: 11.75rem; text-align: right" onchange="window.location.href=this.value">
-                <option {{if eq .GameModeName "hub"}}selected{{end}}value="/">home</option>
+                <option {{if eq .GameModeName "hub"}}selected{{end}} hidden value="/">home</option>
+                <option value="">home</option>
                 <option {{if eq .GameModeName "mz"}}selected{{end}}value="mz">mz.potpissers.com</option>
                 <option {{if eq .GameModeName "hcf"}}selected{{end}}value="hcf">hcf.potpissers.com</option>
             </select>
