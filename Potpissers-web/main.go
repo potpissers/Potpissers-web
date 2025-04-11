@@ -40,8 +40,9 @@ func main() {
 		"mz":   &mz,
 		"hcf":  &hcf,
 	} {
+		pointer := bytes
 		http.HandleFunc(endpoint, func(w http.ResponseWriter, r *http.Request) {
-			_, err := w.Write(*bytes)
+			_, err := w.Write(*pointer)
 			handleFatalErr(err)
 
 			handleRedditPostDataUpdate()
