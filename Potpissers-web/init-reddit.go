@@ -60,6 +60,7 @@ var redditAccessTokenExpiration = func() time.Time {
 }()
 
 func handleRedditPostDataUpdate() {
+	println("hey")
 	select {
 	case redditPostsChannel <- struct{}{}:
 		{

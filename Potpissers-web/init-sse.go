@@ -120,48 +120,47 @@ func init() {
 		}
 	}()
 
-	for _, endpoint := range []string{"/", "hub", "mz", "hcf"} {
-		http.HandleFunc("/api/sse"+endpoint, func(w http.ResponseWriter, r *http.Request) {
-			w.Header().Set("Content-Type", "text/event-stream")
-			w.Header().Set("Cache-Control", "no-cache")
-			w.Header().Set("Connection", "keep-alive")
+	http.HandleFunc("/api/sse/main", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/event-stream")
+		w.Header().Set("Cache-Control", "no-cache")
+		w.Header().Set("Connection", "keep-alive")
 
-			flusher, ok := w.(http.Flusher)
-			if ok {
-				flusher.Flush()
+		flusher, ok := w.(http.Flusher)
+		if ok {
+			flusher.Flush()
 
-				ch := make(chan []byte, 2)
-				pointer := &struct{}{}
-				mutex := mainConnections.mutex
+			ch := make(chan []byte, 2)
+			pointer := &struct{}{}
+			mutex := mainConnections.mutex
 
-				mutex.Lock()
-				mainConnections.mop[pointer] = ch
-				mutex.Unlock()
+			mutex.Lock()
+			mainConnections.mop[pointer] = ch
+			mutex.Unlock()
 
-			whileTrue:
-				for {
-					select {
-					case msg := <-ch:
-						{
-							_, err := w.Write(msg)
-							if err != nil {
-								break whileTrue
-							}
-							flusher.Flush()
-						}
-					case <-r.Context().Done():
-						{
+		whileTrue:
+			for {
+				select {
+				case msg := <-ch:
+					{
+						_, err := w.Write(msg)
+						if err != nil {
 							break whileTrue
 						}
+						flusher.Flush()
+					}
+				case <-r.Context().Done():
+					{
+						break whileTrue
 					}
 				}
-
-				mutex.Lock()
-				mainConnections.mop[pointer] = nil
-				mutex.Unlock()
 			}
-		})
-	}
+
+			mutex.Lock()
+			mainConnections.mop[pointer] = nil
+			mutex.Unlock()
+		}
+	})
+	println("sse init done")
 }
 
 type sseConnectionsData struct {
