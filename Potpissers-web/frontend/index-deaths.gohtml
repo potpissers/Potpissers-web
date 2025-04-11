@@ -13,7 +13,7 @@
             {{template "deathsradiobutton" "duels"}}
         </div>
         <ul id="deaths" style="overflow-x: hidden; overflow-y: scroll">
-            {{range index .ServerDatas .GameModeName}}
+            {{range (index .ServerDatas .GameModeName).Deaths}}
                 <li>
                     <p>
                         ({{.GameModeName}}) {{.DeathMessage}}
