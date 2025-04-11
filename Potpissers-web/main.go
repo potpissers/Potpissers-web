@@ -34,24 +34,24 @@ func main() {
 	mz = getMainTemplateBytes("mz")
 	println("mz template done")
 
-	// for endpoint, bytes := range map[string]*[]byte{
-	// 	"/":    &home,
-	// 	"/hub": &home,
-	// 	"mz":   &mz,
-	// 	"hcf":  &hcf,
-	// } {
-	// 	pointer := bytes
-	// 	http.HandleFunc(endpoint, func(w http.ResponseWriter, r *http.Request) {
-	// 		_, err := w.Write(*pointer)
-	// 		handleFatalErr(err)
+	for endpoint, bytes := range map[string]*[]byte{
+		"/":    &home,
+		"/hub": &home,
+		"/mz":  &mz,
+		"/hcf": &hcf,
+	} {
+		pointer := bytes
+		http.HandleFunc(endpoint, func(w http.ResponseWriter, r *http.Request) {
+			_, err := w.Write(*pointer)
+			handleFatalErr(err)
 
-	// 		handleRedditPostDataUpdate()
-	// 		handleDiscordMessagesUpdate(discordGeneralChan, discordGeneralChannelId, &mostRecentDiscordGeneralMessageId, &discordMessages, "general")
-	// 		//			handleDiscordMessagesUpdate(discordChangelogChan, discordChangelogChannelId, &mostRecentDiscordChangelogMessageId, &changelog, "changelog")
-	// 		handleDiscordMessagesUpdate(discordAnnouncementsChan, discordAnnouncementsChannelId, &mostRecentDiscordAnnouncementsMessageId, &announcements, "announcements")
-	// 	})
-	// 	println(endpoint + " done")
-	// }
+			handleRedditPostDataUpdate()
+			handleDiscordMessagesUpdate(discordGeneralChan, discordGeneralChannelId, &mostRecentDiscordGeneralMessageId, &discordMessages, "general")
+			//			handleDiscordMessagesUpdate(discordChangelogChan, discordChangelogChannelId, &mostRecentDiscordChangelogMessageId, &changelog, "changelog")
+			handleDiscordMessagesUpdate(discordAnnouncementsChan, discordAnnouncementsChannelId, &mostRecentDiscordAnnouncementsMessageId, &announcements, "announcements")
+		})
+		println(endpoint + " done")
+	}
 
 	http.HandleFunc("/github", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "https://github.com/potpissers", http.StatusMovedPermanently)
