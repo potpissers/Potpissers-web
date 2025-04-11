@@ -1,9 +1,9 @@
 {{define "deaths"}}
     <div class="bd" style="display: flex; flex-direction: column">
         <div style="text-align: center">
-            {{template "radiobutton" (dict "fights" "deaths-ticker" false)}}
-            {{template "radiobutton" (dict "deaths" "deaths-ticker" true)}}
-            {{template "radiobutton" (dict "duels" "deaths-ticker" false)}}
+            {{template "radiobutton" (slice "fights" "deaths-ticker" false)}}
+            {{template "radiobutton" (slice "deaths" "deaths-ticker" true)}}
+            {{template "radiobutton" (slice "duels" "deaths-ticker" false)}}
         </div>
         <ul id="deaths" style="overflow-x: hidden; overflow-y: scroll">
             {{range index .ServerDatas .GameModeName}}

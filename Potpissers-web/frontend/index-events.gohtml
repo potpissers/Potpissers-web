@@ -1,8 +1,8 @@
 {{define "events"}}
     <div class="bd" style="text-align: center">
-        {{template "radiobutton" (dict "koths" "" false)}}
-        {{template "radiobutton" (dict "events" "" true)}}
-        {{template "radiobutton" (dict "drops" "" false)}}
+        {{template "radiobutton" (slice "koths" "" false)}}
+        {{template "radiobutton" (slice "events" "" true)}}
+        {{template "radiobutton" (slice "drops" "" false)}}
         <ul id="koths">
             {{range .Koths}}
                 <li>
