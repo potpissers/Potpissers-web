@@ -8,9 +8,9 @@
     </script>
     <div style="display: flex; flex-direction: column; overflow-y: auto">
         <div style="display: flex">
-            <select onselect="handleTipsButtonSelect(this)">
+            <select onselect="">
                 {{range $name, $v := .ContentData}}
-                    <option>{{$name}}</option>
+                    <option onclick="handleTipsButtonSelect(this)">{{$name}}</option>
                 {{end}}
             </select>
 
