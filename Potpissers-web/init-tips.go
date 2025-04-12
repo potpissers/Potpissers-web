@@ -27,6 +27,7 @@ func init() { // TODO -> move this to getting tips by name
 				gameModeTipsIteration = gameModeTips{"potpissers tips", "hub"}
 			case "potpissers_commands":
 				gameModeTipsIteration = gameModeTips{"potpissers commands", ""}
+				println("hey")
 			case "cubecore":
 				gameModeTipsIteration = gameModeTips{"hcf tips", "hcf"}
 			case "cubecore_commands":
