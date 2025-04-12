@@ -1,5 +1,5 @@
 {{define "eventsradiobutton"}}
-    <span class="ifc" onmousedown="handleSpanButtonClick(this)">
+    <span class="ifc" onmousedown="handleSpanButtonClick(this, handleEventsButtonClick)">
         <button style="font-size: 75%">{{.}}</button>
         <input name="events-ticker" type="radio">
     </span>
@@ -8,12 +8,12 @@
 {{define "events"}}
     <div class="bd" style="text-align: center">
         {{template "eventsradiobutton" "koths"}}
-        <span class="ifc" onmousedown="handleSpanButtonClick(this)">
+        <span class="ifc" onmousedown="handleSpanButtonClick(this, handleEventsButtonClick)">
             <button>events</button>
             <input name="events-ticker" type="radio" checked>
         </span>
         {{template "eventsradiobutton" "drops"}}
-        <ul id="koths" class="events">
+        <ul id="koths" class="events" hidden>
             {{range .Koths}}
                 <li>
                     <p>
@@ -31,7 +31,7 @@
                 </li>
             {{end}}
         </ul>
-        <ul id="drops" class="events">
+        <ul id="drops" class="events" hidden>
             {{range .SupplyDrops}}
                 <li>
                     <p>

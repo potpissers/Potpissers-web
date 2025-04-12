@@ -90,6 +90,12 @@ function handlePlayersListToggle(button) {
     }
 }
 
-function handleSpanButtonClick(span) {
+function handleSpanButtonClick(span, runnable) {
     span.querySelector("input").checked = true
+    runnable(span)
+}
+function handleEventsButtonClick(span) {
+    for (const event of document.getElementsByClassName("events"))
+        event.hidden = true
+    document.getElementById(span.querySelector('button').textContent).hidden = false
 }
