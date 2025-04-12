@@ -2,10 +2,10 @@
     <div style="display: flex; height: 100%; overflow-y: auto">
         <div style="display: flex; flex-direction: column; flex: 1">
             <button class="id-chat-discord" hidden style="align-self: end; font-size: 75%"
-                    onclick="fetch('/api/discord-general')" onmouseover="fetch('/api/discord-general')">refresh
+                    onmousedown="fetch('/api/discord-general')" onmouseover="fetch('/api/discord-general')">refresh
             </button>
             <button class="id-chat-game" style="align-self: end; font-size: 75%"
-                    onclick="handlePlayersListToggle(this)">/list</button>
+                    onmousedown="handlePlayersListToggle(this); fetch('/api/discord-general')" onmouseover="fetch('/api/discord-general')">/list</button>
 
             {{range $name, $data := .ServerDatas}}
                 <ul id="onlineplayers-{{$name}}" style="overflow-y: scroll; flex: 1" hidden>
@@ -50,7 +50,7 @@
                 {{end}}
             </ul>
             <div style="display: flex; justify-content: space-between">
-                <button style="font-size: 75%" onclick="handleChatToggle(this)">game</button>
+                <button style="font-size: 75%" onmousedown="handleChatToggle(this)">game</button>
                 <input class="id-chat-game" style="font-size: 75%">
             </div>
         </div>

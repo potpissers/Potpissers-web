@@ -11,11 +11,11 @@ function handleClassHiddenToggle(className) {
     else
         clickedLineItemClasses.delete(className)
 }
-function handleTipsButtonSelect(clickedId) {
+function handleTipsButtonSelect(clickedOption) {
     for (let buttonId of tipIds) {
         document.getElementById(buttonId).hidden = true
     }
-    document.getElementById(clickedId.value).hidden = false
+    document.getElementById(clickedOption.innerText).hidden = false
 }
 
 function handleLineItemButtonContentMaximize() {
@@ -88,4 +88,8 @@ function handlePlayersListToggle(button) {
             document.getElementById("onlineplayers-network").hidden = true
             break
     }
+}
+
+function handleSpanButtonClick(span) {
+    span.querySelector("input").checked = true
 }

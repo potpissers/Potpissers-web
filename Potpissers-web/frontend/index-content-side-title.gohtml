@@ -2,15 +2,15 @@
     <div style="display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden">
         <div style="display: flex; justify-content: space-between">
             <button id="donatebutton">/donate</button>
-            <button style="width: 100%" onclick="handlePaymentLink()" id="checkout" class="fsb h"><span
+            <button style="width: 100%" onmousedown="handlePaymentLink()" id="checkout" class="fsb h"><span
                         style="font-size: 75%">checkout</span><span id="checkoutbalance"></span></button>
             <div id="squarebutton" class="h" style="overflow-x: hidden">
-                <a hidden id="squarelink" onclick="handleLineItemReset()"></a>
+                <a hidden id="squarelink" onmousedown="handleLineItemReset()"></a>
                 <a id="squarelinkspinner">...</a>
             </div>
 
-            <button id="donatesidebutton" onclick="handleContentMaximizeButtonClick(true)"></button>
-            <button hidden id="donatesidebuttonred" onclick="handleLineItemReset()"
+            <button id="donatesidebutton" onmousedown="handleContentMaximizeButtonClick(true)"></button>
+            <button hidden id="donatesidebuttonred" onmousedown="handleLineItemReset()"
                     style="background-color: indianred"></button>
         </div>
         <ul style="overflow-y: scroll; width: 100%">
@@ -20,7 +20,7 @@
             {{/*            <!--            <button>shoutout</button>-->*/}}
             {{range .LineItemData}}
                 <li class="fc85">
-                    <button onclick="handleClassHiddenToggle('{{.GameModeName}}-{{.ItemName}}'); handleLineItemButtonContentMaximize()"
+                    <button onmousedown="handleClassHiddenToggle('{{.GameModeName}}-{{.ItemName}}'); handleLineItemButtonContentMaximize()"
                             class="fsb" style="width: 100%">
                         {{.GameModeName}}<br>{{.ItemName}}<span>${{.ItemPriceInDollars}}</span>
                     </button>
@@ -44,7 +44,7 @@
                         </script>
 
                         <button style="font-size: 75%" class="{{.GameModeName}}-{{.ItemName}}" hidden
-                                onclick="handleAddLineItemJson('{{.GameModeName}}-{{.ItemName}}', {{if .IsPlural}}document.getElementById('{{.GameModeName}}-{{.ItemName}}-amount').value{{else}}1{{end}})">
+                                onmousedown="handleAddLineItemJson('{{.GameModeName}}-{{.ItemName}}', {{if .IsPlural}}document.getElementById('{{.GameModeName}}-{{.ItemName}}-amount').value{{else}}1{{end}})">
                             add
                         </button>
                     </div>

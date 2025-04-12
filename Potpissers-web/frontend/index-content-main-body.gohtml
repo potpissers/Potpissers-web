@@ -8,13 +8,13 @@
     </script>
     <div style="display: flex; flex-direction: column; overflow-y: auto">
         <div style="display: flex">
-            <select onchange="handleTipsButtonSelect(this)">
+            <select>
                 {{range $name, $v := .ContentData}}
-                    <option {{if eq $name.GameModeName $.GameModeName}}selected{{end}}>{{$name.Title}}</option>
+                    <option {{if eq $name.GameModeName $.GameModeName}}selected{{end}} onmousedown="handleTipsButtonSelect(this)">{{$name.Title}}</option>
                 {{end}}
             </select>
 
-            <button onclick="handleContentMaximizeButtonClick(false)" style="margin-left: auto"></button>
+            <button onmousedown="handleContentMaximizeButtonClick(false)" style="margin-left: auto"></button>
         </div>
         {{range $name, $data := .ContentData}}
             <ul id="{{$name.Title}}" style="overflow-y: scroll; flex: 1" {{if not (eq $name.GameModeName $.GameModeName)}}hidden{{end}}>

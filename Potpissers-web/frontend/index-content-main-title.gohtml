@@ -7,7 +7,7 @@
                 <input type="radio" disabled>
                 <button>changelog</button>
             </div>
-            <button onclick="handleContentMaximizeButtonClick(true)" style="margin-left: auto"></button>
+            <button onmousedown="handleContentMaximizeButtonClick(true)" style="margin-left: auto"></button>
         </div>
         <ul id="announcements" style="overflow-y: scroll">
             {{range .Announcements}}
