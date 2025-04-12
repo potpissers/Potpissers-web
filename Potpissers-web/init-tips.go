@@ -25,18 +25,17 @@ func init() { // TODO -> move this to getting tips by name
 			switch gameModeName {
 			case "potpissers":
 				gameModeTipsIteration = gameModeTips{"potpissers tips", "hub"}
-			case "potpissers_commands":
+			case "potpissers-commands":
 				gameModeTipsIteration = gameModeTips{"potpissers commands", ""}
-				println("hey")
 			case "cubecore":
 				gameModeTipsIteration = gameModeTips{"hcf tips", "hcf"}
-			case "cubecore_commands":
+			case "cubecore-commands":
 				gameModeTipsIteration = gameModeTips{"hcf commands", ""}
 			case "cubecore_classes":
 				gameModeTipsIteration = gameModeTips{"hcf class tips", ""}
 			case "kollusion":
 				gameModeTipsIteration = gameModeTips{"mz tips", "mz"}
-			case "kollusion_commands":
+			case "kollusion-commands":
 				gameModeTipsIteration = gameModeTips{"mz commands", ""}
 			}
 			contentData[gameModeTipsIteration] = append(contentData[gameModeTipsIteration], tip)
