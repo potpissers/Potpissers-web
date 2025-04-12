@@ -140,7 +140,7 @@ func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePos
 		println("reddit request")
 		resp, err := (&http.Client{}).Do(req)
 		if err != nil {
-			println(err.Error)
+			println(err.Error())
 			continue
 		}
 		defer resp.Body.Close()
@@ -181,7 +181,7 @@ func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePos
 		}
 		err = json.NewDecoder(resp.Body).Decode(&responseJson)
 		if err != nil {
-			println(err.Error)
+			println(err.Error())
 			continue
 		}
 
