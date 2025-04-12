@@ -23,10 +23,12 @@ var events = func() []abstractEvent {
 	for i < len(koths) {
 		koth := koths[i]
 		events = append(events, abstractEvent{koth.CapMessage, koth.EndTimestamp})
+		i++
 	}
 	for j < len(supplyDrops) {
 		drop := supplyDrops[j]
 		events = append(events, abstractEvent{drop.WinMessage, drop.EndTimestamp})
+		j++
 	}
 	return events
 }()
