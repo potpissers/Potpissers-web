@@ -1,5 +1,5 @@
 {{define "eventsradiobutton"}}
-    <span class=ifc onmousedown="handleSpanButtonClick(this)">
+    <span class="ifc events" onmousedown="handleSpanButtonClick(this)">
         <button style="font-size: 75%">{{.}}</button>
         <input name="events-ticker" type="radio">
     </span>
@@ -8,7 +8,7 @@
 {{define "events"}}
     <div class="bd" style="text-align: center">
         {{template "eventsradiobutton" "koths"}}
-        <span class=ifc onmousedown="handleSpanButtonClick(this)">
+        <span class="ifc events" onmousedown="handleSpanButtonClick(this)">
             <button>events</button>
             <input name="events-ticker" type="radio" checked>
         </span>
@@ -40,5 +40,8 @@
                 </li>
             {{end}}
         </ul>
+        <script>
+
+        </script>
     </div>
 {{end}}

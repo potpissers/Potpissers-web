@@ -8,9 +8,9 @@
     </script>
     <div style="display: flex; flex-direction: column; overflow-y: auto">
         <div style="display: flex">
-            <select>
+            <select onchange="handleTipsButtonSelect(this)">{{/*                TODO -> this not using onmousedown sucks!*/}}
                 {{range $name, $v := .ContentData}}
-                    <option {{if eq $name.GameModeName $.GameModeName}}selected{{end}} onmousedown="handleTipsButtonSelect(this)">{{$name.Title}}</option>
+                    <option {{if eq $name.GameModeName $.GameModeName}}selected{{end}}>{{$name.Title}}</option>
                 {{end}}
             </select>
 

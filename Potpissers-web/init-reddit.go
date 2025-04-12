@@ -35,6 +35,7 @@ var lastCheckedRedditPostCreatedUtc float64
 var redditPostsChannel = make(chan struct{}, 1)
 
 func init() {
+	println("reddit started")
 	redditVideoPosts, redditImagePosts = getRedditPostData(potpissersRedditApiUrl)
 	http.HandleFunc("/api/reddit", func(w http.ResponseWriter, r *http.Request) {
 		handleRedditPostDataUpdate()
@@ -60,7 +61,6 @@ var redditAccessTokenExpiration = func() time.Time {
 }()
 
 func handleRedditPostDataUpdate() {
-	println("hey1")
 	select {
 	case redditPostsChannel <- struct{}{}:
 		{
@@ -91,7 +91,6 @@ func handleRedditPostDataUpdate() {
 			<-redditPostsChannel
 		}
 	default:
-		println("hey")
 		return
 	}
 }
