@@ -70,8 +70,6 @@ ul {
     list-style: none;
 
     background: rgba(240, 240, 240, 0.2);
-
-    overflow-x: hidden
 }
 
 input {
