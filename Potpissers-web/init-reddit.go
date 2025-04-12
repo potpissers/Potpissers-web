@@ -134,11 +134,13 @@ func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePos
 		log.Fatal(err)
 	}
 	req.Header.Set("Authorization", "Bearer "+redditAccessToken)
+	println("reddit request started")
 	resp, err := (&http.Client{}).Do(req)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer resp.Body.Close()
+	println("reddit request ended")
 	responseJson := getFatalJsonT[struct {
 		Kind string `json:"kind"`
 		Data struct {
