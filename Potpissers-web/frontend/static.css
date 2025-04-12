@@ -69,7 +69,10 @@ ul {
     padding: 0;
     list-style: none;
 
-    background: rgba(240, 240, 240, 0.2)
+    background: rgba(240, 240, 240, 0.2);
+
+    overflow-x: hidden;
+    overflow-y: scroll
 }
 
 input {

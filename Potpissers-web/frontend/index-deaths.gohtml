@@ -1,5 +1,5 @@
 {{define "deathsradiobutton"}}
-    <span class=ifc>
+    <span class=ifc onmousedown="handleSpanButtonClick(this, handleEventsButtonClick)">
         <button style="font-size: 75%">{{.}}</button>
         <input name="deaths-ticker" type="radio" {{if eq . "deaths"}}checked{{end}}>
     </span>
@@ -12,6 +12,9 @@
             {{template "deathsradiobutton" "deaths"}}
             {{template "deathsradiobutton" "duels"}}
         </div>
+        <ul id="fights">
+            {{/*TODO fights*/}}
+        </ul>
         <ul id="deaths" style="overflow-x: hidden; overflow-y: scroll">
             {{range .Deaths}}
                 <li>
@@ -21,7 +24,8 @@
                 </li>
             {{end}}
         </ul>
-        {{/*TODO fights*/}}
-        {{/*TODO duels*/}}
+        <ul id="duels">
+            {{/*TODO duels*/}}
+        </ul>
     </div>
 {{end}}
