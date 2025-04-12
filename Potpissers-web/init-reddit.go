@@ -96,6 +96,7 @@ func handleRedditPostDataUpdate() {
 }
 func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePost) {
 	for redditAccessToken == "" || redditAccessTokenExpiration.Before(time.Now()) {
+		println("started reddit api key")
 		data := url.Values{}
 		data.Set("grant_type", "client_credentials")
 		req, err := http.NewRequest("POST", "https://www.reddit.com/api/v1/access_token", strings.NewReader(data.Encode()))
