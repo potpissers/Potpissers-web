@@ -168,7 +168,7 @@ func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePos
 			} else {
 				sleepSeconds = resetSeconds
 			}
-			getRedditPostDataWaitTimestamp = time.Now().Add(time.Duration(sleepSeconds) * time.Second)
+			getRedditPostDataWaitTimestamp = time.Now().Add(time.Duration(sleepSeconds * float64(time.Second)))
 			println(resetSeconds / remaining)
 		}
 		// limit := resp.Header.Get("X-Ratelimit-Limit")
