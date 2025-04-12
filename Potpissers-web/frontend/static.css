@@ -71,7 +71,8 @@ ul {
 
     background: rgba(240, 240, 240, 0.2);
 
-    overflow-x: hidden
+    overflow-x: hidden;
+    overflow-y: scroll
 }
 
 input {
