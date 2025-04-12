@@ -13,7 +13,7 @@ function handleClassHiddenToggle(className) {
 }
 function handleTipsButtonSelect(clickedId) {
     for (let buttonId of tipIds) {
-        document.getElementById(buttonId).hidden = false
+        document.getElementById(buttonId).hidden = true
     }
 
     document.getElementById(clickedId.value).hidden = false

@@ -17,7 +17,7 @@
             <button onclick="handleContentMaximizeButtonClick(false)" style="margin-left: auto"></button>
         </div>
         {{range $name, $data := .ContentData}}
-            <ul id="{{$name}}" style="overflow-y: scroll; flex: 1" hidden>
+            <ul id="{{$name}}" style="overflow-y: scroll; flex: 1">
                 {{range $data}}
                     <li>
                         <p>
