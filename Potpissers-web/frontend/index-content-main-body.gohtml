@@ -8,7 +8,7 @@
     </script>
     <div style="display: flex; flex-direction: column; overflow-y: auto">
         <div style="display: flex">
-            <select onselect="handleTipsButtonSelect(this)">
+            <select onchange="handleTipsButtonSelect(this)">
                 {{range $name, $v := .ContentData}}
                     <option>{{$name}}</option>
                 {{end}}
@@ -17,7 +17,7 @@
             <button onclick="handleContentMaximizeButtonClick(false)" style="margin-left: auto"></button>
         </div>
         {{range $name, $data := .ContentData}}
-            <ul id="{{$name}}" style="overflow-y: scroll; flex: 1">
+            <ul id="{{$name}}" style="overflow-y: scroll; flex: 1" hidden>
                 {{range $data}}
                     <li>
                         <p>
