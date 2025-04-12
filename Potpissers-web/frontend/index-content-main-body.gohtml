@@ -10,7 +10,7 @@
         <div style="display: flex">
             <select onchange="handleTipsButtonSelect(this)">
                 {{range $name, $v := .ContentData}}
-                    <option>{{$name.Title}}</option>
+                    <option {{if eq $name.GameModeName $.GameModeName}}selected{{end}}>{{$name.Title}}</option>
                 {{end}}
             </select>
 
