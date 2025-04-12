@@ -30,7 +30,7 @@ var mainTemplate = func() *template.Template {
 func getMainTemplateBytes(gameModeName string) []byte {
 	var buffer bytes.Buffer
 	donationsMu.RLock()
-	println(len(deaths))
+	println(len(supplyDrops))
 	println(len(events))
 	println(len(koths))
 	handleFatalErr(mainTemplate.Execute(&buffer, struct {
@@ -76,7 +76,6 @@ func getMainTemplateBytes(gameModeName string) []byte {
 		Koths:                koths,
 		SupplyDrops:          supplyDrops,
 	}))
-	println(len(deaths))
 	donationsMu.RUnlock()
 	return buffer.Bytes()
 }
