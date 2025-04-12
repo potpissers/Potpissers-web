@@ -5,8 +5,7 @@
                     onclick="fetch('/api/discord-general')" onmouseover="fetch('/api/discord-general')">refresh
             </button>
             <button class="id-chat-game" style="align-self: end; font-size: 75%"
-                    onclick="handlePlayersListToggle(this)">/list
-            </button>
+                    onclick="handlePlayersListToggle(this)">/list</button>
 
             {{range $name, $data := .ServerDatas}}
                 <ul id="onlineplayers-{{$name}}" style="overflow-y: scroll; flex: 1" hidden>

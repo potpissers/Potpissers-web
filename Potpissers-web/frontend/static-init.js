@@ -68,7 +68,6 @@ function handleChatToggle(button) {
     }
 }
 function handlePlayersListToggle(button) {
-    console.log("hey")
     switch (button.textContent) {
         case "/list":
             button.textContent = "/glist"
