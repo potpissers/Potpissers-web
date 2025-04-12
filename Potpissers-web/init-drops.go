@@ -29,7 +29,7 @@ type supplyDrop struct {
 	WinMessage   string    `json:"win_message"`
 }
 
-var supplyDrops = getSupplyDropsQuerySlice("SELECT * FROM get_14_newest_network_koths()")
+var supplyDrops = getSupplyDropsQuerySlice("SELECT * FROM get_14_newest_network_supply_drops()")
 
 func init() {
 	for _, serverData := range serverDatas {
