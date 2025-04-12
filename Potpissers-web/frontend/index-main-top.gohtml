@@ -5,19 +5,18 @@
                 leaderboards
             </button>
             <select style="font-size: 75%; align-self: end">
-                <option class="fsb" {{if eq .GameModeName "hub"}}selected{{end}} disabled id="online-network">
+                <option {{if eq .GameModeName "hub"}}selected{{end}} disabled id="online-network">
                     /glist: {{len .NetworkPlayers}}</option>
-                <option class="fsb" disabled id="online-hub">
-                    /hub: <span>{{len (index .ServerDatas "hub").CurrentPlayers}}</span></option>
-                <option class="fsb" {{if eq .GameModeName "cubecore"}}selected{{end}} disabled id="online-cubecore">
-                    /cubecore: <span>{{len (index .ServerDatas "cubecore").CurrentPlayers}}</span></option>
-                <option class="fsb" {{if eq .GameModeName (print "hcf" .CurrentHcfServerName)}}selected{{end}} disabled id="online-hcf">
-                    /hcf: <span>{{len ((index .ServerDatas (print "hcf" .CurrentHcfServerName)).CurrentPlayers)}}</span>
-                </option>
-                <option class="fsb" {{if eq .GameModeName "kollusion"}}selected{{end}} disabled id="online-kollusion">
-                    /kollusion: <span>{{len (index .ServerDatas "kollusion").CurrentPlayers}}</span></option>
-                <option class="fsb" {{if eq .GameModeName "mz"}}selected{{end}} disabled id="online-mz">
-                    /mz: <span>{{len (index .ServerDatas "mz").CurrentPlayers}}</span></option>
+                <option disabled id="online-hub">
+                    /hub: {{len (index .ServerDatas "hub").CurrentPlayers}}</option>
+                <option {{if eq .GameModeName "cubecore"}}selected{{end}} disabled id="online-cubecore">
+                    /cubecore: {{len (index .ServerDatas "cubecore").CurrentPlayers}}</option>
+                <option {{if eq .GameModeName (print "hcf" .CurrentHcfServerName)}}selected{{end}} disabled id="online-hcf">
+                    /hcf: {{len ((index .ServerDatas (print "hcf" .CurrentHcfServerName)).CurrentPlayers)}}</option>
+                <option {{if eq .GameModeName "kollusion"}}selected{{end}} disabled id="online-kollusion">
+                    /kollusion: {{len (index .ServerDatas "kollusion").CurrentPlayers}}</option>
+                <option {{if eq .GameModeName "mz"}}selected{{end}} disabled id="online-mz">
+                    /mz: {{len (index .ServerDatas "mz").CurrentPlayers}}</option>
             </select>
         </div>
         <div

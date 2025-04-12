@@ -30,6 +30,9 @@ var mainTemplate = func() *template.Template {
 func getMainTemplateBytes(gameModeName string) []byte {
 	var buffer bytes.Buffer
 	donationsMu.RLock()
+	println(len(deaths))
+	println(len(events))
+	println(len(koths))
 	handleFatalErr(mainTemplate.Execute(&buffer, struct {
 		GameModeName       string
 		BackgroundImageUrl redditImagePost
