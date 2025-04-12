@@ -7,12 +7,14 @@
 
 {{define "events"}}
     <div class="bd" style="text-align: center; display: flex; flex-direction: column">
-        {{template "eventsradiobutton" "koths"}}
-        <span class="ifc" onmousedown="handleSpanButtonClick(this, handleEventsButtonClick, 'events')">
-            <button>events</button>
-            <input name="events-ticker" type="radio" checked>
-        </span>
-        {{template "eventsradiobutton" "drops"}}
+        <div style="text-align: center">
+            {{template "eventsradiobutton" "koths"}}
+            <span class="ifc" onmousedown="handleSpanButtonClick(this, handleEventsButtonClick, 'events')">
+                <button>events</button>
+                <input name="events-ticker" type="radio" checked>
+            </span>
+            {{template "eventsradiobutton" "drops"}}
+        </div>
         <ul id="koths" class="events" hidden>
             {{range .Koths}}
                 <li>
