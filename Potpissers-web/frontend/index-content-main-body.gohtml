@@ -5,12 +5,13 @@
             "{{$name}}",
             {{end}}
         ]
+        console.log("hey")
     </script>
     <div style="display: flex; flex-direction: column; overflow-y: auto">
         <div style="display: flex">
-            <select onselect="">
+            <select onselect="handleTipsButtonSelect(this)">
                 {{range $name, $v := .ContentData}}
-                    <option onclick="handleTipsButtonSelect(this)">{{$name}}</option>
+                    <option>{{$name}}</option>
                 {{end}}
             </select>
 

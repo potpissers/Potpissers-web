@@ -12,7 +12,6 @@ function handleClassHiddenToggle(className) {
         clickedLineItemClasses.delete(className)
 }
 function handleTipsButtonSelect(clickedId) {
-    console.log("hey")
     for (let buttonId of tipIds) {
         document.getElementById(buttonId).hidden = true
     }
