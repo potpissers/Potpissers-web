@@ -2,7 +2,12 @@ package main
 
 import "github.com/jackc/pgx/v5"
 
-var contentData = make(map[string][]tip)
+type gameModeTips struct {
+	Title        string
+	GameModeName string
+}
+
+var contentData = make(map[gameModeTips][]tip)
 
 type tip struct {
 	Title   string
@@ -16,16 +21,24 @@ func init() { // TODO -> move this to getting tips by name
 		var tipMessage string
 		handleFatalPgx(pgx.ForEachRow(rows, []any{&gameModeName, &tipTitle, &tipMessage}, func() error {
 			tip := tip{tipTitle, tipMessage}
+			var gameModeTipsIteration gameModeTips
 			switch gameModeName {
 			case "potpissers":
-				contentData["potpissers tips"] = append(contentData["potpissers tips"], tip)
+				gameModeTipsIteration = gameModeTips{"potpissers tips", "hub"}
+			case "potpissers_commands":
+				gameModeTipsIteration = gameModeTips{"potpissers commands", ""}
 			case "cubecore":
-				contentData["hcf tips"] = append(contentData["hcf tips"], tip)
+				gameModeTipsIteration = gameModeTips{"hcf tips", "hcf"}
+			case "cubecore_commands":
+				gameModeTipsIteration = gameModeTips{"hcf commands", ""}
 			case "cubecore_classes":
-				contentData["hcf class tips"] = append(contentData["hcf class tips"], tip)
+				gameModeTipsIteration = gameModeTips{"hcf class tips", ""}
 			case "kollusion":
-				contentData["mz tips"] = append(contentData["mz tips"], tip)
+				gameModeTipsIteration = gameModeTips{"mz tips", "mz"}
+			case "kollusion_commands":
+				gameModeTipsIteration = gameModeTips{"mz commands", ""}
 			}
+			contentData[gameModeTipsIteration] = append(contentData[gameModeTipsIteration], tip)
 			return nil
 		}))
 	})

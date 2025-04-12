@@ -2,7 +2,7 @@
     <script>
         const tipIds = [
             {{range $name, $v := .ContentData}}
-            "{{$name}}",
+            "{{$name.Title}}",
             {{end}}
         ]
     </script>
@@ -10,14 +10,14 @@
         <div style="display: flex">
             <select onchange="handleTipsButtonSelect(this)">
                 {{range $name, $v := .ContentData}}
-                    <option>{{$name}}</option>
+                    <option>{{$name.Title}}</option>
                 {{end}}
             </select>
 
             <button onclick="handleContentMaximizeButtonClick(false)" style="margin-left: auto"></button>
         </div>
         {{range $name, $data := .ContentData}}
-            <ul id="{{$name}}" style="overflow-y: scroll; flex: 1" hidden>
+            <ul id="{{$name.Title}}" style="overflow-y: scroll; flex: 1" {{if not (eq $name.GameModeName .GameModeName)}}hidden{{end}}>
                 {{range $data}}
                     <li>
                         <p>

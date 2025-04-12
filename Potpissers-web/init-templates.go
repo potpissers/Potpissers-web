@@ -36,7 +36,7 @@ func getMainTemplateBytes(gameModeName string) []byte {
 		NetworkPlayers     []onlinePlayer
 		ServerDatas        map[string]*serverData
 		NewPlayers         []newPlayer
-		ContentData        map[string][]tip
+		ContentData        map[gameModeTips][]tip
 
 		Messages             []ingameMessage
 		Announcements        []discordMessage
