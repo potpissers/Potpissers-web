@@ -66,7 +66,6 @@ func handleRedditPostDataUpdate() {
 	case redditPostsChannel <- struct{}{}:
 		{
 			if time.Now().Before(getRedditPostDataWaitTimestamp) {
-				println("getRedditPosts sleeping")
 				time.Sleep(time.Until(getRedditPostDataWaitTimestamp))
 			}
 			newVideoPosts, newImagePosts := getRedditPostData(potpissersRedditApiUrl + "&before=" + lastCheckedRedditPostId) // holy fuck sorted by new -> before is newer, after is older
@@ -156,12 +155,10 @@ func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePos
 			if err != nil {
 				log.Fatal(err)
 			}
-			println(remaining)
 			resetSeconds, err := strconv.ParseFloat(resp.Header.Get("X-Ratelimit-Reset"), 64)
 			if err != nil {
 				log.Fatal(err)
 			}
-			println(resetSeconds)
 			var sleepSeconds float64
 			if remaining > 0 {
 				sleepSeconds = resetSeconds / remaining
@@ -169,7 +166,6 @@ func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePos
 				sleepSeconds = resetSeconds
 			}
 			getRedditPostDataWaitTimestamp = time.Now().Add(time.Duration(sleepSeconds * float64(time.Second)))
-			println(resetSeconds / remaining)
 		}
 		// limit := resp.Header.Get("X-Ratelimit-Limit")
 
