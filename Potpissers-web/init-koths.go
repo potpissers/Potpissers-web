@@ -12,10 +12,10 @@ type koth struct {
 	LootFactor           int       `json:"loot_factor"`
 	MaxTimer             int       `json:"max_timer"`
 	IsMovementRestricted bool      `json:"is_movement_restricted"`
-	CappingUserUUID      *string   `json:"capping_user_uuid"`
+	CappingUserUUID      string    `json:"capping_user_uuid"`
 	EndTimestamp         time.Time `json:"end_timestamp"`
 	CappingPartyUUID     *string   `json:"capping_party_uuid"`
-	CapMessage           *string   `json:"cap_message"`
+	CapMessage           string    `json:"cap_message"`
 	World                string    `json:"world"`
 	X                    int       `json:"x"`
 	Y                    int       `json:"y"`
