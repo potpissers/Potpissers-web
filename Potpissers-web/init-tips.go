@@ -32,7 +32,9 @@ func init() { // TODO -> move this to getting tips by name
 			case "cubecore-commands":
 				gameModeTipsIteration = gameModeTips{"hcf commands", ""}
 			case "cubecore_classes":
-				gameModeTipsIteration = gameModeTips{"hcf class tips", ""}
+				gameModeTipsIteration = gameModeTips{"hcf classes", ""}
+			case "cubecor_classes_items":
+				gameModeTipsIteration = gameModeTips{"hcf class items", ""}
 			case "kollusion":
 				gameModeTipsIteration = gameModeTips{"mz tips", "mz"}
 			case "kollusion-commands":
