@@ -15,6 +15,7 @@ function handleTipsButtonSelect(clickedId) {
     for (let buttonId of tipIds) {
         document.getElementById(buttonId).hidden = true
     }
+    console.log("hey")
 
     document.getElementById(clickedId.value).hidden = false
 }
