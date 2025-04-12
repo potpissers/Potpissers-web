@@ -11,12 +11,12 @@ function handleClassHiddenToggle(className) {
     else
         clickedLineItemClasses.delete(className)
 }
-function handleTipsButtonClick(otherButtonsIds, clickedId) {
-    for (let buttonId of otherButtonsIds) {
+function handleTipsButtonSelect(clickedId) {
+    for (let buttonId of tipIds) {
         document.getElementById(buttonId).hidden = true
     }
 
-    document.getElementById(clickedId).hidden = false
+    document.getElementById(clickedId.value).hidden = false
 }
 
 function handleLineItemButtonContentMaximize() {
