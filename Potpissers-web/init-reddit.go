@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"os"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -64,6 +65,10 @@ func handleRedditPostDataUpdate() {
 	select {
 	case redditPostsChannel <- struct{}{}:
 		{
+			if time.Now().Before(getRedditPostDataWaitTimestamp) {
+				println("getRedditPosts sleeping")
+				time.Sleep(time.Until(getRedditPostDataWaitTimestamp))
+			}
 			newVideoPosts, newImagePosts := getRedditPostData(potpissersRedditApiUrl + "&before=" + lastCheckedRedditPostId) // holy fuck sorted by new -> before is newer, after is older
 			for _, post := range newVideoPosts {
 				redditVideoPosts = append([]redditVideoPost{post}, redditVideoPosts...)
@@ -94,6 +99,9 @@ func handleRedditPostDataUpdate() {
 		return
 	}
 }
+
+var getRedditPostDataWaitTimestamp time.Time
+
 func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePost) {
 	for redditAccessToken == "" || redditAccessTokenExpiration.Before(time.Now()) {
 		println("started reddit api key")
@@ -143,6 +151,19 @@ func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePos
 			log.Fatal(err)
 		}
 		defer resp.Body.Close()
+		{
+			remaining, err := strconv.Atoi(resp.Header.Get("X-Ratelimit-Remaining"))
+			if err != nil {
+				log.Fatal(err)
+			}
+			resetTimestampInt, err := strconv.ParseInt(resp.Header.Get("X-Ratelimit-Reset"), 10, 64)
+			if err != nil {
+				log.Fatal(err)
+			}
+			getRedditPostDataWaitTimestamp = time.Now().Add(time.Duration(int64(time.Unix(resetTimestampInt, 0).Sub(time.Now()).Nanoseconds()) / int64(remaining)))
+		}
+		// limit := resp.Header.Get("X-Ratelimit-Limit")
+
 		var responseJson struct {
 			Kind string `json:"kind"`
 			Data struct {
