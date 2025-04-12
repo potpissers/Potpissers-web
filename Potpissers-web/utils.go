@@ -43,8 +43,8 @@ func getMojangApiUuidRequest(username string) (*http.Response, error) {
 
 func getRowsBlocking(query string, bar func(rows pgx.Rows), params ...any) {
 	rows, err := postgresPool.Query(context.Background(), query, params...)
-	defer rows.Close()
 	handleFatalErr(err)
+	defer rows.Close()
 	bar(rows)
 }
 
