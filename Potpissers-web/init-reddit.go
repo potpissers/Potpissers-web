@@ -140,8 +140,7 @@ func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePos
 		println("reddit request")
 		resp, err := (&http.Client{}).Do(req)
 		if err != nil {
-			println(err.Error())
-			continue
+			log.Fatal(err)
 		}
 		defer resp.Body.Close()
 		var responseJson struct {
