@@ -129,85 +129,94 @@ func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePos
 		println("retrieved reddit api key")
 	}
 
-	req, err := http.NewRequest("GET", redditApiUrl, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-	req.Header.Set("Authorization", "Bearer "+redditAccessToken)
-	println("reddit request")
-	resp, err := (&http.Client{}).Do(req)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer resp.Body.Close()
-	responseJson := getFatalJsonT[struct {
-		Kind string `json:"kind"`
-		Data struct {
-			After     *string `json:"after"`
-			Dist      int     `json:"dist"`
-			Modhash   string  `json:"modhash"`
-			GeoFilter string  `json:"geo_filter"`
-			Children  []struct {
-				Kind string `json:"kind"`
-				Data struct {
-					Name        string  `json:"name"`
-					Subreddit   string  `json:"subreddit"`
-					Title       string  `json:"title"`
-					Selftext    string  `json:"selftext"`
-					Author      string  `json:"author"`
-					UpvoteRatio float64 `json:"upvote_ratio"`
-					Thumbnail   string  `json:"thumbnail"`
-					URL         string  `json:"url"`
-					NumComments int     `json:"num_comments"`
-					Permalink   string  `json:"permalink"`
-					CreatedUTC  float64 `json:"created_utc"`
-					IsVideo     bool    `json:"is_video"`
-					Media       *struct {
-						RedditVideo *struct {
-							FallbackURL  string `json:"fallback_url"`
-							Height       int    `json:"height"`
-							Width        int    `json:"width"`
-							Duration     int    `json:"duration"`
-							ThumbnailURL string `json:"thumbnail_url"`
-						} `json:"reddit_video"`
-					} `json:"media,omitempty"`
-				} `json:"data"`
-			} `json:"children"`
-		} `json:"data"`
-	}](resp)
-
 	var videoPosts []redditVideoPost
 	var imagePosts []redditImagePost
-	children := responseJson.Data.Children
-	if len(children) > 0 {
-		if lastCheckedRedditPostCreatedUtc < children[0].Data.CreatedUTC {
-			lastCheckedRedditPostId = children[0].Data.Name
-			lastCheckedRedditPostCreatedUtc = children[0].Data.CreatedUTC
+	for {
+		req, err := http.NewRequest("GET", redditApiUrl, nil)
+		if err != nil {
+			log.Fatal(err)
 		}
-		for _, child := range children {
-			getRedditPostUrl := func(permalink string) string {
-				return "https://www.reddit.com" + permalink
+		req.Header.Set("Authorization", "Bearer "+redditAccessToken)
+		println("reddit request")
+		resp, err := (&http.Client{}).Do(req)
+		if err != nil {
+			println(err)
+			continue
+		}
+		defer resp.Body.Close()
+		var responseJson struct {
+			Kind string `json:"kind"`
+			Data struct {
+				After     *string `json:"after"`
+				Dist      int     `json:"dist"`
+				Modhash   string  `json:"modhash"`
+				GeoFilter string  `json:"geo_filter"`
+				Children  []struct {
+					Kind string `json:"kind"`
+					Data struct {
+						Name        string  `json:"name"`
+						Subreddit   string  `json:"subreddit"`
+						Title       string  `json:"title"`
+						Selftext    string  `json:"selftext"`
+						Author      string  `json:"author"`
+						UpvoteRatio float64 `json:"upvote_ratio"`
+						Thumbnail   string  `json:"thumbnail"`
+						URL         string  `json:"url"`
+						NumComments int     `json:"num_comments"`
+						Permalink   string  `json:"permalink"`
+						CreatedUTC  float64 `json:"created_utc"`
+						IsVideo     bool    `json:"is_video"`
+						Media       *struct {
+							RedditVideo *struct {
+								FallbackURL  string `json:"fallback_url"`
+								Height       int    `json:"height"`
+								Width        int    `json:"width"`
+								Duration     int    `json:"duration"`
+								ThumbnailURL string `json:"thumbnail_url"`
+							} `json:"reddit_video"`
+						} `json:"media,omitempty"`
+					} `json:"data"`
+				} `json:"children"`
+			} `json:"data"`
+		}
+		err = json.NewDecoder(resp.Body).Decode(&responseJson)
+		if err != nil {
+			println(err)
+			continue
+		}
+
+		children := responseJson.Data.Children
+		if len(children) > 0 {
+			if lastCheckedRedditPostCreatedUtc < children[0].Data.CreatedUTC {
+				lastCheckedRedditPostId = children[0].Data.Name
+				lastCheckedRedditPostCreatedUtc = children[0].Data.CreatedUTC
 			}
+			for _, child := range children {
+				getRedditPostUrl := func(permalink string) string {
+					return "https://www.reddit.com" + permalink
+				}
 
-			data := child.Data
-			linkPostUrl := data.URL
+				data := child.Data
+				linkPostUrl := data.URL
 
-			if imageRegex.MatchString(linkPostUrl) {
-				imagePosts = append(imagePosts, redditImagePost{linkPostUrl, getRedditPostUrl(data.Permalink)})
-			} else if strings.Contains(linkPostUrl, "youtube.com") || strings.Contains(linkPostUrl, "youtu.be") { // TODO https ?
-				videoPosts = append(videoPosts, redditVideoPost{
-					YoutubeEmbedUrl: "https://www.youtube.com/embed/" + youtubeVideoIdRegex.FindStringSubmatch(data.URL)[1],
-					PostUrl:         getRedditPostUrl(data.Permalink),
-					Title:           data.Title,
-				})
-			} else if data.Media != nil {
-				videoPosts = append(videoPosts, redditVideoPost{
-					VideoUrl: data.URL,
-					PostUrl:  getRedditPostUrl(data.Permalink),
-					Title:    data.Title,
-				})
+				if imageRegex.MatchString(linkPostUrl) {
+					imagePosts = append(imagePosts, redditImagePost{linkPostUrl, getRedditPostUrl(data.Permalink)})
+				} else if strings.Contains(linkPostUrl, "youtube.com") || strings.Contains(linkPostUrl, "youtu.be") { // TODO https ?
+					videoPosts = append(videoPosts, redditVideoPost{
+						YoutubeEmbedUrl: "https://www.youtube.com/embed/" + youtubeVideoIdRegex.FindStringSubmatch(data.URL)[1],
+						PostUrl:         getRedditPostUrl(data.Permalink),
+						Title:           data.Title,
+					})
+				} else if data.Media != nil {
+					videoPosts = append(videoPosts, redditVideoPost{
+						VideoUrl: data.URL,
+						PostUrl:  getRedditPostUrl(data.Permalink),
+						Title:    data.Title,
+					})
+				}
 			}
 		}
+		break
 	}
 	return videoPosts, imagePosts
 }
