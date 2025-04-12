@@ -6,7 +6,7 @@
 {{end}}
 
 {{define "events"}}
-    <div class="bd" style="text-align: center">
+    <div class="bd" style="text-align: center; display: flex; flex-direction: column">
         {{template "eventsradiobutton" "koths"}}
         <span class="ifc" onmousedown="handleSpanButtonClick(this, handleEventsButtonClick, 'events')">
             <button>events</button>
