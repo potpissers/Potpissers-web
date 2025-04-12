@@ -20,9 +20,9 @@
             <ul id="{{$name.Title}}" style="overflow-y: scroll; flex: 1" {{if not (eq $name.GameModeName $.GameModeName)}}hidden{{end}}>
                 {{range $data}}
                     <li>
-                        <p>
+                        <pre>
                             <strong>{{.Title}}</strong>: {{.Message}}
-                        </p>
+                        </pre>
                     </li>
                 {{end}}
             </ul>
