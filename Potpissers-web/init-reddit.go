@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"log"
+	"math"
 	"net/http"
 	"net/url"
 	"os"
@@ -65,6 +66,7 @@ func handleRedditPostDataUpdate() {
 	select {
 	case redditPostsChannel <- struct{}{}:
 		{
+			println("wow")
 			if time.Now().Before(getRedditPostDataWaitTimestamp) {
 				println("getRedditPosts sleeping")
 				time.Sleep(time.Until(getRedditPostDataWaitTimestamp))
@@ -96,6 +98,7 @@ func handleRedditPostDataUpdate() {
 			<-redditPostsChannel
 		}
 	default:
+		println("fuck")
 		return
 	}
 }
@@ -162,7 +165,7 @@ func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePos
 				log.Fatal(err)
 			}
 			println(resetSeconds)
-			getRedditPostDataWaitTimestamp = time.Now().Add(time.Duration(resetSeconds / remaining) * time.Second)
+			getRedditPostDataWaitTimestamp = time.Now().Add(time.Duration(resetSeconds/math.Max(remaining, 1)) * time.Second)
 			println(resetSeconds / remaining)
 		}
 		// limit := resp.Header.Get("X-Ratelimit-Limit")
