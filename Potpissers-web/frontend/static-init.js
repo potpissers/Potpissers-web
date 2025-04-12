@@ -13,10 +13,10 @@ function handleClassHiddenToggle(className) {
 }
 function handleTipsButtonSelect(clickedId) {
     for (let buttonId of tipIds) {
-        document.getElementById(buttonId).hidden = true
+        document.getElementById(buttonId).hidden = false
     }
 
-    document.getElementById(clickedId.innerText).hidden = false
+    document.getElementById(clickedId.value).hidden = false
 }
 
 function handleLineItemButtonContentMaximize() {
