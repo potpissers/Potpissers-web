@@ -141,7 +141,7 @@ func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePos
 	}
 	defer resp.Body.Close()
 	println("reddit request ended")
-	responseJson := getFatalJsonT[struct {
+	var responseJson struct {
 		Kind string `json:"kind"`
 		Data struct {
 			After     *string `json:"after"`
@@ -175,7 +175,9 @@ func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePos
 				} `json:"data"`
 			} `json:"children"`
 		} `json:"data"`
-	}](resp)
+	}
+	println(resp.StatusCode)
+	handleFatalErr(json.NewDecoder(resp.Body).Decode(&messages))
 
 	var videoPosts []redditVideoPost
 	var imagePosts []redditImagePost
