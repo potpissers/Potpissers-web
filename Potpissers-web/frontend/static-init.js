@@ -16,7 +16,7 @@ function handleTipsButtonSelect(clickedId) {
         document.getElementById(buttonId).hidden = true
     }
 
-    document.getElementById(clickedId.value).hidden = false
+    document.getElementById(clickedId.innerText).hidden = false
 }
 
 function handleLineItemButtonContentMaximize() {
