@@ -1,16 +1,16 @@
 {{define "contentmainbody"}}
     <script>
         const tipIds = [
-            {{range keys .ContentData}}
-            "{{.}}",
+            {{range $name, $v := .ContentData}}
+            "{{$name}}",
             {{end}}
         ]
     </script>
     <div style="display: flex; flex-direction: column; overflow-y: auto">
         <div style="display: flex">
             <select onselect="handleTipsButtonSelect(this)">
-                {{range keys .ContentData}}
-                    <option>{{.}}</option>
+                {{range $name, $v := .ContentData}}
+                    <option>{{$name}}</option>
                 {{end}}
             </select>
 
