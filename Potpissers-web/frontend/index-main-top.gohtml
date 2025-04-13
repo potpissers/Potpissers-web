@@ -6,7 +6,7 @@
             </button>
             <select style="font-size: 75%; align-self: end">
                 <option {{if eq .GameModeName "hub"}}selected{{end}} disabled id="online-network">
-                    /glist: {{len .NetworkPlayers}}</option>
+                    potpissers: {{len .NetworkPlayers}}</option>
                 <option disabled id="online-hub">
                     /hub: {{len (index .ServerDatas "hub").CurrentPlayers}}</option>
                 <option {{if eq .GameModeName "cubecore"}}selected{{end}} disabled id="online-cubecore">

@@ -4,33 +4,20 @@
             <button class="id-chat-discord" hidden style="align-self: end; font-size: 75%"
                     onmousedown="fetch('/api/discord-general')" onmouseover="fetch('/api/discord-general')">refresh
             </button>
-            <button class="id-chat-game" style="align-self: end; font-size: 75%"
-                    onmousedown="handlePlayersListToggle(this)">/list
-            </button>
-{{/*            <select>*/}}
-
-{{/*            </select>*/}}
-
-            {{range $name, $data := .ServerDatas}}
-                <ul id="onlineplayers-{{$name}}" style="overflow-y: scroll; flex: 1" hidden>
-                    {{range $data.CurrentPlayers}}
-                        <li>
-                            <p>
-                                {{.Name}}
-                            </p>
-                        </li>
-                    {{end}}
-                </ul>
-            {{end}}
-            <ul id="onlineplayers" style="overflow-y: scroll; flex: 1" hidden>
+            <select class="id-chat-game">
+                <option selected hidden>/glist</option>
                 {{range .NetworkPlayers}}
-                    <li>
-                        <p>
-                            {{.Name}}
-                        </p>
-                    </li>
+                    <option disabled>{{.Name}}</option>
                 {{end}}
-            </ul>
+            </select>
+            {{range $name, $data := .ServerDatas}}
+                <select hidden>
+                    <option selected hidden>/list</option>
+                    {{range $data.CurrentPlayers}}
+                        <option disabled>{{.Name}}</option>
+                    {{end}}
+                </select>
+            {{end}}
 
             <ul id="general" class="id-chat-discord"
                 style="text-align: left; justify-items: end; flex: 1; overflow-y: auto; font-size: 75%" hidden>
