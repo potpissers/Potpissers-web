@@ -40,7 +40,7 @@ function handleContentMaximizeButtonClick(isAnnouncements) {
             // for (const element of document.getElementsByClassName("contentbody"))
             //     element.classList.remove("h")
             // for (const element of document.getElementsByClassName("contenttitle"))
-            //     element.classList.remove("h")
+            //     element.classList.remove("h")/
         } else {
             contentElement.style.gridTemplateRows = "auto auto"
             document.body.style.gridTemplateRows = "44vh auto auto"
