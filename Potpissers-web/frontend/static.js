@@ -71,9 +71,9 @@ eventSource.onmessage = function(e) {
                 document.getElementById("online-" + gameModeName).innerText = "/" + gameModeName + ": " + select.children.length.toString()
             }
             {
-                const option = document.getElementById("onlineplayers")
-                option.appendChild(option.cloneNode(true))
-                document.getElementById("online").innerText = "potpissers: " + option.children.length.toString()
+                const select = document.getElementById("onlineplayers")
+                select.appendChild(option.cloneNode(true))
+                document.getElementById("online").innerText = "potpissers: " + select.children.length.toString()
             }
             break
         }
