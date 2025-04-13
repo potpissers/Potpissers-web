@@ -9,7 +9,10 @@
             </button>
 
             {{range $name, $data := .ServerDatas}}
-                <ul class="onlineplayers" id="onlineplayers-{{$name}}" style="overflow-y: scroll; flex: 1" hidden>
+                <select>
+
+                </select>
+                <ul id="onlineplayers-{{$name}}" style="overflow-y: scroll; flex: 1" hidden>
                     {{range $data.CurrentPlayers}}
                         <li>
                             <p>
@@ -19,7 +22,7 @@
                     {{end}}
                 </ul>
             {{end}}
-            <ul class="onlineplayers" id="onlineplayers" style="overflow-y: scroll; flex: 1" hidden>
+            <ul id="onlineplayers" style="overflow-y: scroll; flex: 1" hidden>
                 {{range .NetworkPlayers}}
                     <li>
                         <p>
@@ -29,7 +32,7 @@
                 {{end}}
             </ul>
 
-            <ul id="general" class="onlineplayers id-chat-discord"
+            <ul id="general" class="id-chat-discord"
                 style="text-align: left; justify-items: end; flex: 1; overflow-y: auto; font-size: 75%" hidden>
                 {{range .DiscordMessages}}
                     <li>
@@ -41,7 +44,7 @@
                     </li>
                 {{end}}
             </ul>
-            <ul id="chat" class="onlineplayers id-chat-game" style="flex: 1; overflow-y: scroll; height: 100%; font-size: 75%">
+            <ul id="chat" class="id-chat-game" style="flex: 1; overflow-y: scroll; height: 100%; font-size: 75%">
                 {{range .Messages}}
                     <li>
                         <p>
