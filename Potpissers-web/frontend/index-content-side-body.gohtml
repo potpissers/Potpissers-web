@@ -8,7 +8,7 @@
             <option disabled>current heroes</option>
         </select>
 
-        <ul {{if not (eq .GameModeName "hcf")}}hidden{{end}} style="overflow-y: scroll">
+        <ul class="contentbody" {{if not (eq .GameModeName "hcf")}}hidden{{end}} style="overflow-y: scroll">
             {{range (index .ServerDatas (print "hcf" .CurrentHcfServerName)).Factions}}
                 <li>
                     <p>
@@ -18,7 +18,7 @@
             {{end}}
         </ul>
         {{/*        TODO votes*/}}
-        <ul {{if not (eq .GameModeName "mz")}}hidden{{end}}>
+        <ul class="contentbody" {{if not (eq .GameModeName "mz")}}hidden{{end}}>
             {{range (index .ServerDatas "mz").Bandits}}
                 <li>
                     <p>

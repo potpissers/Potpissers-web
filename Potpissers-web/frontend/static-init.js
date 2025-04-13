@@ -34,9 +34,17 @@ function handleContentMaximizeButtonClick(isAnnouncements) {
             for (const className of clickedLineItemClasses)
                 handleClassHiddenToggle(className)
             clickedLineItemClasses.clear()
+
+            for (const element of document.getElementsByClassName("contentbody"))
+                element.classList.remove("h")
+            document.getElementById("content").style.gridTemplateRows = "1fr 1fr"
         } else {
             contentElement.style.gridTemplateRows = "auto 22vh"
             document.body.style.gridTemplateRows = "44vh auto auto"
+
+            for (const element of document.getElementsByClassName("contentbody"))
+                element.classList.add("h")
+            document.getElementById("content").style.gridTemplateRows = "auto auto"
         }
     } else {
         if (contentElement.style.gridTemplateRows === "22vh auto") {
