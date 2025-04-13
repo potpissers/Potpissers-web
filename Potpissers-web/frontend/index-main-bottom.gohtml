@@ -5,8 +5,7 @@
                     onmousedown="fetch('/api/discord-general')" onmouseover="fetch('/api/discord-general')">refresh
             </button>
             <button class="id-chat-game" style="align-self: end; font-size: 75%"
-                    onmousedown="handlePlayersListToggle(this); fetch('/api/discord-general')"
-                    onmouseover="fetch('/api/discord-general')">/list
+                    onmousedown="handlePlayersListToggle(this)">/list
             </button>
 
             {{range $name, $data := .ServerDatas}}

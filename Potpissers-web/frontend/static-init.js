@@ -55,7 +55,7 @@ function handleContentMaximizeButtonClick(isAnnouncements) {
 }
 
 function handleChatToggle(button) {
-    switch (button.textContent) {
+    switch (button.textContent.trim()) {
         case "game":
             button.textContent = "discord"
             Array.from(document.getElementsByClassName("id-chat-discord"))
@@ -73,7 +73,7 @@ function handleChatToggle(button) {
     }
 }
 function handlePlayersListToggle(button) {
-    switch (button.textContent) {
+    switch (button.textContent.trim()) {
         case "/list":
             button.textContent = "/glist"
             document.getElementById("chat").hidden = true
