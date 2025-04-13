@@ -79,17 +79,20 @@ eventSource.onmessage = function(e) {
                 ul.appendChild(li.cloneNode(true))
                 document.getElementById("online").innerText = "/glist: " + ul.children.length.toString()
             }
+            console.log("hey")
             break
         }
         case "offline": {
-            const gameModeName = data.game_mode_name
-            for (const li of document.getElementById("onlineplayers-" + gameModeName).querySelectorAll("li")) {
-                if (li.textContent.trim() === jsonData.data.name) {
-                    li.remove()
+            {
+                const gameModeName = data.game_mode_name
+                for (const li of document.getElementById("onlineplayers-" + gameModeName).querySelectorAll("li")) {
+                    if (li.textContent.trim() === jsonData.data.name) {
+                        li.remove()
 
-                    const onlineUl = document.getElementById("online-" + gameModeName)
-                    onlineUl.textContent = (parseInt(onlineUl.textContent.trim()) - 1).toString()
-                    break
+                        const onlineUl = document.getElementById("online-" + gameModeName)
+                        onlineUl.textContent = (parseInt(onlineUl.textContent.trim()) - 1).toString()
+                        break
+                    }
                 }
             }
             for (const li of document.getElementById("onlineplayers").querySelectorAll("li")) {
