@@ -7,11 +7,11 @@
             <button class="id-chat-game" style="align-self: end; font-size: 75%"
                     onmousedown="handlePlayersListToggle(this)">/list
             </button>
+{{/*            <select>*/}}
+
+{{/*            </select>*/}}
 
             {{range $name, $data := .ServerDatas}}
-                <select>
-
-                </select>
                 <ul id="onlineplayers-{{$name}}" style="overflow-y: scroll; flex: 1" hidden>
                     {{range $data.CurrentPlayers}}
                         <li>
