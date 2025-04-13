@@ -62,24 +62,19 @@ eventSource.onmessage = function(e) {
         case "online": {
             const data = jsonData.data
 
-            const li = document.createElement("li")
-            {
-                const option = document.createElement("option")
-                option.textContent = data.name
-                li.appendChild(option)
-            }
+            const option = document.createElement("option")
+            option.textContent = data.name
             {
                 const gameModeName = data.game_mode_name
-                const ul = document.getElementById("onlineplayers-" + gameModeName)
-                ul.appendChild(li)
-                document.getElementById("online-" + gameModeName).innerText = "/" + gameModeName + ": " + ul.children.length.toString()
+                const select = document.getElementById("onlineplayers-" + gameModeName)
+                select.appendChild(option)
+                document.getElementById("online-" + gameModeName).innerText = "/" + gameModeName + ": " + select.children.length.toString()
             }
             {
-                const ul = document.getElementById("onlineplayers")
-                ul.appendChild(li.cloneNode(true))
-                document.getElementById("online").innerText = "/glist: " + ul.children.length.toString()
+                const option = document.getElementById("onlineplayers")
+                option.appendChild(option.cloneNode(true))
+                document.getElementById("online").innerText = "potpissers: " + option.children.length.toString()
             }
-            console.log("hey")
             break
         }
         case "offline": {
