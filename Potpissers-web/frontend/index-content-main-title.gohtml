@@ -9,7 +9,7 @@
             </div>
             <button onmousedown="handleContentMaximizeButtonClick(true)" style="margin-left: auto"></button>
         </div>
-        <ul id="announcements" class="contentmaintitle" style="overflow-y: scroll">
+        <ul id="announcements" class="contenttitle" style="overflow-y: scroll">
             {{range .Announcements}}
                 <li>
                     <a href="https://discord.com/channels/{{$.DiscordId}}/{{.ChannelID}}/{{.ID}}">
@@ -20,7 +20,7 @@
                 </li>
             {{end}}
         </ul>
-        <ul id="changelog"  class="contentmaintitle" style="overflow-y: scroll" hidden>
+        <ul id="changelog"  class="contenttitle" style="overflow-y: scroll" hidden>
             {{range .Changelog}}
                 <li>
                     <a href="https://discord.com/channels/{{$.DiscordId}}/{{.ChannelID}}/{{.ID}}">
