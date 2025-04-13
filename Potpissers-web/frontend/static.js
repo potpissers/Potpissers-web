@@ -60,6 +60,7 @@ eventSource.onmessage = function(e) {
             break
         }
         case "online": {
+            console.log("hi")
             const data = jsonData.data
 
             const option = document.createElement("option")
@@ -79,6 +80,7 @@ eventSource.onmessage = function(e) {
             break
         }
         case "offline": {
+            console.log("hey")
             const data = jsonData.data
             {
                 const gameModeName = data.game_mode_name
