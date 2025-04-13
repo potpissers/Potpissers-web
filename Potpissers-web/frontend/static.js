@@ -63,33 +63,44 @@ eventSource.onmessage = function(e) {
             const data = jsonData.data
 
             const li = document.createElement("li")
-            const p = document.createElement("p")
-            p.textContent = data.name
-            li.appendChild(p)
-
-            const gameModeName = data.game_mode_name
-            const ul = document.getElementById("onlineplayers-" + gameModeName)
-            ul.appendChild(li)
-
-            console.log(gameModeName)
-            document.getElementById("online-" + gameModeName).innerText = "/" + gameModeName + ": " + ul.children.length.toString()
+            {
+                const p = document.createElement("p")
+                p.textContent = data.name
+                li.appendChild(p)
+            }
+            {
+                const gameModeName = data.game_mode_name
+                const ul = document.getElementById("onlineplayers-" + gameModeName)
+                ul.appendChild(li)
+                document.getElementById("online-" + gameModeName).innerText = "/" + gameModeName + ": " + ul.children.length.toString()
+            }
+            {
+                const ul = document.getElementById("onlineplayers")
+                ul.appendChild(li.cloneNode(true))
+                document.getElementById("online").innerText = "/glist: " + ul.children.length.toString()
+            }
             break
         }
         case "offline": {
-            let flag = false
-            document.getElementById("online")
-                .querySelectorAll("li")
-                .forEach(li => {
-                    if (li.textContent === jsonData.data.name) {
-                        li.remove()
+            const gameModeName = data.game_mode_name
+            for (const li of document.getElementById("onlineplayers-" + gameModeName).querySelectorAll("li")) {
+                if (li.textContent.trim() === jsonData.data.name) {
+                    li.remove()
 
-                        const onlineNumber = document.getElementById("online-server")
-                        onlineNumber.textContent = (parseInt(onlineNumber.textContent) - 1).toString()
-                        flag = true // TODO -> don't use forEach
-                    }
-                })
-            if (!flag)
-                throw new Error("offline player not found")
+                    const onlineUl = document.getElementById("online-" + gameModeName)
+                    onlineUl.textContent = (parseInt(onlineUl.textContent.trim()) - 1).toString()
+                    break
+                }
+            }
+            for (const li of document.getElementById("onlineplayers").querySelectorAll("li")) {
+                if (li.textContent.trim() === jsonData.data.name) {
+                    li.remove()
+
+                    const onlineUl = document.getElementById("online")
+                    onlineUl.textContent = (parseInt(onlineUl.textContent.trim()) - 1).toString()
+                    break
+                }
+            }
         }
         case "donations": {
             handleSseLi(jsonData, (li, data) => {
