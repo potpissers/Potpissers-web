@@ -5,7 +5,9 @@
                     onmousedown="fetch('/api/discord-general')" onmouseover="fetch('/api/discord-general')">refresh
             </button>
             <button class="id-chat-game" style="align-self: end; font-size: 75%"
-                    onmousedown="handlePlayersListToggle(this); fetch('/api/discord-general')" onmouseover="fetch('/api/discord-general')">/list</button>
+                    onmousedown="handlePlayersListToggle(this); fetch('/api/discord-general')"
+                    onmouseover="fetch('/api/discord-general')">/list
+            </button>
 
             {{range $name, $data := .ServerDatas}}
                 <ul id="onlineplayers-{{$name}}" style="overflow-y: scroll; flex: 1" hidden>
@@ -60,12 +62,17 @@
                 <select style="font-size: 75%">
                     <option {{if eq .GameModeName "hub"}}selected{{end}} hidden>/attackspeed</option>
                     <option disabled>/hub: {{(index .ServerDatas "hub").AttackSpeedName}}</option>
-                    <option {{if eq .GameModeName "cubecore"}}selected{{end}} disabled>/cubecore: {{(index .ServerDatas "cubecore").AttackSpeedName}}</option>
-                    <option {{if eq .GameModeName (print "hcf" .CurrentHcfServerName)}}selected{{end}} disabled>/hcf: {{(index .ServerDatas (print "hcf" .CurrentHcfServerName)).AttackSpeedName}}</option>
-                    <option {{if eq .GameModeName "kollusion"}}selected{{end}} disabled>/kollusion: {{(index .ServerDatas "kollusion").AttackSpeedName}}</option>
-                    <option {{if eq .GameModeName "mz"}}selected{{end}} disabled>/mz: {{(index .ServerDatas "mz").AttackSpeedName}}</option>
+                    <option {{if eq .GameModeName "cubecore"}}selected{{end}} disabled>
+                        /cubecore: {{(index .ServerDatas "cubecore").AttackSpeedName}}</option>
+                    <option {{if eq .GameModeName (print "hcf" .CurrentHcfServerName)}}selected{{end}} disabled>
+                        /hcf: {{(index .ServerDatas (print "hcf" .CurrentHcfServerName)).AttackSpeedName}}</option>
+                    <option {{if eq .GameModeName "kollusion"}}selected{{end}} disabled>
+                        /kollusion: {{(index .ServerDatas "kollusion").AttackSpeedName}}</option>
+                    <option {{if eq .GameModeName "mz"}}selected{{end}} disabled>
+                        /mz: {{(index .ServerDatas "mz").AttackSpeedName}}</option>
                 </select>
-                <select {{if not (eq .GameModeName (print "hcf" .CurrentHcfServerName))}}hidden{{end}} style="font-size: 75%">
+                <select {{if not (eq .GameModeName (print "hcf" .CurrentHcfServerName))}}hidden{{end}}
+                        style="font-size: 75%">
                     <option disabled selected hidden></option>
                     <!--    TODO maps-->
                 </select>
@@ -86,8 +93,10 @@
                     {{end}}
                 </tr>
             </table>
-            <div {{if not (eq .GameModeName (print "hcf" .CurrentHcfServerName))}}hidden{{end}} style="align-self: end; margin-top: auto; display: flex; justify-content: end; width: 100%">
-                <select {{if not (eq .GameModeName (print "hcf" .CurrentHcfServerName))}}hidden{{end}} style="font-size: 75%; width: fit-content; text-align: right">
+            <div {{if not (eq .GameModeName (print "hcf" .CurrentHcfServerName))}}hidden{{end}}
+                 style="align-self: end; margin-top: auto; display: flex; justify-content: end; width: 100%">
+                <select {{if not (eq .GameModeName (print "hcf" .CurrentHcfServerName))}}hidden{{end}}
+                        style="font-size: 75%; width: fit-content; text-align: right">
                     <option selected hidden>/mapkit</option>
 
                     {{with index .ServerDatas (print "hcf" .CurrentHcfServerName)}}
@@ -102,7 +111,9 @@
                     {{end}}
                 </select>
 
-                <button {{if not (eq .GameModeName (print "hcf" .CurrentHcfServerName))}}hidden{{end}} style="font-size: 75%">/map</button>
+                <button {{if not (eq .GameModeName (print "hcf" .CurrentHcfServerName))}}hidden{{end}}
+                        style="font-size: 75%">/map
+                </button>
             </div>
             <iframe {{if not (eq .GameModeName "mz")}}hidden{{end}} src="/mz-map/index.html"
                     style="width: 100%; height: 75%"></iframe>
@@ -122,7 +133,9 @@
                 </ul>
             </div>
             <div style="display: flex">
-                <button {{if not (eq .GameModeName (print "hcf" .CurrentHcfServerName))}}hidden{{end}} style="font-size: 75%">/events</button>
+                <button {{if not (eq .GameModeName (print "hcf" .CurrentHcfServerName))}}hidden{{end}}
+                        style="font-size: 75%">/events
+                </button>
                 <button style="font-size: 75%; margin-left: auto">"/referral"s</button>
             </div>
         </div>

@@ -144,7 +144,6 @@ func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePos
 			log.Fatal(err)
 		}
 		req.Header.Set("Authorization", "Bearer "+redditAccessToken)
-		println("reddit request")
 		resp, err := (&http.Client{}).Do(req)
 		if err != nil {
 			log.Fatal(err)
