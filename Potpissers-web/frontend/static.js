@@ -64,7 +64,7 @@ eventSource.onmessage = function(e) {
 
             const option = document.createElement("option")
             option.textContent = data.name
-            console.log("foo")
+            option.disabled = true
             {
                 const gameModeName = data.game_mode_name
                 const select = document.getElementById("onlineplayers-" + gameModeName)
@@ -75,31 +75,32 @@ eventSource.onmessage = function(e) {
                 const select = document.getElementById("onlineplayers")
                 select.appendChild(option.cloneNode(true))
                 document.getElementById("online").innerText = "potpissers: " + (select.children.length - 1).toString()
-            } //
+            }
             break
         }
         case "offline": {
-            console.log("bar")
             const data = jsonData.data
             {
                 const gameModeName = data.game_mode_name
-                for (const option of document.getElementById("onlineplayers-" + gameModeName).querySelectorAll("option")) {
+                const select = document.getElementById("onlineplayers-" + gameModeName)
+                for (const option of select.querySelectorAll("option")) {
                     if (option.textContent.trim() === data.name) {
                         option.remove()
 
-                        const onlineUl = document.getElementById("online-" + gameModeName)
-                        onlineUl.textContent = (parseInt(onlineUl.textContent.trim()) - 1).toString()
+                        document.getElementById("online-" + gameModeName).textContent = "/" + gameModeName + ": " + (select.children.length - 1)
                         break
                     }
                 }
             }
-            for (const option of document.getElementById("onlineplayers").querySelectorAll("option")) {
-                if (option.textContent.trim() === data.name) {
-                    option.remove()
+            {
+                const select = document.getElementById("onlineplayers")
+                for (const option of select.querySelectorAll("option")) {
+                    if (option.textContent.trim() === data.name) {
+                        option.remove()
 
-                    const onlineUl = document.getElementById("online")
-                    onlineUl.textContent = (parseInt(onlineUl.textContent.trim()) - 1).toString()
-                    break
+                        document.getElementById("online").textContent = "potpissers: " + (select.children - 1)
+                        break
+                    }
                 }
             }
         }
