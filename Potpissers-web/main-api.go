@@ -51,20 +51,20 @@ func doApi() {
 		var mutex sync.Mutex
 		var waitGroup sync.WaitGroup
 		for _, request := range attemptedDonationRequests {
-			waitGroup.Add(1)
-			go func() {
-				defer waitGroup.Done()
-				var potentialFinalRequest donateRequest
-				for _, data := range lineItemDatas {
-					if data.GameModeName+"-"+data.ItemName == request.LineItemName {
-						potentialFinalRequest.LineItemName = request.LineItemName
-						if data.IsPlural {
-							potentialFinalRequest.LineItemAmount = int(math.Max(float64(request.LineItemAmount), 1))
-						} else {
-							potentialFinalRequest.LineItemAmount = 1 // TODO -> allow 0 amount
-						}
-						potentialFinalRequest.lineItemCostInCents = data.ItemPriceInCents
+			var potentialFinalRequest donateRequest
+			for _, data := range lineItemDatas {
+				if data.GameModeName+"-"+data.ItemName == request.LineItemName {
+					potentialFinalRequest.LineItemName = request.LineItemName
+					if data.IsPlural {
+						potentialFinalRequest.LineItemAmount = int(math.Max(float64(request.LineItemAmount), 1))
+					} else {
+						potentialFinalRequest.LineItemAmount = 1 // TODO -> allow 0 amount
+					}
+					potentialFinalRequest.lineItemCostInCents = data.ItemPriceInCents
 
+					waitGroup.Add(1)
+					go func() {
+						defer waitGroup.Done()
 						for {
 							resp, err := getMojangApiUuidRequest(request.Username)
 							if err != nil {
@@ -88,9 +88,9 @@ func doApi() {
 							}
 							time.Sleep(time.Second * 2)
 						}
-					}
+					}()
 				}
-			}()
+			}
 		}
 		waitGroup.Wait()
 		if len(successfulDonationRequests) == 0 {
@@ -105,6 +105,7 @@ func doApi() {
 			}
 			var lineItems []LineItem
 			for _, lineItem := range successfulDonationRequests {
+				println(lineItem.LineItemName)
 				lineItems = append(lineItems, LineItem{
 					Quantity: strconv.Itoa(lineItem.LineItemAmount),
 					ItemType: "ITEM",
