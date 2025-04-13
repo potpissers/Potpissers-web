@@ -4,14 +4,14 @@
             <button class="id-chat-discord" hidden style="align-self: end; font-size: 75%"
                     onmousedown="fetch('/api/discord-general')" onmouseover="fetch('/api/discord-general')">refresh
             </button>
-            <select class="id-chat-game">
+            <select class="id-chat-game" style="font-size: 75%">
                 <option selected hidden>/glist</option>
                 {{range .NetworkPlayers}}
                     <option disabled>{{.Name}}</option>
                 {{end}}
             </select>
             {{range $name, $data := .ServerDatas}}
-                <select hidden>
+                <select hidden style="font-size: 75%">
                     <option selected hidden>/list</option>
                     {{range $data.CurrentPlayers}}
                         <option disabled>{{.Name}}</option>
