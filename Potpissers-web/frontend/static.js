@@ -68,21 +68,21 @@ eventSource.onmessage = function(e) {
                 const gameModeName = data.game_mode_name
                 const select = document.getElementById("onlineplayers-" + gameModeName)
                 select.appendChild(option)
-                document.getElementById("online-" + gameModeName).innerText = "/" + gameModeName + ": " + select.children.length.toString()
+                document.getElementById("online-" + gameModeName).innerText = "/" + gameModeName + ": " + (select.children.length - 1).toString()
             }
             {
                 const select = document.getElementById("onlineplayers")
                 select.appendChild(option.cloneNode(true))
-                document.getElementById("online").innerText = "potpissers: " + select.children.length.toString()
+                document.getElementById("online").innerText = "potpissers: " + (select.children.length - 1).toString()
             }
             break
         }
         case "offline": {
             {
                 const gameModeName = data.game_mode_name
-                for (const li of document.getElementById("onlineplayers-" + gameModeName).querySelectorAll("li")) {
-                    if (li.textContent.trim() === jsonData.data.name) {
-                        li.remove()
+                for (const option of document.getElementById("onlineplayers-" + gameModeName).querySelectorAll("option")) {
+                    if (option.textContent.trim() === jsonData.data.name) {
+                        option.remove()
 
                         const onlineUl = document.getElementById("online-" + gameModeName)
                         onlineUl.textContent = (parseInt(onlineUl.textContent.trim()) - 1).toString()
@@ -90,9 +90,9 @@ eventSource.onmessage = function(e) {
                     }
                 }
             }
-            for (const li of document.getElementById("onlineplayers").querySelectorAll("li")) {
-                if (li.textContent.trim() === jsonData.data.name) {
-                    li.remove()
+            for (const option of document.getElementById("onlineplayers").querySelectorAll("option")) {
+                if (option.textContent.trim() === jsonData.data.name) {
+                    option.remove()
 
                     const onlineUl = document.getElementById("online")
                     onlineUl.textContent = (parseInt(onlineUl.textContent.trim()) - 1).toString()
