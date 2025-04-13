@@ -77,7 +77,7 @@ func doApi() {
 								}
 
 								if statusCode == 200 {
-									potentialFinalRequest.LineItemName = request.Username
+									potentialFinalRequest.Username = request.Username
 									mutex.Lock()
 									successfulDonationRequests = append(successfulDonationRequests, potentialFinalRequest)
 									mutex.Unlock() // TODO -> this loses the correct order
@@ -105,7 +105,6 @@ func doApi() {
 			}
 			var lineItems []LineItem
 			for _, lineItem := range successfulDonationRequests {
-				println(lineItem.LineItemName)
 				lineItems = append(lineItems, LineItem{
 					Quantity: strconv.Itoa(lineItem.LineItemAmount),
 					ItemType: "ITEM",
