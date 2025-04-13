@@ -64,9 +64,9 @@ eventSource.onmessage = function(e) {
 
             const li = document.createElement("li")
             {
-                const p = document.createElement("p")
-                p.textContent = data.name
-                li.appendChild(p)
+                const option = document.createElement("option")
+                option.textContent = data.name
+                li.appendChild(option)
             }
             {
                 const gameModeName = data.game_mode_name
