@@ -25,7 +25,7 @@
                         {{.GameModeName}}<br>{{.ItemName}}<span>${{.ItemPriceInDollars}}</span>
                     </button>
 
-                    <p class={{.GameModeName}}-{{.ItemName}} hidden>
+                    <p class="line-items {{.GameModeName}}-{{.ItemName}}" hidden>
                         {{.ItemDescription}}
                     </p>
 
@@ -33,17 +33,17 @@
                         <input id="{{.GameModeName}}-{{.ItemName}}-amount"
                                style="align-self: end; width: 20%; font-size: 75%" placeholder=amount type=number
                                min=1
-                               value=1 step=1 class="{{.GameModeName}}-{{.ItemName}}" hidden>
+                               value=1 step=1 class="line-items {{.GameModeName}}-{{.ItemName}}" hidden>
                     {{end}}
                     <div style="display: flex">
-                        <input id="donate-username" class="fi {{.GameModeName}}-{{.ItemName}}" hidden
+                        <input id="donate-username" class="fi line-items {{.GameModeName}}-{{.ItemName}}" hidden
                                style="width: 60%; font-size: 75%" placeholder="username"
                                onblur="handleMcNameBlur(this)">
                         <script async>
                             document.getElementById("donate-username").addEventListener("keydown", (e) => handleMcNameKeyDown(e))
                         </script>
 
-                        <button style="font-size: 75%" class="{{.GameModeName}}-{{.ItemName}}" hidden
+                        <button style="font-size: 75%" class="line-items {{.GameModeName}}-{{.ItemName}}" hidden
                                 onmousedown="handleAddLineItemJson('{{.GameModeName}}-{{.ItemName}}', {{if .IsPlural}}document.getElementById('{{.GameModeName}}-{{.ItemName}}-amount').value{{else}}1{{end}})">
                             add
                         </button>

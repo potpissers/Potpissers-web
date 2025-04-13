@@ -1,15 +1,9 @@
 "use strict"
-const clickedLineItemClasses = new Set()
 function handleClassHiddenToggle(className) {
     const elements = document.getElementsByClassName(className)
     const newValue = !elements[0].hidden
     for (let i = 0; i < elements.length; i++)
         elements[i].hidden = newValue
-
-    if (!newValue)
-        clickedLineItemClasses.add(className)
-    else
-        clickedLineItemClasses.delete(className)
 }
 function handleTipsButtonSelect(clickedOption) {
     for (let buttonId of tipIds) {
@@ -31,9 +25,8 @@ function handleContentMaximizeButtonClick(isAnnouncements) {
             contentElement.style.gridTemplateRows = "1fr 1fr"
             document.body.style.gridTemplateRows = "44vh 44vh auto"
 
-            for (const className of clickedLineItemClasses)
-                handleClassHiddenToggle(className)
-            clickedLineItemClasses.clear()
+            for (const element of document.getElementsByClassName("line-items"))
+                element.hidden = true
 
             for (const element of document.querySelectorAll(".contentbody, .contenttitle"))
                 element.classList.remove("h")
