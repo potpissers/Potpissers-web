@@ -80,10 +80,11 @@ eventSource.onmessage = function(e) {
         }
         case "offline": {
             console.log("bar")
+            const data = jsonData.data
             {
                 const gameModeName = data.game_mode_name
                 for (const option of document.getElementById("onlineplayers-" + gameModeName).querySelectorAll("option")) {
-                    if (option.textContent.trim() === jsonData.data.name) {
+                    if (option.textContent.trim() === data.name) {
                         option.remove()
 
                         const onlineUl = document.getElementById("online-" + gameModeName)
@@ -93,7 +94,7 @@ eventSource.onmessage = function(e) {
                 }
             }
             for (const option of document.getElementById("onlineplayers").querySelectorAll("option")) {
-                if (option.textContent.trim() === jsonData.data.name) {
+                if (option.textContent.trim() === data.name) {
                     option.remove()
 
                     const onlineUl = document.getElementById("online")
