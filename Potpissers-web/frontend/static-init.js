@@ -45,12 +45,14 @@ function handleContentMaximizeButtonClick(isAnnouncements) {
 
             for (const element of document.getElementsByClassName("contenttitle"))
                 element.classList.remove("h")
+            document.getElementById("content").style.gridTemplateRows = "1fr 1fr"
         } else {
             contentElement.style.gridTemplateRows = "22vh auto"
             document.body.style.gridTemplateRows = "44vh auto auto"
 
             for (const element of document.getElementsByClassName("contenttitle"))
                 element.classList.add("h")
+            document.getElementById("content").style.gridTemplateRows = "auto auto"
         }
     }
 }
