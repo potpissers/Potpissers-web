@@ -1,15 +1,15 @@
 {{define "contentmaintitle"}}
     <div style="display: flex; flex-direction: column; overflow-y: auto">
-        <div style="display: flex; position: sticky; top: 0">
-            <div style="margin-left: auto; position: sticky; top: 0">
-                <button style="position: sticky; top: 0">announcements</button>
+        <div style="display: flex">
+            <div style="margin-left: auto">
+                <button>announcements</button>
                 <input type="radio" checked>
                 <input type="radio" disabled>
                 <button>changelog</button>
             </div>
             <button onmousedown="handleContentMaximizeButtonClick(true)" style="margin-left: auto"></button>
         </div>
-        <ul id="announcements" style="overflow-y: scroll">
+        <ul id="announcements" class="contentmaintitle" style="overflow-y: scroll">
             {{range .Announcements}}
                 <li>
                     <a href="https://discord.com/channels/{{$.DiscordId}}/{{.ChannelID}}/{{.ID}}">
@@ -20,7 +20,7 @@
                 </li>
             {{end}}
         </ul>
-        <ul id="changelog" style="overflow-y: scroll" hidden>
+        <ul id="changelog"  class="contentmaintitle" style="overflow-y: scroll" hidden>
             {{range .Changelog}}
                 <li>
                     <a href="https://discord.com/channels/{{$.DiscordId}}/{{.ChannelID}}/{{.ID}}">
