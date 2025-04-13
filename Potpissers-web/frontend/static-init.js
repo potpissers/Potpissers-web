@@ -13,8 +13,8 @@ function handleTipsButtonSelect(clickedOption) {
 }
 
 function handleLineItemButtonContentMaximize() {
-    if (document.getElementById("content").style.gridTemplateRows !== "auto 22vh") {
-        document.getElementById("content").style.gridTemplateRows = "auto 22vh"
+    if (document.getElementById("content").style.gridTemplateRows !== "auto auto") {
+        document.getElementById("content").style.gridTemplateRows = "auto auto"
         document.body.style.gridTemplateRows = "44vh auto auto"
     }
 }
