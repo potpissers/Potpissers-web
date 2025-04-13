@@ -72,7 +72,7 @@ function handleChatToggle(button) {
             break
     }
 }
-function handlePlayersListToggle(button) {
+function handlePlayersListToggle(button) { // TODO
     switch (button.textContent.trim()) {
         case "/list":
             button.textContent = "/glist"

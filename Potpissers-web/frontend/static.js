@@ -17,6 +17,7 @@ function handleSseLi(jsonData, getLiChild) {
 
     document.getElementById(jsonData.type).appendChild(li)
 }
+const eventSource = new EventSource("/api/sse/main")
 eventSource.onerror = () => location.reload()
 eventSource.onmessage = function(e) {
     const jsonData = JSON.parse(e.data)
@@ -32,6 +33,7 @@ eventSource.onmessage = function(e) {
             break
         }
         case "deaths": {
+            // TODO -> each server
             handleSseLi(jsonData, (li, data) => {
                 const p = document.createElement("p")
                 p.textContent = "(" + data.server_name + ") " + data.death_message
@@ -40,6 +42,7 @@ eventSource.onmessage = function(e) {
             break
         }
         case "events": {
+            // TODO -> each server
             handleSseLi(jsonData, (li, data) => {
                 const p = document.createElement("p")
                 p.textContent = data.cap_message
@@ -48,6 +51,7 @@ eventSource.onmessage = function(e) {
             break
         }
         case "chat": {
+            // TODO each server
             handleSseLi(jsonData, (li, data) => {
                 const p = document.createElement("p")
                 p.textContent = data.message
