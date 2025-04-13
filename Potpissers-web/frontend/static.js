@@ -60,7 +60,6 @@ eventSource.onmessage = function(e) {
             break
         }
         case "online": {
-            console.log("hi")
             const data = jsonData.data
 
             const option = document.createElement("option")
@@ -80,7 +79,6 @@ eventSource.onmessage = function(e) {
             break
         }
         case "offline": {
-            console.log("hey")
             const data = jsonData.data
             {
                 const gameModeName = data.game_mode_name
@@ -89,7 +87,7 @@ eventSource.onmessage = function(e) {
                     if (option.textContent.trim() === data.name) {
                         option.remove()
 
-                        document.getElementById("online-" + gameModeName).textContent = "/" + gameModeName + ": " + (select.children.length - 1)
+                        document.getElementById("online-" + gameModeName).textContent = "/" + gameModeName + ": " + (select.children.length - 1) // 1 hidden
                         break
                     }
                 }
@@ -100,7 +98,7 @@ eventSource.onmessage = function(e) {
                     if (option.textContent.trim() === data.name) {
                         option.remove()
 
-                        document.getElementById("online").textContent = "potpissers: " + (select.children - 1)
+                        document.getElementById("online").textContent = "potpissers: " + (select.children.length - 1) // 1 hidden
                         break
                     }
                 }
