@@ -34,23 +34,23 @@ function handleContentMaximizeButtonClick(isAnnouncements) {
             for (const className of clickedLineItemClasses)
                 handleClassHiddenToggle(className)
             clickedLineItemClasses.clear()
-
-            for (const element of document.getElementsByClassName("content"))
-                element.classList.remove("h")
         } else {
             contentElement.style.gridTemplateRows = "auto 22vh"
             document.body.style.gridTemplateRows = "44vh auto auto"
-
-            for (const element of document.getElementsByClassName("content"))
-                element.classList.add("h")
         }
     } else {
         if (contentElement.style.gridTemplateRows === "22vh auto") {
             contentElement.style.gridTemplateRows = "1fr 1fr"
             document.body.style.gridTemplateRows = "44vh 44vh auto"
+
+            for (const element of document.getElementsByClassName("contenttitle"))
+                element.classList.remove("h")
         } else {
             contentElement.style.gridTemplateRows = "22vh auto"
             document.body.style.gridTemplateRows = "44vh auto auto"
+
+            for (const element of document.getElementsByClassName("contenttitle"))
+                element.classList.add("h")
         }
     }
 }
