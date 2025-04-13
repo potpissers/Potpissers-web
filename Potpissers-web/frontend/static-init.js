@@ -27,7 +27,7 @@ function handleLineItemButtonContentMaximize() {
 function handleContentMaximizeButtonClick(isAnnouncements) {
     let contentElement = document.getElementById("content")
     if (isAnnouncements) {
-        if (contentElement.style.gridTemplateRows === "auto 22vh") {
+        if (contentElement.style.gridTemplateRows === "auto auto") {
             contentElement.style.gridTemplateRows = "1fr 1fr"
             document.body.style.gridTemplateRows = "44vh 44vh auto"
 
@@ -37,17 +37,15 @@ function handleContentMaximizeButtonClick(isAnnouncements) {
 
             for (const element of document.getElementsByClassName("contentbody"))
                 element.classList.remove("h")
-            document.getElementById("content").style.gridTemplateRows = "1fr 1fr"
         } else {
-            contentElement.style.gridTemplateRows = "auto 22vh"
+            contentElement.style.gridTemplateRows = "auto auto"
             document.body.style.gridTemplateRows = "44vh auto auto"
 
             for (const element of document.getElementsByClassName("contentbody"))
                 element.classList.add("h")
-            document.getElementById("content").style.gridTemplateRows = "auto auto"
         }
     } else {
-        if (contentElement.style.gridTemplateRows === "22vh auto") {
+        if (contentElement.style.gridTemplateRows === "auto auto") {
             contentElement.style.gridTemplateRows = "1fr 1fr"
             document.body.style.gridTemplateRows = "44vh 44vh auto"
 
@@ -55,7 +53,7 @@ function handleContentMaximizeButtonClick(isAnnouncements) {
                 element.classList.remove("h")
             document.getElementById("content").style.gridTemplateRows = "1fr 1fr"
         } else {
-            contentElement.style.gridTemplateRows = "22vh auto"
+            contentElement.style.gridTemplateRows = "auto auto"
             document.body.style.gridTemplateRows = "44vh auto auto"
 
             for (const element of document.getElementsByClassName("contenttitle"))
