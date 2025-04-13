@@ -64,6 +64,7 @@ eventSource.onmessage = function(e) {
 
             const option = document.createElement("option")
             option.textContent = data.name
+            console.log("foo")
             {
                 const gameModeName = data.game_mode_name
                 const select = document.getElementById("onlineplayers-" + gameModeName)
@@ -78,6 +79,7 @@ eventSource.onmessage = function(e) {
             break
         }
         case "offline": {
+            console.log("bar")
             {
                 const gameModeName = data.game_mode_name
                 for (const option of document.getElementById("onlineplayers-" + gameModeName).querySelectorAll("option")) {
