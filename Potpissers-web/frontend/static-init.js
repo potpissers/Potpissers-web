@@ -58,17 +58,17 @@ function handleChatToggle(button) {
     switch (button.textContent.trim()) {
         case "game":
             button.textContent = "discord"
-            Array.from(document.getElementsByClassName("id-chat-discord"))
-                .forEach(each => each.hidden = false)
-            Array.from(document.getElementsByClassName("id-chat-game"))
-                .forEach(each => each.hidden = true)
+            for (const element of document.getElementsByClassName("id-chat-discord"))
+                element.hidden = false
+            for (const element of document.getElementsByClassName("id-chat-game"))
+                element.hidden = true
             break
         case "discord":
             button.textContent = "game"
-            Array.from(document.getElementsByClassName("id-chat-discord"))
-                .forEach(each => each.hidden = true)
-            Array.from(document.getElementsByClassName("id-chat-game"))
-                .forEach(each => each.hidden = false)
+            for (const element of document.getElementsByClassName("id-chat-discord"))
+                element.hidden = true
+            for (const element of document.getElementsByClassName("id-chat-game"))
+                element.hidden = false
             break
     }
 }
@@ -76,21 +76,21 @@ function handlePlayersListToggle(button) {
     switch (button.textContent.trim()) {
         case "/list":
             button.textContent = "/glist"
-            document.getElementById("chat").hidden = true
-            document.getElementById("onlineplayers-server").hidden = true
-            document.getElementById("onlineplayers-network").hidden = false
+            for (const element of document.getElementsByClassName("onlineplayers"))
+                element.hidden = true
+            document.getElementById("onlineplayers").hidden = false
             break
         case "/glist":
             button.textContent = "chat"
+            for (const element of document.getElementsByClassName("onlineplayers"))
+                element.hidden = true
             document.getElementById("chat").hidden = false
-            document.getElementById("onlineplayers-server").hidden = true
-            document.getElementById("onlineplayers-network").hidden = true
             break
         case "chat":
             button.textContent = "/list"
-            document.getElementById("chat").hidden = true
-            document.getElementById("onlineplayers-server").hidden = false
-            document.getElementById("onlineplayers-network").hidden = true
+            for (const element of document.getElementsByClassName("onlineplayers"))
+                element.hidden = true
+            document.getElementById("onlineplayers-hub").hidden = false // TODO -> GameModeName
             break
     }
 }
