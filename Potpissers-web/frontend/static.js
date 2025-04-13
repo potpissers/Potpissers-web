@@ -75,7 +75,7 @@ eventSource.onmessage = function(e) {
                 const select = document.getElementById("onlineplayers")
                 select.appendChild(option.cloneNode(true))
                 document.getElementById("online").innerText = "potpissers: " + (select.children.length - 1).toString()
-            }
+            } //
             break
         }
         case "offline": {
