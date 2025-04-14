@@ -77,6 +77,12 @@ func init() {
 					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
 					jsonBytes, err := json.Marshal(sseMessage{"online", t})
 					handleFatalErr(err)
+					for i, currentPlayer := range networkPlayers {
+						if t.Uuid == currentPlayer.Uuid {
+							networkPlayers = append(networkPlayers[:i], networkPlayers[i+1:]...)
+							break
+						}
+					}
 					networkPlayers = append([]onlinePlayer{t}, networkPlayers...)
 					home = getMainTemplateBytes("hub")
 					hcf = getMainTemplateBytes("hcf" + currentHcfServerName)
