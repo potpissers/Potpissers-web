@@ -1,7 +1,7 @@
 {{define "contentsidebody"}}
     <div style="display: flex; flex-direction: column; align-items: center; overflow-y: auto">
         <button {{if not (eq .GameModeName "hub")}}hidden{{end}} style="width: fit-content">votes</button>
-        <button {{if not (eq .GameModeName "hcf")}}hidden{{end}} style="">/f list</button>
+        <button {{if not (eq .GameModeName "hcf")}}hidden{{end}}>/f list</button>
         <select {{if not (eq .GameModeName "mz")}}hidden{{end}}>
             <option selected>bandit warnings</option>
             <option disabled>current bandits</option>

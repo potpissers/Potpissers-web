@@ -59,6 +59,10 @@ eventSource.onmessage = function(e) {
             })
             break
         }
+        case "koths":
+            break
+        case "drops":
+            break
         case "chat": {
             // TODO each server
             handleSseLiAppend(jsonData, (li, data) => {
@@ -127,8 +131,6 @@ eventSource.onmessage = function(e) {
             break
         }
         case "donations": {
-            console.log(jsonData.data)
-            console.log(jsonData.type)
             handleSseLiPrepend(jsonData, (li, data) => {
                 const p = document.createElement("p")
                 p.textContent = data.total_money.amount + "+" + data.total_tip_money.amount
@@ -181,5 +183,9 @@ eventSource.onmessage = function(e) {
             })
             break
         }
+        case "bandits":
+            break
+        case "factions":
+            break
     }
 }
