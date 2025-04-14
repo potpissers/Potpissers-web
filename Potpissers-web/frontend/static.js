@@ -62,11 +62,12 @@ eventSource.onmessage = function(e) {
         case "online": {
             const data = jsonData.data
 
+            let flag = false
             outer: for (const select of document.getElementsByClassName("onlineplayersgamemodelists"))
                 for (const option of select.options) {
                     if (option.textContent === data.name) {
-                        console.log("what")
                         option.remove()
+                        flag = true
                         break outer
                     }
                 }
@@ -80,7 +81,7 @@ eventSource.onmessage = function(e) {
                 select.appendChild(option)
                 document.getElementById("online-" + gameModeName).innerText = "/" + gameModeName + ": " + (select.children.length - 1).toString()
             }
-            {
+            if (!flag){
                 const select = document.getElementById("onlineplayers")
                 select.appendChild(option.cloneNode(true))
                 document.getElementById("online").innerText = "potpissers: " + (select.children.length - 1).toString()
