@@ -7,6 +7,10 @@ import (
 	"time"
 )
 
+type serverTemplateData struct {
+	CurrentPlayers []onlinePlayer
+}
+
 var mainTemplate = func() *template.Template {
 	mainTemplate, err := template.ParseFiles(
 		frontendDirName+"/index.gohtml",
@@ -28,6 +32,17 @@ var mainTemplate = func() *template.Template {
 }()
 
 func getMainTemplateBytes(gameModeName string) []byte {
+	serverTemplateDatas := make(map[string]serverTemplateData)
+	for gameModeName := range serverDatas {
+		var serverTemplateData serverTemplateData
+		for _, currentPlayer := range networkPlayers {
+			if gameModeName == currentPlayer.GameModeName {
+				serverTemplateData.CurrentPlayers = append(serverTemplateData.CurrentPlayers, currentPlayer)
+			}
+		}
+		serverTemplateDatas[gameModeName] = serverTemplateData
+	}
+
 	var buffer bytes.Buffer
 	donationsMu.RLock()
 	handleFatalErr(mainTemplate.Execute(&buffer, struct {
@@ -51,6 +66,8 @@ func getMainTemplateBytes(gameModeName string) []byte {
 		Events               []abstractEvent
 		Koths                []koth
 		SupplyDrops          []supplyDrop
+
+		ServerTemplateDatas map[string]serverTemplateData
 	}{
 		GameModeName:       gameModeName,
 		BackgroundImageUrl: redditImagePosts[rand.New(rand.NewSource(time.Now().UnixNano())).Intn(len(redditImagePosts))],
@@ -72,6 +89,8 @@ func getMainTemplateBytes(gameModeName string) []byte {
 		Events:               events,
 		Koths:                koths,
 		SupplyDrops:          supplyDrops,
+
+		ServerTemplateDatas: serverTemplateDatas,
 	}))
 	donationsMu.RUnlock()
 	return buffer.Bytes()
