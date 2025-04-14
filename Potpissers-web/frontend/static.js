@@ -65,6 +65,7 @@ eventSource.onmessage = function(e) {
             outer: for (const select of document.getElementsByClassName("onlineplayersgamemodelists"))
                 for (const option of select.options) {
                     if (option.textContent === data.name) {
+                        console.log("what")
                         option.remove()
                         break outer
                     }
