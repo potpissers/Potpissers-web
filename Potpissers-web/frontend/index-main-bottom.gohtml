@@ -11,7 +11,7 @@
                 {{end}}
             </select>
             {{range $name, $data := .ServerTemplateDatas}}
-                <select class="onlineplayersgamemodelists" id="onlineplayers-{{name}}" hidden style="font-size: 75%; align-self: end">
+                <select class="onlineplayersgamemodelists" id="onlineplayers-{{$name}}" hidden style="font-size: 75%; align-self: end">
                     <option selected hidden>/list</option>
                     {{range $data.CurrentPlayers}}
                         <option disabled>{{.Name}}</option>
