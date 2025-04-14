@@ -68,7 +68,7 @@ eventSource.onmessage = function(e) {
                     if (option.textContent === data.name) {
                         option.remove()
                         flag = true
-                        const gameModeName = select.id.replace("players", "")
+                        const gameModeName = select.id.replace("players", "") // TODO -> this is retarded
                         document.getElementById("online-" + gameModeName).innerText = "/" + gameModeName + ": " + (select.children.length - 1).toString()
                         break outer
                     }
@@ -91,7 +91,6 @@ eventSource.onmessage = function(e) {
             break
         }
         case "offline": {
-            console.log("hi")
             const data = jsonData.data
             {
                 const gameModeName = data.game_mode_name
@@ -118,6 +117,8 @@ eventSource.onmessage = function(e) {
             }
         }
         case "donations": {
+            console.log(jsonData.data)
+            console.log(jsonData.type)
             handleSseLi(jsonData, (li, data) => {
                 const p = document.createElement("p")
                 p.textContent = data.total_money.amount + "+" + data.total_tip_money.amount
