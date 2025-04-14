@@ -68,6 +68,8 @@ eventSource.onmessage = function(e) {
                     if (option.textContent === data.name) {
                         option.remove()
                         flag = true
+                        const gameModeName = select.id.replace("players", "")
+                        document.getElementById("online-" + gameModeName).innerText = "/" + gameModeName + ": " + (select.children.length - 1).toString()
                         break outer
                     }
                 }
