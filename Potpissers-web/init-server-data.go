@@ -41,11 +41,10 @@ type serverData struct {
 	AttackSpeedName               string    `json:"attack_speed_name"`
 	IsInitiallyWhitelisted        bool      `json:"is_initially_whitelisted"`
 
-	CurrentPlayers []onlinePlayer
-	Deaths         []death
-	Events         []abstractEvent
-	Koths          []koth
-	SupplyDrops    []supplyDrop
+	Deaths      []death // TODO -> just put all of these in global slices
+	Events      []abstractEvent
+	Koths       []koth
+	SupplyDrops []supplyDrop
 	// Donations      []order TODO
 	Messages []ingameMessage
 	// Videos         []string TODO
@@ -60,7 +59,6 @@ var serverDatas = func() map[string]*serverData {
 	serverDatas := make(map[string]*serverData)
 	getRowsBlocking("SELECT * FROM get_server_datas()", func(rows pgx.Rows) {
 		var serverDataBuffer serverData
-		serverDataBuffer.CurrentPlayers = []onlinePlayer{}
 		serverDataBuffer.Deaths = []death{}
 		serverDataBuffer.Events = []abstractEvent{}
 		serverDataBuffer.Koths = []koth{}

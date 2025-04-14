@@ -22,8 +22,6 @@ var networkPlayers = func() []onlinePlayer {
 		var t onlinePlayer
 		handleFatalPgx(pgx.ForEachRow(rows, []any{&t.Uuid, &t.Name, &t.GameModeName, &t.ServerName, &t.ActiveFaction, &t.NetworkJoin, &t.ServerJoin}, func() error {
 			currentPlayers = append(currentPlayers, t) // TODO sort names
-			serverData := serverDatas[t.GameModeName+t.ServerName]
-			serverData.CurrentPlayers = append(serverData.CurrentPlayers, t)
 			return nil
 		}))
 	})

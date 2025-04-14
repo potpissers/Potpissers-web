@@ -35,7 +35,7 @@ func init() {
 					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
 					jsonBytes, err := json.Marshal(sseMessage{"deaths", t})
 					handleFatalErr(err)
-					handleServerDataJsonPrepend[death](&deaths, t, jsonBytes, &serverDatas[t.GameModeName+t.ServerName].Deaths)
+					handleServerDataJsonPrepend(&deaths, t, jsonBytes, &serverDatas[t.GameModeName+t.ServerName].Deaths)
 				}
 			case "drops":
 				{ // TODO
@@ -46,7 +46,7 @@ func init() {
 					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
 					jsonBytes, err := json.Marshal(sseMessage{"chat", t})
 					handleFatalErr(err)
-					handleServerDataJsonPrepend[ingameMessage](&messages, t, jsonBytes, &serverDatas[t.GameModeName+t.ServerName].Messages)
+					handleServerDataJsonPrepend(&messages, t, jsonBytes, &serverDatas[t.GameModeName+t.ServerName].Messages)
 				}
 			case "koths":
 				{
@@ -54,7 +54,7 @@ func init() {
 					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
 					jsonBytes, err := json.Marshal(sseMessage{"koths", t})
 					handleFatalErr(err)
-					handleServerDataJsonPrepend[koth](&koths, t, jsonBytes, &serverDatas[t.GameModeName+t.ServerName].Koths)
+					handleServerDataJsonPrepend(&koths, t, jsonBytes, &serverDatas[t.GameModeName+t.ServerName].Koths)
 				}
 			case "referrals":
 				{
@@ -77,7 +77,11 @@ func init() {
 					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
 					jsonBytes, err := json.Marshal(sseMessage{"online", t})
 					handleFatalErr(err)
-					handleServerDataJsonPrepend[onlinePlayer](&networkPlayers, t, jsonBytes, &serverDatas[t.GameModeName+t.ServerName].CurrentPlayers)
+					networkPlayers = append([]onlinePlayer{t}, networkPlayers...)
+					home = getMainTemplateBytes("hub")
+					hcf = getMainTemplateBytes("hcf" + currentHcfServerName)
+					mz = getMainTemplateBytes("mz")
+					handleSseData(jsonBytes, mainConnections)
 				}
 			case "offline":
 				{
@@ -89,13 +93,6 @@ func init() {
 					for i, data := range networkPlayers {
 						if data == t {
 							networkPlayers = append(networkPlayers[:i], networkPlayers[i+1:]...)
-							break
-						}
-					}
-					serverData := serverDatas[t.GameModeName+t.ServerName]
-					for i, data := range serverData.CurrentPlayers {
-						if data == t {
-							serverData.CurrentPlayers = append(serverData.CurrentPlayers[:i], serverData.CurrentPlayers[i+1:]...)
 							break
 						}
 					}
