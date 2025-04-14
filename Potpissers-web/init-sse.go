@@ -14,7 +14,7 @@ func init() {
 		log.Fatal(err)
 	}
 	// defer'd -> below goroutine
-	for _, channelName := range []string{"deaths", "drops", "chat", "koths", "referrals", "online", "offline", "server_data", "bandits", "factions"} {
+	for _, channelName := range []string{"drops", "chat", "koths", "referrals", "online", "offline", "server_data", "bandits", "factions", "deaths"} {
 		_, err = connection.Exec(context.Background(), "LISTEN "+channelName)
 		if err != nil {
 			connection.Release()
@@ -74,7 +74,6 @@ func init() {
 				}
 			case "online":
 				{
-					println("hi")
 					var t onlinePlayer
 					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
 					jsonBytes, err := json.Marshal(sseMessage{"online", t})
