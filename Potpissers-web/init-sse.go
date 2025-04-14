@@ -31,6 +31,7 @@ func init() {
 			switch notification.Channel { // TODO -> transitioning from ssr to csr like this absolutely can desync, oh well
 			case "deaths": // TODO -> NVM just block the response if csr is happening
 				{
+					println("hey")
 					var t death
 					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
 					jsonBytes, err := json.Marshal(sseMessage{"deaths", t})
