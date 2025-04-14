@@ -14,7 +14,7 @@ func init() {
 		log.Fatal(err)
 	}
 	// defer'd -> below goroutine
-	for _, channelName := range []string{"drops", "chat", "koths", "referrals", "online", "offline", "server_data", "bandits", "factions", "deaths"} {
+	for _, channelName := range []string{"deaths", "drops", "chat", "koths", "referrals", "online", "offline", "server_data", "bandits", "factions"} {
 		_, err = connection.Exec(context.Background(), "LISTEN "+channelName)
 		if err != nil {
 			connection.Release()
@@ -31,7 +31,6 @@ func init() {
 			switch notification.Channel { // TODO -> transitioning from ssr to csr like this absolutely can desync, oh well
 			case "deaths": // TODO -> NVM just block the response if csr is happening
 				{
-					println("hey")
 					var t death
 					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
 					jsonBytes, err := json.Marshal(sseMessage{"deaths", t})

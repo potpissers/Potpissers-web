@@ -34,6 +34,7 @@ eventSource.onmessage = function(e) {
         }
         case "deaths": {
             // TODO -> each server
+            console.log("fuck")
             handleSseLi(jsonData, (li, data) => {
                 const p = document.createElement("p")
                 p.textContent = "(" + data.server_name + ") " + data.death_message
