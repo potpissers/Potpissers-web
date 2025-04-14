@@ -8,15 +8,15 @@
                 <option {{if eq .GameModeName "hub"}}selected{{end}} disabled id="online">
                     potpissers: {{len .NetworkPlayers}}</option>
                 <option disabled id="online-hub">
-                    /hub: {{len (index .ServerDatas "hub").CurrentPlayers}}</option>
+                    /hub: {{len (index .ServerTemplateDatas "hub").CurrentPlayers}}</option>
                 <option {{if eq .GameModeName "cubecore"}}selected{{end}} disabled id="online-cubecore">
-                    /cubecore: {{len (index .ServerDatas "cubecore").CurrentPlayers}}</option>
+                    /cubecore: {{len (index .ServerTemplateDatas "cubecore").CurrentPlayers}}</option>
                 <option {{if eq .GameModeName (print "hcf" .CurrentHcfServerName)}}selected{{end}} disabled id="online-hcf">
-                    /hcf: {{len ((index .ServerDatas (print "hcf" .CurrentHcfServerName)).CurrentPlayers)}}</option>
+                    /hcf: {{len ((index .ServerTemplateDatas (print "hcf" .CurrentHcfServerName)).CurrentPlayers)}}</option>
                 <option {{if eq .GameModeName "kollusion"}}selected{{end}} disabled id="online-kollusion">
-                    /kollusion: {{len (index .ServerDatas "kollusion").CurrentPlayers}}</option>
+                    /kollusion: {{len (index .ServerTemplateDatas "kollusion").CurrentPlayers}}</option>
                 <option {{if eq .GameModeName "mz"}}selected{{end}} disabled id="online-mz">
-                    /mz: {{len (index .ServerDatas "mz").CurrentPlayers}}</option>
+                    /mz: {{len (index .ServerTemplateDatas "mz").CurrentPlayers}}</option>
             </select>
         </div>
         <div
