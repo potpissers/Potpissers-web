@@ -74,6 +74,7 @@ func init() {
 				}
 			case "online":
 				{
+					println("hi")
 					var t onlinePlayer
 					handleFatalErr(json.Unmarshal([]byte(notification.Payload), &t))
 					jsonBytes, err := json.Marshal(sseMessage{"online", t})
