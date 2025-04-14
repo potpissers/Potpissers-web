@@ -115,6 +115,7 @@ eventSource.onmessage = function(e) {
                     }
                 }
             }
+            break
         }
         case "donations": {
             console.log(jsonData.data)
@@ -147,9 +148,11 @@ eventSource.onmessage = function(e) {
                 a.appendChild(small)
                 return a
             })
+            break
         }
         case "texts": {
             // TODO impl
+            break
         }
         case "general": {
             handleSseLi(jsonData, (li, data) => {
@@ -160,6 +163,7 @@ eventSource.onmessage = function(e) {
             break
         }
         case "changelog":
+            break
         case "announcements": {
             handleSseLi(jsonData, (li, data) => {
                 const p = document.createElement("p")
