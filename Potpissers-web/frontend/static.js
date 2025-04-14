@@ -62,6 +62,14 @@ eventSource.onmessage = function(e) {
         case "online": {
             const data = jsonData.data
 
+            outer: for (const select of document.getElementsByClassName("onlineplayersgamemodelists"))
+                for (const option of select.options) {
+                    if (option.textContent === data.name) {
+                        option.remove()
+                        break outer
+                    }
+                }
+
             const option = document.createElement("option")
             option.textContent = data.name
             option.disabled = true
