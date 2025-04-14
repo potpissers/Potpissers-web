@@ -9,7 +9,16 @@ function handleMcNameKeyDown(event) {
         event.target.blur()
 }
 
-function handleSseLi(jsonData, getLiChild) {
+function handleSseLiPrepend(jsonData, getLiChild) {
+    const data = jsonData.data
+
+    const li = document.createElement("li")
+    li.appendChild(getLiChild(li, data))
+
+    const ul = document.getElementById(jsonData.type)
+    ul.insertBefore(li, ul.firstChild)
+}
+function handleSseLiAppend(jsonData, getLiChild) {
     const data = jsonData.data
 
     const li = document.createElement("li")
@@ -23,7 +32,7 @@ eventSource.onmessage = function(e) {
     const jsonData = JSON.parse(e.data)
     switch (jsonData.type) {
         case "referrals": {
-            handleSseLi(jsonData, (li, data) => {
+            handleSseLiAppend(jsonData, (li, data) => {
                 li.setAttribute('title', data.timestamp)
 
                 const small = document.createElement("small")
@@ -34,17 +43,16 @@ eventSource.onmessage = function(e) {
         }
         case "deaths": {
             // TODO -> each server
-            console.log("fuck")
-            handleSseLi(jsonData, (li, data) => {
+            handleSseLiPrepend(jsonData, (li, data) => {
                 const p = document.createElement("p")
-                p.textContent = "(" + data.server_name + ") " + data.death_message
+                p.textContent = "(" + data.game_mode_name + ") " + data.death_message
                 return p
             })
             break
         }
         case "events": {
             // TODO -> each server
-            handleSseLi(jsonData, (li, data) => {
+            handleSseLiPrepend(jsonData, (li, data) => {
                 const p = document.createElement("p")
                 p.textContent = data.cap_message
                 return p
@@ -53,7 +61,7 @@ eventSource.onmessage = function(e) {
         }
         case "chat": {
             // TODO each server
-            handleSseLi(jsonData, (li, data) => {
+            handleSseLiAppend(jsonData, (li, data) => {
                 const p = document.createElement("p")
                 p.textContent = data.message
                 return p
@@ -121,7 +129,7 @@ eventSource.onmessage = function(e) {
         case "donations": {
             console.log(jsonData.data)
             console.log(jsonData.type)
-            handleSseLi(jsonData, (li, data) => {
+            handleSseLiPrepend(jsonData, (li, data) => {
                 const p = document.createElement("p")
                 p.textContent = data.total_money.amount + "+" + data.total_tip_money.amount
                 return p
@@ -129,7 +137,7 @@ eventSource.onmessage = function(e) {
             break
         }
         case "videos": {
-            handleSseLi(jsonData, (li, data) => {
+            handleSseLiPrepend(jsonData, (li, data) => {
                 if (data.youtube_embed_url !== null) {
                     const iframe = document.createElement("iframe")
                     iframe.src = data.youtube_embed_url
@@ -156,7 +164,7 @@ eventSource.onmessage = function(e) {
             break
         }
         case "general": {
-            handleSseLi(jsonData, (li, data) => {
+            handleSseLiPrepend(jsonData, (li, data) => {
                 const p = document.createElement("p")
                 p.textContent = data.content
                 return p
@@ -166,7 +174,7 @@ eventSource.onmessage = function(e) {
         case "changelog":
             break
         case "announcements": {
-            handleSseLi(jsonData, (li, data) => {
+            handleSseLiPrepend(jsonData, (li, data) => {
                 const p = document.createElement("p")
                 p.textContent = data.content
                 return p
