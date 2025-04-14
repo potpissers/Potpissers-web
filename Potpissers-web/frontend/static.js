@@ -62,13 +62,13 @@ eventSource.onmessage = function(e) {
         case "online": {
             const data = jsonData.data
 
-            // outer: for (const select of document.getElementsByClassName("onlineplayersgamemodelists"))
-            //     for (const option of select.options) {
-            //         if (option.textContent === data.name) {
-            //             option.remove()
-            //             break outer
-            //         }
-            //     }
+            outer: for (const select of document.getElementsByClassName("onlineplayersgamemodelists"))
+                for (const option of select.options) {
+                    if (option.textContent === data.name) {
+                        option.remove()
+                        break outer
+                    }
+                }
 
             const option = document.createElement("option")
             option.textContent = data.name
@@ -113,6 +113,7 @@ eventSource.onmessage = function(e) {
             }
         }
         case "donations": {
+            console.log("hey")
             handleSseLi(jsonData, (li, data) => {
                 const p = document.createElement("p")
                 p.textContent = data.total_money.amount + "+" + data.total_tip_money.amount
