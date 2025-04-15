@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/base64"
 	"encoding/json"
 	"log"
@@ -139,14 +140,22 @@ func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePos
 	var videoPosts []redditVideoPost
 	var imagePosts []redditImagePost
 	for {
-		req, err := http.NewRequest("GET", redditApiUrl, nil)
-		if err != nil {
-			log.Fatal(err)
-		}
-		req.Header.Set("Authorization", "Bearer "+redditAccessToken)
-		resp, err := (&http.Client{}).Do(req)
-		if err != nil {
-			log.Fatal(err)
+		var resp *http.Response
+		for {
+			context, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+			defer cancel()
+
+			req, err := http.NewRequestWithContext(context, "GET", redditApiUrl, nil)
+			if err != nil {
+				log.Fatal(err)
+			}
+			req.Header.Set("Authorization", "Bearer "+redditAccessToken)
+			resp, err = (&http.Client{}).Do(req)
+			if err != nil {
+				log.Println(err)
+			} else {
+				break
+			}
 		}
 		defer resp.Body.Close()
 		{
@@ -203,7 +212,7 @@ func getRedditPostData(redditApiUrl string) ([]redditVideoPost, []redditImagePos
 				} `json:"children"`
 			} `json:"data"`
 		}
-		err = json.NewDecoder(resp.Body).Decode(&responseJson)
+		err := json.NewDecoder(resp.Body).Decode(&responseJson)
 		if err != nil {
 			println(err.Error())
 			continue

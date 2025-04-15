@@ -95,7 +95,6 @@ func init() {
 				return nil
 			}))
 		}, serverData.GameModeName, serverData.ServerName)
-		println(len(serverData.Factions))
 		serverData.Bandits = []bandit{}
 		getRowsBlocking("SELECT * FROM get_7_newest_bandits($1, $2)", func(rows pgx.Rows) {
 			var bandit bandit
