@@ -36,7 +36,7 @@
                                value=1 step=1 class="line-items {{.GameModeName}}-{{.ItemName}}" hidden>
                     {{end}}
                     <div style="display: flex">
-                        <input id="donate-username" class="fi line-items {{.GameModeName}}-{{.ItemName}}" hidden
+                        <input id="donate-username-{{.GameModeName}}-{{.ItemName}}" class="fi line-items {{.GameModeName}}-{{.ItemName}}" hidden
                                style="width: 60%; font-size: 75%" placeholder="username"
                                onblur="handleMcNameBlur(this)">
                         <script async>
@@ -44,7 +44,7 @@
                         </script>
 
                         <button style="font-size: 75%" class="line-items {{.GameModeName}}-{{.ItemName}}" hidden
-                                onmousedown="handleAddLineItemJson('{{.GameModeName}}-{{.ItemName}}', {{if .IsPlural}}document.getElementById('{{.GameModeName}}-{{.ItemName}}-amount').value{{else}}1{{end}})">
+                                onmousedown="handleAddLineItemJson('donate-username-{{.GameModeName}}-{{.ItemName}}', '{{.GameModeName}}-{{.ItemName}}', {{if .IsPlural}}document.getElementById('{{.GameModeName}}-{{.ItemName}}-amount').value{{else}}1{{end}})">
                             add
                         </button>
                     </div>
