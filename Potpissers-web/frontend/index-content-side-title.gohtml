@@ -44,7 +44,7 @@
                         </script>
 
                         <button style="font-size: 75%" class="line-items {{.GameModeName}}-{{.ItemName}}" hidden
-                                onmousedown="handleAddLineItemJson('donate-username-{{.GameModeName}}-{{.ItemName}}', '{{.GameModeName}}-{{.ItemName}}', {{if .IsPlural}}document.getElementById('{{.GameModeName}}-{{.ItemName}}-amount').value{{else}}1{{end}})">
+                                onmousedown="handleAddLineItemJson(document.getElementById('donate-username-{{.GameModeName}}-{{.ItemName}}').value, '{{.GameModeName}}-{{.ItemName}}', {{if .IsPlural}}document.getElementById('{{.GameModeName}}-{{.ItemName}}-amount').value{{else}}1{{end}})">
                             add
                         </button>
                     </div>
