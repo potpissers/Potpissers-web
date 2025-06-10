@@ -1,0 +1,9 @@
+>make site spa
+>add builds and map koths to site
+>add loot tables to site
+>web -> hcf maps dropdown
+>Reddit wrapper forum
+>Creator code: 50% if unreferral, else 25% (?)
+>Make it grab ip referral if necessary
+>sticky everything
+>hcfcommands isnt long enough for the layout to work
