@@ -42,7 +42,7 @@ func main() {
 	} {
 		pointer := bytes
 		http.HandleFunc(endpoint, func(w http.ResponseWriter, r *http.Request) {
-			w.Header().Del("X-Frame-Options")
+			w.Header().Set("Content-Security-Policy", "frame-ancestors *")
 			_, err := w.Write(*pointer)
 			handleFatalErr(err)
 
