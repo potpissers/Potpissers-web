@@ -11,7 +11,7 @@ import (
 
 const minecraftUsernameLookupUrl = "https://api.minecraftservices.com/minecraft/profile/lookup/name/"
 const potpissersRedditApiUrl = "https://oauth.reddit.com/r/potpissers/new.json?limit=100"
-const frontendDirName = "./Potpissers-web/frontend/"
+const frontendDirName = "./frontend/"
 
 var postgresPool = func() *pgxpool.Pool {
 	pool, err := pgxpool.New(context.Background(), os.Getenv("POSTGRES_CONNECTION_STRING"))
@@ -47,7 +47,7 @@ func main() {
 
 			handleRedditPostDataUpdate()
 			handleDiscordMessagesUpdate(discordGeneralChan, discordGeneralChannelId, &mostRecentDiscordGeneralMessageId, &discordMessages, "general")
-			//			handleDiscordMessagesUpdate(discordChangelogChan, discordChangelogChannelId, &mostRecentDiscordChangelogMessageId, &changelog, "changelog")
+			handleDiscordMessagesUpdate(discordChangelogChan, discordChangelogChannelId, &mostRecentDiscordChangelogMessageId, &changelog, "changelog")
 			handleDiscordMessagesUpdate(discordAnnouncementsChan, discordAnnouncementsChannelId, &mostRecentDiscordAnnouncementsMessageId, &announcements, "announcements")
 		})
 		println(endpoint + " done")

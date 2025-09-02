@@ -50,6 +50,9 @@ type discordMessage struct {
 }
 
 func getDiscordMessages(channelId string, apiUrlModifier string) []discordMessage {
+	if true {
+		return []discordMessage{}
+	}
 	for {
 		req, err := http.NewRequest("GET", "https://discord.com/api/v10/channels/"+channelId+"/messages?"+apiUrlModifier+"limit=6", nil)
 		if err != nil {
@@ -90,7 +93,7 @@ func getDiscordMessages(channelId string, apiUrlModifier string) []discordMessag
 const discordGeneralChannelId = "1245300045188956255"
 
 var discordMessages = getDiscordMessages(discordGeneralChannelId, "")
-var mostRecentDiscordGeneralMessageId = discordMessages[0].ID
+var mostRecentDiscordGeneralMessageId = "" //discordMessages[0].ID
 var discordGeneralChan = make(chan struct{}, 1)
 
 const discordChangelogChannelId = "1346008874830008375"
@@ -102,16 +105,16 @@ var discordChangelogChan = make(chan struct{}, 1)
 const discordAnnouncementsChannelId = "1265836245678948464"
 
 var announcements = getDiscordMessages(discordAnnouncementsChannelId, "")
-var mostRecentDiscordAnnouncementsMessageId = announcements[0].ID
+var mostRecentDiscordAnnouncementsMessageId = "" //announcements[0].ID
 var discordAnnouncementsChan = make(chan struct{}, 1)
 
 func init() {
 	http.HandleFunc("/api/discord/general", func(w http.ResponseWriter, r *http.Request) {
 		handleDiscordMessagesUpdate(discordGeneralChan, discordGeneralChannelId, &mostRecentDiscordGeneralMessageId, &discordMessages, "general")
 	})
-	//	http.HandleFunc("/api/discord/changelog", func(w http.ResponseWriter, r *http.Request) {
-	//		handleDiscordMessagesUpdate(discordChangelogChan, discordChangelogChannelId, &mostRecentDiscordChangelogMessageId, &changelog, "changelog")
-	//	})
+		http.HandleFunc("/api/discord/changelog", func(w http.ResponseWriter, r *http.Request) {
+			handleDiscordMessagesUpdate(discordChangelogChan, discordChangelogChannelId, &mostRecentDiscordChangelogMessageId, &changelog, "changelog")
+		})
 	http.HandleFunc("/api/discord/announcements", func(w http.ResponseWriter, r *http.Request) {
 		handleDiscordMessagesUpdate(discordAnnouncementsChan, discordAnnouncementsChannelId, &mostRecentDiscordAnnouncementsMessageId, &announcements, "announcements")
 	})
@@ -119,6 +122,9 @@ func init() {
 }
 
 func handleDiscordMessagesUpdate(channel chan struct{}, discordChannelId string, mostRecentMessageId *string, slice *[]discordMessage, sseMessageType string) {
+	if true {
+		return
+	}
 	select {
 	case channel <- struct{}{}:
 		{

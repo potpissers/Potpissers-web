@@ -13,7 +13,7 @@ type serverTemplateData struct {
 
 var mainTemplate = func() *template.Template {
 	mainTemplate, err := template.ParseFiles(
-		frontendDirName+"/index.gohtml",
+		frontendDirName+"index.gohtml",
 		frontendDirName+"index-videos.gohtml",
 		frontendDirName+"index-main.gohtml",
 		frontendDirName+"index-main-top.gohtml",
