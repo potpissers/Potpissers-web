@@ -76,8 +76,10 @@ func main() {
 	http.Handle("/mz-map/", http.StripPrefix("/mz-map", http.FileServer(http.Dir(frontendDirName+"/mz-map"))))
 
 	println("starting server")
-	err := http.ListenAndServeTLS(":443", "/etc/letsencrypt/live/potpissers.com/fullchain.pem", "/etc/letsencrypt/live/potpissers.com/privkey.pem", nil)
-	if err != nil {
-		log.Fatal(err)
+	for { // TODO fix whatever the fuck is causing EOF error
+		err := http.ListenAndServeTLS(":443", "/etc/letsencrypt/live/potpissers.com/fullchain.pem", "/etc/letsencrypt/live/potpissers.com/privkey.pem", nil)
+		if err != nil {
+			log.Println(err)
+		}
 	}
 }
