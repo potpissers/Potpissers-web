@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -24,62 +25,76 @@ func main() {
 	defer postgresPool.Close()
 	println("init done")
 
-	doApi()
-	println("main api done")
+	timeout, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+	done := make(chan struct{})
 
-	home = getMainTemplateBytes("hub")
-	println("home template done")
-	hcf = getMainTemplateBytes("hcf" + currentHcfServerName)
-	println("hcf template done")
-	mz = getMainTemplateBytes("mz")
-	println("mz template done")
+	go func() {
 
-	for endpoint, bytes := range map[string]*[]byte{
-		"/":    &home,
-		"/hub": &home,
-		"/mz":  &mz,
-		"/hcf": &hcf,
-	} {
-		pointer := bytes
-		http.HandleFunc(endpoint, func(w http.ResponseWriter, r *http.Request) {
-			w.Header().Set("Content-Security-Policy", "frame-ancestors *")
-			_, err := w.Write(*pointer)
-			handleFatalErr(err)
+		doApi()
+		println("main api done")
 
-			handleRedditPostDataUpdate()
-			handleDiscordMessagesUpdate(discordGeneralChan, discordGeneralChannelId, &mostRecentDiscordGeneralMessageId, &discordMessages, "general")
-			handleDiscordMessagesUpdate(discordChangelogChan, discordChangelogChannelId, &mostRecentDiscordChangelogMessageId, &changelog, "changelog")
-			handleDiscordMessagesUpdate(discordAnnouncementsChan, discordAnnouncementsChannelId, &mostRecentDiscordAnnouncementsMessageId, &announcements, "announcements")
+		home = getMainTemplateBytes("hub")
+		println("home template done")
+		hcf = getMainTemplateBytes("hcf" + currentHcfServerName)
+		println("hcf template done")
+		mz = getMainTemplateBytes("mz")
+		println("mz template done")
+
+		for endpoint, bytes := range map[string]*[]byte{
+			"/":    &home,
+			"/hub": &home,
+			"/mz":  &mz,
+			"/hcf": &hcf,
+		} {
+			pointer := bytes
+			http.HandleFunc(endpoint, func(w http.ResponseWriter, r *http.Request) {
+				w.Header().Set("Content-Security-Policy", "frame-ancestors *")
+				_, err := w.Write(*pointer)
+				handleFatalErr(err)
+
+				handleRedditPostDataUpdate()
+				handleDiscordMessagesUpdate(discordGeneralChan, discordGeneralChannelId, &mostRecentDiscordGeneralMessageId, &discordMessages, "general")
+				handleDiscordMessagesUpdate(discordChangelogChan, discordChangelogChannelId, &mostRecentDiscordChangelogMessageId, &changelog, "changelog")
+				handleDiscordMessagesUpdate(discordAnnouncementsChan, discordAnnouncementsChannelId, &mostRecentDiscordAnnouncementsMessageId, &announcements, "announcements")
+			})
+			println(endpoint + " done")
+		}
+
+		http.HandleFunc("/github", func(w http.ResponseWriter, r *http.Request) {
+			http.Redirect(w, r, "https://github.com/potpissers", http.StatusMovedPermanently)
 		})
-		println(endpoint + " done")
-	}
+		http.HandleFunc("/reddit", func(w http.ResponseWriter, r *http.Request) {
+			http.Redirect(w, r, "https://www.reddit.com/r/potpissers/", http.StatusMovedPermanently)
+		})
+		http.HandleFunc("/discord", func(w http.ResponseWriter, r *http.Request) {
+			http.Redirect(w, r, "https://discord.gg/Cqnvktf7EF", http.StatusFound)
+		})
 
-	http.HandleFunc("/github", func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, "https://github.com/potpissers", http.StatusMovedPermanently)
-	})
-	http.HandleFunc("/reddit", func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, "https://www.reddit.com/r/potpissers/", http.StatusMovedPermanently)
-	})
-	http.HandleFunc("/discord", func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, "https://discord.gg/Cqnvktf7EF", http.StatusFound)
-	})
+		http.Handle("/static.css", http.StripPrefix("/", http.FileServer(http.Dir(frontendDirName))))
 
-	http.Handle("/static.css", http.StripPrefix("/", http.FileServer(http.Dir(frontendDirName))))
+		http.Handle("/static.js", http.StripPrefix("/", http.FileServer(http.Dir(frontendDirName))))
+		http.Handle("/static-donate.js", http.StripPrefix("/", http.FileServer(http.Dir(frontendDirName))))
+		http.Handle("/static-init.js", http.StripPrefix("/", http.FileServer(http.Dir(frontendDirName))))
 
-	http.Handle("/static.js", http.StripPrefix("/", http.FileServer(http.Dir(frontendDirName))))
-	http.Handle("/static-donate.js", http.StripPrefix("/", http.FileServer(http.Dir(frontendDirName))))
-	http.Handle("/static-init.js", http.StripPrefix("/", http.FileServer(http.Dir(frontendDirName))))
+		http.Handle("/potpisser.jpg", http.StripPrefix("/", http.FileServer(http.Dir(frontendDirName))))
+		http.Handle("/favicon.png", http.StripPrefix("/", http.FileServer(http.Dir(frontendDirName))))
 
-	http.Handle("/potpisser.jpg", http.StripPrefix("/", http.FileServer(http.Dir(frontendDirName))))
-	http.Handle("/favicon.png", http.StripPrefix("/", http.FileServer(http.Dir(frontendDirName))))
+		http.Handle("/mz-map/", http.StripPrefix("/mz-map", http.FileServer(http.Dir(frontendDirName+"/mz-map"))))
 
-	http.Handle("/mz-map/", http.StripPrefix("/mz-map", http.FileServer(http.Dir(frontendDirName+"/mz-map"))))
+		close(done)
+	}()
 
-	println("starting server")
-	for { // TODO fix whatever the fuck is causing EOF error
-		err := http.ListenAndServeTLS(":443", "/etc/letsencrypt/live/potpissers.com/fullchain.pem", "/etc/letsencrypt/live/potpissers.com/privkey.pem", nil)
-		if err != nil {
-			log.Println(err)
+	select {
+	case <-timeout.Done():
+		os.Exit(1)
+	case <-done:
+		println("starting server")
+		for { // TODO fix whatever the fuck is causing EOF error
+			err := http.ListenAndServeTLS(":443", "/etc/letsencrypt/live/potpissers.com/fullchain.pem", "/etc/letsencrypt/live/potpissers.com/privkey.pem", nil)
+			if err != nil {
+				log.Println(err)
+			}
 		}
 	}
 }
