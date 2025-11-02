@@ -109,18 +109,16 @@
         </div>
 
         <div style="display: flex; flex-direction: column; flex: 1">
-            <div style="display: flex; flex-direction: column-reverse">
-                <ul id="referrals"
-                    style="display: flex; flex-direction: column; align-items: flex-end; align-self: end">
-                    {{range .NewPlayers}}
-                        <li title="{{.Timestamp}}">
-                            <small>
-                                {{.PlayerName}} ({{.Referrer}}) [{{.RowNumber}}]
-                            </small>
-                        </li>
-                    {{end}}
-                </ul>
-            </div>
+            <ul id="referrals"
+                style="display: flex; flex-direction: column-reverse; align-items: flex-end; align-self: end">
+                {{range .NewPlayers}}
+                    <li title="{{.Timestamp}}">
+                        <small>
+                            {{.PlayerName}} ({{.Referrer}}) [{{.RowNumber}}]
+                        </small>
+                    </li>
+                {{end}}
+            </ul>
             <div style="display: flex">
                 <button {{if not (eq .GameModeName (print "hcf" .CurrentHcfServerName))}}hidden{{end}}
                         style="font-size: 75%">/events
